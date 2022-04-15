@@ -1,0 +1,31 @@
+{
+  "name": "commonsense_platform",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@prisma/client": "^3.12.0",
+    "axios": "^0.26.1",
+    "next": "12.1.5",
+    "next-auth": "^4.3.1",
+    "react": "18.0.0",
+    "react-dom": "18.0.0",
+    "swr": "^1.3.0",
+    "watts-forms": "file:../watts-forms"
+  },
+  "devDependencies": {
+    "@types/node": "17.0.23",
+    "@types/react": "18.0.4",
+    "@types/react-dom": "18.0.0",
+    "cypress": "^9.5.4",
+    "eslint": "8.13.0",
+    "eslint-config-next": "12.1.5",
+    "prisma": "^3.12.0",
+    "typescript": "4.6.3"
+  }
+}
