@@ -1,11 +1,12 @@
 import NextAuth from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
-
+import { prisma } from "../../../helpers/db"
+import { PrismaAdapter } from "@next-auth/prisma-adapter"
 
 // For more information on each option (and a full list of options) go to
 // https://next-auth.js.org/configuration/options
 export default NextAuth({
-  // https://next-auth.js.org/configuration/providers/oauth
+  adapter: PrismaAdapter(prisma),
   providers: [
     /* EmailProvider({
          server: process.env.EMAIL_SERVER,
@@ -28,16 +29,23 @@ export default NextAuth({
     GoogleProvider({
       clientId: process.env.GOOGLE_ID,
       clientSecret: process.env.GOOGLE_SECRET,
-    }),
+    })
   ],
   theme: {
     colorScheme: "auto",
     brandColor: "#ff7852",
   },
   callbacks: {
-    async jwt({ token }) {
-      token.userRole = "admin"
+    async jwt({ token, user, account }) {
+      let userInfo = await prisma.user.findFirst({
+        where: {
+          email: user.email,
+        },
+      })
+
+      token.publicId = userInfo.id
       return token
     },
+
   },
 })

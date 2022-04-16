@@ -13,11 +13,18 @@ export type Element = {
   choices?: string[];
 }
 
-export interface FormProps {
-  elements: Element[]
+export type Attribute = {
+  key: string
+  value: string 
 }
 
-export const SinglePageForm = ({elements}: FormProps) => {
+export interface FormProps {
+  elements: Element[]
+  action: string
+  hiddenAttributes?: Attribute[]
+}
+
+export const SinglePageForm = ({elements, action, hiddenAttributes}: FormProps) => {
   const createInput = (element: Element) => {
     switch (element.type) {
       case "radio":
@@ -32,9 +39,12 @@ export const SinglePageForm = ({elements}: FormProps) => {
   }
 
   return (
-    <form>
+    <form action={action}  method="POST" > 
       {
         elements.map(element => createInput(element))
+      }
+      {
+        hiddenAttributes?.map(attribute => <input type="hidden" name={attribute.key} value={attribute.value} />)
       }
       <Submit />
     </form>
