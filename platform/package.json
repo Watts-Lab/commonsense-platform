@@ -17,7 +17,8 @@
     "react": "18.0.0",
     "react-dom": "18.0.0",
     "swr": "^1.3.0",
-    "watts-forms": "file:../watts-forms"
+    "watts-forms": "file:../watts-forms",
+    "node-notifier": "^8.0.1"
   },
   "devDependencies": {
     "@types/node": "17.0.23",
