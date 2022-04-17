@@ -9,9 +9,14 @@ const description = "test2"
 const choices = ["A", "B", "C"]
 
 let result: RenderResult | undefined = undefined
+let data: Record<any, any> = {}
+
+const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  data = { ...data, [event.target.name]: event.target.value }
+}
 
 beforeEach(() => {result = 
-  render(<Radio name={name} title={title} description={description} choices={choices} />)
+  render(<Radio name={name} onChange = {onChange} title={title} description={description} choices={choices} />)
 })
 
 test('check for correct title in heading', async () => {
@@ -58,7 +63,7 @@ test('check clicking of radio', async () => {
     const radio = radioes[i] as HTMLInputElement
     radio.click()
     expect(radio.checked).toBe(true)
-
+    expect(data[name]).toBe(radio.value)
     for (let j = 0; j < radioes.length; j++) {
       if (i == j) {
         continue

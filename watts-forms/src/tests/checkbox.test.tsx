@@ -9,9 +9,14 @@ const description = "test2"
 const choices = ["A", "B", "C"]
 
 let result: RenderResult | undefined = undefined
+let data: Record<string, any> = {}
+
+const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  data = { ...data, [event.target.name]: event.target.value }
+}
 
 beforeEach(() => {result = 
-  render(<CheckboxGroup name={name} title={title} description={description} choices={choices} />)
+  render(<CheckboxGroup name={name} title={title} description={description} choices={choices} onChange = {onChange} />)
 })
 
 test('check for correct title in heading', async () => {

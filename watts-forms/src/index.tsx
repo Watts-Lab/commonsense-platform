@@ -20,26 +20,27 @@ export type Attribute = {
 
 export interface FormProps {
   elements: Element[]
-  action: string
   hiddenAttributes?: Attribute[]
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+  onSubmit: (event: React.FormEvent<HTMLFormElement>) => void
 }
 
-export const SinglePageForm = ({elements, action, hiddenAttributes}: FormProps) => {
+export const SinglePageForm = ({elements, hiddenAttributes, onChange, onSubmit}: FormProps) => {
   const createInput = (element: Element) => {
     switch (element.type) {
       case "radio":
-        return <Radio {...element} />
+        return <Radio {...element} onChange={onChange} />
       case "text":
         return <Text {...element} />
       case "checkbox":
-        return <Checkbox {...element} />
+        return <Checkbox {...element} onChange={onChange} />
       default:
         return null;
     }
   }
 
   return (
-    <form action={action}  method="POST" > 
+    <form onSubmit={onSubmit} data-testid="watts-form" > 
       {
         elements.map(element => createInput(element))
       }

@@ -8,10 +8,10 @@ export interface TextInputProps {
 }
 
 export default function Text({name, title, description }: TextInputProps) {
-  
+  const id = `${name}-input`; 
   return (
     <Base name={name} title = {title} description = {description}>
-      <input type="text" className="form-text" name={name} id={`${name}-text`} required={true} />
+      <input type="text" className="form-text" name={name} id={`${name}-text`} data-testid={id}  required={true} />
     </Base>    
   )    
 }
