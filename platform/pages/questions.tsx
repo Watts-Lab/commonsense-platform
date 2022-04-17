@@ -70,7 +70,7 @@ export const encodeElements =[
       "choices":  ["Metaphorical", "Literal"]
     },
     {
-      "name": "Which knowledge category or categories describe this statement?",
+      "name": "knowledge-statements",
       "type": "checkbox",
       "title": "Which knowledge category or categories describe this statement?",
       "choices":  ["General reference", "Culture and the arts", "Geography and places", "Health and fitness", "History and events", "Human activities", "Mathematics and logic", "Natural and physical sciences", "People and self", "Philosophy and thinking", "Religion and belief systems", "Society and social sciences", "Technology and applied sciences"]

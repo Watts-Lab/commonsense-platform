@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { prisma } from "../../helpers/db"
+import prisma from "../../helpers/db"
 
 type record = {
   statement: string;
@@ -10,14 +10,34 @@ type record = {
 export default async function  handler(req: NextApiRequest, res: NextApiResponse){
   if (req.method == "POST") {
     const rawForm = req.body
-    
     const data = []
-    for (const key in rawForm) {
 
+    let id = await prisma.statement.findFirst({
+      select: {
+        id: true
+      },
+      where: {
+        text: rawForm.statement
+      }
+    })
+
+        
+    if (id === null) {
+      // TODO: Add new statement
+      res.status(400).json({"error": "Statement not found"})
+      return
+    }
+
+
+    for (const key in rawForm) {
+      if (key === "statement") {
+        continue
+      }
       if (rawForm[key] instanceof Array) {
         for (const value of rawForm[key]) {
           data.push({
-            statement: key,
+            statementId: id.id, 
+            key: key,
             answer: value,
             userEmail: rawForm.email 
           })
@@ -26,7 +46,8 @@ export default async function  handler(req: NextApiRequest, res: NextApiResponse
       } 
       //otherwise it's a string
       const datum = {
-        statement: key,
+        statementId: id.id,
+        key: key,
         answer: rawForm[key],
         userEmail: rawForm.email 
       }
@@ -34,11 +55,10 @@ export default async function  handler(req: NextApiRequest, res: NextApiResponse
       
     }
 
-    console.log(rawForm.email)
-    const prisma_res = await prisma.responses.createMany({
+    await prisma.responses.createMany({
       data: data
     })
-    
-    res.redirect("/")
+
+    res.status(200).json({"success": "Success"})
   }
 }
