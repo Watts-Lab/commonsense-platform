@@ -45,3 +45,5 @@ typings/
 lib/*.js
 test/*.js
 *.map
+
+.next

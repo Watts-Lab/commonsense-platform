@@ -1,0 +1,27 @@
+name: Platform Test
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Use Node 16.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16.x
+      - name: Install watts form
+        run: cd ./watts-forms/ && npm i && npm run test
+
+      - name: Install deps and build (with cache)
+        run: cd ./platform && npm i
+
+      - name: Test
+        run: cd ./platform && npx jest --silent --coverage 
