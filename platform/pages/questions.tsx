@@ -1,4 +1,6 @@
-export const encodeElements =[
+import { Element } from "@watts-lab/rapid-forms"
+
+export const encodeElements: Element[] =[
     {
       "name": "filter",
       "type": "radio",
