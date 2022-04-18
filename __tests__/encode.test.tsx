@@ -27,7 +27,7 @@ test("test encoding form renders with all expected elements", async () => {
     }
   }
   
-  const submitButton = screen.getByTestId("watts-form-submit")
+  const submitButton = screen.getByTestId("rapid-forms-submit")
   expect(submitButton).toBeInTheDocument()
 })
 
@@ -59,7 +59,7 @@ test("test form submission occurs" , async () => {
     }
   }
 
-  const form = result.getByTestId("watts-form")
+  const form = result.getByTestId("rapid-form")
 
   if (form) {
     expect(fireEvent.submit(form)).toBe(true)
