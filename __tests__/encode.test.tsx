@@ -42,11 +42,11 @@ test("test form submission occurs" , async () => {
   )
 
   for (let element of encodeElements) {
-    if (element.type === "radio") {
+    if (element.type === "radio" && element.choices) {
       const match = screen.getByTestId(`${element.name}-${element.choices[0]}-label`)
       expect(fireEvent.click(match)).toBe(true)
       expect(onChangeMock).toBeCalled()
-    } else if (element.type === "checkbox") {
+    } else if (element.type === "checkbox" && element.choices) {
       const match1 = screen.getByTestId(`${element.name}-${element.choices[0]}-label`)
       expect(fireEvent.click(match1)).toBe(true)
       expect(onChangeMock).toBeCalled()   
@@ -68,9 +68,9 @@ test("test form submission occurs" , async () => {
 
   console.log(data)
   for (let element of encodeElements) {
-    if (element.type === "radio" ) {
+    if (element.type === "radio" && element.choices) {
       expect(data[element.name]).toBe(element.choices[0])
-    } else if (element.type === "checkbox") {
+    } else if (element.type === "checkbox" && element.choices) {
       expect(data[element.name + "-0"]).toBe(element.choices[0])
       expect(data[element.name + "-1"]).not.toBe(element.choices[1])
     }
