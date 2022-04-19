@@ -1,5 +1,5 @@
 import type { NextPage } from 'next'
-import { SinglePageForm } from 'watts-forms'
+import { SinglePageForm } from '@watts-lab/rapid-forms'
 import { getFetcher } from '../helpers/fetching'
 import { encodeElements } from './questions'
 import Base from '../components/base'

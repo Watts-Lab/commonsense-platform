@@ -17,11 +17,9 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 16.x
-      - name: Install watts form
-        run: cd ./watts-forms/ && npm i && npm run test
-
+      
       - name: Install deps and build (with cache)
-        run: cd ./platform && npm i
+        run: npm i
 
       - name: Test
-        run: cd ./platform && npx jest --silent --coverage 
+        run: npm test
