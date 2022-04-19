@@ -73,3 +73,22 @@ To learn more about Next.js, take a look at the following resources:
 - [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
 - [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
+### Prisma Basics
+Prism is Object Relational Mapper (ORM).
+
+Key to prisma is schema.prisma within the prisma folder. This contains all the tables within our database and their relation.
+
+Before diving into prisma, it is key to have some fundamental knowledge of relational tables
+Digital ocean has extremely great guide.
+https://www.digitalocean.com/community/tutorials/understanding-relational-databases
+
+After that, you can understand how to update and make changes to the prisma schema with this website
+https://www.prisma.io/docs/concepts/components/prisma-schema
+
+Propogating changes in your local development. This also keeps a history of changes exactly like git
+`npx prisma migrate dev`
+
+### Docker (only infastructure people)
+will be written soon
+
+
