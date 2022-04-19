@@ -88,7 +88,11 @@ https://www.prisma.io/docs/concepts/components/prisma-schema
 Propogating changes in your local development. This also keeps a history of changes exactly like git
 `npx prisma migrate dev`
 
-### Docker (only infastructure people)
+### Devops (CI, deployment, etc..)
+Only infastructure people really need this. Feel free to skip if not relevant.
+#### Docker
 will be written soon
 
+#### AWS 
+will be written soon
 
