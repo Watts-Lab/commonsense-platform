@@ -1,5 +1,5 @@
 import Encode from "../pages/encode";
-import { encodeElements } from "../pages/questions";
+import { encodeElements } from "../components/questions";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { SessionProvider } from "next-auth/react"
 
