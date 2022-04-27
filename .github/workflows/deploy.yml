@@ -76,7 +76,7 @@ jobs:
           cd ~
           aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $ECR_REGISTRY
           docker pull $ECR_REGISTRY/commonsense:latest
-          pm2 restart  
+          pm2 restart commonsense-web 
           docker container prune -f
           docker image prune -f
     - name: Remove Github Actions IP from security group
