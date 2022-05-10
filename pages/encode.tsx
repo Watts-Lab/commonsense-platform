@@ -1,7 +1,7 @@
 import type { NextPage } from 'next'
 import { SinglePageForm } from '@watts-lab/rapid-forms'
 import { getFetcher } from '../helpers/fetching'
-import { encodeElements } from './questions'
+import { encodeElements } from '../components/questions'
 import Base from '../components/base'
 import useSWR from 'swr'
 import { useSession } from 'next-auth/react'

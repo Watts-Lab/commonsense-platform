@@ -6,10 +6,9 @@ WORKDIR /usr/src/app
 # Bundle app source
 COPY . .
 
-RUN cd ./watts-forms && npm run build
-RUN cd ./platform && npm i && npm run build
+RUN npm i
+RUN npm run build
 
-WORKDIR /usr/src/app/platform
 EXPOSE 5000
 
 CMD [ "npx", "next", "start", "--port", "5000" ]
