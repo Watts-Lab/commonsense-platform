@@ -91,8 +91,12 @@ Propogating changes in your local development. This also keeps a history of chan
 ### Devops (CI, deployment, etc..)
 Only infastructure people really need this. Feel free to skip if not relevant.
 #### Docker
-will be written soon
-
+These are required commands to push docker into amazon ecr registry.
+```
+  docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+  docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+  echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+```
 #### AWS 
 will be written soon
 
