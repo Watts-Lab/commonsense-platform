@@ -91,8 +91,30 @@ Propogating changes in your local development. This also keeps a history of chan
 ### Devops (CI, deployment, etc..)
 Only infastructure people really need this. Feel free to skip if not relevant.
 #### Docker
-will be written soon
-
+These are required commands to push docker into amazon ecr registry. This already implemented in the deploy.yml and the dockerfile should not require changing as long as there is only a node js setup required
+```
+  aws ecr get-login-password --region region | docker login --username AWS --password-stdin aws_account_id.dkr.ecr.region.amazonaws.com
+  docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+  docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+  echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+```
 #### AWS 
-will be written soon
+##### SSH into the server (configuring and debugging difficult deploys)
+Ssh into server `ssh -i commonsense-surveyor-key-pair.pem ec2-user@44.196.91.156ssh ec2-user@ip-172-31-7-91`
+Ask mark for the PEM
 
+##### Database
+We use AWS RDS of mySQL
+
+The database URI
+admin:<password>@commonsense.cn33x8n1lktv.us-east-1.rds.amazonaws.com:3306/prod
+
+The password ask Mark
+
+Note that the deploy pipeline should migrate any changes that can be merged. However,
+if data is going to be deleted, the migration will fail because it will not delete data.
+
+You will need to ssh into server and run this command to see the problem and resolve it.
+```
+npx prisma migrate deploy
+```
