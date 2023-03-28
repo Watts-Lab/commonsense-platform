@@ -15,7 +15,7 @@
     "@watts-lab/rapid-forms": "github:Watts-Lab/rapid-forms",
     "axios": "^0.26.1",
     "next": "12.1.5",
-    "next-auth": "^4.3.1",
+    "next-auth": "^4.10.3",
     "node-notifier": "^8.0.1",
     "react": "18.0.0",
     "react-dom": "18.0.0",
