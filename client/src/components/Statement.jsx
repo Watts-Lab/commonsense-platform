@@ -25,7 +25,7 @@ function Statement(props) {
   useEffect(() => {
     props.onChange(props.statementId, [questionOneAgree, questionOneOpinion, questionTwoAgree, questionTwoOpinion, questionThreeAgree, questionThreeOpinion]);
     props.data.answers = [questionOneAgree, questionOneOpinion, questionTwoAgree, questionTwoOpinion, questionThreeAgree, questionThreeOpinion];
-    console.log('props.data %O', props.data.answers);
+    // console.log('props.data %O', props.data.answers);
   }, [[questionOneAgree, questionOneOpinion, questionTwoAgree, questionTwoOpinion, questionThreeAgree, questionThreeOpinion]]);
 
 

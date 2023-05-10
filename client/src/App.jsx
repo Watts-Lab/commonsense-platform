@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import axios from "axios";
 
 axios.defaults.baseURL = `http://localhost:8000`
@@ -6,6 +7,8 @@ axios.defaults.baseURL = `http://localhost:8000`
 import Statement from "./components/Statement";
 import MultiStepForm from "./components/MultiStepForm";
 import Buttons from "./components/Buttons";
+import Consent from "./components/Consent";
+import Landing from "./components/Landing";
 
 import './App.css';
 
@@ -18,11 +21,15 @@ const cookies = new Cookies();
 
 function App() {
 
+  const { pathname } = useLocation();
+
   const [listOfStatements, setListOfStatements] = useState([{id: 0, statement:'loading...'}]);
 
   const [statementArray, setStatementArray] = useState([]);
 
   const [statementsData, setStatementsData] = useState([]);
+
+  const [sessionId, setSessionId] = useState();
 
   const {
     steps,
@@ -72,39 +79,44 @@ function App() {
 
     });
 
-    axios.get("", { withCredentials: true }).then((response) => {
+    axios.get("/", { withCredentials: true }).then((response) => {
       console.log(response.data);
+      setSessionId(response.data)
     });
 
+    
   }, []);
 
   return (
     <div className="App">
         <div className="mx-auto p-3 max-w-3xl pb-14">
-          { 
-            statementArray[currentStepIndex]
-          }
 
-          {
-            console.log('cookie: %O', document.cookie)
-          }
-          <Buttons 
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Landing/>} />
+              <Route path="/consent" element={<Consent/>} />
+              <Route path="/statements" element={statementArray[currentStepIndex]} />
+
+              {pathname !== "/" && pathname !== "/consent" && 
+            <Buttons 
             currentStep={currentStepIndex}
             next={next}  
             back={back}  
           />
+          }
+            </Routes>
+
+           
+          </BrowserRouter>
+
+
+          
+          
     
+          
+        </div>
 
         
-        {/* <Statement 
-            next={next}
-            back={back}
-            currentStep={currentStepIndex + 1}
-            statementText={listOfStatements[currentStepIndex].statement} 
-            statementId={listOfStatements[currentStepIndex].id} 
-          /> */}
-
-        </div>
     </div>
   )
 }

@@ -6,11 +6,25 @@ function MultiStepForm(props) {
 
     const [currentStepIndex, setCurrentStepIndex] = useState(0);
 
+    function checkAnswers(answerList) {
+        if(answerList.includes('')) 
+            return false;
+        else 
+            return true;
+    }
+
     function next() {
-        setCurrentStepIndex(i => {
-          if (i > props.steps.length - 1) return i;
-          return i + 1;
-        });
+
+        
+        if(checkAnswers(props.steps[currentStepIndex].answers.slice(0, 5))) {
+            setCurrentStepIndex(i => {
+                if (i > props.steps.length - 1) return i;
+                return i + 1;
+              });
+        } else {
+            console.log('answer all questions');
+        }
+        
 
         window.scrollTo({
             top: 0,
