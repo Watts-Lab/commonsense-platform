@@ -27,11 +27,13 @@ function QuestionThree(props) {
             id_v={questionIdentifier + "yes"} 
             statementClass={questionIdentifier + "agree"} 
             checked={props.questionThreeAgree === questionIdentifier + "yes"} 
+            required={true}
         />
         <Option text="No, it is not common sense" 
             id_v={questionIdentifier+ "no"} 
             statementClass={questionIdentifier + "agree"} 
             checked={props.questionThreeAgree === questionIdentifier + "no"} 
+            required={true}
         />
       </ul>
       </div>
@@ -43,16 +45,19 @@ function QuestionThree(props) {
             id_v={questionIdentifier + "clear"} 
             statementClass={questionIdentifier + "opinion"} 
             checked={props.questionThreeOpinion === questionIdentifier + "clear"}  
+            required={false}
         />
         <Option text="Confusing: I don't quite understand what it means, but it seems like it is written correctly" 
             id_v={questionIdentifier + "confusing"} 
             statementClass={questionIdentifier + "opinion"} 
             checked={props.questionThreeOpinion === questionIdentifier + "confusing"}
+            required={false}
         />
         <Option text="Gibberish: I don't know what it means, it is gibberish or poorly written so it doesn't make sense" 
             id_v={questionIdentifier + "gibberish"} 
             statementClass={questionIdentifier + "opinion"} 
             checked={props.questionThreeOpinion === questionIdentifier + "gibberish"}
+            required={false}
         />
       </ul>
     </div>

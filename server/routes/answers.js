@@ -4,19 +4,10 @@ const { answers } = require('../models')
 
 const { body, validationResult } = require('express-validator');
 
-// router.post("/", async (req, res) => {
-    
-//     const answer = req.body;
-
-//     console.log(answer.hey);
-
-//     // await answers.create(answer);
-
-//     res.json(answer);
-// });
 
 router.post(
     '/',
+    body('statementId').not().isEmpty().isInt({ min: 1 }),
     body('questionOneAgree').not().isEmpty().isInt({ min: 0, max: 1 }),
     body('questionOneWhy').not().isEmpty().isInt({ min: 0, max: 3 }),
     body('questionTwoAgree').not().isEmpty().isInt({ min: 0, max: 1 }),
@@ -30,13 +21,23 @@ router.post(
       if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
       } else {
-        res.json(req.body);
+        answers.create({
+
+          statementId: req.body.statementId,
+          questionOneAgree: req.body.questionOneAgree,
+          questionOneWhy: req.body.questionOneWhy,
+          questionTwoAgree: req.body.questionTwoAgree,
+          questionTwoWhy: req.body.questionTwoWhy,
+          questionThreeAgree: req.body.questionTwoAgree,
+          questionThreeWhy: req.body.questionThreeWhy,
+          origLanguage: "en",
+          sessionId: req.body.sessionId,
+
+        }).then(answer => res.json(answer));
       }
+      
   
-    //   User.create({
-    //     username: req.body.username,
-    //     password: req.body.password,
-    //   }).then(user => res.json(user));
+  
     
     });
 

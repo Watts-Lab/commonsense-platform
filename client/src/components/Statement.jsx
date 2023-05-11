@@ -30,8 +30,9 @@ function Statement(props) {
 
 
   return (
-    <form>
-      <div className="sticky top-0 z-50 bg-white border-double border-blue-600 border-b-2">
+    // sticky top-0 z-50
+    <>
+      <div className=" bg-white border-double border-blue-600 border-b-2">
         <ProgressBar currentStep={props.currentStep} />
         <p className="text-gray-600">Answer questions below about the following statement:</p>
         <h3 className="mt-3.5 mb-5 text-xl font-medium text-gray-900 dark:text-white text-center py-4">{text}</h3>
@@ -64,8 +65,7 @@ function Statement(props) {
         setQuestionThreeOpinion={setQuestionThreeOpinion} 
       />      
       
-      
-    </form>
+    </>
   )
 }
 

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 import './style.css';
 
@@ -57,6 +58,14 @@ function Consent(props) {
         <h3 className="font-semibold">Who can I call with questions, complaints or if I’m concerned about my rights as a research subject?</h3>
         <p>If you have questions, concerns or complaints regarding your participation in this research study or if you have any questions about your rights as a research subject, you should speak with Mark Whiting at 352-226-9212. If a member of the research team cannot be reached or you want to talk to someone other than those working on the study, you may contact the IRB at (215) 898 2614.</p>
         <p><b>By continuing in this survey you are agreeing to this research consent statement.</b></p>
+        
+        <div className="flex flex-col items-center pt-7">
+          <Link to="/statements">
+          <button className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+            I Agree
+          </button>
+          </Link>
+        </div>
 
     </div>
     )

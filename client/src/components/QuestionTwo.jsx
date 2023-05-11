@@ -26,11 +26,13 @@ function QuestionTwo(props) {
                     id_v={questionIdentifier + "yes"} 
                     statementClass={questionIdentifier + "agree"}
                     checked={props.questionTwoAgree === questionIdentifier + "yes"} 
+                    required={true}
                 />
                 <Option text="No" 
                     id_v={questionIdentifier + "no"} 
                     statementClass={questionIdentifier + "agree"} 
                     checked={props.questionTwoAgree === questionIdentifier + "no"} 
+                    required={true}
                 />
             </ul>
             </div>
@@ -42,21 +44,25 @@ function QuestionTwo(props) {
                     id_v={questionIdentifier + "op1"} 
                     statementClass={questionIdentifier + "opinion"} 
                     checked={props.questionTwoOpinion === questionIdentifier + "op1"} 
+                    required={true}
                 />
                 <Option text="I think most people lack good judgment with regard to this topic" 
                     id_v={questionIdentifier + "op2"} 
                     statementClass={questionIdentifier + "opinion"} 
                     checked={props.questionTwoOpinion === questionIdentifier + "op2"} 
+                    required={true}
                 />
                 <Option text="I think it's mostly a matter of opinion" 
                     id_v={questionIdentifier + "op3"} 
                     statementClass={questionIdentifier + "opinion"} 
                     checked={props.questionTwoOpinion === questionIdentifier + "op3"} 
+                    required={true}
                 />
                 <Option text="I don't know" 
                     id_v={questionIdentifier + "op4"} 
                     statementClass={questionIdentifier + "opinion"} 
-                    checked={props.questionTwoOpinion === questionIdentifier + "op4"} 
+                    checked={props.questionTwoOpinion === questionIdentifier + "op4"}
+                    required={true} 
                 />
             </ul>
             </div>
