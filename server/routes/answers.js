@@ -41,4 +41,16 @@ router.post(
     
     });
 
+router.get("/session/:sessionId/statement/:statementId", async (req, res) => {
+  const answerList = await answers.findAll({
+      limit: 1,
+      where: {
+          sessionId: req.params.sessionId,
+          statementId: req.params.statementId
+      },
+      order: [ [ 'createdAt', 'DESC' ]]
+  });
+  res.json(answerList);
+});
+
 module.exports = router;

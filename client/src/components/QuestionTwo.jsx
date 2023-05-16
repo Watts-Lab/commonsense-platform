@@ -23,15 +23,15 @@ function QuestionTwo(props) {
             
             <ul className="grid w-full gap-2 md:grid-cols-1 py-2">
                 <Option text="Yes" 
-                    id_v={questionIdentifier + "yes"} 
+                    id_v={questionIdentifier + "ag1"} 
                     statementClass={questionIdentifier + "agree"}
-                    checked={props.questionTwoAgree === questionIdentifier + "yes"} 
+                    checked={props.questionTwoAgree === questionIdentifier + "ag1"} 
                     required={true}
                 />
                 <Option text="No" 
-                    id_v={questionIdentifier + "no"} 
+                    id_v={questionIdentifier + "ag0"} 
                     statementClass={questionIdentifier + "agree"} 
-                    checked={props.questionTwoAgree === questionIdentifier + "no"} 
+                    checked={props.questionTwoAgree === questionIdentifier + "ag0"} 
                     required={true}
                 />
             </ul>
@@ -41,27 +41,27 @@ function QuestionTwo(props) {
             <h4>Why did you answer the way you did about most <b>other people?</b></h4>
             <ul className="grid w-full gap-2 md:grid-cols-1 py-2">
                 <Option text="I think most people have good judgement with regard to this topic" 
+                    id_v={questionIdentifier + "op0"} 
+                    statementClass={questionIdentifier + "opinion"} 
+                    checked={props.questionTwoOpinion === questionIdentifier + "op0"} 
+                    required={true}
+                />
+                <Option text="I think most people lack good judgment with regard to this topic" 
                     id_v={questionIdentifier + "op1"} 
                     statementClass={questionIdentifier + "opinion"} 
                     checked={props.questionTwoOpinion === questionIdentifier + "op1"} 
                     required={true}
                 />
-                <Option text="I think most people lack good judgment with regard to this topic" 
+                <Option text="I think it's mostly a matter of opinion" 
                     id_v={questionIdentifier + "op2"} 
                     statementClass={questionIdentifier + "opinion"} 
                     checked={props.questionTwoOpinion === questionIdentifier + "op2"} 
                     required={true}
                 />
-                <Option text="I think it's mostly a matter of opinion" 
+                <Option text="I don't know" 
                     id_v={questionIdentifier + "op3"} 
                     statementClass={questionIdentifier + "opinion"} 
-                    checked={props.questionTwoOpinion === questionIdentifier + "op3"} 
-                    required={true}
-                />
-                <Option text="I don't know" 
-                    id_v={questionIdentifier + "op4"} 
-                    statementClass={questionIdentifier + "opinion"} 
-                    checked={props.questionTwoOpinion === questionIdentifier + "op4"}
+                    checked={props.questionTwoOpinion === questionIdentifier + "op3"}
                     required={true} 
                 />
             </ul>

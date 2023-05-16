@@ -12,7 +12,7 @@ import './style.css';
 
 function Layout(props) {
     
-    const [listOfStatements, setListOfStatements] = useState([{id: 0, statement:'loading...'}]);
+    // const [listOfStatements, setListOfStatements] = useState([{id: 0, statement:'loading...'}]);
 
     const [statementArray, setStatementArray] = useState([]);
 
@@ -20,58 +20,107 @@ function Layout(props) {
 
     const [sessionId, setSessionId] = useState();
 
+    const handleAnswerSaving = (tid, answerState) => {
+        setStatementsData(prevState =>
+            prevState.map(data => (data.id === tid ? {id: tid, answers: data.answers, answereSaved: answerState} : data)),
+        );
+    };
+
+    const getNextStatement = async (sessionId) => {
+        try {
+          const {data:response} = await axios.get("/statements/next") //use data destructuring to get data from the promise object
+            return response
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const pushNewStatement = (statementId, statementText, statementIndex) => {
+        console.log('adding new statement');
+        setStatementsData(oldArray => [...oldArray, {id: statementId, answers: ["", "", "", "", "", ""], answereSaved: false}] );
+        setStatementArray(
+            oldArray => [...oldArray, 
+            (
+                <Statement 
+                    key={oldArray.length}
+                    next={next}
+                    back={back}
+                    currentStep={oldArray.length + 1}
+                    statementText={statementText} 
+                    statementId={statementId} 
+                    onChange={handleStatementChange}
+                    onSaveStatement={handleAnswerSaving}
+                    data={statementsData[oldArray.length] || {id: statementId, answers: ["", "", "", "", "", ""]}}
+                />
+            )]
+        );
+    }
+
     const {
         steps,
         currentStepIndex,
         back,
         next
-        } = MultiStepForm({steps: statementsData, sessionId: sessionId});
-
+        } = MultiStepForm({
+            steps: statementsData, 
+            sessionId: sessionId, 
+            handleAnswerSaving: handleAnswerSaving, 
+            getNextStatement: getNextStatement,
+            pushNewStatement: pushNewStatement
+        });
 
 
     const handleStatementChange = (tid, updatedData) => {
-    setStatementsData(prevState =>
-        prevState.map(data => (data.id === tid ? {id: tid, answers: updatedData} : data)),
-    );
+        setStatementsData(prevState =>
+            prevState.map(data => (data.id === tid ? {id: tid, answers: updatedData, answereSaved: data.answereSaved} : data)),
+        );
+    };
+
+    const getUserLastAnswer = (sessionId, statementId) => {
+        axios.get("/answers/session/"+sessionId+"/statement/" + statementId).then((response) => {
+            console.log(response.data)
+        })
     };
 
     useEffect(() => {
-    axios.get("/statements").then((response) => {
 
-        setStatementsData(response.data.map(statement => {
-            return {id: statement.id, answers: ["", "", "", "", "", ""]}
-        })
-        );
+        axios.get("/statements").then((response) => {
 
-        setListOfStatements(response.data);
+            setStatementsData(response.data.map(statement => {
+                    return {id: statement.id, answers: ["", "", "", "", "", ""], answereSaved: false}
+                })
+            );
 
-        return response;
+            // setListOfStatements(response.data);
 
-    }).then((response) => {
+            return response;
 
-        setStatementArray(
-        response.data.map((statement, index) => {
-            return (
-                <Statement 
-                key={index}
-                next={next}
-                back={back}
-                currentStep={index + 1}
-                statementText={statement.statement} 
-                statementId={statement.id} 
-                onChange={handleStatementChange}
-                data={statementsData[index] || {id: statement.id, answers: ["", "", "", "", "", ""]}}
-            />
-            )
-        })
-        );
+        }).then((response) => {
 
-    });
+            setStatementArray(
+                response.data.map((statement, index) => {
+                    return (
+                        <Statement 
+                        key={index}
+                        next={next}
+                        back={back}
+                        currentStep={index + 1}
+                        statementText={statement.statement} 
+                        statementId={statement.id} 
+                        onChange={handleStatementChange}
+                        onSaveStatement={handleAnswerSaving}
+                        data={statementsData[index] || {id: statement.id, answers: ["", "", "", "", "", ""]}}
+                    />
+                    )
+                })
+            );
 
-    axios.get("/", { withCredentials: true }).then((response) => {
-        console.log(response.data);
-        setSessionId(response.data)
-    });
+        });
+
+        axios.get("/", { withCredentials: true }).then((response) => {
+            console.log(response.data);
+            setSessionId(response.data)
+        });
 
 
     }, []);
@@ -86,7 +135,7 @@ function Layout(props) {
         <form onSubmit={submitHandler}>
             {statementArray[currentStepIndex]}
 
-            <Buttons currentStep={currentStepIndex} next={next} back={back} />
+            <Buttons currentStep={currentStepIndex} getNextStatement={getNextStatement} next={next} back={back} />
         </form>
     </>
   )

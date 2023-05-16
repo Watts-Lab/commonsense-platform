@@ -24,15 +24,15 @@ function QuestionThree(props) {
       
       <ul className="grid w-full gap-2 md:grid-cols-1 py-2">
         <Option text="Yes, it is common sense" 
-            id_v={questionIdentifier + "yes"} 
+            id_v={questionIdentifier + "ag1"} 
             statementClass={questionIdentifier + "agree"} 
-            checked={props.questionThreeAgree === questionIdentifier + "yes"} 
+            checked={props.questionThreeAgree === questionIdentifier + "ag1"} 
             required={true}
         />
         <Option text="No, it is not common sense" 
-            id_v={questionIdentifier+ "no"} 
+            id_v={questionIdentifier+ "ag0"} 
             statementClass={questionIdentifier + "agree"} 
-            checked={props.questionThreeAgree === questionIdentifier + "no"} 
+            checked={props.questionThreeAgree === questionIdentifier + "ag0"} 
             required={true}
         />
       </ul>
@@ -42,21 +42,21 @@ function QuestionThree(props) {
       <h4><b>Optional:</b> How do you think most people would categorize this statement</h4>
       <ul className="grid w-full gap-2 md:grid-cols-1 py-2">
         <Option text="Clear: it is clearly written and I can understand the meaning" 
-            id_v={questionIdentifier + "clear"} 
+            id_v={questionIdentifier + "op0"} 
             statementClass={questionIdentifier + "opinion"} 
-            checked={props.questionThreeOpinion === questionIdentifier + "clear"}  
+            checked={props.questionThreeOpinion === questionIdentifier + "op0"}  
             required={false}
         />
         <Option text="Confusing: I don't quite understand what it means, but it seems like it is written correctly" 
-            id_v={questionIdentifier + "confusing"} 
+            id_v={questionIdentifier + "op1"} 
             statementClass={questionIdentifier + "opinion"} 
-            checked={props.questionThreeOpinion === questionIdentifier + "confusing"}
+            checked={props.questionThreeOpinion === questionIdentifier + "op1"}
             required={false}
         />
         <Option text="Gibberish: I don't know what it means, it is gibberish or poorly written so it doesn't make sense" 
-            id_v={questionIdentifier + "gibberish"} 
+            id_v={questionIdentifier + "op2"} 
             statementClass={questionIdentifier + "opinion"} 
-            checked={props.questionThreeOpinion === questionIdentifier + "gibberish"}
+            checked={props.questionThreeOpinion === questionIdentifier + "op2"}
             required={false}
         />
       </ul>

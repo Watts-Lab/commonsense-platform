@@ -26,24 +26,38 @@ function MultiStepForm(props) {
 
     function next() {
 
+        if(currentStepIndex > 3) {
+            props.getNextStatement(12).then(ret_val => {
+                console.log(ret_val[0]);
+                props.pushNewStatement(ret_val[0].id, ret_val[0].statement, 6)
+             });
+        }
+
         if(checkAnswers(props.steps[currentStepIndex].answers.slice(0, 5))) {
+            
             setCurrentStepIndex(i => {
                 if (i > props.steps.length - 1) return i;
                 return i + 1;
             });
 
-            axios.post('/answers', {
-                "statementId": props.steps[currentStepIndex].id,
-                "questionOneAgree": 0,
-                "questionOneWhy": 3,
-                "questionTwoAgree": 0,
-                "questionTwoWhy": 1,
-                "questionThreeAgree": 1,
-                "questionThreeWhy": 3,
-                "origLanguage": "en",
-                "sessionId": props.sessionId,
-            })
-                .then(response => console.log(response.data));
+            if(!props.steps[currentStepIndex].answereSaved) {
+                axios.post('/answers', {
+                    "statementId": props.steps[currentStepIndex].id,
+                    "questionOneAgree": props.steps[currentStepIndex].answers[0].slice(-1),
+                    "questionOneWhy": props.steps[currentStepIndex].answers[1].slice(-1),
+                    "questionTwoAgree": props.steps[currentStepIndex].answers[2].slice(-1),
+                    "questionTwoWhy": props.steps[currentStepIndex].answers[3].slice(-1),
+                    "questionThreeAgree": props.steps[currentStepIndex].answers[4].slice(-1),
+                    "questionThreeWhy": "3",
+                    "origLanguage": "en",
+                    "sessionId": props.sessionId,
+                })
+                .then((response) => {
+                    console.log(response.data);
+                    props.handleAnswerSaving(props.steps[currentStepIndex].id, true);
+                    props.steps[currentStepIndex].answereSaved = true;
+                });
+            }
 
         } else {
             console.log(whichQuestion(props.steps[currentStepIndex].answers.slice(0, 5)));

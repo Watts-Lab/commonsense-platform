@@ -49,7 +49,7 @@ module.exports = (sequelize, DataTypes) => {
     });
     
     Answers.associate = (models) => {
-      Answers.belongsTo(models.statements);
+      Answers.belongsTo(models.statements, { foreignKey: 'statementId', as: 'statement' });
     };
 
     return Answers;
