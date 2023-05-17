@@ -8,21 +8,12 @@ app.use(express.json())
 
 const db = require("./models");
 
+// session management and store
 const session = require('express-session')
 
 const mysql = require('mysql2');
 const MySQLStore = require('express-mysql-session')(session);
-
-const options = {
-    host: '127.0.0.1',
-    port: 3306,
-    user: 'root',
-    password: 'mysqlroot',
-    database: 'CommonsenseDB',
-    connectionLimit: 10,
-    createDatabaseTable: true
-};
-
+const options = require(__dirname + '/config/config.json')['options'];
 const pool = mysql.createPool(options);
 const sessionStore = new MySQLStore(options, pool);
 
@@ -40,9 +31,9 @@ app.use(session({
     store: sessionStore,
     cookie: { 
         path: '/',
-        maxAge: 1000 * 60 * 60 * 2, // 2 hours
+        maxAge: 1000 * 60 * 60 * 12, // 2 hours
         sameSite: true,
-        secure: false 
+        secure: false // remove in production
     }
 
 }));
