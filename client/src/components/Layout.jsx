@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import axios from "axios";
 
@@ -28,14 +28,14 @@ function Layout(props) {
 
     const getNextStatement = async (sessionId) => {
         try {
-          const {data:response} = await axios.get("/statements/next") //use data destructuring to get data from the promise object
+          const {data:response} = await axios.get("/statements/test") //use data destructuring to get data from the promise object
             return response
         } catch (error) {
             console.log(error);
         }
     }
 
-    const pushNewStatement = (statementId, statementText, statementIndex) => {
+    const pushNewStatement = (statementId, statementText) => {
         console.log('adding new statement');
         setStatementsData(oldArray => [...oldArray, {id: statementId, answers: ["", "", "", "", "", ""], answereSaved: false}] );
         setStatementArray(
@@ -130,12 +130,14 @@ function Layout(props) {
         console.log(statementsData);
     }
 
+    const fromRef = useRef();
+
   return (
     <>
-        <form onSubmit={submitHandler}>
+        <form ref={fromRef} onSubmit={submitHandler}>
             {statementArray[currentStepIndex]}
 
-            <Buttons currentStep={currentStepIndex} getNextStatement={getNextStatement} next={next} back={back} />
+            <Buttons formRef={fromRef} currentStep={currentStepIndex} getNextStatement={getNextStatement} next={next} back={back} />
         </form>
     </>
   )

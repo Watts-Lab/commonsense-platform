@@ -1,8 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const { statements, statementproperties, answers } = require('../models')
+const { statements, statementproperties, answers } = require('../models');
 
-const Sequelize = require('sequelize');
+const env = process.env.NODE_ENV || 'development';
+const config = require(__dirname + '/../config/config.json')[env];
+
+const { Sequelize, QueryTypes } = require('sequelize');
+
+const sequelize = new Sequelize(config.database, config.username, config.password, config);
 
 function getRandom(arr, n) {
     var result = new Array(n),
@@ -17,6 +22,61 @@ function getRandom(arr, n) {
     }
     return result;
 }
+
+function getStatementByWeight(statementsArray) {
+    const temp_data = [
+        { id: 1, count: 10 },
+        { id: 2, count: 1 },
+        { id: 3, count: 1 },
+      ];
+  
+    const max_answers = Math.max(...statementsArray.map((d) => Number(d.statementCount)));
+    console.log(statementsArray[0]);
+
+    const weighted_list = statementsArray.flatMap((d) =>
+        Array(Math.round(max_answers / (d.statementCount + 1))).fill(d.id)
+    );
+
+
+    console.log(weighted_list);
+    console.log(
+        statementsArray[
+            weighted_list[Math.floor(Math.random() * weighted_list.length)] - 1
+        ]
+    )
+}
+
+router.get("/test", async (req, res) => {
+    try {
+        const [results, metadata] = await sequelize.query(`
+        WITH weighted_questions AS (
+            SELECT
+            statements.id,
+            statements.statement,
+            1.0 / (COUNT(answers.statementId)+1) AS weight
+            FROM
+            statements
+            LEFT JOIN
+                answers ON statements.id = answers.statementId 
+            GROUP BY
+                statements.id
+        )
+        
+        SELECT
+          id,
+          statement,
+          -LOG(RAND()) / weight AS priority
+        FROM
+          weighted_questions
+        ORDER BY priority ASC  
+        LIMIT 1;
+        `);
+        res.json(results);
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'An error occurred' });
+      }
+});
 
 router.get("/", async (req, res) => {
     // res.send("hello");
@@ -56,11 +116,13 @@ router.get("/next", async (req, res) => {
             ]
         },
         include: [{
-            model: answers, attributes: []
+            model: answers,
+            attributes: []
         }],
         group: ['statements.id']
     });
-    res.json(getRandom(statementList, 10));
+    // res.json(getRandom(statementList,10));
+    res.json(getStatementByWeight(statementList));
 });
 
 module.exports = router;

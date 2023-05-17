@@ -26,19 +26,21 @@ function MultiStepForm(props) {
 
     function next() {
 
-        if(currentStepIndex > 3) {
-            props.getNextStatement(12).then(ret_val => {
-                console.log(ret_val[0]);
-                props.pushNewStatement(ret_val[0].id, ret_val[0].statement, 6)
-             });
-        }
+        console.log('current step ' + currentStepIndex + ' array length ' + props.steps.length);
 
-        if(checkAnswers(props.steps[currentStepIndex].answers.slice(0, 5))) {
-            
+        if(!checkAnswers(props.steps[currentStepIndex].answers.slice(0, 5))) {
+
             setCurrentStepIndex(i => {
                 if (i > props.steps.length - 1) return i;
                 return i + 1;
             });
+
+            if(currentStepIndex > 3 && currentStepIndex < 14) {
+                props.getNextStatement(12).then(ret_val => {
+                    console.log(ret_val[0]);
+                    props.pushNewStatement(ret_val[0].id, ret_val[0].statement)
+                 });
+            }
 
             if(!props.steps[currentStepIndex].answereSaved) {
                 axios.post('/answers', {
@@ -48,7 +50,7 @@ function MultiStepForm(props) {
                     "questionTwoAgree": props.steps[currentStepIndex].answers[2].slice(-1),
                     "questionTwoWhy": props.steps[currentStepIndex].answers[3].slice(-1),
                     "questionThreeAgree": props.steps[currentStepIndex].answers[4].slice(-1),
-                    "questionThreeWhy": "3",
+                    "questionThreeWhy": props.steps[currentStepIndex].answers[5].slice(-1),
                     "origLanguage": "en",
                     "sessionId": props.sessionId,
                 })

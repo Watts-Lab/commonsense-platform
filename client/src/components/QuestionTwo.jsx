@@ -22,13 +22,15 @@ function QuestionTwo(props) {
             <p className="text-gray-600">(if the answer depends, respond with your most common or most likely answer)</p>
             
             <ul className="grid w-full gap-2 md:grid-cols-1 py-2">
-                <Option text="Yes" 
+                <Option 
+                    text="Yes" 
                     id_v={questionIdentifier + "ag1"} 
                     statementClass={questionIdentifier + "agree"}
                     checked={props.questionTwoAgree === questionIdentifier + "ag1"} 
                     required={true}
                 />
-                <Option text="No" 
+                <Option 
+                    text="No" 
                     id_v={questionIdentifier + "ag0"} 
                     statementClass={questionIdentifier + "agree"} 
                     checked={props.questionTwoAgree === questionIdentifier + "ag0"} 
