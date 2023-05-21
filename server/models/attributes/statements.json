@@ -1,0 +1,25 @@
+{
+    "statement": {
+        "type": "TEXT",
+        "allowNull": false
+    },
+
+    "statementSource": {
+        "type": "STRING",
+        "allowNull": false
+    },
+
+    "origLanguage": {
+        "type": "STRING",
+        "allowNull": false
+    },
+
+    "published": {
+        "type": "BOOLEAN",
+        "allowNull": true
+    }
+
+    
+}
+
+

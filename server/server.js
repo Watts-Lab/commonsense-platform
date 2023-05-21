@@ -20,8 +20,11 @@ const sessionStore = new MySQLStore(options, pool);
 // routers
 const statementRouter = require('./routes/statements');
 const answerRouter = require('./routes/answers');
+const resultRouter = require('./routes/results');
+
 app.use("/statements", statementRouter);
 app.use("/answers", answerRouter);
+app.use("/results", resultRouter);
 
 app.use(session({
     name: 'user-session',
@@ -31,7 +34,7 @@ app.use(session({
     store: sessionStore,
     cookie: { 
         path: '/',
-        maxAge: 1000 * 60 * 60 * 12, // 2 hours
+        maxAge: 1000 * 60 * 60 * 12, // 12 hours
         sameSite: true,
         secure: false // remove in production
     }
@@ -40,7 +43,7 @@ app.use(session({
   
 // Access the session as req.session
 app.get('/', function(req, res) {
-    console.log(req.sessionID)
+    // console.log(req.sessionID)
     res.send(req.sessionID);
 })
 

@@ -28,7 +28,7 @@ function MultiStepForm(props) {
 
         console.log('current step ' + currentStepIndex + ' array length ' + props.steps.length);
 
-        if(!checkAnswers(props.steps[currentStepIndex].answers.slice(0, 5))) {
+        if(checkAnswers(props.steps[currentStepIndex].answers.slice(0, 5))) {
 
             setCurrentStepIndex(i => {
                 if (i > props.steps.length - 1) return i;
@@ -62,6 +62,7 @@ function MultiStepForm(props) {
             }
 
         } else {
+            // TODO: invoke error on the button
             console.log(whichQuestion(props.steps[currentStepIndex].answers.slice(0, 5)));
             return whichQuestion(props.steps[currentStepIndex].answers.slice(0, 5));
         }

@@ -1,3 +1,5 @@
+const { DataTypes } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
     
     const StatementProperties = sequelize.define("statementproperties", {
@@ -20,3 +22,17 @@ module.exports = (sequelize, DataTypes) => {
   
     return StatementProperties;
   };
+
+console.log({
+      
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+
+  available: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
+  }
+  
+})

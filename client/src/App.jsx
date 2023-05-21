@@ -8,11 +8,12 @@ axios.defaults.baseURL = `http://localhost:8000`
 import Consent from "./components/Consent";
 import Landing from "./components/Landing";
 import Layout from "./components/Layout";
+import Result from "./components/Result";
 
 import './App.css';
 
-
 import Cookies from 'universal-cookie';
+
 
 
 
@@ -31,6 +32,7 @@ function App() {
               <Route path="/" element={<Landing/>} />
               <Route path="/consent" element={<Consent/>} />
               <Route path="/statements" element={<Layout/>} />
+              <Route path="/finish" element={<Result/>} />
             </Routes>
 
            
