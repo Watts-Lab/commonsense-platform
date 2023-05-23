@@ -52,6 +52,24 @@ function getStatementByWeight(statementsArray) {
   );
 }
 
+function shuffle(array) {
+  let currentIndex = array.length,  randomIndex;
+
+  // While there remain elements to shuffle.
+  while (currentIndex != 0) {
+
+    // Pick a remaining element.
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    // And swap it with the current element.
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex], array[currentIndex]];
+  }
+
+  return array;
+}
+
 router.get("/test", async (req, res) => {
   try {
     const [results, metadata] = await sequelize.query(`
@@ -86,14 +104,16 @@ router.get("/test", async (req, res) => {
 
 router.get("/", async (req, res) => {
   // res.send("hello");
-  const statementList = await statements.findAll({
-    where: {
-      id: [6, 149, 2009, 2904, 3621],
-    },
-    // include: statementproperties,
-    // order: Sequelize.literal('rand()')
-  });
-  res.json(statementList);
+  await statements
+    .findAll({
+      where: {
+        id: [6, 149, 2009, 2904, 3621],
+      },
+      // include: statementproperties,
+      // order: Sequelize.literal('rand()')
+    })
+    .then(shuffle)
+    .then((data) => res.json(data));
 });
 
 router.get("/byid/:statementId", async (req, res) => {

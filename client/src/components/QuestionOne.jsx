@@ -20,7 +20,7 @@ function QuestionOne(props) {
   return (
     <>
       <div className={props.unansweredQuestionIndex === 0 ? errorStyle : "p-3"} onChange={onChangeAgreement}>
-        <h4 className="font-bold">Do you agree with this statement?</h4>
+        <h4 className="font-bold required-field">Do you agree with this statement? *</h4>
         <p className="text-gray-600">
           (if the answer depends, respond with your most common or most likely
           answer)
@@ -46,7 +46,7 @@ function QuestionOne(props) {
 
       <div className={props.unansweredQuestionIndex === 1 ? errorStyle : "p-3"} onChange={onChangeOpinion}>
         <h4>
-          Why did you answer the way you did about <b>yourself?</b>
+          Why did you answer the way you did about <b>yourself?</b> *
         </h4>
         <ul className="grid w-full gap-2 md:grid-cols-1 py-2">
           <Option

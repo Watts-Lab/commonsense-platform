@@ -103,7 +103,7 @@ function Result(props) {
                 Create an account
               </button>
 
-              <div class="relative flex py-1 items-center !mt-0.5">
+              {/* <div class="relative flex py-1 items-center !mt-0.5">
                 <div class="flex-grow border-t border-gray-400"></div>
                 <span class="flex-shrink mx-4 text-gray-400">Or</span>
                 <div class="flex-grow border-t border-gray-400"></div>
@@ -161,7 +161,7 @@ function Result(props) {
                 >
                   Login here
                 </a>
-              </p>
+              </p> */}
             </form>
           </div>
         </div>

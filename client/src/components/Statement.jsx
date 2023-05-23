@@ -65,16 +65,19 @@ function Statement(props) {
   return (
     // sticky top-0 z-50
     <>
-      <div className=" bg-white border-double border-blue-600 border-b-2">
-        <ProgressBar currentStep={props.currentStep} />
-        <p className="text-gray-600">
-          Answer questions below about the following statement:
-        </p>
-        <h3 className="mt-3.5 mb-5 text-xl font-medium text-gray-900 dark:text-white text-center py-4">
+      <ProgressBar currentStep={props.currentStep} />
+      <p className="text-gray-600">
+        Answer questions below about the following statement:
+      </p>
+
+      <div className=" sticky top-0 z-50 bg-white border-double border-blue-600 border-b-2">
+        <h3 className="mt-3.5 text-xl font-medium text-gray-900 dark:text-white text-center py-4">
           {text}
           {console.log(props.data.answereSaved)}
         </h3>
       </div>
+      
+      <p className="px-3 pt-3 tracking-tighter text-gray-500 md:text-sm dark:text-gray-400">Required fields are marked with an asterisk *</p>
       {/* first set of questions */}
       <QuestionOne
         statementId={props.statementId}
@@ -85,7 +88,7 @@ function Statement(props) {
         unansweredQuestionIndex={props.unansweredQuestionIndex}
       />
 
-      <hr />
+      <p className="p-5"> </p>
       {/* second set of questions */}
 
       <QuestionTwo
@@ -96,7 +99,7 @@ function Statement(props) {
         setQuestionTwoOpinion={setQuestionTwoOpinion}
       />
 
-      <hr />
+      <p className="p-5"> </p>
       {/* third set of questions */}
 
       <QuestionThree

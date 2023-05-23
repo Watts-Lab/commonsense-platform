@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 import axios from "axios";
 
-axios.defaults.baseURL = `http://localhost:8000`;
+// axios.defaults.baseURL = `http://localhost:8000`;
 
 import Statement from "./Statement";
 import MultiStepForm from "./MultiStepForm";

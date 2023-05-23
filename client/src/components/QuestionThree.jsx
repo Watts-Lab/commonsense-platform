@@ -20,7 +20,7 @@ function QuestionThree(props) {
     return (
     <>
     <div className="p-3" onChange={onChangeAgreement}>
-      <h4 className="font-bold">Overall, do you think this statement is an example of common sense?</h4>
+      <h4 className="font-bold">Overall, do you think this statement is an example of common sense? *</h4>
       
       <ul className="grid w-full gap-2 md:grid-cols-1 py-2">
         <Option text="Yes, it is common sense" 
