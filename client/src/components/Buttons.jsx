@@ -7,7 +7,8 @@ function Buttons(props) {
 
     function nextClick() {
         props.next();
-        props.formRef.current.reset();
+        // props.formRef.current.reset();
+        // event.preventDefault();
     }
     
     return (

@@ -1,54 +1,60 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { statements, statementproperties, answers } = require('../models');
+const { statements, statementproperties, answers } = require("../models");
 
-const env = process.env.NODE_ENV || 'development';
-const config = require(__dirname + '/../config/config.json')[env];
+const env = process.env.NODE_ENV || "development";
+const config = require(__dirname + "/../config/config.json")[env];
 
-const { Sequelize, QueryTypes } = require('sequelize');
+const { Sequelize, QueryTypes } = require("sequelize");
 
-const sequelize = new Sequelize(config.database, config.username, config.password, config);
+const sequelize = new Sequelize(
+  config.database,
+  config.username,
+  config.password,
+  config
+);
 
 function getRandom(arr, n) {
-    var result = new Array(n),
-        len = arr.length,
-        taken = new Array(len);
-    if (n > len)
-        throw new RangeError("getRandom: more elements taken than available");
-    while (n--) {
-        var x = Math.floor(Math.random() * len);
-        result[n] = arr[x in taken ? taken[x] : x];
-        taken[x] = --len in taken ? taken[len] : len;
-    }
-    return result;
+  var result = new Array(n),
+    len = arr.length,
+    taken = new Array(len);
+  if (n > len)
+    throw new RangeError("getRandom: more elements taken than available");
+  while (n--) {
+    var x = Math.floor(Math.random() * len);
+    result[n] = arr[x in taken ? taken[x] : x];
+    taken[x] = --len in taken ? taken[len] : len;
+  }
+  return result;
 }
 
 function getStatementByWeight(statementsArray) {
-    const temp_data = [
-        { id: 1, count: 10 },
-        { id: 2, count: 1 },
-        { id: 3, count: 1 },
-      ];
-  
-    const max_answers = Math.max(...statementsArray.map((d) => Number(d.statementCount)));
-    console.log(statementsArray[0]);
+  const temp_data = [
+    { id: 1, count: 10 },
+    { id: 2, count: 1 },
+    { id: 3, count: 1 },
+  ];
 
-    const weighted_list = statementsArray.flatMap((d) =>
-        Array(Math.round(max_answers / (d.statementCount + 1))).fill(d.id)
-    );
+  const max_answers = Math.max(
+    ...statementsArray.map((d) => Number(d.statementCount))
+  );
+  console.log(statementsArray[0]);
 
+  const weighted_list = statementsArray.flatMap((d) =>
+    Array(Math.round(max_answers / (d.statementCount + 1))).fill(d.id)
+  );
 
-    console.log(weighted_list);
-    console.log(
-        statementsArray[
-            weighted_list[Math.floor(Math.random() * weighted_list.length)] - 1
-        ]
-    )
+  console.log(weighted_list);
+  console.log(
+    statementsArray[
+      weighted_list[Math.floor(Math.random() * weighted_list.length)] - 1
+    ]
+  );
 }
 
 router.get("/test", async (req, res) => {
-    try {
-        const [results, metadata] = await sequelize.query(`
+  try {
+    const [results, metadata] = await sequelize.query(`
         WITH weighted_questions AS (
             SELECT
             statements.id,
@@ -71,58 +77,67 @@ router.get("/test", async (req, res) => {
         ORDER BY priority ASC  
         LIMIT 1;
         `);
-        res.json(results);
-      } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'An error occurred' });
-      }
+    res.json(results);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "An error occurred" });
+  }
 });
 
 router.get("/", async (req, res) => {
-    // res.send("hello");
-    const statementList = await statements.findAll({
-        where: {
-            id: [6, 149, 2009, 2904, 3621]
-        },
-        // include: statementproperties,
-        // order: Sequelize.literal('rand()')
-    });
-    res.json(statementList);
+  // res.send("hello");
+  const statementList = await statements.findAll({
+    where: {
+      id: [6, 149, 2009, 2904, 3621],
+    },
+    // include: statementproperties,
+    // order: Sequelize.literal('rand()')
+  });
+  res.json(statementList);
 });
 
 router.get("/byid/:statementId", async (req, res) => {
-    const statementList = await statements.findAll({
-        where: {
-            id: req.params.statementId
-        },
-        // include: statementproperties,
-    });
-    res.json(statementList);
+  const statementList = await statements.findAll({
+    where: {
+      id: req.params.statementId,
+    },
+    // include: statementproperties,
+  });
+  res.json(statementList);
 });
 
 router.get("/next", async (req, res) => {
-    const statementList = await statements.findAll({
-        where: {
-            id: {
-                [Sequelize.Op.notIn]: [6, 149, 2009, 2904, 3621]
-            }
-        },
-        attributes: { 
-            include: [
-                [Sequelize.fn("COUNT", Sequelize.col("answers.statementId")), "statementCount"]
-            ],
-            exclude: [
-                'statementSource', 'origLanguage', 'published', 'createdAt', 'updatedAt'
-            ]
-        },
-        include: [{
-            model: answers,
-            attributes: []
-        }],
-        group: ['statements.id']
-    });
-    // res.json(getRandom(statementList,10));
-    res.json(getStatementByWeight(statementList));
+  const statementList = await statements.findAll({
+    where: {
+      id: {
+        [Sequelize.Op.notIn]: [6, 149, 2009, 2904, 3621],
+      },
+    },
+    attributes: {
+      include: [
+        [
+          Sequelize.fn("COUNT", Sequelize.col("answers.statementId")),
+          "statementCount",
+        ],
+      ],
+      exclude: [
+        "statementSource",
+        "origLanguage",
+        "published",
+        "createdAt",
+        "updatedAt",
+      ],
+    },
+    include: [
+      {
+        model: answers,
+        attributes: [],
+      },
+    ],
+    group: ["statements.id"],
+  });
+  // res.json(getRandom(statementList,10));
+  res.json(getStatementByWeight(statementList));
 });
 
 module.exports = router;

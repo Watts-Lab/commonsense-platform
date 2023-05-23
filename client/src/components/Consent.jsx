@@ -5,7 +5,10 @@ import './style.css';
 
 function Consent(props) {
 
-    
+    const handleCloseWindow = () => {
+        window.close();
+    }
+
     return (
     <div className="text-justify leading-relaxed">
         <h2 className="font-bold">Research Study Summary for Potential Subjects</h2>
@@ -57,6 +60,7 @@ function Consent(props) {
         <p>Participation will be compensated directly via the recruitment platform after your participation or the completion of the study or as information about your participation if you volunteer to take part in this study.</p>
         <h3 className="font-semibold">Who can I call with questions, complaints or if I’m concerned about my rights as a research subject?</h3>
         <p>If you have questions, concerns or complaints regarding your participation in this research study or if you have any questions about your rights as a research subject, you should speak with Mark Whiting at 352-226-9212. If a member of the research team cannot be reached or you want to talk to someone other than those working on the study, you may contact the IRB at (215) 898 2614.</p>
+        <br></br>
         <p><b>By continuing in this survey you are agreeing to this research consent statement.</b></p>
         
         <div className="flex flex-col items-center pt-7">
@@ -65,6 +69,7 @@ function Consent(props) {
             I Agree
           </button>
           </Link>
+          {/* <a className="" href="#" onClick={handleCloseWindow}>Disagree and close the window.</a> */}
         </div>
 
     </div>

@@ -35,13 +35,19 @@ function MultiStepForm(props) {
                 return i + 1;
             });
 
-            if(currentStepIndex > 3 && currentStepIndex < 14) {
+            if(currentStepIndex === 13) {
+                props.pushResultComponent();
+            }
+            
+            // if user finishes a statement, then get new statement (stays 2 steps ahead)
+            if(currentStepIndex > props.steps.length - 3 && currentStepIndex < 13) {
                 props.getNextStatement(12).then(ret_val => {
                     console.log(ret_val[0]);
                     props.pushNewStatement(ret_val[0].id, ret_val[0].statement)
                  });
             }
 
+            // if the user answered the statement, then save the answer and set the answerSaved flag to true
             if(!props.steps[currentStepIndex].answereSaved) {
                 axios.post('/answers', {
                     "statementId": props.steps[currentStepIndex].id,
@@ -63,7 +69,8 @@ function MultiStepForm(props) {
 
         } else {
             // TODO: invoke error on the button
-            console.log(whichQuestion(props.steps[currentStepIndex].answers.slice(0, 5)));
+            // console.log(whichQuestion(props.steps[currentStepIndex].answers.slice(0, 5)));
+            props.setUnansweredQuestionIndex(whichQuestion(props.steps[currentStepIndex].answers.slice(0, 5)));
             return whichQuestion(props.steps[currentStepIndex].answers.slice(0, 5));
         }
 
