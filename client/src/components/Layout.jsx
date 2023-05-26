@@ -12,12 +12,24 @@ import Result from "./Result";
 
 import "./style.css";
 
-
 function Layout(props) {
   // const [listOfStatements, setListOfStatements] = useState([{id: 0, statement:'loading...'}]);
 
+  function useStickyState(defaultValue, key) {
+    const [value, setValue] = React.useState(() => {
+      const stickyValue = localStorage.getItem(key);
+      return stickyValue !== null ? JSON.parse(stickyValue) : defaultValue;
+    });
+
+    React.useEffect(() => {
+      localStorage.setItem(key, JSON.stringify(value));
+    }, [key, value]);
+
+    return [value, setValue];
+  }
+
   const [statementArray, setStatementArray] = useState([]);
-  const [statementsData, setStatementsData] = useState([]);
+  const [statementsData, setStatementsData] = useStickyState([], 'statementsData');
   const [sessionId, setSessionId] = useState();
   const [unansweredQuestionIndex, setUnansweredQuestionIndex] = useState(null);
 
@@ -51,6 +63,7 @@ function Layout(props) {
 
   const pushNewStatement = (statementId, statementText) => {
     console.log("adding new statement");
+
     setStatementsData((oldArray) => [
       ...oldArray,
       {
@@ -125,11 +138,11 @@ function Layout(props) {
           })
         );
 
-        // setListOfStatements(response.data);
-
         return response;
       })
       .then((response) => {
+        localStorage.setItem("statementsData", JSON.stringify(statementsData));
+
         setStatementArray(
           response.data.map((statement, index) => {
             return (
@@ -162,12 +175,18 @@ function Layout(props) {
     });
   }, []);
 
+  // useEffect(() => {
+  //   localStorage.setItem("statementsData", JSON.stringify(statementsData));
+  //   console.log(JSON.parse(localStorage.getItem("statementsData")));
+  // }, [statementsData]);
+
   const submitHandler = (event) => {
     event.preventDefault();
     next();
     // console.log(statementsData);
   };
 
+  
   return (
     <>
       <form onSubmit={submitHandler}>
@@ -209,7 +228,7 @@ function Layout(props) {
             {(() => {
               if (currentStepIndex === 14) {
                 // return <Link to="/finish">Finish</Link>;
-                return ("Finish")
+                return "Finish";
               } else {
                 return "Next";
               }

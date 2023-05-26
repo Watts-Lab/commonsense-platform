@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import "./style.css";
+import Consent from "./Consent";
 
 function Landing(props) {
   return (
@@ -32,8 +33,39 @@ function Landing(props) {
         Our platform aims to improve your critical thinking skills and
         decision-making abilities.
       </p>
+
+      <div className="overflow-y-auto h-72 rounded-md border-2 p-3 px-6">
+        <Consent />
+      </div>
+
+      <div className="flex items-start pt-4">
+        <div className="flex items-center h-5">
+          <input
+            id="terms"
+            aria-describedby="terms"
+            type="checkbox"
+            className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
+            required
+          />
+        </div>
+        <div className="ml-3 text-sm">
+          <label
+            htmlFor="terms"
+            className="font-light text-gray-500 dark:text-gray-300"
+          >
+            I accept the{" "}
+            <a
+              className="font-medium text-primary-600 hover:underline dark:text-primary-500"
+              href="#"
+            >
+              Terms and Conditions
+            </a>
+          </label>
+        </div>
+      </div>
+
       <div className="flex flex-col items-center pt-7">
-        <Link to="/consent">
+        <Link to="/statements">
           <button className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
             Check Your Common Sense
           </button>

@@ -17,8 +17,12 @@
     "published": {
         "type": "BOOLEAN",
         "allowNull": true
-    }
+    },
 
+    "statementMedian": {
+        "type": "DOUBLE",
+        "allowNull": true
+    }
     
 }
 
