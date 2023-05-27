@@ -2,11 +2,6 @@ module.exports = (sequelize, DataTypes) => {
     
     const Answers = sequelize.define("answers", {
       
-      // statementId: {
-      //   type: DataTypes.INTEGER,
-      //   allowNull: false
-      // },
-
       questionOneAgree: {
         type: DataTypes.INTEGER,
         allowNull: false

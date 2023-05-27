@@ -26,20 +26,28 @@ function MultiStepForm(props) {
 
     function next() {
 
-        if(currentStepIndex > 3) {
-            props.getNextStatement(12).then(ret_val => {
-                console.log(ret_val[0]);
-                props.pushNewStatement(ret_val[0].id, ret_val[0].statement, 6)
-             });
-        }
+        console.log('current step ' + currentStepIndex + ' array length ' + props.steps.length);
 
         if(checkAnswers(props.steps[currentStepIndex].answers.slice(0, 5))) {
-            
+
             setCurrentStepIndex(i => {
                 if (i > props.steps.length - 1) return i;
                 return i + 1;
             });
 
+            if(currentStepIndex === 13) {
+                props.pushResultComponent();
+            }
+            
+            // if user finishes a statement, then get new statement (stays 2 steps ahead)
+            if(currentStepIndex > props.steps.length - 3 && currentStepIndex < 13) {
+                props.getNextStatement(12).then(ret_val => {
+                    console.log(ret_val[0]);
+                    props.pushNewStatement(ret_val[0].id, ret_val[0].statement)
+                 });
+            }
+
+            // if the user answered the statement, then save the answer and set the answerSaved flag to true
             if(!props.steps[currentStepIndex].answereSaved) {
                 axios.post('/answers', {
                     "statementId": props.steps[currentStepIndex].id,
@@ -48,7 +56,7 @@ function MultiStepForm(props) {
                     "questionTwoAgree": props.steps[currentStepIndex].answers[2].slice(-1),
                     "questionTwoWhy": props.steps[currentStepIndex].answers[3].slice(-1),
                     "questionThreeAgree": props.steps[currentStepIndex].answers[4].slice(-1),
-                    "questionThreeWhy": "3",
+                    "questionThreeWhy": props.steps[currentStepIndex].answers[5].slice(-1),
                     "origLanguage": "en",
                     "sessionId": props.sessionId,
                 })
@@ -60,7 +68,9 @@ function MultiStepForm(props) {
             }
 
         } else {
-            console.log(whichQuestion(props.steps[currentStepIndex].answers.slice(0, 5)));
+            // TODO: invoke error on the button
+            // console.log(whichQuestion(props.steps[currentStepIndex].answers.slice(0, 5)));
+            props.setUnansweredQuestionIndex(whichQuestion(props.steps[currentStepIndex].answers.slice(0, 5)));
             return whichQuestion(props.steps[currentStepIndex].answers.slice(0, 5));
         }
 
