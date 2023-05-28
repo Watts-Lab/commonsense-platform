@@ -1,14 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 
-import axios from "axios";
-
-// axios.defaults.baseURL = `http://localhost:8000`;
-
 import Statement from "./Statement";
 import MultiStepForm from "./MultiStepForm";
 import Buttons from "./Buttons";
 import Result from "./Result";
+
+import Backend from "../apis/backend";
 
 import "./style.css";
 
@@ -45,7 +43,7 @@ function Layout(props) {
 
   const getNextStatement = async (sessionId) => {
     try {
-      const { data: response } = await axios.get("/statements/test"); //use data destructuring to get data from the promise object
+      const { data: response } = await Backend.get("/statements/test"); //use data destructuring to get data from the promise object
       return response;
     } catch (error) {
       console.log(error);
@@ -117,7 +115,7 @@ function Layout(props) {
   };
 
   const getUserLastAnswer = (sessionId, statementId) => {
-    axios
+    Backend
       .get("/answers/session/" + sessionId + "/statement/" + statementId)
       .then((response) => {
         console.log(response.data);
@@ -125,7 +123,7 @@ function Layout(props) {
   };
 
   useEffect(() => {
-    axios
+    Backend
       .get("/statements")
       .then((response) => {
         setStatementsData(
@@ -169,7 +167,7 @@ function Layout(props) {
         );
       });
 
-    axios.get("/", { withCredentials: true }).then((response) => {
+      Backend.get("/", { withCredentials: true }).then((response) => {
       //   console.log(response.data);
       setSessionId(response.data);
     });

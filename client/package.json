@@ -1,6 +1,5 @@
 {
-  "name": "client-vite",
-  "proxy": "http://localhost:8000",
+  "name": "common-sense-platform",
   "private": true,
   "version": "0.0.0",
   "type": "module",

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import Backend from "../apis/backend";
 
 import './style.css';
 
@@ -49,7 +49,7 @@ function MultiStepForm(props) {
 
             // if the user answered the statement, then save the answer and set the answerSaved flag to true
             if(!props.steps[currentStepIndex].answereSaved) {
-                axios.post('/answers', {
+                Backend.post('/answers', {
                     "statementId": props.steps[currentStepIndex].id,
                     "questionOneAgree": props.steps[currentStepIndex].answers[0].slice(-1),
                     "questionOneWhy": props.steps[currentStepIndex].answers[1].slice(-1),

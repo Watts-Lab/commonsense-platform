@@ -22,9 +22,9 @@ const statementRouter = require("./routes/statements");
 const answerRouter = require("./routes/answers");
 const resultRouter = require("./routes/results");
 
-app.use("/statements", statementRouter);
-app.use("/answers", answerRouter);
-app.use("/results", resultRouter);
+app.use("/api/statements", statementRouter);
+app.use("/api/answers", answerRouter);
+app.use("/api/results", resultRouter);
 
 app.use(
   session({
@@ -43,21 +43,13 @@ app.use(
 );
 
 // Access the session as req.session
-app.get("/", function (req, res) {
+app.get("/api", function (req, res) {
   // console.log(req.sessionID)
   res.send(req.sessionID);
 });
 
-var reactApp = express();
-
-reactApp.use("/", express.static("dist"));
-
-reactApp.listen(8080, function () {
-  console.log("React app ready");
-});
-
 db.sequelize.sync().then(() => {
-  app.listen(8000, () => {
-    console.log("server on port 8000");
+  app.listen(4000, () => {
+    console.log("server on port 4000");
   });
 });

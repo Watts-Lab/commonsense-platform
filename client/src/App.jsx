@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
-import axios from "axios";
-
-axios.defaults.baseURL = `http://3.227.243.72:4000`;
-// axios.defaults.baseURL = `http://localhost:8000`;
 
 import Consent from "./components/Consent";
 import Landing from "./components/Landing";
