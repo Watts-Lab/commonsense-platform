@@ -5,7 +5,6 @@ import "./style.css";
 import axios from "axios";
 
 function Result(props) {
-  
   const [commonSenseScore, setCommonSenseScore] = useState(0);
 
   function isUserDone(statementsData) {
@@ -31,6 +30,21 @@ function Result(props) {
         );
       });
   }, []);
+
+  const generateTwitterShare = () => {
+    let tweetText =
+      "I have more common sense than " + commonSenseScore + "% of people!";
+    // ⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛
+    // ⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛
+    // ⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛
+    // ⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛
+    // ⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛
+    // ⬛⬛⬛⬛⬛⬛😀🔲🔲🔲
+    // 🔲🔲🔲🔲🔲🔲🔲🔲🔲🔲
+    // 🔲🔲🤖🔲🔲🔲🔲🔲🔲🔲
+    // 🔲🔲🔲🔲🔲🔲🔲🔲🔲💯
+    // ...but not quite as much as ChatGPT 🦾
+  };
 
   return (
     <div className="text-justify leading-relaxed">

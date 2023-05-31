@@ -21,10 +21,12 @@ const sessionStore = new MySQLStore(options, pool);
 const statementRouter = require("./routes/statements");
 const answerRouter = require("./routes/answers");
 const resultRouter = require("./routes/results");
+const userRouter = require("./routes/users");
 
 app.use("/api/statements", statementRouter);
 app.use("/api/answers", answerRouter);
 app.use("/api/results", resultRouter);
+app.use("/api/users", userRouter);
 
 app.use(
   session({
