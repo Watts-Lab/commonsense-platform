@@ -3,8 +3,9 @@ import { Link } from "react-router-dom";
 import { HashLink } from 'react-router-hash-link';
 
 import Icon from "../images/WEBSITE-LOGO.png";
+import Modal from "../components/Modal";
 
-function Header() {
+function Header(props) {
   const [top, setTop] = useState(true);
 
   // detect whether user has scrolled the page down by 10px
@@ -42,7 +43,7 @@ function Header() {
             <ul className="flex flex-grow justify-start flex-wrap items-center">
               <li>
                 <HashLink
-                  to="#about"
+                  to={props.where ? props.where + "#about" : "#about"}
                   className="font-medium text-white hover:text-gray-300 px-5 py-3 flex items-center transition duration-150 ease-in-out"
                 >
                   About
@@ -50,7 +51,7 @@ function Header() {
               </li>
               <li>
                 <HashLink
-                  to="#people"
+                  to={props.where ? props.where + "#people" : "#people"}
                   className="font-medium text-white hover:text-gray-300 px-5 py-3 flex items-center transition duration-150 ease-in-out"
                 >
                   People
@@ -58,7 +59,7 @@ function Header() {
               </li>
               <li>
                 <HashLink
-                  to="#research"
+                  to={props.where ? props.where + "#research" : "#research"}
                   className="font-medium text-white hover:text-gray-300 px-5 py-3 flex items-center transition duration-150 ease-in-out"
                 >
                   Research
@@ -67,19 +68,23 @@ function Header() {
             </ul>
             <ul className="flex flex-grow justify-end flex-wrap items-center">
               <li>
+                {!props.loggedIn ? (
                 <Link
                   to="/signin"
                   className="font-medium text-white hover:text-gray-300 px-5 py-3 flex items-center transition duration-150 ease-in-out"
                 >
                   Sign in
                 </Link>
+                ) : (
+                  <p>Loggid in as {props.user}</p>
+                )}
               </li>
               <li>
-                <Link
+                {/* <Link
                   to="/survey"
-                  className="btn-sm text-white bg-gray-900 hover:bg-gray-600 ml-3"
+                  className=""
                 >
-                  <span>Participate</span>
+                  <span>P</span>
                   <svg
                     className="w-3 h-3 fill-current text-gray-400 flex-shrink-0 ml-2 -mr-1"
                     viewBox="0 0 12 12"
@@ -90,7 +95,12 @@ function Header() {
                       fillRule="nonzero"
                     />
                   </svg>
-                </Link>
+                </Link> */}
+
+                <Modal
+                    buttonText="Participate →"
+                    buttonClass="btn-sm text-white bg-gray-900 hover:bg-gray-600 ml-3"
+                  />
               </li>
             </ul>
           </nav>

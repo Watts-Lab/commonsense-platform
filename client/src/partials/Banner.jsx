@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 
+import Modal from "../components/Modal";
+
 function Banner() {
   const HeroImage =
     "https://css.seas.upenn.edu/wp-content/uploads/2021/03/circle_dots_pattern.png";
@@ -41,12 +43,10 @@ function Banner() {
                 data-aos-delay="300"
               >
                 <div>
-                  <Link
-                    to="/survey"
-                    className="btn text-white bg-blue-600 hover:bg-blue-700 w-full mb-4 sm:w-auto sm:mb-0"
-                  >
-                    Measure your common sense
-                  </Link>
+                  <Modal
+                    buttonText="Measure Your Common Sense"
+                    buttonClass="text-white p-3 bg-blue-600 hover:bg-blue-700 w-full mb-4 rounded-md sm:w-auto sm:mb-0"
+                  />
                 </div>
                 {/* <div>
                   <a className="btn text-white bg-gray-900 hover:bg-gray-800 w-full sm:w-auto sm:ml-4" href="#0">

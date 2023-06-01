@@ -6,11 +6,16 @@ import './css/style.css';
 
 import AOS from 'aos';
 
+// pages
 import Home from './pages/Home';
 import ConsentPage from "./pages/ConsentPage";
+import SurveyPage from "./pages/SurveyPage";
+import SignIn from "./pages/SignIn";
+import Welcome from "./pages/Welcome";
+
+// components
 import Consent from "./components/Consent";
 import Landing from "./components/Landing";
-import SurveyPage from "./pages/SurveyPage";
 import Result from "./components/Result";
 import Enter from "./components/Enter";
 
@@ -35,6 +40,7 @@ function App() {
       try {
         Backend.defaults.headers.common["Authorization"] = token;
         const response = await Backend.post(`/users/verify`);
+        setUserEmail(response.data.succ.email);
         return response.data.ok ? login(token) : logout();
       } catch (error) {
         console.log(error);
@@ -50,6 +56,7 @@ function App() {
 
   const logout = () => {
     localStorage.removeItem("token");
+    setUserEmail("");
     setLoggedIn(false);
   };
 
@@ -88,15 +95,17 @@ function App() {
     <div className="App">
       <div className="mx-auto pb-14">
           <Routes>
-            <Route exact path="/" element={<Home />} />
+            <Route exact path="/" element={<Home loggedIn={loggedIn} user={userEmail} />} />
             <Route
               path="login/:email/:link"
               element={<Enter signIn={signIn} />}
             />
+            <Route path="/signin" element={<SignIn loggedIn={loggedIn}  user={userEmail}  />} />
             <Route path="/survey" element={<ConsentPage />} />
             <Route path="/consent" element={<Consent />} />
             <Route path="/statements" element={<SurveyPage />} />
             <Route path="/finish" element={<Result />} />
+            <Route path="/welcome" element={<Welcome loggedIn={loggedIn} user={userEmail}  />} />
           </Routes>
       </div>
     </div>

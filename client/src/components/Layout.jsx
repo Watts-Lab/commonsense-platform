@@ -27,7 +27,10 @@ function Layout(props) {
   }
 
   const [statementArray, setStatementArray] = useState([]);
-  const [statementsData, setStatementsData] = useStickyState([], 'statementsData');
+  const [statementsData, setStatementsData] = useStickyState(
+    [],
+    "statementsData"
+  );
   const [sessionId, setSessionId] = useState();
   const [unansweredQuestionIndex, setUnansweredQuestionIndex] = useState(null);
 
@@ -115,16 +118,15 @@ function Layout(props) {
   };
 
   const getUserLastAnswer = (sessionId, statementId) => {
-    Backend
-      .get("/answers/session/" + sessionId + "/statement/" + statementId)
-      .then((response) => {
-        console.log(response.data);
-      });
+    Backend.get(
+      "/answers/session/" + sessionId + "/statement/" + statementId
+    ).then((response) => {
+      console.log(response.data);
+    });
   };
 
   useEffect(() => {
-    Backend
-      .get("/statements")
+    Backend.get("/statements")
       .then((response) => {
         setStatementsData(
           response.data.map((statement) => {
@@ -167,7 +169,7 @@ function Layout(props) {
         );
       });
 
-      Backend.get("/", { withCredentials: true }).then((response) => {
+    Backend.get("/", { withCredentials: true }).then((response) => {
       //   console.log(response.data);
       setSessionId(response.data);
     });
@@ -184,68 +186,42 @@ function Layout(props) {
     // console.log(statementsData);
   };
 
-  
   return (
     <>
       <form onSubmit={submitHandler}>
         {statementArray[currentStepIndex]}
 
-        <div className="flex justify-between">
-          <button
-            onClick={back}
-            type="button"
-            className="order-1 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          >
-            <svg
-              aria-hidden="true"
-              className="w-5 h-5 mr-2 -ml-1"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-              transform="matrix(-1,0,0,1,0,0)"
+        {currentStepIndex < 15 && (
+          <div className="flex justify-between">
+            <button
+              onClick={back}
+              type="button"
+              className="order-1 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             >
-              <path
-                fillRule="evenodd"
-                d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                clipRule="evenodd"
-              ></path>
-            </svg>
-            {(() => {
-              if (props.currentStepIndex === 0) {
-                return <Link to="/consent">Start</Link>;
-              } else {
-                return "Previous";
-              }
-            })()}
-          </button>
+              {(() => {
+                if (props.currentStepIndex === 0) {
+                  return <Link to="/consent">Start</Link>;
+                } else {
+                  return "← Previous";
+                }
+              })()}
+            </button>
 
-          <button
-            type="submit"
-            className="order-last text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          >
-            {(() => {
-              if (currentStepIndex === 14) {
-                // return <Link to="/finish">Finish</Link>;
-                return "Finish";
-              } else {
-                return "Next";
-              }
-            })()}
-            <svg
-              aria-hidden="true"
-              className="w-5 h-5 ml-2 -mr-1"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
+            <button
+              type="submit"
+              className="order-last text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             >
-              <path
-                fillRule="evenodd"
-                d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                clipRule="evenodd"
-              ></path>
-            </svg>
-          </button>
-        </div>
+              {(() => {
+                if (currentStepIndex === 14) {
+                  // return <Link to="/finish">Finish</Link>;
+                  return "Finish";
+                } else {
+                  return "Next →";
+                }
+              })()}
+            </button>
+          </div>
+        )}
 
         {/* <Buttons
           currentStep={currentStepIndex}

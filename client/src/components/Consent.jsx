@@ -9,13 +9,9 @@ function Consent(props) {
   };
 
   return (
-    <div className="text-justify leading-relaxed">
-      <h1 className="font-bold pb-3">
-        Terms and Conditions
-      </h1>
-      <h2 className="font-bold">
-        Research Study Summary for Potential Subjects
-      </h2>
+    <div className="text-justify text-sm leading-relaxed">
+      <h1 className="font-bold pb-3">Research Study Summary for Potential Subjects</h1>
+
       <p className="pb-4">
         We are studying common sense in society. Participating in this study
         will involve answering basic questions for 10-20 minutes.
@@ -85,7 +81,9 @@ function Consent(props) {
         also be valuable to the broader society, so participating may be
         valuable through that context too.
       </p>
-      <h3 className="font-semibold">Will I receive the results of research testing?</h3>
+      <h3 className="font-semibold">
+        Will I receive the results of research testing?
+      </h3>
       <p className="pb-4">
         The full results will be made public when the research is shared openly
         upon eventual publication.
@@ -183,13 +181,6 @@ function Consent(props) {
         contact the IRB at (215) 898 2614.
       </p>
 
-      <p className="pb-4">
-        <b>
-          By continuing in this survey you are agreeing to this research consent
-          statement.
-        </b>
-      </p>
-
       {/* <div className="flex flex-col items-center pt-7">
         <Link to="/statements">
           <button className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
@@ -198,7 +189,6 @@ function Consent(props) {
         </Link>
         { <a className="" href="#" onClick={handleCloseWindow}>Disagree and close the window.</a>}
       </div> */}
-
     </div>
   );
 }
