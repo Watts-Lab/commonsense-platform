@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { HashLink } from 'react-router-hash-link';
+import { HashLink } from "react-router-hash-link";
 
 import Icon from "../images/WEBSITE-LOGO.png";
 import Modal from "../components/Modal";
@@ -29,11 +29,7 @@ function Header(props) {
           {/* Site branding */}
           <div className="flex-shrink-0 mr-4">
             {/* Logo */}
-            <Link
-              to="https://css.seas.upenn.edu/"
-              className="block"
-              aria-label="Cruip"
-            >
+            <Link to="/" className="block" aria-label="Cruip">
               <img className="h-10" src={Icon} alt="Cruip" />
             </Link>
           </div>
@@ -69,14 +65,14 @@ function Header(props) {
             <ul className="flex flex-grow justify-end flex-wrap items-center">
               <li>
                 {!props.loggedIn ? (
-                <Link
-                  to="/signin"
-                  className="font-medium text-white hover:text-gray-300 px-5 py-3 flex items-center transition duration-150 ease-in-out"
-                >
-                  Sign in
-                </Link>
+                  <Link
+                    to="/signin"
+                    className="font-medium text-white hover:text-gray-300 px-5 py-3 flex items-center transition duration-150 ease-in-out"
+                  >
+                    Sign in
+                  </Link>
                 ) : (
-                  <p>Loggid in as {props.user}</p>
+                  <p>Logged in as {props.user}</p>
                 )}
               </li>
               <li>
@@ -98,9 +94,9 @@ function Header(props) {
                 </Link> */}
 
                 <Modal
-                    buttonText="Participate →"
-                    buttonClass="btn-sm text-white bg-gray-900 hover:bg-gray-600 ml-3"
-                  />
+                  buttonText="Participate →"
+                  buttonClass="btn-sm text-white bg-gray-900 hover:bg-gray-600 ml-3"
+                />
               </li>
             </ul>
           </nav>

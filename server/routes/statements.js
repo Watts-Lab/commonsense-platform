@@ -38,18 +38,18 @@ function getStatementByWeight(statementsArray) {
   const max_answers = Math.max(
     ...statementsArray.map((d) => Number(d.statementCount))
   );
-  console.log(statementsArray[0]);
+  // console.log(statementsArray[0]);
 
   const weighted_list = statementsArray.flatMap((d) =>
     Array(Math.round(max_answers / (d.statementCount + 1))).fill(d.id)
   );
 
-  console.log(weighted_list);
-  console.log(
-    statementsArray[
-      weighted_list[Math.floor(Math.random() * weighted_list.length)] - 1
-    ]
-  );
+  // console.log(weighted_list);
+  // console.log(
+  //   statementsArray[
+  //     weighted_list[Math.floor(Math.random() * weighted_list.length)] - 1
+  //   ]
+  // );
 }
 
 function shuffle(array) {

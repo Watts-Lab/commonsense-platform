@@ -6,6 +6,8 @@ import MultiStepForm from "./MultiStepForm";
 import Buttons from "./Buttons";
 import Result from "./Result";
 
+import useStickyState from "../hooks/useStickyState";
+
 import Backend from "../apis/backend";
 
 import "./style.css";
@@ -13,25 +15,16 @@ import "./style.css";
 function Layout(props) {
   // const [listOfStatements, setListOfStatements] = useState([{id: 0, statement:'loading...'}]);
 
-  function useStickyState(defaultValue, key) {
-    const [value, setValue] = React.useState(() => {
-      const stickyValue = localStorage.getItem(key);
-      return stickyValue !== null ? JSON.parse(stickyValue) : defaultValue;
-    });
-
-    React.useEffect(() => {
-      localStorage.setItem(key, JSON.stringify(value));
-    }, [key, value]);
-
-    return [value, setValue];
-  }
-
   const [statementArray, setStatementArray] = useState([]);
   const [statementsData, setStatementsData] = useStickyState(
     [],
     "statementsData"
   );
-  const [sessionId, setSessionId] = useState();
+  
+  const [sessionId, setSessionId] = useStickyState(
+    null,
+    "surveySessionId"
+  );
   const [unansweredQuestionIndex, setUnansweredQuestionIndex] = useState(null);
 
   const handleAnswerSaving = (tid, answerState) => {

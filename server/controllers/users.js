@@ -1,9 +1,8 @@
 const { users } = require("../models");
 const jwt = require("jsonwebtoken");
 const validator = require("validator");
-require('dotenv').config();
+require("dotenv").config();
 const jwt_secret = process.env.JWT_SECRET;
-const { v4: uuidv4 } = require("uuid");
 const crypto = require("crypto");
 const { send_magic_link } = require("./emails.js");
 const { Op } = require("sequelize");
@@ -19,7 +18,6 @@ const register = async (email) => {
     let user = await users.create(newUser);
     // send magic link to email
     let sendEmail = send_magic_link(email, user.magicLink, "signup");
-    console.log("sendEmail", sendEmail);
 
     return { ok: true, message: "User created" };
   } catch (error) {
@@ -29,6 +27,8 @@ const register = async (email) => {
 
 const login = async (req, res) => {
   const { email, magicLink } = req.body;
+
+  console.log("email", req.sessionID);
 
   if (!email)
     return res.json({ ok: false, message: "All fields are required" });
@@ -58,8 +58,7 @@ const login = async (req, res) => {
         });
       } catch {}
     } else if (user.magicLink === magicLink && !user.magicLinkExpired) {
-      console.log("user", user.toJSON());
-
+      // create token
       const token = jwt.sign(user.toJSON(), jwt_secret, { expiresIn: "1h" }); //{expiresIn:'365d'}
 
       await user.update({ magicLinkExpired: true });
@@ -81,7 +80,7 @@ const verify_token = (req, res) => {
   jwt.verify(token, jwt_secret, (err, succ) => {
     err
       ? res.json({ ok: false, message: "Something went wrong" })
-      : res.json({ ok: true, succ });
+      : res.json({ ok: true, email: succ.email });
   });
 };
 

@@ -17,20 +17,9 @@ const options = require(__dirname + "/config/config.json")["options"];
 const pool = mysql.createPool(options);
 const sessionStore = new MySQLStore(options, pool);
 
-// routers
-const statementRouter = require("./routes/statements");
-const answerRouter = require("./routes/answers");
-const resultRouter = require("./routes/results");
-const userRouter = require("./routes/users");
-
-app.use("/api/statements", statementRouter);
-app.use("/api/answers", answerRouter);
-app.use("/api/results", resultRouter);
-app.use("/api/users", userRouter);
-
 app.use(
   session({
-    name: "user-session",
+    name: "survey-session",
     secret: "keyboardcat",
     resave: false,
     saveUninitialized: true,
@@ -43,6 +32,18 @@ app.use(
     },
   })
 );
+
+// routers
+const statementRouter = require("./routes/statements");
+const answerRouter = require("./routes/answers");
+const resultRouter = require("./routes/results");
+const userRouter = require("./routes/users");
+
+app.use("/api/statements", statementRouter);
+app.use("/api/answers", answerRouter);
+app.use("/api/results", resultRouter);
+app.use("/api/users", userRouter);
+
 
 // Access the session as req.session
 app.get("/api", function (req, res) {

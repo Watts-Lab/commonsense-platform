@@ -5,9 +5,7 @@ import Backend from "../apis/backend";
 import Header from "../partials/Header";
 import NotificationBox from "../utils/NotificationBox";
 
-
 function SignIn(props) {
-
   const [userEmail, setUserEmail] = useState("");
 
   const [notifBox, setNotifBox] = useState(false);
@@ -40,22 +38,22 @@ function SignIn(props) {
       {/*  Site header */}
       <Header loggedIn={props.loggedIn} user={props.user} where="/" />
 
- 
-
       {/*  Page content */}
       <main className="flex-grow">
         <section className="bg-gradient-to-b from-gray-100 to-white">
           <div className="max-w-6xl mx-auto px-4 sm:px-6">
             <div className="pt-32 pb-12 md:pt-40 md:pb-20">
               {/* Page header */}
-              <div className="max-w-3xl mx-auto text-center pb-12 md:pb-20">
-                <p className="h4">Welcome back</p>
-                <p>
-                  You can check on your common sense score or answer more
-                  questions about statements to get a more accurate reading of
-                  your score.
-                </p>
-              </div>
+              {!notifBox ? (
+                <div className="max-w-3xl mx-auto text-center pb-12 md:pb-20">
+                  <p className="h4">Welcome back</p>
+                  <p>
+                    You can check on your common sense score or answer more
+                    questions about statements to get a more accurate reading of
+                    your score.
+                  </p>
+                </div>
+              ) : null}
 
               {/* Form */}
               <div className="max-w-sm mx-auto">
