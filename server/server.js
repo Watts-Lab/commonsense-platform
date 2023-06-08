@@ -13,7 +13,7 @@ const session = require("express-session");
 
 const mysql = require("mysql2");
 const MySQLStore = require("express-mysql-session")(session);
-const options = require(__dirname + "/config/config.json")["options"];
+const options = require(__dirname + "/config/config.js").dboptions;
 const pool = mysql.createPool(options);
 const sessionStore = new MySQLStore(options, pool);
 
