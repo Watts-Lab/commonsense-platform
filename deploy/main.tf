@@ -9,9 +9,9 @@ terraform {
 
 # Configure the AWS Provider
 provider "aws" {
-  region = var.region
+  region = "us-east-1"
 }
 
 resource "aws_ecr_repository" "common_sense_ecr_repo" {
-  name = "common-sense-repo" 
+  name = "common-sense-ecr-repo" 
 }
