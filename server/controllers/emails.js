@@ -11,7 +11,7 @@ const transport = nodemailer.createTransport({
   },
 });
 
-const URL = "http://localhost:5173/login/";
+const URL = "http://35.153.104.168/login/";
 const ProdURL = "http://3.227.243.72/login/";
 
 const send_magic_link = async (email, link, which) => {

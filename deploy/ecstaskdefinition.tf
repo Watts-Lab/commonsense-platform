@@ -1,9 +1,10 @@
+
 resource "aws_ecs_task_definition" "common_sense_task" {
-  family                   = "common-sense-task" 
+  family                   = "common-sense-task"
   container_definitions    = <<DEFINITION
   [
     {
-      "name": "common-sense-task",
+      "name": "my-first-task",
       "image": "${aws_ecr_repository.common_sense_ecr_repo.repository_url}",
       "essential": true,
       "portMappings": [
@@ -21,12 +22,12 @@ resource "aws_ecs_task_definition" "common_sense_task" {
   network_mode             = "awsvpc"    # Using awsvpc as our network mode as this is required for Fargate
   memory                   = 512         # Specifying the memory our container requires
   cpu                      = 256         # Specifying the CPU our container requires
-  execution_role_arn       = "${aws_iam_role.ecsTaskExecutionRole.arn}"
+  execution_role_arn       = aws_iam_role.ecsTaskExecutionRole.arn
 }
 
 resource "aws_iam_role" "ecsTaskExecutionRole" {
   name               = "ecsTaskExecutionRole"
-  assume_role_policy = "${data.aws_iam_policy_document.assume_role_policy.json}"
+  assume_role_policy = data.aws_iam_policy_document.assume_role_policy.json
 }
 
 data "aws_iam_policy_document" "assume_role_policy" {
@@ -41,6 +42,6 @@ data "aws_iam_policy_document" "assume_role_policy" {
 }
 
 resource "aws_iam_role_policy_attachment" "ecsTaskExecutionRole_policy" {
-  role       = "${aws_iam_role.ecsTaskExecutionRole.name}"
+  role       = aws_iam_role.ecsTaskExecutionRole.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
