@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
+require('dotenv').config()
 
 // app.use(cors());
 app.use(cors({ credentials: true, origin: true }));
@@ -54,5 +55,6 @@ app.get("/api", function (req, res) {
 db.sequelize.sync().then(() => {
   app.listen(4000, () => {
     console.log("server on port 4000");
+    console.log(process.env.GITHUB_HASH)
   });
 });

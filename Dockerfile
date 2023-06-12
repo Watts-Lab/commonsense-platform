@@ -15,6 +15,10 @@ COPY server ./
 
 # Stage 3: Setup Nginx
 FROM --platform=linux/amd64 public.ecr.aws/nginx/nginx:latest
+ARG GITHUB_HASH=local
+ENV GITHUB_HASH=${GITHUB_HASH}
+ARG GITHUB_BRANCH=local
+ENV GITHUB_BRANCH=${GITHUB_BRANCH}
 COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copy built files from React frontend
