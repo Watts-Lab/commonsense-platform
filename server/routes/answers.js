@@ -10,14 +10,12 @@ const { header, body, validationResult } = require("express-validator");
 router.post(
   "/",
   body("statementId").not().isEmpty().isInt({ min: 1 }),
-  body("questionOneAgree").not().isEmpty().isInt({ min: 0, max: 1 }),
-  body("questionOneWhy").not().isEmpty().isInt({ min: 0, max: 3 }),
-  body("questionTwoAgree").not().isEmpty().isInt({ min: 0, max: 1 }),
-  body("questionTwoWhy").not().isEmpty().isInt({ min: 0, max: 3 }),
-  body("questionThreeAgree").not().isEmpty().isInt({ min: 0, max: 1 }),
-  body("questionThreeWhy")
-    .isInt({ min: 0, max: 2 })
-    .optional({ nullable: true, checkFalsy: true }),
+  body("I_agree").not().isEmpty().isInt({ min: 0, max: 1 }),
+  body("I_agree_reason").not().isEmpty(),
+  body("others_agree").not().isEmpty().isInt({ min: 0, max: 1 }),
+  body("others_agree_reason").not().isEmpty(),
+  body("perceived_commonsense").not().isEmpty().isInt({ min: 0, max: 1 }),
+  body("clarity").optional({ nullable: true, checkFalsy: true }),
 
   (req, res) => {
     // Finds the validation errors in this request and wraps them in an object with handy functions
@@ -25,35 +23,29 @@ router.post(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     } else {
-      console.log("email", req.sessionID);
-      if (req.body.questionThreeWhy === "") {
-        answers
-          .create({
-            statementId: req.body.statementId,
-            questionOneAgree: req.body.questionOneAgree,
-            questionOneWhy: req.body.questionOneWhy,
-            questionTwoAgree: req.body.questionTwoAgree,
-            questionTwoWhy: req.body.questionTwoWhy,
-            questionThreeAgree: req.body.questionTwoAgree,
-            origLanguage: "en",
-            sessionId: req.body.sessionId,
-          })
-          .then((answer) => res.json(answer));
-      } else {
-        answers
-          .create({
-            statementId: req.body.statementId,
-            questionOneAgree: req.body.questionOneAgree,
-            questionOneWhy: req.body.questionOneWhy,
-            questionTwoAgree: req.body.questionTwoAgree,
-            questionTwoWhy: req.body.questionTwoWhy,
-            questionThreeAgree: req.body.questionTwoAgree,
-            questionThreeWhy: req.body.questionThreeWhy,
-            origLanguage: "en",
-            sessionId: req.body.sessionId,
-          })
-          .then((answer) => res.json(answer));
+      const answerData = {
+        statementId: req.body.statementId,
+        statement_number: req.body.statementId,
+        I_agree: req.body.I_agree,
+        I_agree_reason: req.body.I_agree_reason,
+        others_agree: req.body.others_agree,
+        others_agree_reason: req.body.others_agree_reason,
+        perceived_commonsense: req.body.perceived_commonsense,
+        origLanguage: "en",
+        sessionId: req.body.sessionId,
+      };
+
+      if (req.body.clarity !== "") {
+        answerData.clarity = req.body.clarity;
       }
+
+      answers
+        .create(answerData)
+        .then((answer) => res.json(answer))
+        .catch((error) => {
+          console.error(error);
+          res.status(500).json({ error: "An error occurred" });
+        });
     }
   }
 );
@@ -110,7 +102,7 @@ router.post(
                       {
                         model: statements,
                         as: "statement",
-                        attributes: ['statement'],
+                        attributes: ["statement"],
                       },
                     ],
                     order: [["createdAt", "DESC"]],

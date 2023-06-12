@@ -39,8 +39,7 @@ function MultiStepForm(props) {
 
       // if user finishes a statement, then get new statement (stays 2 steps ahead)
       if (currentStepIndex > props.steps.length - 3 && currentStepIndex < 13) {
-        props.getNextStatement(12).then((ret_val) => {
-          console.log(ret_val[0]);
+        props.getNextStatement(props.sessionId).then((ret_val) => {
           props.pushNewStatement(ret_val[0].id, ret_val[0].statement);
         });
       }
@@ -49,12 +48,12 @@ function MultiStepForm(props) {
       if (!props.steps[currentStepIndex].answereSaved) {
         Backend.post("/answers", {
           statementId: props.steps[currentStepIndex].id,
-          questionOneAgree: props.steps[currentStepIndex].answers[0].slice(-1),
-          questionOneWhy: props.steps[currentStepIndex].answers[1].slice(-1),
-          questionTwoAgree: props.steps[currentStepIndex].answers[2].slice(-1),
-          questionTwoWhy: props.steps[currentStepIndex].answers[3].slice(-1),
-          questionThreeAgree: props.steps[currentStepIndex].answers[4].slice(-1),
-          questionThreeWhy: props.steps[currentStepIndex].answers[5].slice(-1),
+          I_agree: props.steps[currentStepIndex].answers[0].slice(-1),
+          I_agree_reason: props.steps[currentStepIndex].answers[1].split('-')[1],
+          others_agree: props.steps[currentStepIndex].answers[2].slice(-1),
+          others_agree_reason: props.steps[currentStepIndex].answers[3],
+          perceived_commonsense: props.steps[currentStepIndex].answers[4].slice(-1),
+          clarity: props.steps[currentStepIndex].answers[5],
           origLanguage: "en",
           sessionId: props.sessionId,
           withCredentials: true,

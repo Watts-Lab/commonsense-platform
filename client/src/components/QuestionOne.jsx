@@ -15,6 +15,13 @@ function QuestionOne(props) {
     props.setQuestionOneOpinion(event.target.value);
   }
 
+  const i_agree_reasons = [
+    "It's obvious",
+    "It's something I learned",
+    "It's my opinion",
+    "I don't know",
+  ];
+
   // const errorStyle = ""
   const errorStyle = "p-3 rounded-md border-2 border-rose-600";
 
@@ -72,34 +79,18 @@ function QuestionOne(props) {
         </div>
 
         <ul className="grid w-full gap-2 md:grid-cols-1 py-2">
-          <Option
-            text="It's obvious"
-            id_v={questionIdentifier + "op0"}
-            statementClass={questionIdentifier + "opinion"}
-            checked={props.questionOneOpinion === questionIdentifier + "op0"}
-            required={true}
-          />
-          <Option
-            text="It's something I learned"
-            id_v={questionIdentifier + "op1"}
-            statementClass={questionIdentifier + "opinion"}
-            checked={props.questionOneOpinion === questionIdentifier + "op1"}
-            required={true}
-          />
-          <Option
-            text="It's my opinion"
-            id_v={questionIdentifier + "op2"}
-            statementClass={questionIdentifier + "opinion"}
-            checked={props.questionOneOpinion === questionIdentifier + "op2"}
-            required={true}
-          />
-          <Option
-            text="I don't know"
-            id_v={questionIdentifier + "op3"}
-            statementClass={questionIdentifier + "opinion"}
-            checked={props.questionOneOpinion === questionIdentifier + "op3"}
-            required={true}
-          />
+          {i_agree_reasons.map((reason, index) => {
+            return (
+              <Option
+                key={index}
+                text={reason}
+                id_v={questionIdentifier + '-' + reason}
+                statementClass={questionIdentifier + "opinion"}
+                checked={props.questionOneOpinion === questionIdentifier + '-' + reason}
+                required={true}
+              />
+            );
+          })}
         </ul>
       </div>
     </>

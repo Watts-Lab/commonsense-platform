@@ -15,6 +15,13 @@ function QuestionTwo(props) {
     props.setQuestionTwoOpinion(event.target.value);
   }
 
+  const others_agree_reasons = [
+    "I think most people have good judgement with regard to this topic",
+    "I think most people lack good judgment with regard to this topic",
+    "I think it's mostly a matter of opinion",
+    "I don't know",
+  ];
+
   return (
     <>
       <div className="p-3" onChange={onChangeAgreement}>
@@ -63,34 +70,16 @@ function QuestionTwo(props) {
         </div>
 
         <ul className="grid w-full gap-2 md:grid-cols-1 py-2">
-          <Option
-            text="I think most people have good judgement with regard to this topic"
-            id_v={questionIdentifier + "op0"}
-            statementClass={questionIdentifier + "opinion"}
-            checked={props.questionTwoOpinion === questionIdentifier + "op0"}
-            required={true}
-          />
-          <Option
-            text="I think most people lack good judgment with regard to this topic"
-            id_v={questionIdentifier + "op1"}
-            statementClass={questionIdentifier + "opinion"}
-            checked={props.questionTwoOpinion === questionIdentifier + "op1"}
-            required={true}
-          />
-          <Option
-            text="I think it's mostly a matter of opinion"
-            id_v={questionIdentifier + "op2"}
-            statementClass={questionIdentifier + "opinion"}
-            checked={props.questionTwoOpinion === questionIdentifier + "op2"}
-            required={true}
-          />
-          <Option
-            text="I don't know"
-            id_v={questionIdentifier + "op3"}
-            statementClass={questionIdentifier + "opinion"}
-            checked={props.questionTwoOpinion === questionIdentifier + "op3"}
-            required={true}
-          />
+          {others_agree_reasons.map((reason, index) => (
+            <Option
+              key={index}
+              text={reason}
+              id_v={reason}
+              statementClass={questionIdentifier + "opinion"}
+              checked={props.questionTwoOpinion === reason}
+              required={true}
+            />
+          ))}
         </ul>
       </div>
     </>

@@ -73,7 +73,7 @@ function Statement(props) {
       <div className="bg-white border-double border-blue-600 border-b-2">
         <h3 className="mt-3.5 text-xl font-medium text-gray-900 dark:text-white text-center py-4">
           {text}
-          {console.log(props.data.answereSaved)}
+         
         </h3>
       </div>
       

@@ -39,7 +39,8 @@ function Layout(props) {
 
   const getNextStatement = async (sessionId) => {
     try {
-      const { data: response } = await Backend.get("/statements/test"); //use data destructuring to get data from the promise object
+      const { data: response } = await Backend.get("/statements/test");
+      console.log("new fetched statement:", response[0]);
       return response;
     } catch (error) {
       console.log(error);

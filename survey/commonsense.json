@@ -1,0 +1,159 @@
+{
+  "surveyId": "123456789",
+  "surveyName": "Common Sense",
+  "version": 1.0,
+  "languages": [
+    {
+      "languageCode": "en",
+      "questions": [
+        {
+          "questionId": "1",
+          "questionText": "Do you agree with this statement?",
+          "questionDescription": "(if the answer depends, respond with your most common or most likely answer)",
+          "answerColumn": "I_agree",
+          "answerType": "BOOLEAN",
+          "answerRequired": true,
+          "answerOptions": ["Yes", "No"]
+        },
+        {
+          "questionId": "2",
+          "questionText": "Why did you answer the way you did about yourself?",
+          "questionDescription": "",
+          "answerColumn": "I_agree_reason",
+          "answerType": "STRING",
+          "answerRequired": true,
+          "answerOptions": [
+            "It's obvious",
+            "It's something I learned",
+            "It's my opinion",
+            "I don't know"
+          ]
+        },
+        {
+          "questionId": "3",
+          "questionText": "Do you think most other people would agree with this statement?",
+          "questionDescription": "(if the answer depends, respond with your most common or most likely answer)",
+          "answerColumn": "others_agree",
+          "answerType": "BOOLEAN",
+          "answerRequired": true,
+          "answerOptions": ["Yes", "No"]
+        },
+        {
+          "questionId": "4",
+          "questionText": "Why did you answer the way you did about most other people?",
+          "questionDescription": "",
+          "answerColumn": "others_agree_reason",
+          "answerType": "STRING",
+          "answerRequired": true,
+          "answerOptions": [
+            "I think most people have good judgment with regard to this topic",
+            "I think most people lack good judgment with regard to this topic",
+            "I think it’s mostly a matter of opinion",
+            "I don't know"
+          ]
+        },
+        {
+          "questionId": "5",
+          "questionText": "Overall, do you think this statement is an example of common sense?",
+          "questionDescription": "",
+          "answerColumn": "perceived_commonsense",
+          "answerType": "BOOLEAN",
+          "answerRequired": true,
+          "answerOptions": [
+            "Yes, it is common sense",
+            "No, it is not common sense"
+          ]
+        },
+        {
+          "questionId": "6",
+          "questionText": "Optional: How do you think most people would categorize this statement?",
+          "questionDescription": "",
+          "answerColumn": "clarity",
+          "answerType": "STRING",
+          "answerRequired": false,
+          "answerOptions": [
+            "Clear: it is clearly written and I can understand the meaning",
+            "Confusing: I don't quite understand what it means, but it seems like it is written correctly",
+            "Gibberish: I don't know what it means, it is gibberish or poorly written so it doesn't make sense"
+          ]
+        }
+      ]
+    },
+    {
+      "languageCode": "de",
+      "questions": [
+        {
+          "questionId": "1",
+          "questionText": "Stimmen Sie dieser Aussage zu?",
+          "questionDescription": "(Wenn die Antwort abhängt, antworten Sie mit Ihrer häufigsten oder wahrscheinlichsten Antwort)",
+          "answerColumn": "I_agree",
+          "answerType": "BOOLEAN",
+          "answerRequired": true,
+          "answerOptions": ["Ja", "Nein"]
+        },
+        {
+          "questionId": "2",
+          "questionText": "Warum haben Sie so geantwortet?",
+          "questionDescription": "",
+          "answerColumn": "I_agree_reason",
+          "answerType": "STRING",
+          "answerRequired": true,
+          "answerOptions": [
+            "Es ist offensichtlich",
+            "Es ist etwas, das ich gelernt habe",
+            "Es ist meine Meinung",
+            "Ich weiß es nicht"
+          ]
+        },
+        {
+          "questionId": "3",
+          "questionText": "Glauben Sie, dass die meisten anderen Menschen dieser Aussage zustimmen würden?",
+          "questionDescription": "(Wenn die Antwort abhängt, antworten Sie mit Ihrer häufigsten oder wahrscheinlichsten Antwort)",
+          "answerColumn": "others_agree",
+          "answerType": "BOOLEAN",
+          "answerRequired": true,
+          "answerOptions": ["Ja", "Nein"]
+        },
+        {
+          "questionId": "4",
+          "questionText": "Warum haben Sie so geantwortet, wenn es um die meisten anderen Menschen geht?",
+          "questionDescription": "",
+          "answerColumn": "others_agree_reason",
+          "answerType": "STRING",
+          "answerRequired": true,
+          "answerOptions": [
+            "Ich denke, die meisten Menschen haben ein gutes Urteilsvermögen in Bezug auf dieses Thema",
+            "Ich denke, die meisten Menschen haben kein gutes Urteilsvermögen in Bezug auf dieses Thema",
+            "Ich denke, es ist größtenteils eine Frage der Meinung",
+            "Ich weiß es nicht"
+          ]
+        },
+        {
+          "questionId": "5",
+          "questionText": "Insgesamt betrachtet, halten Sie diese Aussage für gesunden Menschenverstand?",
+          "questionDescription": "",
+          "answerColumn": "perceived_commonsense",
+          "answerType": "BOOLEAN",
+          "answerRequired": true,
+          "answerOptions": [
+            "Ja, es ist gesunder Menschenverstand",
+            "Nein, es ist kein gesunder Menschenverstand"
+          ]
+        },
+        {
+          "questionId": "6",
+          "questionText": "Optional: Wie würden Sie diese Aussage Ihrer Meinung nach am ehesten kategorisieren?",
+          "questionDescription": "",
+          "answerColumn": "clarity",
+          "answerType": "STRING",
+          "answerRequired": false,
+          "answerOptions": [
+            "Klar: Sie ist klar formuliert und ich verstehe die Bedeutung",
+            "Verwirrend: Ich verstehe nicht ganz, was sie bedeutet, aber sie scheint korrekt formuliert zu sein",
+            "Kauderwelsch: Ich weiß nicht, was sie bedeutet, es ist Kauderwelsch oder schlecht formuliert, sodass es keinen Sinn ergibt"
+          ]
+        }
+      ]
+    }
+  ]
+}

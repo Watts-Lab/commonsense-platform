@@ -15,6 +15,12 @@ function QuestionThree(props) {
     props.setQuestionThreeOpinion(event.target.value);
   }
 
+  const clarity_reasons = [
+    "Clear: it is clearly written and I can understand the meaning",
+    "Confusing: I don't quite understand what it means, but it seems like it is written correctly",
+    "Gibberish: I don't know what it means, it is gibberish or poorly written so it doesn't make sense",
+  ];
+
   return (
     <>
       <div className="p-3" onChange={onChangeAgreement}>
@@ -60,27 +66,16 @@ function QuestionThree(props) {
         </div>
 
         <ul className="grid w-full gap-2 md:grid-cols-1 py-2">
-          <Option
-            text="Clear: it is clearly written and I can understand the meaning"
-            id_v={questionIdentifier + "op0"}
-            statementClass={questionIdentifier + "opinion"}
-            checked={props.questionThreeOpinion === questionIdentifier + "op0"}
-            required={false}
-          />
-          <Option
-            text="Confusing: I don't quite understand what it means, but it seems like it is written correctly"
-            id_v={questionIdentifier + "op1"}
-            statementClass={questionIdentifier + "opinion"}
-            checked={props.questionThreeOpinion === questionIdentifier + "op1"}
-            required={false}
-          />
-          <Option
-            text="Gibberish: I don't know what it means, it is gibberish or poorly written so it doesn't make sense"
-            id_v={questionIdentifier + "op2"}
-            statementClass={questionIdentifier + "opinion"}
-            checked={props.questionThreeOpinion === questionIdentifier + "op2"}
-            required={false}
-          />
+          {clarity_reasons.map((reason, index) => (
+            <Option
+              key={index}
+              text={reason}
+              id_v={reason}
+              statementClass={questionIdentifier + "opinion"}
+              checked={props.questionThreeOpinion === reason}
+              required={false}
+            />
+          ))}
         </ul>
       </div>
     </>
