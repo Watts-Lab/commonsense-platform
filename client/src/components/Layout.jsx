@@ -20,11 +20,8 @@ function Layout(props) {
     [],
     "statementsData"
   );
-  
-  const [sessionId, setSessionId] = useStickyState(
-    null,
-    "surveySessionId"
-  );
+
+  const [sessionId, setSessionId] = useStickyState(null, "surveySessionId");
   const [unansweredQuestionIndex, setUnansweredQuestionIndex] = useState(null);
 
   const handleAnswerSaving = (tid, answerState) => {
@@ -39,8 +36,10 @@ function Layout(props) {
 
   const getNextStatement = async (sessionId) => {
     try {
-      const { data: response } = await Backend.get("/statements/test");
-      console.log("new fetched statement:", response[0]);
+      const { data: response } = await Backend.get("/statements/next", {
+        params: { sessionId: sessionId },
+      });
+      console.log("new fetched statement:", response);
       return response;
     } catch (error) {
       console.log(error);

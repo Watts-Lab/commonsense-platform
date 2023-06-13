@@ -1,10 +1,17 @@
 import React, { useEffect, useState } from "react";
 import Backend from "../apis/backend";
+import useStickyState from "../hooks/useStickyState";
 
 import "./style.css";
 
 function MultiStepForm(props) {
-  const [currentStepIndex, setCurrentStepIndex] = useState(0);
+
+  // const [currentStepIndex, setCurrentStepIndex] = useStickyState(
+  //   0,
+  //   "currentStepIndex"
+  // );
+
+  const [currentStepIndex, setCurrentStepIndex] = useState(0);  
 
   function checkAnswers(answerList) {
     if (answerList.includes("")) {
@@ -40,7 +47,7 @@ function MultiStepForm(props) {
       // if user finishes a statement, then get new statement (stays 2 steps ahead)
       if (currentStepIndex > props.steps.length - 3 && currentStepIndex < 13) {
         props.getNextStatement(props.sessionId).then((ret_val) => {
-          props.pushNewStatement(ret_val[0].id, ret_val[0].statement);
+          props.pushNewStatement(ret_val.id, ret_val.statement);
         });
       }
 
@@ -51,9 +58,9 @@ function MultiStepForm(props) {
           I_agree: props.steps[currentStepIndex].answers[0].slice(-1),
           I_agree_reason: props.steps[currentStepIndex].answers[1].split('-')[1],
           others_agree: props.steps[currentStepIndex].answers[2].slice(-1),
-          others_agree_reason: props.steps[currentStepIndex].answers[3],
+          others_agree_reason: props.steps[currentStepIndex].answers[3].split('-')[1],
           perceived_commonsense: props.steps[currentStepIndex].answers[4].slice(-1),
-          clarity: props.steps[currentStepIndex].answers[5],
+          clarity: props.steps[currentStepIndex].answers[5].split('-')[1],
           origLanguage: "en",
           sessionId: props.sessionId,
           withCredentials: true,

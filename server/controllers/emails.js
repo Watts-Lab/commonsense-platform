@@ -11,8 +11,8 @@ const transport = nodemailer.createTransport({
   },
 });
 
-const URL = "http://35.153.104.168/login/";
-const ProdURL = "http://3.227.243.72/login/";
+const TempURL = "http://35.153.104.168/login/";
+const URL = "http://common-sense-loadbalancer-549736638.us-east-1.elb.amazonaws.com/login/";
 
 const send_magic_link = async (email, link, which) => {
   if (which === "signup") {

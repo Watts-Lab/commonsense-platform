@@ -74,9 +74,9 @@ function QuestionTwo(props) {
             <Option
               key={index}
               text={reason}
-              id_v={reason}
+              id_v={questionIdentifier + '-' + reason}
               statementClass={questionIdentifier + "opinion"}
-              checked={props.questionTwoOpinion === reason}
+              checked={props.questionTwoOpinion === questionIdentifier + '-' + reason}
               required={true}
             />
           ))}

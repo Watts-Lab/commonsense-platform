@@ -44,13 +44,12 @@ function Result(props) {
     try {
       let res = await Backend.post(`/users/enter`, { email, magicLink });
       if (res.data.token) {
-        alert(res.data.message);
         login(res.data.token);
       } else {
         setNotifBox(true);
       }
     } catch (error) {
-      alert(error);
+      // alert(error);
     }
   };
 
@@ -60,7 +59,8 @@ function Result(props) {
 
   const emailSubmit = (e) => {
     e.preventDefault();
-    signIn(userEmail);
+    // signIn(userEmail);
+    setNotifBox(true);
   };
 
   return (
@@ -77,15 +77,25 @@ function Result(props) {
         This score reflects the similarity of your beliefs to others, and the
         accuracy of your perceptions about what others believe.
       </p>
-      <p>
+      <p className="pb-4">
         This is calculated by comparing your answers to others answers, so it
         will become more accurate if you answer more questions and it will
         become more accurate as others answer more questions. If you log in you
         can continue to see this score as it updates over time.
       </p>
-      <br></br>
 
       <TwitterText percentage={commonSenseScore} />
+
+      <div className="flex flex-col items-center pt-7">
+        <p className="pb-2">Thanks for completing our survey!</p>
+        <p className="pb-2">
+          Copy the code below and paste it in the HIT as a completion
+          verification:
+        </p>
+        <p className="pb-2 font-semibold border-2 rounded py-1 px-3">
+          {props.sessionId}
+        </p>
+      </div>
 
       <div className="flex flex-col items-center pt-7">
         <div className="w-full bg-white md:mt-0 sm:max-w-lg xl:p-0 dark:bg-gray-800 dark:border-gray-700">
@@ -100,7 +110,6 @@ function Result(props) {
               <form
                 onSubmit={emailSubmit}
                 className="space-y-4 md:space-y-6"
-                action="#"
               >
                 <div>
                   <label

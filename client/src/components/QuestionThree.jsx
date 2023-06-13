@@ -70,9 +70,9 @@ function QuestionThree(props) {
             <Option
               key={index}
               text={reason}
-              id_v={reason}
+              id_v={questionIdentifier + '-' + reason}
               statementClass={questionIdentifier + "opinion"}
-              checked={props.questionThreeOpinion === reason}
+              checked={props.questionThreeOpinion === questionIdentifier + '-' + reason}
               required={false}
             />
           ))}
