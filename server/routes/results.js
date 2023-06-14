@@ -28,8 +28,8 @@ router.post(
         ],
         attributes: [
           "statementId",
-          "questionOneAgree",
-          "questionThreeAgree",
+          "I_agree",
+          "perceived_commonsense",
           [Sequelize.col("statement.statementMedian"), "statementMedian"],
         ],
         raw: true,
@@ -38,8 +38,8 @@ router.post(
         // Process the query results
         results
           .map((row) => ({
-            awareness: Number(row.questionThreeAgree === row.statementMedian),
-            consensus: Number(row.questionOneAgree === row.statementMedian),
+            awareness: Number(row.perceived_commonsense === row.statementMedian),
+            consensus: Number(row.I_agree === row.statementMedian),
           }))
           .reduce(
             (avg, value, index, array) => ({

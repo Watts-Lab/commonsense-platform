@@ -23,16 +23,16 @@ module.exports = (sequelize, DataTypes) => {
     return StatementProperties;
   };
 
-console.log({
+// console.log({
       
-  name: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
+//   name: {
+//     type: DataTypes.STRING,
+//     allowNull: false
+//   },
 
-  available: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false
-  }
+//   available: {
+//     type: DataTypes.BOOLEAN,
+//     defaultValue: false
+//   }
   
-})
+// })
