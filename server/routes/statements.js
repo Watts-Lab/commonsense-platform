@@ -14,8 +14,6 @@ const sequelize = new Sequelize(
   config
 );
 
-
-
 function shuffle(array) {
   let currentIndex = array.length,
     randomIndex;
@@ -36,11 +34,16 @@ function shuffle(array) {
   return array;
 }
 
+const { valid_statementlist } = require("./statement_clear.js");
+
+
+
 router.get("/next", async (req, res) => {
   try {
     const sessionId = req.query.sessionId || null;
-    
-    const [results] = await sequelize.query(`
+
+    const [results] = await sequelize.query(
+      `
       WITH weighted_questions AS (
         SELECT
           statements.id,
@@ -52,6 +55,8 @@ router.get("/next", async (req, res) => {
           answers ON statements.id = answers.statementId AND answers.sessionId NOT IN (:sessionId)
         GROUP BY
           statements.id
+        HAVING
+          statements.id IN (:valid_statementlist)
       )
       SELECT
         id,
@@ -62,10 +67,12 @@ router.get("/next", async (req, res) => {
       ORDER BY
         priority ASC  
       LIMIT 1;
-    `, {
-      replacements: { sessionId }, // Bind the sessionId value
-      type: sequelize.QueryTypes.SELECT
-    });
+    `,
+      {
+        replacements: { sessionId, valid_statementlist }, // Bind the sessionId value
+        type: sequelize.QueryTypes.SELECT,
+      }
+    );
 
     res.json(results);
   } catch (error) {
@@ -73,8 +80,6 @@ router.get("/next", async (req, res) => {
     res.status(500).json({ error: "An error occurred" });
   }
 });
-
-
 
 router.get("/", async (req, res) => {
   await statements
@@ -90,11 +95,13 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/byid/:statementId", async (req, res) => {
-  await statements.findAll({
-    where: {
-      id: req.params.statementId,
-    },
-  }).then((data) => res.json(data));
+  await statements
+    .findAll({
+      where: {
+        id: req.params.statementId,
+      },
+    })
+    .then((data) => res.json(data));
 });
 
 router.get("/next", async (req, res) => {
