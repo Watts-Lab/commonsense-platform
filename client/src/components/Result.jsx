@@ -12,6 +12,8 @@ function Result(props) {
   const [userEmail, setUserEmail] = useState("");
   const navigateTo = useNavigate();
 
+  const ATurkBox = false;
+
   const [notifBox, setNotifBox] = useState(false);
 
   function handleRedirect() {
@@ -86,16 +88,18 @@ function Result(props) {
 
       <TwitterText percentage={commonSenseScore} />
 
-      <div className="flex flex-col items-center pt-7">
-        <p className="pb-2">Thanks for completing our survey!</p>
-        <p className="pb-2">
-          Copy the code below and paste it in the HIT as a completion
-          verification:
-        </p>
-        <p className="pb-2 font-semibold border-2 rounded py-1 px-3">
-          {props.sessionId}
-        </p>
-      </div>
+      {ATurkBox ? (
+        <div className="flex flex-col items-center pt-7">
+          <p className="pb-2">Thanks for completing our survey!</p>
+          <p className="pb-2">
+            Copy the code below and paste it in the HIT as a completion
+            verification:
+          </p>
+          <p className="pb-2 font-semibold border-2 rounded py-1 px-3">
+            {props.sessionId}
+          </p>
+        </div>
+      ) : null}
 
       <div className="flex flex-col items-center pt-7">
         <div className="w-full bg-white md:mt-0 sm:max-w-lg xl:p-0 dark:bg-gray-800 dark:border-gray-700">
@@ -107,10 +111,7 @@ function Result(props) {
             {notifBox ? (
               <NotificationBox userEmail={userEmail} />
             ) : (
-              <form
-                onSubmit={emailSubmit}
-                className="space-y-4 md:space-y-6"
-              >
+              <form onSubmit={emailSubmit} className="space-y-4 md:space-y-6">
                 <div>
                   <label
                     htmlFor="email"

@@ -12,7 +12,7 @@ const transport = nodemailer.createTransport({
 });
 
 const TempURL = "http://35.153.104.168/login/";
-const URL = "http://common-sense-loadbalancer-549736638.us-east-1.elb.amazonaws.com/login/";
+const URL = "http://commonsensicality.org/login/";
 
 const send_magic_link = async (email, link, which) => {
   if (which === "signup") {
