@@ -21,7 +21,7 @@ const sessionStore = new MySQLStore(options, pool);
 app.use(
   session({
     name: "survey-session",
-    secret: "keyboardcat",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
     store: sessionStore,

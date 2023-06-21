@@ -121,6 +121,7 @@ function Layout(props) {
   useEffect(() => {
     Backend.get("/statements")
       .then((response) => {
+
         setStatementsData(
           response.data.map((statement) => {
             return {
@@ -163,7 +164,6 @@ function Layout(props) {
       });
 
     Backend.get("/", { withCredentials: true }).then((response) => {
-      //   console.log(response.data);
       setSessionId(response.data);
     });
   }, []);
