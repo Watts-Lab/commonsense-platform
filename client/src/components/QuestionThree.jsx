@@ -35,7 +35,7 @@ function QuestionThree(props) {
           />
         </div>
 
-        <ul className="grid w-full gap-2 md:grid-cols-1 py-2">
+        <ul className="grid w-full gap-2 md:grid-cols-2 py-2">
           <Option
             text="Yes, it is common sense"
             id_v={questionIdentifier + "ag1"}
@@ -65,7 +65,7 @@ function QuestionThree(props) {
           />
         </div>
 
-        <ul className="grid w-full gap-2 md:grid-cols-1 py-2">
+        <ul className="grid w-full gap-2 md:grid-cols-2 py-2">
           {clarity_reasons.map((reason, index) => (
             <Option
               key={index}
