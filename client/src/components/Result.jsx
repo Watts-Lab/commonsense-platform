@@ -42,9 +42,9 @@ function Result(props) {
     });
   }, []);
 
-  const signIn = async (email, magicLink) => {
+  const signUp = async (email, sessionId) => {
     try {
-      let res = await Backend.post(`/users/enter`, { email, magicLink });
+      let res = await Backend.post(`/users/enter`, { email, sessionId });
       if (res.data.token) {
         login(res.data.token);
       } else {
@@ -61,7 +61,7 @@ function Result(props) {
 
   const emailSubmit = (e) => {
     e.preventDefault();
-    // signIn(userEmail);
+    signUp(userEmail, props.sessionId);
     setNotifBox(true);
   };
 

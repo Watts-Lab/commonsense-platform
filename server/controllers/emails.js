@@ -1,7 +1,7 @@
 const nodemailer = require("nodemailer");
-const process = require('process');
+const process = require("process");
 
-require('dotenv').config()
+require("dotenv").config();
 
 const transport = nodemailer.createTransport({
   service: "Gmail",
@@ -11,9 +11,15 @@ const transport = nodemailer.createTransport({
   },
 });
 
-const URL = "http://commonsensicality.org/login/";
+const URL =
+  process.env.NODE_ENV != "development"
+    ? process.env.SITE_URL + "/login/"
+    : "http://localhost:5173/login/";
 
 const send_magic_link = async (email, link, which) => {
+  
+  console.log("node env:", process.env.NODE_ENV);
+
   if (which === "signup") {
     var subj = "Sign Up Common Sense Platform",
       body =
@@ -35,8 +41,6 @@ const send_magic_link = async (email, link, which) => {
     subject: subj,
     html: body,
   };
-
-  console.log(mailOptions);
 
   try {
     const response = await transport.sendMail(mailOptions);

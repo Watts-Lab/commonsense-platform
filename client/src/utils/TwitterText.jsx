@@ -38,7 +38,7 @@ function TwitterText(props) {
 
   const textareaValue = `I have more common sense than ${props.percentage}% of people!\n${blocksWithLineBreaks.join(
     "\n"
-  )}\n...but not as much as ChatGPT`;
+  )}\nhttps://commonsensicality.org`;
 
   return (
     <div className="flex flex-col items-center">

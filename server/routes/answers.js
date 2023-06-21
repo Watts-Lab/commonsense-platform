@@ -91,7 +91,6 @@ router.post(
         } else {
           getSessionId(succ.email)
             .then((sessionID) => {
-              console.log(sessionID);
               if (sessionID) {
                 answers
                   .findAll({

@@ -48,7 +48,6 @@ app.use("/api/users", userRouter);
 
 // Access the session as req.session
 app.get("/api", function (req, res) {
-  // console.log(req.sessionID)
   res.send(req.sessionID);
 });
 

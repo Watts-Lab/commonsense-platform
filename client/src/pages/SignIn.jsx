@@ -36,7 +36,7 @@ function SignIn(props) {
   return (
     <div className="flex flex-col min-h-screen overflow-hidden">
       {/*  Site header */}
-      <Header loggedIn={props.loggedIn} user={props.user} where="/" />
+      <Header where="/" />
 
       {/*  Page content */}
       <main className="flex-grow">

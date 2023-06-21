@@ -28,8 +28,6 @@ const register = async (email) => {
 const login = async (req, res) => {
   const { email, magicLink } = req.body;
 
-  console.log("email", req.sessionID);
-
   if (!email)
     return res.json({ ok: false, message: "All fields are required" });
   if (!validator.isEmail(email))
@@ -42,7 +40,7 @@ const login = async (req, res) => {
       res.send({
         ok: true,
         message:
-          "Your account has been created. Click the link in the email to sign in",
+          "Click the link in the email to sign in",
       });
     } else if (!magicLink) {
       try {
@@ -59,7 +57,7 @@ const login = async (req, res) => {
       } catch {}
     } else if (user.magicLink === magicLink && !user.magicLinkExpired) {
       // create token
-      const token = jwt.sign(user.toJSON(), jwt_secret, { expiresIn: "1h" }); //{expiresIn:'365d'}
+      const token = jwt.sign(user.toJSON(), jwt_secret, { expiresIn: "12h" }); //{expiresIn:'365d'}
 
       await user.update({ magicLinkExpired: true });
       res.json({ ok: true, message: "Welcome back", token, email });
@@ -75,7 +73,6 @@ const login = async (req, res) => {
 };
 
 const verify_token = (req, res) => {
-  console.log(req.headers.authorization);
   const token = req.headers.authorization;
   jwt.verify(token, jwt_secret, (err, succ) => {
     err
