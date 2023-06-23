@@ -1,5 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+
+import { setSession } from "../redux/slices/loginSlice";
 
 import Statement from "./Statement";
 import MultiStepForm from "./MultiStepForm";
@@ -20,6 +23,8 @@ function Layout(props) {
     [],
     "statementsData"
   );
+
+  const surveySession = useSelector((state) => state.login.surveySession);
 
   const [sessionId, setSessionId] = useStickyState(null, "surveySessionId");
   const [unansweredQuestionIndex, setUnansweredQuestionIndex] = useState(null);
@@ -164,7 +169,14 @@ function Layout(props) {
       });
 
     Backend.get("/", { withCredentials: true }).then((response) => {
+      console.log(response.data);
       setSessionId(response.data);
+      if (!surveySession) {
+        setSession({
+          surveySession: "jjjj"
+        })
+      }
+
     });
   }, []);
 

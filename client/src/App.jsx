@@ -15,23 +15,21 @@ import SurveyPage from "./pages/SurveyPage";
 import SignIn from "./pages/SignIn";
 import Welcome from "./pages/Welcome";
 import Dashboard from "./pages/Dashboard";
+import Finish from "./pages/Finish";
 
 // components
 import Consent from "./components/Consent";
-import Landing from "./components/Landing";
-import Result from "./components/Result";
 import Enter from "./components/Enter";
 
+// apis
 import Backend from "./apis/backend";
 
-import Cookies from "universal-cookie";
-
-const cookies = new Cookies();
 
 function App() {
   const loggedIn = useSelector((state) => state.login.loggedIn);
   const email = useSelector((state) => state.login.email);
   const token = useSelector((state) => state.login.token);
+  const surveySession = useSelector((state) => state.login.surveySession);
 
   const dispatch = useDispatch();
 
@@ -41,12 +39,14 @@ function App() {
       try {
         Backend.defaults.headers.common["Authorization"] = token;
         const response = await Backend.post(`/users/verify`);
+        console.log(response);
         return response.data.ok
           ? dispatch(
               setUserData({
                 loggedIn: true,
-                email: response.data.succ.email,
+                email: response.data.email,
                 token: token,
+                surveySession: response.data.sessionId,
               })
             )
           : dispatch(clearUserData());
@@ -66,6 +66,7 @@ function App() {
             loggedIn: true,
             email: email,
             token: res.data.token,
+            surveySession: res.data.sessionId,
           })
         );
       } else {
@@ -106,7 +107,7 @@ function App() {
           <Route path="/survey" element={<ConsentPage />} />
           <Route path="/consent" element={<Consent />} />
           <Route path="/statements" element={<SurveyPage />} />
-          <Route path="/finish" element={<Result />} />
+          <Route path="/finish" element={<Finish />} />
           <Route path="/welcome" element={<Welcome />} />
           <Route path="/dashboard" element={<Dashboard />} />
         </Routes>

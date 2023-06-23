@@ -17,8 +17,7 @@ const URL =
     : "http://localhost:5173/login/";
 
 const send_magic_link = async (email, link, which) => {
-  
-  console.log("node env:", process.env.NODE_ENV);
+
 
   if (which === "signup") {
     var subj = "Sign Up Common Sense Platform",

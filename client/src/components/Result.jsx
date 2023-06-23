@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import * as Plot from "@observablehq/plot";
 
 import "./style.css";
 
@@ -65,6 +66,50 @@ function Result(props) {
     setNotifBox(true);
   };
 
+  const containerRef = useRef();
+  const [data, setData] = useState([]);
+  const [individualCommonsensicality, setIndividualCommonsensicality] =
+    useState([]);
+
+  useEffect(() => {
+    Backend.get("/results/all").then((response) => {
+      setData(
+        response.data.sort((a, b) => a.commonsensicality - b.commonsensicality)
+      );
+    });
+  }, []);
+
+  useEffect(() => {
+    setIndividualCommonsensicality(data.map((value, index) => ({
+      sessionId: "user" + index,
+      Percentile: index / (data.length - 1),
+      count: 1,
+    })));
+
+    const plot = Plot.plot({
+      x: { percent: true, nice: true },
+      y: { nice: true },
+      marks: [
+        Plot.rectY(
+          individualCommonsensicality,
+          Plot.binX(
+            {
+              y: "count",
+              fill: (bin) => bin.some((r) => r.sessionId === 'user16'),
+            },
+            {
+              thresholds: 20,
+              x: "Percentile",
+            }
+          )
+        ),
+        Plot.ruleY([0]),
+      ],
+    });
+    containerRef.current.append(plot);
+    return () => plot.remove();
+  }, [data]);
+
   return (
     <div className="text-justify leading-relaxed">
       <p className="pb-4">
@@ -85,6 +130,8 @@ function Result(props) {
         become more accurate as others answer more questions. If you log in you
         can continue to see this score as it updates over time.
       </p>
+
+      <div className="flex justify-center" ref={containerRef} />
 
       <TwitterText percentage={commonSenseScore} />
 

@@ -1,11 +1,8 @@
-const express = require("express");
-const router = express.Router();
-const jwt = require("jsonwebtoken");
-require("dotenv").config();
-const jwt_secret = process.env.JWT_SECRET;
-const { statements, users, answers } = require("../models");
+const router = require("express").Router();
+const controller = require("../controllers/answers.js")
 
 const { header, body, validationResult } = require("express-validator");
+
 
 router.post(
   "/",
