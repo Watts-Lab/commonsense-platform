@@ -1,5 +1,7 @@
 const { statements, statementproperties, answers } = require("../models");
 
+const { readTreatments } = require("./treatments.js");
+
 const env = process.env.NODE_ENV || "development";
 const config = require(__dirname + "/../config/config.js")[env];
 
@@ -100,4 +102,11 @@ const statementById = async (req, res) => {
     .then((data) => res.json(data));
 };
 
-module.exports = { next, baseStatements, statementById };
+const getTreatment = async (req, res) => {
+  
+  res.json(await readTreatments());
+};
+
+
+
+module.exports = { next, baseStatements, statementById, getTreatment };

@@ -80,11 +80,13 @@ function Result(props) {
   }, []);
 
   useEffect(() => {
-    setIndividualCommonsensicality(data.map((value, index) => ({
-      sessionId: "user" + index,
-      Percentile: index / (data.length - 1),
-      count: 1,
-    })));
+    setIndividualCommonsensicality(
+      data.map((value, index) => ({
+        sessionId: value.sessionId,
+        Percentile: index / data.length,
+        count: 1,
+      }))
+    );
 
     const plot = Plot.plot({
       x: { percent: true, nice: true },
@@ -95,7 +97,7 @@ function Result(props) {
           Plot.binX(
             {
               y: "count",
-              fill: (bin) => bin.some((r) => r.sessionId === 'user16'),
+              fill: (bin) => bin.some((r) => r.sessionId === "user16"),
             },
             {
               thresholds: 20,
@@ -117,9 +119,22 @@ function Result(props) {
         more questions by logging in.
       </p>
 
-      <p className="font-bold pb-2.5">
+      <div className="flex justify-center pb-4">
+        <div className="h-52 w-44 bg-gradient-to-t from-indigo-500 to-sky-500 rounded-2xl">
+          <div className="flex flex-col justify-center items-center h-full text-white">
+            <div className="text-pale-blue pb-4 text-2xl">Your Result</div>
+            <div className="rounded-full pt-3 h-24 w-24 justify-center text-center items-center bg-gradient-to-b from-sky-600 to-indigo-500">
+              <div className="text-4xl font-bold">{commonSenseScore}</div>
+              <span className="text-pale-blue text-sm">of 100</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* <p className="font-bold pb-2.5">
         Your common sense score is: {commonSenseScore}%.
       </p>
+       */}
       <p className="pb-4">
         This score reflects the similarity of your beliefs to others, and the
         accuracy of your perceptions about what others believe.

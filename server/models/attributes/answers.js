@@ -1,6 +1,4 @@
-
-
-const { DataTypes } = require('sequelize');
+const { DataTypes } = require("sequelize");
 
 module.exports = {
   I_agree: {
@@ -35,6 +33,11 @@ module.exports = {
 
   origLanguage: {
     type: DataTypes.STRING,
+  },
+
+  clientVersion: {
+    type: DataTypes.STRING,
+    allowNull: true,
   },
 
   sessionId: {

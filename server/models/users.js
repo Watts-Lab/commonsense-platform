@@ -1,36 +1,27 @@
-const { v4: uuidv4 } = require("uuid");
-
+'use strict';
+const {
+  Model
+} = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  const Users = sequelize.define("users", {
-    name: {
-      type: DataTypes.STRING,
-      defaultValue: "Anonymous",
-    },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-    },
-    magicLink: {
-      type: DataTypes.STRING,
-      allowNull: true,
-      unique: false,
-      defaultValue: () => uuidv4(),
-    },
-    magicLinkExpired: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false,
-    },
-    sessionId: {
-      type: DataTypes.STRING,
-      allowNull: true,
-      unique: true,
-    },
+  class users extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
+    static associate(models) {
+      // define association here
+    }
+  }
+  users.init({
+    name: DataTypes.STRING,
+    email: DataTypes.STRING,
+    magicLink: DataTypes.STRING,
+    sessionId: DataTypes.STRING,
+    magicLinkExpired: DataTypes.BOOLEAN
+  }, {
+    sequelize,
+    modelName: 'users',
   });
-
-  // Users.associate = (models) => {
-  //     Users.belongsTo(models.statements, { foreignKey: 'statementId', as: 'statement' });
-  // };
-
-  return Users;
+  return users;
 };

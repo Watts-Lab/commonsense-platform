@@ -1,7 +1,10 @@
 const router = require("express").Router();
-const controller = require("../controllers/answers.js")
+require("dotenv").config();
+const controller = require("../controllers/answers.js");
+const { statements, users, answers } = require("../models");
 
 const { header, body, validationResult } = require("express-validator");
+
 
 
 router.post(
@@ -30,6 +33,7 @@ router.post(
         perceived_commonsense: req.body.perceived_commonsense,
         origLanguage: "en",
         sessionId: req.body.sessionId,
+        clientVersion: process.env.GITHUB_HASH,
       };
 
       if (req.body.clarity !== "") {

@@ -54,6 +54,6 @@ app.get("/api", function (req, res) {
 db.sequelize.sync().then(() => {
   app.listen(4000, () => {
     console.log("server on port 4000");
-    console.log(process.env.GITHUB_HASH)
+    console.log("Github Commit Hash: ", process.env.GITHUB_HASH)
   });
 });
