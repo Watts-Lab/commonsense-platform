@@ -6,6 +6,7 @@ const env = process.env.NODE_ENV || "development";
 const config = require(__dirname + "/../config/config.js")[env];
 
 const { Sequelize, QueryTypes } = require("sequelize");
+const Op = Sequelize.Op;
 
 const sequelize = new Sequelize(
   config.database,
@@ -16,61 +17,58 @@ const sequelize = new Sequelize(
 
 const { valid_statementlist } = require("../routes/statement_clear.js");
 
-function shuffle(array) {
-  let currentIndex = array.length,
-    randomIndex;
+const getStatementsWeighted = async (
+  sessionId,
+  validStatementList,
+  numberOfStatements = 1
+) => {
+  try {
+    let query = `
+      WITH weighted_questions AS (
+        SELECT
+          statements.id,
+          statements.statement,
+          1.0 / (COUNT(answers.statementId)+1) AS weight
+        FROM
+          statements
+        LEFT JOIN
+          answers ON statements.id = answers.statementId AND answers.sessionId NOT IN (:sessionId)
+        GROUP BY statements.id
+      )
+      SELECT
+        id,
+        statement,
+        -LOG(RAND()) / weight AS priority
+      FROM
+        weighted_questions
+      ORDER BY
+        priority ASC  
+      LIMIT :numberOfStatements;
+    `;
+    if (validStatementList && validStatementList.length > 0) {
+      query = query.replace(
+        "GROUP BY statements.id",
+        "GROUP BY statements.id HAVING statements.id IN (:validStatementList)"
+      );
+    }
 
-  // While there remain elements to shuffle.
-  while (currentIndex != 0) {
-    // Pick a remaining element.
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex--;
+    const results = await sequelize.query(query, {
+      replacements: { sessionId, validStatementList, numberOfStatements }, // Bind the sessionId value
+      type: sequelize.QueryTypes.SELECT,
+    });
 
-    // And swap it with the current element.
-    [array[currentIndex], array[randomIndex]] = [
-      array[randomIndex],
-      array[currentIndex],
-    ];
+    return results;
+  } catch (error) {
+    console.error(error);
+    throw new Error("An error occurred");
   }
-
-  return array;
-}
+};
 
 const next = async (req, res) => {
   try {
     const sessionId = req.query.sessionId || null;
 
-    const [results] = await sequelize.query(
-      `
-        WITH weighted_questions AS (
-          SELECT
-            statements.id,
-            statements.statement,
-            1.0 / (COUNT(answers.statementId)+1) AS weight
-          FROM
-            statements
-          LEFT JOIN
-            answers ON statements.id = answers.statementId AND answers.sessionId NOT IN (:sessionId)
-          GROUP BY
-            statements.id
-          HAVING
-            statements.id IN (:valid_statementlist)
-        )
-        SELECT
-          id,
-          statement,
-          -LOG(RAND()) / weight AS priority
-        FROM
-          weighted_questions
-        ORDER BY
-          priority ASC  
-        LIMIT 1;
-      `,
-      {
-        replacements: { sessionId, valid_statementlist }, // Bind the sessionId value
-        type: sequelize.QueryTypes.SELECT,
-      }
-    );
+    const results = await getStatementsWeighted(sessionId, valid_statementlist);
 
     res.json(results);
   } catch (error) {
@@ -92,6 +90,21 @@ const baseStatements = async (req, res) => {
     .then((data) => res.json(data));
 };
 
+const getStatementFromList = async (statementList) => {
+  await statements
+    .findAll({
+      where: {
+        id: statementList,
+      },
+      attributes: ["id", "statement"],
+      order: Sequelize.literal("rand()"),
+      // include: statementproperties,
+      // order: Sequelize.literal('rand()')
+    })
+    // .then(shuffle)
+    .then((data) => res.json(data));
+};
+
 const statementById = async (req, res) => {
   await statements
     .findAll({
@@ -103,10 +116,14 @@ const statementById = async (req, res) => {
 };
 
 const getTreatment = async (req, res) => {
-  
   res.json(await readTreatments());
 };
 
-
-
-module.exports = { next, baseStatements, statementById, getTreatment };
+module.exports = {
+  next,
+  baseStatements,
+  statementById,
+  getTreatment,
+  getStatementsWeighted,
+  getStatementFromList,
+};

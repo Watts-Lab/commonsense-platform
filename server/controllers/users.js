@@ -82,4 +82,27 @@ const verify_token = (req, res) => {
   });
 };
 
-module.exports = { login, verify_token };
+const delete_account = async (req, res) => {
+  const token = req.headers.authorization;
+  jwt.verify(token, jwt_secret, (err, succ) => {
+    if (!err) {
+      users
+        .destroy({
+          where: {
+            email: succ.email,
+            sessionId: succ.sessionId,
+          },
+        })
+        .then(() => {
+          res.json({ ok: true, message: "User deleted" });
+        })
+        .catch((err) => {
+          res.json({ ok: false, message: "Something went wrong" });
+        });
+    } else {
+      res.json({ ok: false, message: "Something went wrong" });
+    }
+  });
+};
+
+module.exports = { login, verify_token, delete_account };

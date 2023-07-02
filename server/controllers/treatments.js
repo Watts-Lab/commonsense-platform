@@ -3,39 +3,28 @@ require("dotenv").config();
 
 const manifest = require("../survey/manifest");
 
-// You can access the properties of the manifest object like this:
+const { getStatementFromList } = require("./statements.js");
+
+// reading the manifest file from the survey folder
 const treatments = manifest.treatments;
 const assignment = manifest.assignment;
 
-// Further code logic...
-
+// getting the treatment from the manifest file by assignment and returning statements
 const readTreatments = () => {
-  // Iterate over the treatments and execute the callback functions
-  treatments.forEach((treatment) => {
-    const statements =
-      typeof treatment.statements === "function"
-        ? treatment.statements()
-        : treatment.statements;
-    console.log("Statements:", statements);
-  });
-
   // Execute the assignment callback function
   if (typeof assignment === "function") {
     const assignedTreatment = assignment(treatments);
     console.log("Assigned Treatment:", assignedTreatment);
-    const statements =
+    let statements =
       typeof assignedTreatment.statements === "function"
-        ? assignedTreatment.statements()
+        ? assignedTreatment.statements(assignedTreatment.statements_params)
         : assignedTreatment.statements;
     assignedTreatment.statements = statements;
-    return assignedTreatment;
+    return statements;
   } else {
     console.log("Assignment Method:", assignment);
     return assignment;
   }
-
-
-  
 };
 
 module.exports = { readTreatments };
