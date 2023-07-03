@@ -91,18 +91,15 @@ const baseStatements = async (req, res) => {
 };
 
 const getStatementFromList = async (statementList) => {
-  await statements
-    .findAll({
-      where: {
-        id: statementList,
-      },
-      attributes: ["id", "statement"],
-      order: Sequelize.literal("rand()"),
-      // include: statementproperties,
-      // order: Sequelize.literal('rand()')
-    })
-    // .then(shuffle)
-    .then((data) => res.json(data));
+  const statementsText = await statements.findAll({
+    where: {
+      id: statementList,
+    },
+    attributes: ["id", "statement"],
+    order: Sequelize.literal("rand()"),
+  });
+
+  return statementsText;
 };
 
 const statementById = async (req, res) => {

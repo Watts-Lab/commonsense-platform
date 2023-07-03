@@ -1,5 +1,7 @@
 const router = require("express").Router();
 require("dotenv").config();
+const jwt_secret = process.env.JWT_SECRET;
+const jwt = require("jsonwebtoken");
 const controller = require("../controllers/answers.js");
 const { statements, users, answers } = require("../models");
 

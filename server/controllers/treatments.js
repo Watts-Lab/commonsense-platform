@@ -1,9 +1,7 @@
 const process = require("process");
 require("dotenv").config();
-
-const manifest = require("../survey/manifest");
-
 const { getStatementFromList } = require("./statements.js");
+const manifest = require("../survey/manifest");
 
 // reading the manifest file from the survey folder
 const treatments = manifest.treatments;
@@ -18,7 +16,7 @@ const readTreatments = () => {
     let statements =
       typeof assignedTreatment.statements === "function"
         ? assignedTreatment.statements(assignedTreatment.statements_params)
-        : assignedTreatment.statements;
+        : getStatementFromList(assignedTreatment.statements);
     assignedTreatment.statements = statements;
     return statements;
   } else {

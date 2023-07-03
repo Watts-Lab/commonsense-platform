@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 
 import Backend from "../apis/backend";
 
@@ -10,11 +11,16 @@ function SignIn(props) {
 
   const [notifBox, setNotifBox] = useState(false);
 
+  const surveySession = useSelector((state) => state.login.surveySession);
+
   const signIn = async (email, magicLink) => {
     try {
-      let res = await Backend.post(`/users/enter`, { email, magicLink });
+      let res = await Backend.post(`/users/enter`, {
+        email,
+        magicLink,
+        surveySession,
+      });
       if (res.data.token) {
-        alert(res.data.message);
         login(res.data.token);
       } else {
         setNotifBox(true);

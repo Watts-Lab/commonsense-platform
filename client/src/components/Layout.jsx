@@ -53,16 +53,16 @@ function Layout(props) {
 
   const pushResultComponent = (statementId, statementText) => {
     console.log("adding Result component");
-
+    let finalSessionId = surveySession ? surveySession : sessionId;
     setStatementArray((oldArray) => [
       ...oldArray,
-      <Result key={oldArray.length} sessionId={sessionId} />,
+      <Result key={oldArray.length} sessionId={finalSessionId} />,
     ]);
   };
 
   const pushNewStatement = (statementId, statementText) => {
     console.log("adding new statement");
-
+    
     setStatementsData((oldArray) => [
       ...oldArray,
       {
@@ -97,7 +97,7 @@ function Layout(props) {
 
   const { steps, currentStepIndex, back, next } = MultiStepForm({
     steps: statementsData,
-    sessionId: sessionId,
+    sessionId: surveySession ? surveySession : sessionId,
     handleAnswerSaving: handleAnswerSaving,
     getNextStatement: getNextStatement,
     pushNewStatement: pushNewStatement,
@@ -126,7 +126,6 @@ function Layout(props) {
   useEffect(() => {
     Backend.get("/statements")
       .then((response) => {
-
         setStatementsData(
           response.data.map((statement) => {
             return {
@@ -173,10 +172,9 @@ function Layout(props) {
       setSessionId(response.data);
       if (!surveySession) {
         setSession({
-          surveySession: "jjjj"
-        })
+          surveySession: "jjjj",
+        });
       }
-
     });
   }, []);
 

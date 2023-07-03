@@ -6,7 +6,7 @@ export default function Enter(props) {
   let navigate = useNavigate();
 
   useEffect(() => {
-    debugger;
+    // debugger;
     props.signIn(params.email, params.link);
     navigate("/");
   }, []);

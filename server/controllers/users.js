@@ -27,7 +27,7 @@ const register = async (email, sessionId) => {
 };
 
 const login = async (req, res) => {
-  const { email, magicLink, sessionId } = req.body;
+  const { email, magicLink, surveySession } = req.body;
 
   if (!email)
     return res.json({ ok: false, message: "All fields are required" });
@@ -37,7 +37,7 @@ const login = async (req, res) => {
   try {
     let user = await users.findOne({ where: { email: email } });
     if (!user) {
-      let reg = await register(email, sessionId);
+      let reg = await register(email, surveySession);
       res.send({
         ok: true,
         message: "Click the link in the email to sign in",

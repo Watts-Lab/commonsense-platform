@@ -131,7 +131,7 @@ module.exports = {
     },
     {
       name: "control",
-      description: "control",
+      description: "get 15 statements from the database",
       statements: getAllStatements,
       statements_params: {
         limit: 15,
@@ -140,7 +140,7 @@ module.exports = {
     },
     {
       name: "control",
-      description: "control",
+      description: "get statements from design space [1,0,0,1,1,1]",
       statements: getDesignSpace,
       statements_params: {
         space: {

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { setUserData, clearUserData } from "./redux/slices/loginSlice";
+import { setUserData, clearUserData, setSession } from "./redux/slices/loginSlice";
 
 import "aos/dist/aos.css";
 import "./css/style.css";
@@ -23,7 +23,6 @@ import Enter from "./components/Enter";
 
 // apis
 import Backend from "./apis/backend";
-
 
 function App() {
   const loggedIn = useSelector((state) => state.login.loggedIn);
@@ -57,9 +56,21 @@ function App() {
     verify_token();
   }, []);
 
+  useEffect(() => {
+    Backend.get("/", { withCredentials: true }).then((response) => {
+      if (!surveySession) {
+        dispatch(
+          setSession({
+            surveySession: response.data,
+          })
+        );
+      }
+    });
+  }, []);
+
   const signIn = async (email, magicLink) => {
     try {
-      let res = await Backend.post("/users/enter", { email, magicLink });
+      let res = await Backend.post("/users/enter", { email, magicLink, surveySession });
       if (res.data.token) {
         dispatch(
           setUserData({
