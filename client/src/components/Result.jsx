@@ -13,7 +13,7 @@ function Result(props) {
   const [userEmail, setUserEmail] = useState("");
   const navigateTo = useNavigate();
 
-  const ATurkBox = false;
+  const ATurkBox = true;
 
   const [notifBox, setNotifBox] = useState(false);
 
