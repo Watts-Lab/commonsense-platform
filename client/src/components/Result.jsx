@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import * as Plot from "@observablehq/plot";
 
 import "./style.css";
 
@@ -11,6 +12,8 @@ function Result(props) {
   const [commonSenseScore, setCommonSenseScore] = useState(0);
   const [userEmail, setUserEmail] = useState("");
   const navigateTo = useNavigate();
+
+  const ATurkBox = true;
 
   const [notifBox, setNotifBox] = useState(false);
 
@@ -40,9 +43,9 @@ function Result(props) {
     });
   }, []);
 
-  const signIn = async (email, magicLink) => {
+  const signUp = async (email, sessionId) => {
     try {
-      let res = await Backend.post(`/users/enter`, { email, magicLink });
+      let res = await Backend.post(`/users/enter`, { email, sessionId });
       if (res.data.token) {
         login(res.data.token);
       } else {
@@ -59,9 +62,55 @@ function Result(props) {
 
   const emailSubmit = (e) => {
     e.preventDefault();
-    // signIn(userEmail);
+    signUp(userEmail, props.sessionId);
     setNotifBox(true);
   };
+
+  const containerRef = useRef();
+  const [data, setData] = useState([]);
+  const [individualCommonsensicality, setIndividualCommonsensicality] =
+    useState([]);
+
+  useEffect(() => {
+    Backend.get("/results/all").then((response) => {
+      setData(
+        response.data.sort((a, b) => a.commonsensicality - b.commonsensicality)
+      );
+    });
+  }, []);
+
+  useEffect(() => {
+    setIndividualCommonsensicality(
+      data.map((value, index) => ({
+        sessionId: value.sessionId,
+        Percentile: index / data.length,
+        count: 1,
+      }))
+    );
+
+    const plot = Plot.plot({
+      x: { percent: true, nice: true },
+      y: { nice: true },
+      marks: [
+        Plot.rectY(
+          individualCommonsensicality,
+          Plot.binX(
+            {
+              y: "count",
+              fill: (bin) => bin.some((r) => r.sessionId === "user16"),
+            },
+            {
+              thresholds: 20,
+              x: "Percentile",
+            }
+          )
+        ),
+        Plot.ruleY([0]),
+      ],
+    });
+    containerRef.current.append(plot);
+    return () => plot.remove();
+  }, [data]);
 
   return (
     <div className="text-justify leading-relaxed">
@@ -70,9 +119,22 @@ function Result(props) {
         more questions by logging in.
       </p>
 
-      <p className="font-bold pb-2.5">
+      <div className="flex justify-center pb-4">
+        <div className="h-52 w-44 bg-gradient-to-t from-indigo-500 to-sky-500 rounded-2xl">
+          <div className="flex flex-col justify-center items-center h-full text-white">
+            <div className="text-pale-blue pb-4 text-2xl">Your Result</div>
+            <div className="rounded-full pt-3 h-24 w-24 justify-center text-center items-center bg-gradient-to-b from-sky-600 to-indigo-500">
+              <div className="text-4xl font-bold">{commonSenseScore}</div>
+              <span className="text-pale-blue text-sm">of 100</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* <p className="font-bold pb-2.5">
         Your common sense score is: {commonSenseScore}%.
       </p>
+       */}
       <p className="pb-4">
         This score reflects the similarity of your beliefs to others, and the
         accuracy of your perceptions about what others believe.
@@ -84,18 +146,22 @@ function Result(props) {
         can continue to see this score as it updates over time.
       </p>
 
+      <div className="flex justify-center" ref={containerRef} />
+
       <TwitterText percentage={commonSenseScore} />
 
-      <div className="flex flex-col items-center pt-7">
-        <p className="pb-2">Thanks for completing our survey!</p>
-        <p className="pb-2">
-          Copy the code below and paste it in the HIT as a completion
-          verification:
-        </p>
-        <p className="pb-2 font-semibold border-2 rounded py-1 px-3">
-          {props.sessionId}
-        </p>
-      </div>
+      {ATurkBox ? (
+        <div className="flex flex-col items-center pt-7">
+          <p className="pb-2">Thanks for completing our survey!</p>
+          <p className="pb-2">
+            Copy the code below and paste it in the HIT as a completion
+            verification:
+          </p>
+          <p className="pb-2 font-semibold border-2 rounded py-1 px-3">
+            {props.sessionId}
+          </p>
+        </div>
+      ) : null}
 
       <div className="flex flex-col items-center pt-7">
         <div className="w-full bg-white md:mt-0 sm:max-w-lg xl:p-0 dark:bg-gray-800 dark:border-gray-700">
@@ -107,10 +173,7 @@ function Result(props) {
             {notifBox ? (
               <NotificationBox userEmail={userEmail} />
             ) : (
-              <form
-                onSubmit={emailSubmit}
-                className="space-y-4 md:space-y-6"
-              >
+              <form onSubmit={emailSubmit} className="space-y-4 md:space-y-6">
                 <div>
                   <label
                     htmlFor="email"

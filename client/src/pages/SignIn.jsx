@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 
 import Backend from "../apis/backend";
 
@@ -10,11 +11,16 @@ function SignIn(props) {
 
   const [notifBox, setNotifBox] = useState(false);
 
+  const surveySession = useSelector((state) => state.login.surveySession);
+
   const signIn = async (email, magicLink) => {
     try {
-      let res = await Backend.post(`/users/enter`, { email, magicLink });
+      let res = await Backend.post(`/users/enter`, {
+        email,
+        magicLink,
+        surveySession,
+      });
       if (res.data.token) {
-        alert(res.data.message);
         login(res.data.token);
       } else {
         setNotifBox(true);
@@ -36,7 +42,7 @@ function SignIn(props) {
   return (
     <div className="flex flex-col min-h-screen overflow-hidden">
       {/*  Site header */}
-      <Header loggedIn={props.loggedIn} user={props.user} where="/" />
+      <Header where="/" />
 
       {/*  Page content */}
       <main className="flex-grow">

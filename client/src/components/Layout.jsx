@@ -1,5 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+
+import { setSession } from "../redux/slices/loginSlice";
 
 import Statement from "./Statement";
 import MultiStepForm from "./MultiStepForm";
@@ -21,6 +24,8 @@ function Layout(props) {
     "statementsData"
   );
 
+  const surveySession = useSelector((state) => state.login.surveySession);
+
   const [sessionId, setSessionId] = useStickyState(null, "surveySessionId");
   const [unansweredQuestionIndex, setUnansweredQuestionIndex] = useState(null);
 
@@ -36,7 +41,8 @@ function Layout(props) {
 
   const getNextStatement = async (sessionId) => {
     try {
-      const { data: response } = await Backend.get("/statements/next", {
+      const { data: response } = await Backend.get("/treatments", {
+        withCredentials: true,
         params: { sessionId: sessionId },
       });
       console.log("new fetched statement:", response);
@@ -48,10 +54,10 @@ function Layout(props) {
 
   const pushResultComponent = (statementId, statementText) => {
     console.log("adding Result component");
-
+    let finalSessionId = surveySession ? surveySession : sessionId;
     setStatementArray((oldArray) => [
       ...oldArray,
-      <Result key={oldArray.length} sessionId={sessionId} />,
+      <Result key={oldArray.length} sessionId={finalSessionId} />,
     ]);
   };
 
@@ -92,7 +98,7 @@ function Layout(props) {
 
   const { steps, currentStepIndex, back, next } = MultiStepForm({
     steps: statementsData,
-    sessionId: sessionId,
+    sessionId: surveySession ? surveySession : sessionId,
     handleAnswerSaving: handleAnswerSaving,
     getNextStatement: getNextStatement,
     pushNewStatement: pushNewStatement,
@@ -110,19 +116,12 @@ function Layout(props) {
     );
   };
 
-  const getUserLastAnswer = (sessionId, statementId) => {
-    Backend.get(
-      "/answers/session/" + sessionId + "/statement/" + statementId
-    ).then((response) => {
-      console.log(response.data);
-    });
-  };
-
   useEffect(() => {
-    Backend.get("/statements")
+    Backend.get("/treatments")
       .then((response) => {
+        console.log(response.data);
         setStatementsData(
-          response.data.map((statement) => {
+          response.data.value.map((statement) => {
             return {
               id: statement.id,
               answers: ["", "", "", "", "", ""],
@@ -137,7 +136,7 @@ function Layout(props) {
         localStorage.setItem("statementsData", JSON.stringify(statementsData));
 
         setStatementArray(
-          response.data.map((statement, index) => {
+          response.data.value.map((statement, index) => {
             return (
               <Statement
                 key={index}
@@ -163,8 +162,13 @@ function Layout(props) {
       });
 
     Backend.get("/", { withCredentials: true }).then((response) => {
-      //   console.log(response.data);
+      // console.log(response.data);
       setSessionId(response.data);
+      if (!surveySession) {
+        setSession({
+          surveySession: "jjjj",
+        });
+      }
     });
   }, []);
 

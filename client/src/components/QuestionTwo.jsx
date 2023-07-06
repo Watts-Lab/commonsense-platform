@@ -40,7 +40,7 @@ function QuestionTwo(props) {
           answer)
         </p>
 
-        <ul className="grid w-full gap-2 md:grid-cols-1 py-2">
+        <ul className="grid w-full gap-2 md:grid-cols-2 py-2">
           <Option
             text="Yes"
             id_v={questionIdentifier + "ag1"}
@@ -69,7 +69,7 @@ function QuestionTwo(props) {
           />
         </div>
 
-        <ul className="grid w-full gap-2 md:grid-cols-1 py-2">
+        <ul className="grid w-full gap-2 md:grid-cols-2 py-2">
           {others_agree_reasons.map((reason, index) => (
             <Option
               key={index}

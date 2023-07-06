@@ -1,11 +1,19 @@
 import { Fragment, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
+import { useSelector, useDispatch } from "react-redux";
+import { setConsent } from "../redux/slices/consentSlice";
 
 import Consent from "./Consent";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Modal(props) {
+
   const [open, setOpen] = useState(false);
+
+  const consent = useSelector((state) => state.consent.consent);
+  const dispatch = useDispatch();
+
+  const navigateTo = useNavigate();
 
   const cancelButtonRef = useRef(null);
 
@@ -14,7 +22,11 @@ function Modal(props) {
   }
 
   function openModal() {
-    setOpen(true);
+    if (consent === false) {
+      setOpen(true);
+    } else {
+      navigateTo("/statements");
+    }
   }
 
   return (
@@ -93,7 +105,10 @@ function Modal(props) {
                       <button
                         type="button"
                         className="inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 sm:ml-3 sm:w-auto"
-                        onClick={() => setOpen(false)}
+                        onClick={() => {
+                          setOpen(false);
+                          dispatch(setConsent());
+                        }}
                       >
                         Check Your Common Sense
                       </button>

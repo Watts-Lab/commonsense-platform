@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { setUserData, clearUserData, setSession } from "./redux/slices/loginSlice";
 
 import "aos/dist/aos.css";
 import "./css/style.css";
@@ -13,34 +15,40 @@ import SurveyPage from "./pages/SurveyPage";
 import SignIn from "./pages/SignIn";
 import Welcome from "./pages/Welcome";
 import Dashboard from "./pages/Dashboard";
+import Finish from "./pages/Finish";
 
 // components
 import Consent from "./components/Consent";
-import Landing from "./components/Landing";
-import Result from "./components/Result";
 import Enter from "./components/Enter";
 
+// apis
 import Backend from "./apis/backend";
 
-import Cookies from "universal-cookie";
-
-const cookies = new Cookies();
-
 function App() {
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [userEmail, setUserEmail] = useState("");
+  const loggedIn = useSelector((state) => state.login.loggedIn);
+  const email = useSelector((state) => state.login.email);
+  const token = useSelector((state) => state.login.token);
+  const surveySession = useSelector((state) => state.login.surveySession);
 
-  // Dealing with the token
-  const token = JSON.parse(localStorage.getItem("token"));
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const verify_token = async () => {
-      if (token === null) return setLoggedIn(false);
+      if (token === null) return dispatch(clearUserData());
       try {
         Backend.defaults.headers.common["Authorization"] = token;
         const response = await Backend.post(`/users/verify`);
-        setUserEmail(response.data.succ.email);
-        return response.data.ok ? login(token) : logout();
+        console.log(response);
+        return response.data.ok
+          ? dispatch(
+              setUserData({
+                loggedIn: true,
+                email: response.data.email,
+                token: token,
+                surveySession: response.data.sessionId,
+              })
+            )
+          : dispatch(clearUserData());
       } catch (error) {
         console.log(error);
       }
@@ -48,23 +56,30 @@ function App() {
     verify_token();
   }, []);
 
-  const login = (token) => {
-    localStorage.setItem("token", JSON.stringify(token));
-    setLoggedIn(true);
-  };
-
-  const logout = () => {
-    localStorage.removeItem("token");
-    setUserEmail("");
-    setLoggedIn(false);
-  };
+  useEffect(() => {
+    Backend.get("/", { withCredentials: true }).then((response) => {
+      if (!surveySession) {
+        dispatch(
+          setSession({
+            surveySession: response.data,
+          })
+        );
+      }
+    });
+  }, []);
 
   const signIn = async (email, magicLink) => {
     try {
-      let res = await Backend.post("/users/enter", { email, magicLink });
+      let res = await Backend.post("/users/enter", { email, magicLink, surveySession });
       if (res.data.token) {
-        alert(res.data.message);
-        login(res.data.token);
+        dispatch(
+          setUserData({
+            loggedIn: true,
+            email: email,
+            token: res.data.token,
+            surveySession: res.data.sessionId,
+          })
+        );
       } else {
         alert(res.data.message);
       }
@@ -94,31 +109,18 @@ function App() {
     <div className="App">
       <div className="mx-auto pb-14">
         <Routes>
-          <Route
-            exact
-            path="/"
-            element={<Home loggedIn={loggedIn} user={userEmail} />}
-          />
+          <Route exact path="/" element={<Home />} />
           <Route
             path="login/:email/:link"
             element={<Enter signIn={signIn} />}
           />
-          <Route
-            path="/signin"
-            element={<SignIn loggedIn={loggedIn} user={userEmail} />}
-          />
+          <Route path="/signin" element={<SignIn />} />
           <Route path="/survey" element={<ConsentPage />} />
           <Route path="/consent" element={<Consent />} />
           <Route path="/statements" element={<SurveyPage />} />
-          <Route path="/finish" element={<Result />} />
-          <Route
-            path="/welcome"
-            element={<Welcome loggedIn={loggedIn} user={userEmail} />}
-          />
-          <Route
-            path="/dashboard"
-            element={<Dashboard loggedIn={loggedIn} user={userEmail} />}
-          />
+          <Route path="/finish" element={<Finish />} />
+          <Route path="/welcome" element={<Welcome />} />
+          <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
       </div>
     </div>

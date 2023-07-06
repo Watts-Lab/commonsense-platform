@@ -70,10 +70,9 @@ function Statement(props) {
         Answer questions below about the following statement:
       </p>
 
-      <div className="bg-white border-double border-blue-600 border-b-2">
+      <div className="!sticky !top-0 !z-50 bg-white border-double border-blue-600 border-b-2">
         <h3 className="mt-3.5 text-xl font-medium text-gray-900 dark:text-white text-center py-4">
           {text}
-         
         </h3>
       </div>
       

@@ -1,7 +1,7 @@
 const nodemailer = require("nodemailer");
-const process = require('process');
+const process = require("process");
 
-require('dotenv').config()
+require("dotenv").config();
 
 const transport = nodemailer.createTransport({
   service: "Gmail",
@@ -11,10 +11,14 @@ const transport = nodemailer.createTransport({
   },
 });
 
-const TempURL = "http://35.153.104.168/login/";
-const URL = "http://common-sense-loadbalancer-549736638.us-east-1.elb.amazonaws.com/login/";
+const URL =
+  process.env.NODE_ENV != "development"
+    ? process.env.SITE_URL + "/login/"
+    : "http://localhost:5173/login/";
 
 const send_magic_link = async (email, link, which) => {
+
+
   if (which === "signup") {
     var subj = "Sign Up Common Sense Platform",
       body =
@@ -36,8 +40,6 @@ const send_magic_link = async (email, link, which) => {
     subject: subj,
     html: body,
   };
-
-  console.log(mailOptions);
 
   try {
     const response = await transport.sendMail(mailOptions);

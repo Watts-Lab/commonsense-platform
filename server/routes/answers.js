@@ -1,11 +1,13 @@
-const express = require("express");
-const router = express.Router();
-const jwt = require("jsonwebtoken");
+const router = require("express").Router();
 require("dotenv").config();
 const jwt_secret = process.env.JWT_SECRET;
+const jwt = require("jsonwebtoken");
+const controller = require("../controllers/answers.js");
 const { statements, users, answers } = require("../models");
 
 const { header, body, validationResult } = require("express-validator");
+
+
 
 router.post(
   "/",
@@ -19,6 +21,7 @@ router.post(
 
   (req, res) => {
     // Finds the validation errors in this request and wraps them in an object with handy functions
+    console.log("sessionId: ", req.sessionID);
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
@@ -33,6 +36,7 @@ router.post(
         perceived_commonsense: req.body.perceived_commonsense,
         origLanguage: "en",
         sessionId: req.body.sessionId,
+        clientVersion: process.env.GITHUB_HASH,
       };
 
       if (req.body.clarity !== "") {
@@ -91,7 +95,6 @@ router.post(
         } else {
           getSessionId(succ.email)
             .then((sessionID) => {
-              console.log(sessionID);
               if (sessionID) {
                 answers
                   .findAll({

@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server",
-    "dev": "nodemon server"
+    "dev": "nodemon server",
+    "makemigrations": "./node_modules/sequelize-auto-migrations/bin/makemigration.js"
   },
   "keywords": [],
   "author": "",
@@ -23,9 +24,20 @@
     "mysql2": "^3.2.0",
     "nodemailer": "^6.9.3",
     "sequelize": "^6.30.0",
+    "sequelize-auto-migrations": "^1.0.3",
     "sequelize-cli": "^6.6.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.22"
+  },
+  "nodemonConfig": {
+    "restartable": "rs",
+    "ignore": [
+      "node_modules/**/node_modules"
+    ],
+    "delay": "2500",
+    "env": {
+      "NODE_ENV": "development"
+    }
   }
 }

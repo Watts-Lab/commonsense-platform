@@ -1,12 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { HashLink } from "react-router-hash-link";
+import { useSelector, useDispatch } from "react-redux";
+
+import { GiHamburgerMenu } from "react-icons/gi";
+import { slide as Menu } from "react-burger-menu";
 
 import Icon from "../images/WEBSITE-LOGO.png";
 import Modal from "../components/Modal";
 
 function Header(props) {
+  const loggedIn = useSelector((state) => state.login.loggedIn);
+  const email = useSelector((state) => state.login.email);
+
   const [top, setTop] = useState(true);
+
+  const [isMenuOpen, setMenuOpen] = useState(false);
 
   // detect whether user has scrolled the page down by 10px
   useEffect(() => {
@@ -34,8 +43,71 @@ function Header(props) {
             </Link>
           </div>
 
-          {/* Site navigation */}
-          <nav className="flex flex-grow">
+          {/* Hamburger menu */}
+          <div className="lg:hidden">
+            <GiHamburgerMenu
+              className="text-white cursor-pointer"
+              size={24}
+              onClick={() => setMenuOpen(!isMenuOpen)}
+            />
+            <Menu
+              className="bg-blue-900 bg-opacity-80 !h-96"
+              right
+              isOpen={isMenuOpen}
+              onStateChange={({ isOpen }) => setMenuOpen(isOpen)}
+            >
+              <HashLink
+                to={props.where ? props.where + "#about" : "#about"}
+                className="block px-4 py-2 text-white"
+                onClick={() => setMenuOpen(false)}
+              >
+                About
+              </HashLink>
+              <HashLink
+                to={props.where ? props.where + "#people" : "#people"}
+                className="block px-4 py-2 text-white"
+                onClick={() => setMenuOpen(false)}
+              >
+                People
+              </HashLink>
+              <HashLink
+                to={props.where ? props.where + "#research" : "#research"}
+                className="block px-4 py-2 text-white"
+                onClick={() => setMenuOpen(false)}
+              >
+                Research
+              </HashLink>
+              {!loggedIn ? (
+                <Link
+                  to="/signin"
+                  className="block px-4 py-2 text-white"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Sign in
+                </Link>
+              ) : (
+                <>
+                  <Link
+                    to="/dashboard"
+                    className="block px-4 py-2 text-white"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    Dashboard
+                  </Link>
+                  
+                  <p className="block px-4 py-2 text-slate-900">
+                    Logged in as {email}
+                  </p>
+                </>
+              )}
+              <Modal
+                buttonText="Participate →"
+                buttonClass="btn-sm text-white bg-gray-900 hover:bg-gray-600 ml-3"
+              />
+            </Menu>
+          </div>
+
+          <nav className="flex-grow hidden lg:flex">
             <ul className="flex flex-grow justify-start flex-wrap items-center">
               <li>
                 <HashLink
@@ -64,7 +136,7 @@ function Header(props) {
             </ul>
             <ul className="flex flex-grow justify-end flex-wrap items-center">
               <li>
-                {!props.loggedIn ? (
+                {!loggedIn ? (
                   <Link
                     to="/signin"
                     className="font-medium text-white hover:text-gray-300 px-5 py-3 flex items-center transition duration-150 ease-in-out"
@@ -72,27 +144,10 @@ function Header(props) {
                     Sign in
                   </Link>
                 ) : (
-                  <p>Logged in as {props.user}</p>
+                  <p>Logged in as {email}</p>
                 )}
               </li>
               <li>
-                {/* <Link
-                  to="/survey"
-                  className=""
-                >
-                  <span>P</span>
-                  <svg
-                    className="w-3 h-3 fill-current text-gray-400 flex-shrink-0 ml-2 -mr-1"
-                    viewBox="0 0 12 12"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M11.707 5.293L7 .586 5.586 2l3 3H0v2h8.586l-3 3L7 11.414l4.707-4.707a1 1 0 000-1.414z"
-                      fillRule="nonzero"
-                    />
-                  </svg>
-                </Link> */}
-
                 <Modal
                   buttonText="Participate →"
                   buttonClass="btn-sm text-white bg-gray-900 hover:bg-gray-600 ml-3"

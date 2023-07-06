@@ -13,7 +13,7 @@ function Home(props) {
     <div className="flex flex-col min-h-screen overflow-hidden">
 
       {/*  Site header */}
-      <Header loggedIn={props.loggedIn} user={props.user} />
+      <Header />
 
       {/*  Page content */}
       <main className="flex-grow">

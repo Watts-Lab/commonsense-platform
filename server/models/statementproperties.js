@@ -1,30 +1,27 @@
-const { DataTypes } = require('sequelize');
+const { DataTypes } = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
-    
-    const StatementProperties = sequelize.define("statementproperties", {
-      
-      name: {
-        type: DataTypes.STRING,
-        allowNull: false
-      },
+  const StatementProperties = sequelize.define("statementproperties", {
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
 
-      available: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false
-      }
-      
-    });
+    available: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+  });
 
-    StatementProperties.associate = (models) => {
-        StatementProperties.belongsTo(models.statements);
-    };
-  
-    return StatementProperties;
+  StatementProperties.associate = (models) => {
+    StatementProperties.belongsTo(models.statements);
   };
 
+  return StatementProperties;
+};
+
 // console.log({
-      
+
 //   name: {
 //     type: DataTypes.STRING,
 //     allowNull: false
@@ -34,5 +31,5 @@ module.exports = (sequelize, DataTypes) => {
 //     type: DataTypes.BOOLEAN,
 //     defaultValue: false
 //   }
-  
+
 // })

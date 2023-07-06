@@ -21,7 +21,7 @@ const sessionStore = new MySQLStore(options, pool);
 app.use(
   session({
     name: "survey-session",
-    secret: "keyboardcat",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
     store: sessionStore,
@@ -39,22 +39,23 @@ const statementRouter = require("./routes/statements");
 const answerRouter = require("./routes/answers");
 const resultRouter = require("./routes/results");
 const userRouter = require("./routes/users");
+const treatmentRouter = require("./routes/treatments");
 
 app.use("/api/statements", statementRouter);
 app.use("/api/answers", answerRouter);
 app.use("/api/results", resultRouter);
 app.use("/api/users", userRouter);
+app.use("/api/treatments", treatmentRouter);
 
 
 // Access the session as req.session
 app.get("/api", function (req, res) {
-  // console.log(req.sessionID)
   res.send(req.sessionID);
 });
 
 db.sequelize.sync().then(() => {
   app.listen(4000, () => {
     console.log("server on port 4000");
-    console.log(process.env.GITHUB_HASH)
+    console.log("Github Commit Hash: ", process.env.GITHUB_HASH)
   });
 });

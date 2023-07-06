@@ -38,7 +38,7 @@ function TwitterText(props) {
 
   const textareaValue = `I have more common sense than ${props.percentage}% of people!\n${blocksWithLineBreaks.join(
     "\n"
-  )}\n...but not quite as much as ChatGPT 🦾`;
+  )}\nhttps://commonsensicality.org`;
 
   return (
     <div className="flex flex-col items-center">
@@ -46,18 +46,18 @@ function TwitterText(props) {
         onClick={handleShare}
         className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
       >
-        Get a shareable tweet
+        Share
       </button>
 
       {isShared && (
         <div className="mt-4 p-4 bg-gray-100 rounded-md w-96">
-          <p className="text-gray-800">Share this:</p>
+          
 
           <textarea
             id="tweetText"
             className="mt-2 p-2 text-gray-800 bg-white border border-gray-300 rounded-md resize-none w-full"
             value={textareaValue}
-            rows={4}
+            rows={5}
             readOnly
           />
           <button

@@ -1,32 +1,34 @@
 import React from "react";
 
+import nakhaeiheadshot from "../images/Photo-nakhaei.jpg";
+
 function People() {
   const people = [
     {
       name: "Duncan Watts",
       title:
-        "Stevens University Professor & twenty-third Penn Integrates Knowledge Professor",
+        "Stevens University Professor & twenty-third Penn Integrates Knowledge Professor, University of Pennsylvania",
       image:
         "https://css.seas.upenn.edu/wp-content/uploads/2021/03/Watts-Duncan.jpg",
     },
     {
       name: "Mark Whiting",
-      title: "Senior Research Scientist",
+      title:
+        "Senior Computational Social Scientist, University of Pennsylvania",
       image:
         "https://css.seas.upenn.edu/wp-content/uploads/2021/05/head_shots_MarkWhiting_v2.jpg",
     },
     {
       name: "Karan Sampath",
-      title: "Undergraduate Student Researcher",
+      title: "Undergraduate Student Researcher, University of Pennsylvania",
       image:
         "https://css.seas.upenn.edu/wp-content/uploads/2021/06/Karan-Sampath-Headshot-e1624055267969.jpeg",
     },
-    // {
-    //   name: "Amirhossein Nakhaei",
-    //   title: "National Center Professor of Management & Technology",
-    //   image:
-    //     "https://css.seas.upenn.edu/wp-content/uploads/2021/03/Kearns-Michael.jpg",
-    // },
+    {
+      name: "Amirhossein Nakhaei",
+      title: "Graduate Student Researcher, RWTH Aachen University",
+      image: nakhaeiheadshot,
+    },
   ];
 
   return (
@@ -47,7 +49,10 @@ function People() {
           {/* Items */}
           <div className="max-w-sm mx-auto grid gap-6 md:grid-cols-2 lg:grid-cols-3 items-start md:max-w-2xl lg:max-w-none">
             {people.map((person, key) => (
-              <div key={key} className="relative flex flex-col items-center p-6 bg-white rounded shadow-xl h-48">
+              <div
+                key={key}
+                className="relative flex flex-col items-center p-6 bg-white rounded shadow-xl h-48"
+              >
                 <img
                   className="inline-block h-12 w-12 rounded-full ring-2 ring-white"
                   src={person.image}
