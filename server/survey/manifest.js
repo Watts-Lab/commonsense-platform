@@ -18,6 +18,26 @@ function getRandom(arr, n) {
   return result;
 }
 
+function shuffle(array) {
+  let currentIndex = array.length,
+    randomIndex;
+
+  // While there remain elements to shuffle.
+  while (currentIndex != 0) {
+    // Pick a remaining element.
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    // And swap it with the current element.
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex],
+      array[currentIndex],
+    ];
+  }
+
+  return array;
+}
+
 async function getAllStatements(params) {
   try {
     const statementList = await statements.findAll({
@@ -121,27 +141,240 @@ function randomAssignment(assignments) {
 module.exports = {
   treatments: [
     {
+      id: 1,
       name: "fixed five",
       description: "five statements fixed 10 varies",
-      statements: [5, 12, 14, 15], // (list of statements, or callback)
+      statements: [
+        {
+          id: 2009,
+          statement:
+            "if max adds fuel to the fire then max wants to cook some food on the fire",
+        },
+        {
+          id: 6,
+          statement: "a battery can't provide power forever",
+        },
+        {
+          id: 149,
+          statement: "a theist is the opposite of an atheist",
+        },
+        {
+          id: 2904,
+          statement:
+            "people usually know how to correctly chnage baby's diaper when they do it",
+        },
+        {
+          id: 3621,
+          statement:
+            "the world needs dreamers and the world needs doers but above all the world needs dreamers who do",
+        },
+        {
+          id: 304,
+          statement: "being tired would make you want to have a rest",
+        },
+        {
+          id: 2355,
+          statement:
+            "in youth we run into difficulties in old age difficulties run into us",
+        },
+        {
+          id: 111,
+          statement: "a person doesn't want to be punished",
+        },
+        {
+          id: 374,
+          statement: "climate change is not fake",
+        },
+        {
+          id: 3189,
+          statement:
+            "something you might do while playing basketball is score points",
+        },
+        {
+          id: 2506,
+          statement: "knowledge has no limit",
+        },
+        {
+          id: 1937,
+          statement:
+            "if max achieves max's objective then max needs to know the objective",
+        },
+        {
+          id: 479,
+          statement: "electricity powers the cities of the world",
+        },
+        {
+          id: 2753,
+          statement:
+            "one must always hope when one is desperate and doubt when one hopes",
+        },
+        {
+          id: 327,
+          statement: "butter is yellow",
+        },
+      ],
       statements_params: {
         limit: 15,
       },
-      randomization: "none", // (none, fully random, callback)
+      randomization: "none",
     },
     {
-      name: "control",
-      description: "get 15 statements from the database",
-      statements: getAllStatements,
+      id: 2,
+      name: "integrative design",
+      description: "get statements from design space [0,1,0,0,0,0]",
+      statements: [
+        {
+          id: 1181,
+          statement: "if alex scratches the ticket he use his hand",
+        },
+        {
+          id: 571,
+          statement:
+            "frequently moving your body in natural ways keeps you healthy",
+        },
+        {
+          id: 2785,
+          statement:
+            "our physical health is highly dependent on what we choose for our diet",
+        },
+        {
+          id: 338,
+          statement: "canada is north of the united states",
+        },
+        {
+          id: 3793,
+          statement: "we are less than 61 000 away from our fundraising goal",
+        },
+        {
+          id: 386,
+          statement: "computers can never be an actual human",
+        },
+        {
+          id: 191,
+          statement:
+            "all social movements are dismissed at some point as complaining over time they are recognized as speaking truth to power",
+        },
+        {
+          id: 4259,
+          statement: "winter is cold",
+        },
+        {
+          id: 20,
+          statement: "a computer virus is not living",
+        },
+        {
+          id: 522,
+          statement: "exercise increases fitness levels",
+        },
+        {
+          id: 2268,
+          statement: "if you burn wood you make smoke",
+        },
+        {
+          id: 3148,
+          statement: "something you find at a school is a child",
+        },
+        {
+          id: 35,
+          statement: "a full bladder would make you want to urinate",
+        },
+        {
+          id: 553,
+          statement: "florida is in the southern united states",
+        },
+        {
+          id: 612,
+          statement:
+            "governemets should not place unnecessary regulatory burdens on farmers",
+        },
+      ],
       statements_params: {
+        space: {
+          behavior: 0,
+          everyday: 1,
+          figure_of_speech: 0,
+          judgment: 0,
+          opinion: 0,
+          reasoning: 0,
+        },
         limit: 15,
       },
       randomization: "weighted",
     },
     {
-      name: "control",
+      id: 3,
+      name: "integrative design",
       description: "get statements from design space [1,0,0,1,1,1]",
-      statements: getDesignSpace,
+      statements: [
+        {
+          id: 3847,
+          statement: "we national mask mandate to stop the spread of covid19",
+        },
+        {
+          id: 3265,
+          statement:
+            "talent is a pursued interest in other words anything you are willing to practice you can do",
+        },
+        {
+          id: 2724,
+          statement:
+            "nothing can stop the man with the right mental attitude from achieving his goal nothing on earth can help the man with the wrong mental attitude",
+        },
+        {
+          id: 2570,
+          statement: "mail in voting should be allowed",
+        },
+        {
+          id: 3873,
+          statement: "we need to create centralized communities",
+        },
+        {
+          id: 3367,
+          statement:
+            "the federal government has a responsibility to look out for the interests of individual states",
+        },
+        {
+          id: 3885,
+          statement: "we need to fight economic inequality",
+        },
+        {
+          id: 4268,
+          statement: "won't put politics over people",
+        },
+        {
+          id: 2400,
+          statement:
+            "it is impossible to actually prove that god exists unless god wants it to be proven",
+        },
+        {
+          id: 2474,
+          statement:
+            "john will thank mary if she passes an examination for him",
+        },
+        {
+          id: 1029,
+          statement:
+            "if alex is a football player they would not wear a helmet",
+        },
+        {
+          id: 3938,
+          statement: "we need to support the every day american citizen",
+        },
+        {
+          id: 658,
+          statement:
+            "he that is discontented in one place will seldom be content in another",
+        },
+        {
+          id: 2886,
+          statement:
+            "people should not support katie porter and boycott media that support that person",
+        },
+        {
+          id: 3967,
+          statement: "we should all wear masks in public",
+        },
+      ],
       statements_params: {
         space: {
           // design space parameters

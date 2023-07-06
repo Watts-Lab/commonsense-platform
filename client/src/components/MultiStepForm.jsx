@@ -44,10 +44,13 @@ function MultiStepForm(props) {
         props.pushResultComponent();
       }
 
+      console.log("current step ", currentStepIndex);
+      console.log("array length ", props.steps.length);
+
       // if user finishes a statement, then get new statement (stays 2 steps ahead)
       if (currentStepIndex > props.steps.length - 3 && currentStepIndex < 13) {
         props.getNextStatement(props.sessionId).then((ret_val) => {
-          props.pushNewStatement(ret_val.id, ret_val.statement);
+          props.pushNewStatement(ret_val.value.id, ret_val.value.statement);
         });
       }
 

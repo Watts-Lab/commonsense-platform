@@ -39,11 +39,13 @@ const statementRouter = require("./routes/statements");
 const answerRouter = require("./routes/answers");
 const resultRouter = require("./routes/results");
 const userRouter = require("./routes/users");
+const treatmentRouter = require("./routes/treatments");
 
 app.use("/api/statements", statementRouter);
 app.use("/api/answers", answerRouter);
 app.use("/api/results", resultRouter);
 app.use("/api/users", userRouter);
+app.use("/api/treatments", treatmentRouter);
 
 
 // Access the session as req.session

@@ -1,7 +1,5 @@
 const { statements, statementproperties, answers } = require("../models");
 
-const { readTreatments } = require("./treatments.js");
-
 const env = process.env.NODE_ENV || "development";
 const config = require(__dirname + "/../config/config.js")[env];
 
@@ -90,18 +88,6 @@ const baseStatements = async (req, res) => {
     .then((data) => res.json(data));
 };
 
-const getStatementFromList = async (statementList) => {
-  const statementsText = await statements.findAll({
-    where: {
-      id: statementList,
-    },
-    attributes: ["id", "statement"],
-    order: Sequelize.literal("rand()"),
-  });
-
-  return statementsText;
-};
-
 const statementById = async (req, res) => {
   await statements
     .findAll({
@@ -112,15 +98,23 @@ const statementById = async (req, res) => {
     .then((data) => res.json(data));
 };
 
-const getTreatment = async (req, res) => {
-  res.json(await readTreatments());
-};
+async function getStatementFromList(statementList) {
+  const statementsText = await statements.findAll({
+    where: {
+      id: statementList,
+    },
+    attributes: ["id", "statement"],
+    order: Sequelize.literal("rand()"),
+  });
+
+  return statementsText;
+}
+
 
 module.exports = {
   next,
   baseStatements,
   statementById,
-  getTreatment,
   getStatementsWeighted,
   getStatementFromList,
 };

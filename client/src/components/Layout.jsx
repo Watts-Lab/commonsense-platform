@@ -41,7 +41,8 @@ function Layout(props) {
 
   const getNextStatement = async (sessionId) => {
     try {
-      const { data: response } = await Backend.get("/statements/next", {
+      const { data: response } = await Backend.get("/treatments", {
+        withCredentials: true,
         params: { sessionId: sessionId },
       });
       console.log("new fetched statement:", response);
@@ -62,7 +63,7 @@ function Layout(props) {
 
   const pushNewStatement = (statementId, statementText) => {
     console.log("adding new statement");
-    
+
     setStatementsData((oldArray) => [
       ...oldArray,
       {
@@ -115,19 +116,12 @@ function Layout(props) {
     );
   };
 
-  const getUserLastAnswer = (sessionId, statementId) => {
-    Backend.get(
-      "/answers/session/" + sessionId + "/statement/" + statementId
-    ).then((response) => {
-      console.log(response.data);
-    });
-  };
-
   useEffect(() => {
-    Backend.get("/statements")
+    Backend.get("/treatments")
       .then((response) => {
+        console.log(response.data);
         setStatementsData(
-          response.data.map((statement) => {
+          response.data.value.map((statement) => {
             return {
               id: statement.id,
               answers: ["", "", "", "", "", ""],
@@ -142,7 +136,7 @@ function Layout(props) {
         localStorage.setItem("statementsData", JSON.stringify(statementsData));
 
         setStatementArray(
-          response.data.map((statement, index) => {
+          response.data.value.map((statement, index) => {
             return (
               <Statement
                 key={index}
@@ -168,7 +162,7 @@ function Layout(props) {
       });
 
     Backend.get("/", { withCredentials: true }).then((response) => {
-      console.log(response.data);
+      // console.log(response.data);
       setSessionId(response.data);
       if (!surveySession) {
         setSession({
