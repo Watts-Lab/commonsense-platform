@@ -52,8 +52,23 @@ function* generator_prototype_for_fixed_15(sessionId, statements_array) {
   console.log("sessionId inside generator", sessionId);
 
   // Return two items at the beginning
-  yield [statements[0], statements[1], statements[2], statements[3], statements[4], statements[5], statements[6], statements[7], statements[8], statements[9], statements[10], statements[11], statements[12], statements[13], statements[14]];
-
+  yield [
+    statements[0],
+    statements[1],
+    statements[2],
+    statements[3],
+    statements[4],
+    statements[5],
+    statements[6],
+    statements[7],
+    statements[8],
+    statements[9],
+    statements[10],
+    statements[11],
+    statements[12],
+    statements[13],
+    statements[14],
+  ];
 
   // Return remaining items one by one
   for (let i = 14; i < statements.length; i++) {
@@ -69,8 +84,7 @@ const assignment = manifest.assignment;
 const readTreatments = async (req, res, next) => {
   // Execute the assignment callback function
 
-  res.send(await getAllStatements({ limit: 15}));
-  
+  res.send(await getAllStatements({ limit: 15 }));
 };
 
 const chooseTreatment = () => {
@@ -101,32 +115,54 @@ const getTreatment = async (req, res, next) => {
         statementList: JSON.stringify(treatment.statements),
       })
       .then((statements) => {
-        if (!userGenerators[req.sessionID]) {
-          userGenerators[req.sessionID] = generator_prototype_for_fixed_15(
-            req.sessionID,
-            treatment.statements
-          );
-          console.log(`1. Generator created for user ${req.sessionID}`);
-        }
-      })
-      .then(() => {
-        if (userGenerators[req.sessionID]) {
-          res.send(userGenerators[req.sessionID].next());
-        }
+        res.send({value: treatment.statements});
       });
   } else {
-    if (userGenerators[req.sessionID]) {
-      console.log('%cThis is a different colored message', 'color: green; background-color: yellow; font-weight: bold;');
-      res.send(userGenerators[req.sessionID].next());
-    } else {
-      userGenerators[req.sessionID] = generator_prototype_for_fixed_15(
-        req.sessionID,
-        JSON.parse(user.statementList)
-      );
-      console.log(`2. Generator created for user ${req.sessionID}`);
-      res.send(userGenerators[req.sessionID].next());
-    }
+    res.send({value: JSON.parse(user.statementList)});
   }
 };
 
 module.exports = { getTreatment, readTreatments };
+
+// const getTreatment = async (req, res, next) => {
+//   let user = await usertreatments.findOne({
+//     where: { sessionId: req.sessionID },
+//   });
+
+//   if (!user) {
+//     let treatment = chooseTreatment();
+
+//     await usertreatments
+//       .create({
+//         sessionId: req.sessionID,
+//         treatmentId: treatment.id,
+//         statementList: JSON.stringify(treatment.statements),
+//       })
+//       .then((statements) => {
+//         if (!userGenerators[req.sessionID]) {
+//           userGenerators[req.sessionID] = generator_prototype_for_fixed_15(
+//             req.sessionID,
+//             treatment.statements
+//           );
+//           console.log(`1. Generator created for user ${req.sessionID}`);
+//         }
+//       })
+//       .then(() => {
+//         if (userGenerators[req.sessionID]) {
+//           res.send(userGenerators[req.sessionID].next());
+//         }
+//       });
+//   } else {
+//     if (userGenerators[req.sessionID]) {
+//       console.log('%cThis is a different colored message', 'color: green; background-color: yellow; font-weight: bold;');
+//       res.send(userGenerators[req.sessionID].next());
+//     } else {
+//       userGenerators[req.sessionID] = generator_prototype_for_fixed_15(
+//         req.sessionID,
+//         JSON.parse(user.statementList)
+//       );
+//       console.log(`2. Generator created for user ${req.sessionID}`);
+//       res.send(userGenerators[req.sessionID].next());
+//     }
+//   }
+// };
