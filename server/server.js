@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
-require('dotenv').config()
+require("dotenv").config();
 
 // app.use(cors());
 app.use(cors({ credentials: true, origin: true }));
@@ -27,7 +27,7 @@ app.use(
     store: sessionStore,
     cookie: {
       path: "/",
-      maxAge: 1000 * 60 * 60 * 12, // 12 hours
+      maxAge: 1000 * 60 * 60 * 1, // 1 hour
       sameSite: true,
       secure: false, // remove in production
     },
@@ -47,6 +47,9 @@ app.use("/api/results", resultRouter);
 app.use("/api/users", userRouter);
 app.use("/api/treatments", treatmentRouter);
 
+const { getAllTreatments } = require("./controllers/treatments");
+
+getAllTreatments();
 
 // Access the session as req.session
 app.get("/api", function (req, res) {
@@ -56,6 +59,6 @@ app.get("/api", function (req, res) {
 db.sequelize.sync().then(() => {
   app.listen(4000, () => {
     console.log("server on port 4000");
-    console.log("Github Commit Hash: ", process.env.GITHUB_HASH)
+    console.log("Github Commit Hash: ", process.env.GITHUB_HASH);
   });
 });

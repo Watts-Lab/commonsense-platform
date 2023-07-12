@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
-// import axios from "axios";
-import Option from "./Option";
 import QuestionOne from "./QuestionOne";
 import QuestionTwo from "./QuestionTwo";
 import QuestionThree from "./QuestionThree";
-import Buttons from "./Buttons";
 
 import "./style.css";
 import ProgressBar from "./ProgressBar";
@@ -65,7 +62,10 @@ function Statement(props) {
   return (
     // sticky top-0 z-50
     <>
-      <ProgressBar currentStep={props.currentStep} />
+      <ProgressBar
+        currentStep={props.currentStep}
+        totalSteps={props.totalSteps}
+      />
       <p className="text-gray-600">
         Answer questions below about the following statement:
       </p>
@@ -75,8 +75,10 @@ function Statement(props) {
           {text}
         </h3>
       </div>
-      
-      <p className="px-3 pt-3 tracking-tighter text-gray-500 md:text-sm dark:text-gray-400">Required fields are marked with an asterisk *</p>
+
+      <p className="px-3 pt-3 tracking-tighter text-gray-500 md:text-sm dark:text-gray-400">
+        Required fields are marked with an asterisk *
+      </p>
       {/* first set of questions */}
       <QuestionOne
         statementId={props.statementId}

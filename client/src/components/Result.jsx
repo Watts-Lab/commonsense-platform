@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import * as Plot from "@observablehq/plot";
+import { useSelector } from "react-redux";
 
 import "./style.css";
 
@@ -11,11 +12,13 @@ import NotificationBox from "../utils/NotificationBox";
 function Result(props) {
   const [commonSenseScore, setCommonSenseScore] = useState(0);
   const [userEmail, setUserEmail] = useState("");
+  const [notifBox, setNotifBox] = useState(false);
+
+  const urlParams = useSelector((state) => state.urlslice.urlParams);
+
   const navigateTo = useNavigate();
 
-  const ATurkBox = true;
-
-  const [notifBox, setNotifBox] = useState(false);
+  const [aTurkBox, setATurkBox] = useState(false);
 
   function handleRedirect() {
     navigateTo("/welcome");
@@ -40,6 +43,12 @@ function Result(props) {
       setCommonSenseScore(
         Math.round(Number(response.data.commonsensicality).toFixed(2) * 100)
       );
+    });
+
+    urlParams.forEach((obj) => {
+      if (obj.key === "source" && obj.value === "amazon") {
+        setATurkBox(true);
+      }
     });
   }, []);
 
@@ -150,7 +159,7 @@ function Result(props) {
 
       <TwitterText percentage={commonSenseScore} />
 
-      {ATurkBox ? (
+      {aTurkBox ? (
         <div className="flex flex-col items-center pt-7">
           <p className="pb-2">Thanks for completing our survey!</p>
           <p className="pb-2">

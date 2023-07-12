@@ -16,15 +16,16 @@ import Backend from "../apis/backend";
 import "./style.css";
 
 function Layout(props) {
-  // const [listOfStatements, setListOfStatements] = useState([{id: 0, statement:'loading...'}]);
-
   const [statementArray, setStatementArray] = useState([]);
   const [statementsData, setStatementsData] = useStickyState(
     [],
     "statementsData"
   );
 
+  const [surveyLength, setSurveyLength] = useState(0);
+
   const surveySession = useSelector((state) => state.login.surveySession);
+  const urlParams = useSelector((state) => state.urlslice.urlParams);
 
   const [sessionId, setSessionId] = useStickyState(null, "surveySessionId");
   const [unansweredQuestionIndex, setUnansweredQuestionIndex] = useState(null);
@@ -117,7 +118,12 @@ function Layout(props) {
   };
 
   useEffect(() => {
-    Backend.get("/treatments")
+    Backend.get("/treatments", {
+      params: urlParams.reduce((acc, param) => {
+        acc[param.key] = param.value;
+        return acc;
+      }, {}),
+    })
       .then((response) => {
         console.log(response.data);
         setStatementsData(
@@ -135,6 +141,8 @@ function Layout(props) {
       .then((response) => {
         localStorage.setItem("statementsData", JSON.stringify(statementsData));
 
+        setSurveyLength(response.data.value.length);
+
         setStatementArray(
           response.data.value.map((statement, index) => {
             return (
@@ -143,6 +151,7 @@ function Layout(props) {
                 next={next}
                 back={back}
                 currentStep={index + 1}
+                totalSteps={response.data.value.length}
                 statementText={statement.statement}
                 statementId={statement.id}
                 onChange={handleStatementChange}
@@ -159,10 +168,12 @@ function Layout(props) {
             );
           })
         );
+      })
+      .then(() => {
+        pushResultComponent();
       });
 
     Backend.get("/", { withCredentials: true }).then((response) => {
-      // console.log(response.data);
       setSessionId(response.data);
       if (!surveySession) {
         setSession({
@@ -172,15 +183,9 @@ function Layout(props) {
     });
   }, []);
 
-  // useEffect(() => {
-  //   localStorage.setItem("statementsData", JSON.stringify(statementsData));
-  //   console.log(JSON.parse(localStorage.getItem("statementsData")));
-  // }, [statementsData]);
-
   const submitHandler = (event) => {
     event.preventDefault();
     next();
-    // console.log(statementsData);
   };
 
   return (
@@ -188,7 +193,7 @@ function Layout(props) {
       <form onSubmit={submitHandler}>
         {statementArray[currentStepIndex]}
 
-        {currentStepIndex < 15 && (
+        {currentStepIndex < surveyLength && (
           <div className="flex justify-between">
             <button
               onClick={back}
@@ -209,7 +214,7 @@ function Layout(props) {
               className="order-last text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             >
               {(() => {
-                if (currentStepIndex === 14) {
+                if (currentStepIndex === surveyLength - 1) {
                   // return <Link to="/finish">Finish</Link>;
                   return "Finish";
                 } else {
@@ -219,13 +224,6 @@ function Layout(props) {
             </button>
           </div>
         )}
-
-        {/* <Buttons
-          currentStep={currentStepIndex}
-          getNextStatement={getNextStatement}
-          next={next}
-          back={back}
-        /> */}
       </form>
     </>
   );
