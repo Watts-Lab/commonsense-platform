@@ -1,6 +1,8 @@
 const nodemailer = require("nodemailer");
 const process = require("process");
 
+const aws = require("@aws-sdk/client-ses");
+
 require("dotenv").config();
 
 const transport = nodemailer.createTransport({
@@ -9,6 +11,20 @@ const transport = nodemailer.createTransport({
     user: process.env.NODEMAILER_EMAIL,
     pass: process.env.NODEMAILER_PASSWORD,
   },
+});
+
+const ses = new aws.SES({
+  apiVersion: "2010-12-01",
+  region: process.env.AWS_REGION,
+  credentials: {
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID
+  }
+});
+
+// create Nodemailer SES transporter
+let transporter = nodemailer.createTransport({
+  SES: { ses, aws },
 });
 
 const URL =
@@ -27,22 +43,36 @@ const send_magic_link = async (email, link, which) => {
         "</p><p>Please ensure that you do not share this link with anyone, as it is unique to your account.</p>" +
         "<p>We look forward to your active participation on the Common Sense Platform.</p>";
   } else {
-    var subj = "Your sign in link",
+    var subj = "Common Sense Platform sign in link",
       body =
         "<p>Welcome back to the Common Sense Platform. Please click on the link below to login: </p><p>" +
         (URL + email + "/" + link) +
         "</p><p>Please ensure that you do not share this link with anyone, as it is unique to your account.</p>" +
         "<p>We look forward to your active participation on the Common Sense Platform.</p>";
   }
+
   const mailOptions = {
+    from: "no-reply@commonsensicality.org",
     to: email,
-    from: process.env.NODEMAILER_EMAIL,
     subject: subj,
     html: body,
+    ses: {
+      // optional extra arguments for SendRawEmail
+      Tags: [
+        {
+          Name: "Project",
+          Value: "commonsense",
+        },
+      ],
+    },
   };
 
+
   try {
-    const response = await transport.sendMail(mailOptions);
+    const response = await transporter.sendMail(mailOptions, (err, info) => {
+      console.log(info.envelope);
+      console.log(info.messageId);
+    });
     // console.log(response);
     return { ok: true, message: "email sent" };
   } catch (err) {
@@ -50,5 +80,12 @@ const send_magic_link = async (email, link, which) => {
     return { ok: false, message: err };
   }
 };
+
+
+
+
+
+
+
 
 module.exports = { send_magic_link };
