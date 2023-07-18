@@ -86,22 +86,28 @@ function Result(props) {
       params: {
         sessionId: props.sessionId,
       },
-    }).then((response) => {
-      setData(
-        response.data.sort((a, b) => a.commonsensicality - b.commonsensicality)
-      );
-    });
+    })
+      .then((response) => {
+        setData(
+          response.data.sort(
+            (a, b) => a.commonsensicality - b.commonsensicality
+          )
+        );
+
+        return response.data;
+      })
+      .then((data) => {
+        setIndividualCommonsensicality(
+          data.map((value, index) => ({
+            sessionId: value.sessionId,
+            commonsensicality: value.commonsensicality,
+            count: 1,
+          }))
+        );
+      });
   }, []);
 
   useEffect(() => {
-    setIndividualCommonsensicality(
-      data.map((value, index) => ({
-        sessionId: value.sessionId,
-        commonsensicality: value.commonsensicality,
-        count: 1,
-      }))
-    );
-
     const plot = Plot.plot({
       x: { percent: true, nice: true },
       y: { nice: true },
