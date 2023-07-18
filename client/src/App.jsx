@@ -1,7 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useLocation,
+  useSearchParams,
+} from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { setUserData, clearUserData, setSession } from "./redux/slices/loginSlice";
+import {
+  setUserData,
+  clearUserData,
+  setSession,
+} from "./redux/slices/loginSlice";
+import { setUrlParams } from "./redux/slices/urlSlice";
 
 import "aos/dist/aos.css";
 import "./css/style.css";
@@ -30,6 +41,8 @@ function App() {
   const token = useSelector((state) => state.login.token);
   const surveySession = useSelector((state) => state.login.surveySession);
 
+  const urlParams = useSelector((state) => state.urlslice.urlParams);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -57,6 +70,7 @@ function App() {
   }, []);
 
   useEffect(() => {
+    // get survey session id
     Backend.get("/", { withCredentials: true }).then((response) => {
       if (!surveySession) {
         dispatch(
@@ -70,7 +84,11 @@ function App() {
 
   const signIn = async (email, magicLink) => {
     try {
-      let res = await Backend.post("/users/enter", { email, magicLink, surveySession });
+      let res = await Backend.post("/users/enter", {
+        email,
+        magicLink,
+        surveySession,
+      });
       if (res.data.token) {
         dispatch(
           setUserData({
@@ -89,6 +107,10 @@ function App() {
   };
 
   const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+
+  // for removing url params
+  const [searchParamsNew, setSearchParamsNew] = useSearchParams();
 
   useEffect(() => {
     AOS.init({
@@ -100,9 +122,26 @@ function App() {
   });
 
   useEffect(() => {
+    // scroll to top on route change
     document.querySelector("html").style.scrollBehavior = "auto";
     window.scroll({ top: 0 });
     document.querySelector("html").style.scrollBehavior = "";
+
+    // get url params
+    let paramString = [];
+    for (const [key, value] of searchParams.entries()) {
+      paramString.push({ key, value });
+    }
+
+    // save url params in redux store
+    if (paramString.length > 0) {
+      dispatch(
+        setUrlParams({
+          urlParams: paramString,
+        })
+      );
+      setSearchParamsNew("");
+    }
   }, [location.pathname]); // triggered on route change
 
   return (

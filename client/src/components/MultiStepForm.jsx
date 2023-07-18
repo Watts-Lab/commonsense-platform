@@ -5,13 +5,12 @@ import useStickyState from "../hooks/useStickyState";
 import "./style.css";
 
 function MultiStepForm(props) {
-
   // const [currentStepIndex, setCurrentStepIndex] = useStickyState(
   //   0,
   //   "currentStepIndex"
   // );
 
-  const [currentStepIndex, setCurrentStepIndex] = useState(0);  
+  const [currentStepIndex, setCurrentStepIndex] = useState(0);
 
   function checkAnswers(answerList) {
     if (answerList.includes("")) {
@@ -40,7 +39,7 @@ function MultiStepForm(props) {
         return i + 1;
       });
 
-      if (currentStepIndex === 13) {
+      if (currentStepIndex === props.steps.length - 1) {
         props.pushResultComponent();
       }
 
@@ -48,7 +47,10 @@ function MultiStepForm(props) {
       console.log("array length ", props.steps.length);
 
       // if user finishes a statement, then get new statement (stays 2 steps ahead)
-      if (currentStepIndex > props.steps.length - 3 && currentStepIndex < 13) {
+      if (
+        currentStepIndex > props.steps.length - 3 &&
+        currentStepIndex < props.steps.length - 1
+      ) {
         props.getNextStatement(props.sessionId).then((ret_val) => {
           props.pushNewStatement(ret_val.value.id, ret_val.value.statement);
         });
@@ -59,11 +61,14 @@ function MultiStepForm(props) {
         Backend.post("/answers", {
           statementId: props.steps[currentStepIndex].id,
           I_agree: props.steps[currentStepIndex].answers[0].slice(-1),
-          I_agree_reason: props.steps[currentStepIndex].answers[1].split('-')[1],
+          I_agree_reason:
+            props.steps[currentStepIndex].answers[1].split("-")[1],
           others_agree: props.steps[currentStepIndex].answers[2].slice(-1),
-          others_agree_reason: props.steps[currentStepIndex].answers[3].split('-')[1],
-          perceived_commonsense: props.steps[currentStepIndex].answers[4].slice(-1),
-          clarity: props.steps[currentStepIndex].answers[5].split('-')[1],
+          others_agree_reason:
+            props.steps[currentStepIndex].answers[3].split("-")[1],
+          perceived_commonsense:
+            props.steps[currentStepIndex].answers[4].slice(-1),
+          clarity: props.steps[currentStepIndex].answers[5].split("-")[1],
           origLanguage: "en",
           sessionId: props.sessionId,
           withCredentials: true,

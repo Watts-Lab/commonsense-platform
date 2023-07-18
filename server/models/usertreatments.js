@@ -14,7 +14,17 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.TEXT,
       allowNull: true,
     },
+
+    finished: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+      defaultValue: false,
+    },
     
+    urlParams: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
   });
 
   userTreatments.associate = (models) => {

@@ -38,6 +38,16 @@ function shuffle(array) {
   return array;
 }
 
+async function getStatementByWeight(params) {
+  const listOfStatements = await getStatementsWeighted(
+    params.sessionId,
+    [],
+    params.limit
+  );
+
+  return listOfStatements;
+}
+
 async function getAllStatements(params) {
   try {
     const statementList = await statements.findAll({
@@ -389,6 +399,120 @@ module.exports = {
       },
       randomization: "none",
     },
+
+    {
+      id: 4,
+      name: "random statements",
+      description: "get 5 statements by weight for facebook test",
+      statements: getStatementByWeight,
+      statements_params: {
+        limit: 5,
+      },
+      critirion: {
+        source: "facebook",
+      },
+      randomization: "none",
+    },
+
+    {
+      id: 5,
+      name: "random statements",
+      description: "get 10 statements by weight for facebook test",
+      statements: getStatementByWeight,
+      statements_params: {
+        limit: 10,
+      },
+      critirion: {
+        source: "facebook",
+      },
+      randomization: "none",
+    },
+
+    {
+      id: 6,
+      name: "random statements",
+      description: "get 15 statements by weight for facebook test",
+      statements: getStatementByWeight,
+      statements_params: {
+        limit: 15,
+      },
+      critirion: {
+        source: "facebook",
+      },
+      randomization: "none",
+    },
+
+    {
+      id: 7,
+      name: "random statements",
+      description: "get 20 statements by weight for facebook test",
+      statements: getStatementByWeight,
+      statements_params: {
+        limit: 20,
+      },
+      critirion: {
+        source: "facebook",
+      },
+      randomization: "none",
+    },
+
+    {
+      id: 8,
+      name: "random statements",
+      description: "get 25 statements by weight for facebook test",
+      statements: getStatementByWeight,
+      statements_params: {
+        limit: 25,
+      },
+      critirion: {
+        source: "facebook",
+      },
+      randomization: "none",
+    },
+
+    {
+      id: 9,
+      name: "random statements",
+      description: "get 30 statements by weight for facebook test",
+      statements: getStatementByWeight,
+      statements_params: {
+        limit: 30,
+      },
+      critirion: {
+        source: "facebook",
+      },
+      randomization: "none",
+    },
+
+    {
+      id: 10,
+      name: "random statements",
+      description: "get 35 statements by weight for facebook test",
+      statements: getStatementByWeight,
+      statements_params: {
+        limit: 35,
+      },
+      critirion: {
+        source: "facebook",
+      },
+      randomization: "none",
+    },
+
+    {
+      id: 11,
+      name: "random statements",
+      description: "get 40 statements by weight for facebook test",
+      statements: getStatementByWeight,
+      statements_params: {
+        limit: 40,
+      },
+      critirion: {
+        source: "facebook",
+      },
+      randomization: "none",
+    },
+
+    
   ],
 
   // how are people assigned to a treatment?

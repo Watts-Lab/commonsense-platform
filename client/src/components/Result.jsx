@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import * as Plot from "@observablehq/plot";
+import { useSelector } from "react-redux";
 
 import "./style.css";
 
@@ -11,11 +12,13 @@ import NotificationBox from "../utils/NotificationBox";
 function Result(props) {
   const [commonSenseScore, setCommonSenseScore] = useState(0);
   const [userEmail, setUserEmail] = useState("");
+  const [notifBox, setNotifBox] = useState(false);
+
+  const urlParams = useSelector((state) => state.urlslice.urlParams);
+
   const navigateTo = useNavigate();
 
-  const ATurkBox = true;
-
-  const [notifBox, setNotifBox] = useState(false);
+  const [aTurkBox, setATurkBox] = useState(false);
 
   function handleRedirect() {
     navigateTo("/welcome");
@@ -40,6 +43,12 @@ function Result(props) {
       setCommonSenseScore(
         Math.round(Number(response.data.commonsensicality).toFixed(2) * 100)
       );
+    });
+
+    urlParams.forEach((obj) => {
+      if (obj.key === "source" && obj.value === "amazon") {
+        setATurkBox(true);
+      }
     });
   }, []);
 
@@ -72,7 +81,12 @@ function Result(props) {
     useState([]);
 
   useEffect(() => {
-    Backend.get("/results/all").then((response) => {
+    Backend.get("/results/all", {
+      withCredentials: true,
+      params: {
+        sessionId: props.sessionId,
+      },
+    }).then((response) => {
       setData(
         response.data.sort((a, b) => a.commonsensicality - b.commonsensicality)
       );
@@ -83,7 +97,7 @@ function Result(props) {
     setIndividualCommonsensicality(
       data.map((value, index) => ({
         sessionId: value.sessionId,
-        Percentile: index / data.length,
+        commonsensicality: value.commonsensicality,
         count: 1,
       }))
     );
@@ -91,17 +105,22 @@ function Result(props) {
     const plot = Plot.plot({
       x: { percent: true, nice: true },
       y: { nice: true },
+      color: { scheme: "Magma" },
       marks: [
         Plot.rectY(
           individualCommonsensicality,
           Plot.binX(
             {
               y: "count",
-              fill: (bin) => bin.some((r) => r.sessionId === "user16"),
+              fill: "x",
+              fillOpacity: (bin) =>
+                bin.some((r) => r.sessionId === "You") ? 1 : 0.3,
             },
             {
               thresholds: 20,
-              x: "Percentile",
+              // stroke: "black",
+              strokeOpacity: 0.2,
+              x: "commonsensicality",
             }
           )
         ),
@@ -150,7 +169,7 @@ function Result(props) {
 
       <TwitterText percentage={commonSenseScore} />
 
-      {ATurkBox ? (
+      {aTurkBox ? (
         <div className="flex flex-col items-center pt-7">
           <p className="pb-2">Thanks for completing our survey!</p>
           <p className="pb-2">
@@ -193,31 +212,6 @@ function Result(props) {
                   />
                 </div>
 
-                <div className="flex items-start">
-                  <div className="flex items-center h-5">
-                    <input
-                      id="terms"
-                      aria-describedby="terms"
-                      type="checkbox"
-                      className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
-                      required
-                    />
-                  </div>
-                  <div className="ml-3 text-sm">
-                    <label
-                      htmlFor="terms"
-                      className="font-light text-gray-500 dark:text-gray-300"
-                    >
-                      I accept the{" "}
-                      <a
-                        className="font-medium text-primary-600 hover:underline dark:text-primary-500"
-                        href="#"
-                      >
-                        Terms and Conditions
-                      </a>
-                    </label>
-                  </div>
-                </div>
                 <button
                   type="submit"
                   className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"

@@ -1,4 +1,9 @@
-const { statements, usertreatments } = require("../models");
+const {
+  statements,
+  treatments,
+  usertreatments,
+  sequelize,
+} = require("../models");
 const { Sequelize, QueryTypes } = require("sequelize");
 const Op = Sequelize.Op;
 
@@ -27,142 +32,151 @@ async function getAllStatements(params) {
   }
 }
 
-function shuffle(array) {
-  let currentIndex = array.length,
-    randomIndex;
-
-  // While there remain elements to shuffle.
-  while (currentIndex != 0) {
-    // Pick a remaining element.
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex--;
-
-    // And swap it with the current element.
-    [array[currentIndex], array[randomIndex]] = [
-      array[randomIndex],
-      array[currentIndex],
-    ];
-  }
-
-  return array;
-}
-
-function* generator_prototype_for_fixed_15(sessionId, statements_array) {
-  const statements = shuffle(statements_array);
-  console.log("sessionId inside generator", sessionId);
-
-  // Return two items at the beginning
-  yield [
-    statements[0],
-    statements[1],
-    statements[2],
-    statements[3],
-    statements[4],
-    statements[5],
-    statements[6],
-    statements[7],
-    statements[8],
-    statements[9],
-    statements[10],
-    statements[11],
-    statements[12],
-    statements[13],
-    statements[14],
-  ];
-
-  // Return remaining items one by one
-  for (let i = 14; i < statements.length; i++) {
-    yield statements[i];
-  }
-}
-
 // reading the manifest file from the survey folder
-const treatments = manifest.treatments;
-const assignment = manifest.assignment;
+const manifest_treatments = manifest.treatments;
+const manifest_assignment = manifest.assignment;
 
-// getting the treatment from the manifest file by assignment and returning statements
-const readTreatments = async (req, res, next) => {
-  // Execute the assignment callback function
+async function getAllTreatments() {
+  try {
+    for (const treatment of manifest_treatments) {
+      const existingTreatment = await treatments.findOne({
+        where: { id: treatment.id },
+      });
 
-  res.send(await getAllStatements({ limit: 15 }));
-};
+      if (!existingTreatment) {
+        console.log(
+          "Treatment not found in the database",
+          treatment.id,
+          "adding..."
+        );
 
-const chooseTreatment = () => {
-  if (typeof assignment === "function") {
-    const assignedTreatment = assignment(treatments);
-    let statements =
-      typeof assignedTreatment.statements === "function"
-        ? assignedTreatment.statements(assignedTreatment.statements_params)
-        : assignedTreatment.statements;
-    return assignedTreatment;
-  } else {
-    return assignment;
+        // Treatment not found in the database, add a new record
+        await treatments.create({
+          id: treatment.id,
+          code: treatment.id,
+          description: treatment.description,
+          params: JSON.stringify(treatment),
+        });
+      }
+    }
+  } catch (error) {
+    console.error("Error fetching treatments:", error);
+    throw error;
   }
+
+  // console.log("treatments: ", await treatments.findAll());
+}
+
+// controller for getting the treatment path /treatments/all
+const readTreatments = async (req, res, next) => {
+  console.log(manifest_treatments[9]);
+  const assignedTreatment = manifest_treatments[9];
+
+  res.send(
+    await assignedTreatment.statements(assignedTreatment.statements_params)
+  );
 };
 
+const chooseTreatment = async (req_param) => {
+  const treatmentIds =
+  req_param.query.source === "facebook" ? [4, 5, 6, 7, 8, 9, 10, 11] : [1, 2, 3];
+
+  const treatmentCount = await treatments
+    .findAll({
+      attributes: [
+        "id",
+        [
+          sequelize.fn("COUNT", sequelize.col("usertreatments.treatmentId")),
+          "count",
+        ],
+      ],
+      where: { id: treatmentIds },
+      include: [
+        {
+          model: usertreatments,
+          attributes: [],
+          where: { treatmentId: treatmentIds }, // Filter by specific treatmentIds
+          required: false,
+        },
+      ],
+      group: ["treatments.id"],
+    })
+    .then((treatmentCount) => {
+      return treatmentCount.map((treatment) => treatment.dataValues);
+    });
+
+  let lowestCount = Infinity;
+  let lowestTreatment = null;
+
+  for (const treatment of treatmentCount) {
+    if (treatment.count < lowestCount) {
+      lowestCount = treatment.count;
+      lowestTreatment = treatment;
+    }
+  }
+
+  const assignedTreatment = manifest_treatments[lowestTreatment.id - 1];
+
+  
+
+  const treatment_parameters = {
+    ...assignedTreatment.statements_params,
+    ...req_param.query,
+    sessionId: req_param.sessionID,
+  };
+
+  console.log("treatment parameters", treatment_parameters);
+
+
+  let statements =
+    typeof assignedTreatment.statements === "function"
+      ? await assignedTreatment.statements(treatment_parameters)
+      : assignedTreatment.statements;
+
+  assignedTreatment.statements = statements;
+
+  return assignedTreatment;
+};
+
+// controller for getting the treatment path /treatments
 const getTreatment = async (req, res, next) => {
+  const source = Object.keys(req.query)
+    .map(
+      (key) =>
+        `${encodeURIComponent(key)}=${encodeURIComponent(req.query[key])}`
+    )
+    .join("&");
+
+  if (req.query.source) {
+    console.log("source", req.query.source);
+  }
+
+  // 5, 10, 15, 20, 25, 30, 35, 40;
+  //   ? roundRobin(fb_1, fb_2, fb_3) : randomWeight(point_1, point_2, point_3)
+
   let user = await usertreatments.findOne({
-    where: { sessionId: req.sessionID },
+    where: { sessionId: req.sessionID, finished: false },
   });
 
   if (!user) {
-    let treatment = chooseTreatment();
+    let treatment = await chooseTreatment(req);
+
+    console.log("treatment", treatment);
 
     await usertreatments
       .create({
         sessionId: req.sessionID,
         treatmentId: treatment.id,
         statementList: JSON.stringify(treatment.statements),
+        finished: false,
+        urlParams: source === "" ? null : source,
       })
       .then((statements) => {
-        res.send({value: treatment.statements});
+        res.send({ value: treatment.statements });
       });
   } else {
-    res.send({value: JSON.parse(user.statementList)});
+    res.send({ value: JSON.parse(user.statementList) });
   }
 };
 
-module.exports = { getTreatment, readTreatments };
-
-// const getTreatment = async (req, res, next) => {
-//   let user = await usertreatments.findOne({
-//     where: { sessionId: req.sessionID },
-//   });
-
-//   if (!user) {
-//     let treatment = chooseTreatment();
-
-//     await usertreatments
-//       .create({
-//         sessionId: req.sessionID,
-//         treatmentId: treatment.id,
-//         statementList: JSON.stringify(treatment.statements),
-//       })
-//       .then((statements) => {
-//         if (!userGenerators[req.sessionID]) {
-//           userGenerators[req.sessionID] = generator_prototype_for_fixed_15(
-//             req.sessionID,
-//             treatment.statements
-//           );
-//           console.log(`1. Generator created for user ${req.sessionID}`);
-//         }
-//       })
-//       .then(() => {
-//         if (userGenerators[req.sessionID]) {
-//           res.send(userGenerators[req.sessionID].next());
-//         }
-//       });
-//   } else {
-//     if (userGenerators[req.sessionID]) {
-//       console.log('%cThis is a different colored message', 'color: green; background-color: yellow; font-weight: bold;');
-//       res.send(userGenerators[req.sessionID].next());
-//     } else {
-//       userGenerators[req.sessionID] = generator_prototype_for_fixed_15(
-//         req.sessionID,
-//         JSON.parse(user.statementList)
-//       );
-//       console.log(`2. Generator created for user ${req.sessionID}`);
-//       res.send(userGenerators[req.sessionID].next());
-//     }
-//   }
-// };
+module.exports = { getTreatment, readTreatments, getAllTreatments };
