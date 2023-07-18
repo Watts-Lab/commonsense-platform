@@ -81,7 +81,12 @@ function Result(props) {
     useState([]);
 
   useEffect(() => {
-    Backend.get("/results/all").then((response) => {
+    Backend.get("/results/all", {
+      withCredentials: true,
+      params: {
+        sessionId: props.sessionId,
+      },
+    }).then((response) => {
       setData(
         response.data.sort((a, b) => a.commonsensicality - b.commonsensicality)
       );
@@ -92,7 +97,7 @@ function Result(props) {
     setIndividualCommonsensicality(
       data.map((value, index) => ({
         sessionId: value.sessionId,
-        Percentile: index / data.length,
+        commonsensicality: value.commonsensicality,
         count: 1,
       }))
     );
@@ -109,13 +114,13 @@ function Result(props) {
               y: "count",
               fill: "x",
               fillOpacity: (bin) =>
-                bin.some((r) => r.sessionId === "user16") ? 1 : 0.3,
+                bin.some((r) => r.sessionId === "You") ? 1 : 0.3,
             },
             {
               thresholds: 20,
               // stroke: "black",
               strokeOpacity: 0.2,
-              x: "Percentile",
+              x: "commonsensicality",
             }
           )
         ),
