@@ -79,7 +79,9 @@ const readTreatments = async (req, res, next) => {
 
 const chooseTreatment = async (req_param) => {
   const treatmentIds =
-  req_param.query.source === "facebook" ? [4, 5, 6, 7, 8, 9, 10, 11] : [1, 2, 3];
+    req_param.query.source === "facebook"
+      ? [4, 5, 6, 7, 8, 9, 10, 11]
+      : [1, 2, 3];
 
   const treatmentCount = await treatments
     .findAll({
@@ -117,8 +119,6 @@ const chooseTreatment = async (req_param) => {
 
   const assignedTreatment = manifest_treatments[lowestTreatment.id - 1];
 
-  
-
   const treatment_parameters = {
     ...assignedTreatment.statements_params,
     ...req_param.query,
@@ -126,7 +126,6 @@ const chooseTreatment = async (req_param) => {
   };
 
   console.log("treatment parameters", treatment_parameters);
-
 
   let statements =
     typeof assignedTreatment.statements === "function"
@@ -179,4 +178,26 @@ const getTreatment = async (req, res, next) => {
   }
 };
 
-module.exports = { getTreatment, readTreatments, getAllTreatments };
+const updateTreatment = async (req, res, next) => {
+  const user = await usertreatments
+    .findOne({
+      where: { sessionId: req.sessionID, finished: false },
+    })
+    .then((user) => {
+      if (user) {
+        user.update({ finished: true });
+      } else {
+        console.log("user not found");
+      }
+    })
+    .then(() => {
+      res.send({ value: "success" });
+    });
+};
+
+module.exports = {
+  getTreatment,
+  readTreatments,
+  getAllTreatments,
+  updateTreatment,
+};
