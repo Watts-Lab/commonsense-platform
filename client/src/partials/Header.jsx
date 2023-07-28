@@ -95,7 +95,7 @@ function Header(props) {
                     Dashboard
                   </Link>
                   
-                  <p className="block px-4 py-2 text-slate-900">
+                  <p className="block px-4 py-2 text-white">
                     Logged in as {email}
                   </p>
                 </>

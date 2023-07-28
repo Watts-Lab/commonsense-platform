@@ -122,7 +122,7 @@ router.get("/all", async (req, res) => {
     })
     .then(
       (data) => {
-        console.log(req.sessionID);
+        // console.log(req.sessionID);
         const output = [];
         Object.keys(data).forEach(function (key, index) {
           data[key]["commonsensicality"] = Math.sqrt(

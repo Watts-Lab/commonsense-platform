@@ -9,10 +9,25 @@ import Backend from "../apis/backend";
 import TwitterText from "../utils/TwitterText";
 import NotificationBox from "../utils/NotificationBox";
 
+import useStickyState from "../hooks/useStickyState";
+
 function Result(props) {
-  const [commonSenseScore, setCommonSenseScore] = useState(0);
+
+  const [statementsData, setStatementsData] = useStickyState(
+    [],
+    "statementsData"
+  );
+
+  const [commonSenseScore, setCommonSenseScore] = useState({
+    commonsense: 0,
+    awareness: 0,
+    consensus: 0,
+  });
+
   const [userEmail, setUserEmail] = useState("");
   const [notifBox, setNotifBox] = useState(false);
+
+  const surveySession = useSelector((state) => state.login.surveySession);
 
   const urlParams = useSelector((state) => state.urlslice.urlParams);
 
@@ -34,21 +49,36 @@ function Result(props) {
   }
 
   useEffect(() => {
-    Backend.post("/results", null, {
+
+    setStatementsData([]);
+    
+    Backend.post("/results", {
+      withCredentials: true,
       params: {
         sessionId: props.sessionId,
       },
     }).then((response) => {
       console.log(response.data);
-      setCommonSenseScore(
-        Math.round(Number(response.data.commonsensicality).toFixed(2) * 100)
-      );
+      setCommonSenseScore({
+        commonsense: Math.round(
+          Number(response.data.commonsensicality).toFixed(2) * 100
+        ),
+        awareness: Math.round(Number(response.data.awareness).toFixed(2) * 100),
+        consensus: Math.round(Number(response.data.consensus).toFixed(2) * 100),
+      });
     });
 
     urlParams.forEach((obj) => {
       if (obj.key === "source" && obj.value === "amazon") {
         setATurkBox(true);
       }
+    });
+
+    Backend.get("/treatments/update", {
+      withCredentials: true,
+      params: { sessionId: props.sessionId },
+    }).then((response) => {
+      console.log(response.data);
     });
   }, []);
 
@@ -143,24 +173,33 @@ function Result(props) {
         You've completed the common sense trial. At any point you can answer
         more questions by logging in.
       </p>
-
       <div className="flex justify-center pb-4">
         <div className="h-52 w-44 bg-gradient-to-t from-indigo-500 to-sky-500 rounded-2xl">
           <div className="flex flex-col justify-center items-center h-full text-white">
             <div className="text-pale-blue pb-4 text-2xl">Your Result</div>
             <div className="rounded-full pt-3 h-24 w-24 justify-center text-center items-center bg-gradient-to-b from-sky-600 to-indigo-500">
-              <div className="text-4xl font-bold">{commonSenseScore}</div>
+              <div className="text-4xl font-bold">
+                {commonSenseScore.commonsense}
+              </div>
               <span className="text-pale-blue text-sm">of 100</span>
             </div>
           </div>
         </div>
       </div>
-
-      {/* <p className="font-bold pb-2.5">
-        Your common sense score is: {commonSenseScore}%.
-      </p>
-       */}
       <p className="pb-4">
+        This score is based on a calculation of how similar your beliefs are to
+        others (yours are {commonSenseScore.awareness}% similar), and how
+        accurately you rated what others think (you were{" "}
+        {commonSenseScore.consensus}% accurate).
+      </p>
+
+      <p className="pb-4">
+        This is calculated by comparing your answers to others answers, so it
+        will become more accurate if you answer more questions and it will
+        become more accurate as others answer more questions. If you log in
+        below you can continue to see this score as it updates over time.
+      </p>
+      {/* <p className="pb-4">
         This score reflects the similarity of your beliefs to others, and the
         accuracy of your perceptions about what others believe.
       </p>
@@ -169,12 +208,9 @@ function Result(props) {
         will become more accurate if you answer more questions and it will
         become more accurate as others answer more questions. If you log in you
         can continue to see this score as it updates over time.
-      </p>
-
+      </p> */}
       <div className="flex justify-center" ref={containerRef} />
-
-      <TwitterText percentage={commonSenseScore} />
-
+      <TwitterText percentage={commonSenseScore.commonsense} />
       {aTurkBox ? (
         <div className="flex flex-col items-center pt-7">
           <p className="pb-2">Thanks for completing our survey!</p>
@@ -187,7 +223,6 @@ function Result(props) {
           </p>
         </div>
       ) : null}
-
       <div className="flex flex-col items-center pt-7">
         <div className="w-full bg-white md:mt-0 sm:max-w-lg xl:p-0 dark:bg-gray-800 dark:border-gray-700">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
