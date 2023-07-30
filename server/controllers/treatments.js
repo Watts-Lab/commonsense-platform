@@ -79,10 +79,9 @@ const readTreatments = async (req, res, next) => {
 
 const chooseTreatment = async (req_param) => {
   const treatmentIds =
-    req_param.query.source === "facebook" ||
-    req_param.query.source === "instagram"
-      ? [1, 2, 3]
-      : [4, 5, 6, 7, 8, 9, 10, 11];
+    req_param.query.source === "facebook"
+      ? [4, 5, 6, 7, 8, 9, 10, 11]
+      : [1, 2, 3];
 
   const treatmentCount = await treatments
     .findAll({
