@@ -8,6 +8,7 @@ import Statement from "./Statement";
 import MultiStepForm from "./MultiStepForm";
 import Buttons from "./Buttons";
 import Result from "./Result";
+import Feedback from "./Feedback/Feedback";
 
 import useStickyState from "../hooks/useStickyState";
 
