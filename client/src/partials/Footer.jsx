@@ -17,21 +17,7 @@ function Footer() {
                 <img className="w-8 h-8" src={Icon} />
               </Link>
             </div>
-            <div className="text-sm text-gray-600">
-              <Link
-                to="#"
-                className="text-gray-600 hover:text-gray-900 hover:underline transition duration-150 ease-in-out"
-              >
-                Terms
-              </Link>{" "}
-              ·{" "}
-              <Link
-                to="#"
-                className="text-gray-600 hover:text-gray-900 hover:underline transition duration-150 ease-in-out"
-              >
-                Privacy Policy
-              </Link>
-            </div>
+            
           </div>
 
           {/* 2nd block */}
@@ -40,7 +26,7 @@ function Footer() {
             <ul className="text-sm">
               <li className="mb-2">
                 <Link
-                  to="#"
+                  to=""
                   className="text-gray-600 hover:text-gray-900 transition duration-150 ease-in-out"
                 >
                   Home
@@ -48,7 +34,7 @@ function Footer() {
               </li>
               <li className="mb-2">
                 <Link
-                  to="#"
+                  to="https://css.seas.upenn.edu/"
                   className="text-gray-600 hover:text-gray-900 transition duration-150 ease-in-out"
                 >
                   Upenn
@@ -56,7 +42,7 @@ function Footer() {
               </li>
               <li className="mb-2">
                 <Link
-                  to="#"
+                  to="/signin"
                   className="text-gray-600 hover:text-gray-900 transition duration-150 ease-in-out"
                 >
                   SignIn
@@ -68,51 +54,7 @@ function Footer() {
           
 
           {/* 4th block */}
-          <div className="sm:col-span-6 md:col-span-4 lg:col-span-2">
-            <h6 className="text-gray-800 font-medium mb-2">CSS Lab</h6>
-            <ul className="text-sm">
-              <li className="mb-2">
-                <Link
-                  to="#"
-                  className="text-gray-600 hover:text-gray-900 transition duration-150 ease-in-out"
-                >
-                  Home
-                </Link>
-              </li>
-              <li className="mb-2">
-                <Link
-                  to="#"
-                  className="text-gray-600 hover:text-gray-900 transition duration-150 ease-in-out"
-                >
-                  About
-                </Link>
-              </li>
-              <li className="mb-2">
-                <Link
-                  to="#"
-                  className="text-gray-600 hover:text-gray-900 transition duration-150 ease-in-out"
-                >
-                  People
-                </Link>
-              </li>
-              <li className="mb-2">
-                <Link
-                  to="#"
-                  className="text-gray-600 hover:text-gray-900 transition duration-150 ease-in-out"
-                >
-                  Research
-                </Link>
-              </li>
-              <li className="mb-2">
-                <Link
-                  to="#"
-                  className="text-gray-600 hover:text-gray-900 transition duration-150 ease-in-out"
-                >
-                  Publications
-                </Link>
-              </li>
-            </ul>
-          </div>
+          
 
           {/* 5th block */}
           <div className="sm:col-span-6 md:col-span-4 lg:col-span-3">

@@ -19,7 +19,7 @@ function Dashboard(props) {
     try {
       Backend.defaults.headers.common["Authorization"] = token;
       const response = await Backend.post("/users/deleteaccount", {
-        email: ""
+        email: "",
       });
       return response.data.ok;
     } catch (error) {
@@ -74,7 +74,7 @@ function Dashboard(props) {
                       Dashboard
                     </button>
                   </li>
-                  <li className="mr-2" role="presentation">
+                  {/* <li className="mr-2" role="presentation">
                     <button
                       className={`inline-block p-4 border-b-2 rounded-t-lg ${
                         activeTab === "profile"
@@ -88,7 +88,7 @@ function Dashboard(props) {
                     >
                       Profile
                     </button>
-                  </li>
+                  </li> */}
 
                   <li className="mr-2" role="presentation">
                     <button
