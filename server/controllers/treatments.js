@@ -148,8 +148,8 @@ const getTreatment = async (req, res, next) => {
 
   if (req.query.source) {
     console.log("source", req.query.source);
+    
   }
-
   // 5, 10, 15, 20, 25, 30, 35, 40;
   //   ? roundRobin(fb_1, fb_2, fb_3) : randomWeight(point_1, point_2, point_3)
 
@@ -160,7 +160,7 @@ const getTreatment = async (req, res, next) => {
   if (!user) {
     let treatment = await chooseTreatment(req);
 
-    console.log("treatment", treatment);
+    // console.log("treatment", treatment);
 
     await usertreatments
       .create({
@@ -168,7 +168,7 @@ const getTreatment = async (req, res, next) => {
         treatmentId: treatment.id,
         statementList: JSON.stringify(treatment.statements),
         finished: false,
-        urlParams: source === "" ? null : source,
+        urlParams: source === "" ? null : JSON.stringify(req.query),
       })
       .then((statements) => {
         res.send({ value: treatment.statements });

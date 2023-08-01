@@ -1,6 +1,7 @@
 const feedbackTypes = {
   BUG: {
     title: "Bug",
+    text: "Tell in detail what is happening. \n\nIf you want to hear back from us, leave your email.",
     image: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -20,6 +21,7 @@ const feedbackTypes = {
   },
   IDEA: {
     title: "Idea",
+    text: "Tell us what you think would be a great addition to the app. \n\nIf you want to hear back from us, leave your email.",
     image: (
       <svg
         xmlns="http://www.w3.org/2000/svg"

@@ -94,7 +94,7 @@ function Header(props) {
                   >
                     Dashboard
                   </Link>
-                  
+
                   <p className="block px-4 py-2 text-white">
                     Logged in as {email}
                   </p>
@@ -144,7 +144,16 @@ function Header(props) {
                     Sign in
                   </Link>
                 ) : (
-                  <p>Logged in as {email}</p>
+                  <>
+                    <Link
+                      to="/dashboard"
+                      className="block px-4 py-2 text-white"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      Dashboard | {email}
+                    </Link>
+
+                  </>
                 )}
               </li>
               <li>
