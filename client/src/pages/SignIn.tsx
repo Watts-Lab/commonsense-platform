@@ -5,7 +5,7 @@ import Backend from "../apis/backend";
 import Header from "../partials/Header";
 import NotificationBox from "../utils/NotificationBox";
 
-const SignIn = () => {
+const SignIn:React.FC = () => {
   const [userEmail, setUserEmail] = useState("");
 
   const [notifBox, setNotifBox] = useState(false);

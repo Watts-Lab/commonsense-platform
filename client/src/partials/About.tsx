@@ -1,22 +1,20 @@
 import React, { useState, useRef, useEffect } from "react";
-
 import FeaturesElement2 from "../images/Common-Sens.png";
 
-function About() {
-  const [tab, setTab] = useState(1);
+const About: React.FC = () => {
+  const [tab, setTab] = useState<number>(1);
 
-  const tabs = useRef(null);
+  const tabs = useRef<HTMLDivElement | null>(null);
 
   const heightFix = () => {
-    if (tabs.current.children[tab]) {
-      tabs.current.style.height =
-        tabs.current.children[tab - 1].offsetHeight + "px";
+    if (tabs.current?.children[tab - 1]) {
+      const childElement = tabs.current.children[tab - 1] as HTMLElement;
+      tabs.current.style.height = childElement.offsetHeight + "px";
     }
   };
-
+  
   useEffect(() => {
     heightFix();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tab]);
 
   return (
@@ -108,6 +106,6 @@ function About() {
       </div>
     </section>
   );
-}
+};
 
 export default About;

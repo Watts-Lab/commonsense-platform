@@ -5,13 +5,38 @@ import Footer from "../partials/Footer";
 
 import Backend from "../apis/backend";
 
-function Dashboard(props) {
-  const [answerList, setAnswerList] = useState([]);
-  const [activeTab, setActiveTab] = useState("dashboard");
+interface Statement {
+  statement: string;
+}
 
-  const token = JSON.parse(localStorage.getItem("token"));
+interface Answer {
+  id: number;
+  I_agree: boolean;
+  I_agree_reason: string;
+  others_agree: boolean;
+  others_agree_reason: string;
+  perceived_commonsense: boolean;
+  clarity: string;
+  origLanguage: string;
+  clientVersion: string;
+  sessionId: string;
+  createdAt: string;
+  updatedAt: string;
+  statement_number: number;
+  statementId: number;
+  statement: Statement;
+}
 
-  const handleTabClick = (tabId) => {
+const Dashboard: React.FC = () => {
+  
+  const [answerList, setAnswerList] = useState<Answer[]>([]);
+  const [activeTab, setActiveTab] = useState<string>("dashboard");
+
+  // const token = JSON.parse(localStorage.getItem("token"));
+  const tokenString = localStorage.getItem("token");
+  const token = tokenString !== null ? JSON.parse(tokenString) : null;
+
+  const handleTabClick = (tabId: string) => {
     setActiveTab(tabId);
   };
 
@@ -47,7 +72,7 @@ function Dashboard(props) {
   return (
     <div className="flex flex-col min-h-screen overflow-hidden">
       {/*  Site header */}
-      <Header loggedIn={props.loggedIn} user={props.user} where="/" />
+      <Header where="/" />
 
       {/*  Page content */}
       <main className="flex-grow">
@@ -125,7 +150,7 @@ function Dashboard(props) {
                           <ul className="pl-5 mt-2 space-y-1 list-disc list-inside">
                             <li>
                               Is it common sense:{" "}
-                              {answer.questionOneAgree === 1 ? (
+                              {answer.I_agree === true ? (
                                 <span className="text-green-800">Yes</span>
                               ) : (
                                 <span className="text-red-700">No</span>
@@ -133,7 +158,7 @@ function Dashboard(props) {
                             </li>
                             <li>
                               Others think it is common sense:{" "}
-                              {answer.questionThreeAgree === 1 ? (
+                              {answer.others_agree === true ? (
                                 <span className="text-green-800">Yes</span>
                               ) : (
                                 <span className="text-red-700">No</span>
@@ -177,9 +202,9 @@ function Dashboard(props) {
         </section>
       </main>
 
-      {/* <Banner /> */}
+      <Footer />
     </div>
   );
-}
+};
 
 export default Dashboard;

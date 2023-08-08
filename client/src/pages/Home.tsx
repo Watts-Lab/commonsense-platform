@@ -7,7 +7,7 @@ import People from "../partials/People";
 import Publications from "../partials/Publications";
 import Footer from "../partials/Footer";
 
-const Home = () => {
+const Home:React.FC = () => {
   return (
     <div className="flex flex-col min-h-screen overflow-hidden">
       {/*  Site header */}
