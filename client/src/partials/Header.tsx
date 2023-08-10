@@ -1,17 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { HashLink } from "react-router-hash-link";
-import { useSelector, useDispatch } from "react-redux";
+
+import { useAppSelector, useAppDispatch } from "../redux/hooks";
 
 import { GiHamburgerMenu } from "react-icons/gi";
-import { slide as Menu } from "react-burger-menu";
+import { slide as Menu, StateChangeHandler } from "react-burger-menu";
 
 import Icon from "../images/WEBSITE-LOGO.png";
+
 import Modal from "../components/Modal";
 
-function Header(props) {
-  const loggedIn = useSelector((state) => state.login.loggedIn);
-  const email = useSelector((state) => state.login.email);
+interface HeaderProps {
+  where: string;
+}
+
+const Header: React.FC<HeaderProps> = ({ where }) => {
+  const loggedIn = useAppSelector((state) => state.login.loggedIn);
+  const email = useAppSelector((state) => state.login.email);
 
   const [top, setTop] = useState(true);
 
@@ -54,24 +60,26 @@ function Header(props) {
               className="bg-blue-900 bg-opacity-80 !h-96"
               right
               isOpen={isMenuOpen}
-              onStateChange={({ isOpen }) => setMenuOpen(isOpen)}
+              onStateChange={({ isOpen }: StateChangeHandler) =>
+                setMenuOpen(isOpen)
+              }
             >
               <HashLink
-                to={props.where ? props.where + "#about" : "#about"}
+                to={where ? where + "#about" : "#about"}
                 className="block px-4 py-2 text-white"
                 onClick={() => setMenuOpen(false)}
               >
                 About
               </HashLink>
               <HashLink
-                to={props.where ? props.where + "#people" : "#people"}
+                to={where ? where + "#people" : "#people"}
                 className="block px-4 py-2 text-white"
                 onClick={() => setMenuOpen(false)}
               >
                 People
               </HashLink>
               <HashLink
-                to={props.where ? props.where + "#research" : "#research"}
+                to={where ? where + "#research" : "#research"}
                 className="block px-4 py-2 text-white"
                 onClick={() => setMenuOpen(false)}
               >
@@ -94,7 +102,7 @@ function Header(props) {
                   >
                     Dashboard
                   </Link>
-                  
+
                   <p className="block px-4 py-2 text-white">
                     Logged in as {email}
                   </p>
@@ -111,7 +119,7 @@ function Header(props) {
             <ul className="flex flex-grow justify-start flex-wrap items-center">
               <li>
                 <HashLink
-                  to={props.where ? props.where + "#about" : "#about"}
+                  to={where ? where + "#about" : "#about"}
                   className="font-medium text-white hover:text-gray-300 px-5 py-3 flex items-center transition duration-150 ease-in-out"
                 >
                   About
@@ -119,7 +127,7 @@ function Header(props) {
               </li>
               <li>
                 <HashLink
-                  to={props.where ? props.where + "#people" : "#people"}
+                  to={where ? where + "#people" : "#people"}
                   className="font-medium text-white hover:text-gray-300 px-5 py-3 flex items-center transition duration-150 ease-in-out"
                 >
                   People
@@ -127,7 +135,7 @@ function Header(props) {
               </li>
               <li>
                 <HashLink
-                  to={props.where ? props.where + "#research" : "#research"}
+                  to={where ? where + "#research" : "#research"}
                   className="font-medium text-white hover:text-gray-300 px-5 py-3 flex items-center transition duration-150 ease-in-out"
                 >
                   Research
@@ -144,7 +152,15 @@ function Header(props) {
                     Sign in
                   </Link>
                 ) : (
-                  <p>Logged in as {email}</p>
+                  <>
+                    <Link
+                      to="/dashboard"
+                      className="block px-4 py-2 text-white"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      Dashboard | {email}
+                    </Link>
+                  </>
                 )}
               </li>
               <li>
@@ -159,6 +175,6 @@ function Header(props) {
       </div>
     </header>
   );
-}
+};
 
 export default Header;

@@ -31,6 +31,8 @@ const getStatementsWeighted = async (
           statements
         LEFT JOIN
           answers ON statements.id = answers.statementId AND answers.sessionId NOT IN (:sessionId)
+        WHERE
+          statements.published = true
         GROUP BY statements.id
       )
       SELECT

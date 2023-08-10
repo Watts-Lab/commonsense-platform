@@ -40,12 +40,15 @@ const answerRouter = require("./routes/answers");
 const resultRouter = require("./routes/results");
 const userRouter = require("./routes/users");
 const treatmentRouter = require("./routes/treatments");
+const feedbackRouter = require("./routes/feedbacks");
 
 app.use("/api/statements", statementRouter);
 app.use("/api/answers", answerRouter);
 app.use("/api/results", resultRouter);
 app.use("/api/users", userRouter);
 app.use("/api/treatments", treatmentRouter);
+app.use("/api/feedbacks", feedbackRouter);
+
 
 const { getAllTreatments } = require("./controllers/treatments");
 

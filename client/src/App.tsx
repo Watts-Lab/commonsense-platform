@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   BrowserRouter,
   Routes,
@@ -35,19 +35,19 @@ import Enter from "./components/Enter";
 // apis
 import Backend from "./apis/backend";
 
-function App() {
-  const loggedIn = useSelector((state) => state.login.loggedIn);
-  const email = useSelector((state) => state.login.email);
-  const token = useSelector((state) => state.login.token);
-  const surveySession = useSelector((state) => state.login.surveySession);
+function App(): JSX.Element {
+  const loggedIn = useSelector((state: any) => state.login.loggedIn);
+  const email = useSelector((state: any) => state.login.email);
+  const token = useSelector((state: any) => state.login.token);
+  const surveySession = useSelector((state: any) => state.login.surveySession);
 
-  const urlParams = useSelector((state) => state.urlslice.urlParams);
+  const urlParams = useSelector((state: any) => state.urlslice.urlParams);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     const verify_token = async () => {
-      if (token === null) return dispatch(clearUserData());
+      if (token === null) return dispatch(clearUserData(null));
       try {
         Backend.defaults.headers.common["Authorization"] = token;
         const response = await Backend.post(`/users/verify`);
@@ -61,13 +61,13 @@ function App() {
                 surveySession: response.data.sessionId,
               })
             )
-          : dispatch(clearUserData());
+          : dispatch(clearUserData(null));
       } catch (error) {
         console.log(error);
       }
     };
     verify_token();
-  }, []);
+  }, [token, dispatch]);
 
   useEffect(() => {
     // get survey session id
@@ -80,9 +80,9 @@ function App() {
         );
       }
     });
-  }, []);
+  }, [dispatch, surveySession]);
 
-  const signIn = async (email, magicLink) => {
+  const signIn = async (email: string, magicLink: string) => {
     try {
       let res = await Backend.post("/users/enter", {
         email,
@@ -119,16 +119,21 @@ function App() {
       duration: 700,
       easing: "ease-out-cubic",
     });
-  });
+  }, []);
 
   useEffect(() => {
     // scroll to top on route change
-    document.querySelector("html").style.scrollBehavior = "auto";
-    window.scroll({ top: 0 });
-    document.querySelector("html").style.scrollBehavior = "";
+
+    const htmlElement = document.querySelector("html");
+    if (htmlElement) {
+      htmlElement.style.scrollBehavior = "auto";
+      window.scroll({ top: 0 });
+      htmlElement.style.scrollBehavior = "";
+    }
 
     // get url params
-    let paramString = [];
+    let paramString: { key: string; value: string }[] = [];
+
     for (const [key, value] of searchParams.entries()) {
       paramString.push({ key, value });
     }
@@ -142,13 +147,13 @@ function App() {
       );
       setSearchParamsNew("");
     }
-  }, [location.pathname]); // triggered on route change
+  }, [location.pathname, dispatch, searchParams, setSearchParamsNew]);
 
   return (
     <div className="App">
       <div className="mx-auto pb-14">
         <Routes>
-          <Route exact path="/" element={<Home />} />
+          <Route path="/" element={<Home />} />
           <Route
             path="login/:email/:link"
             element={<Enter signIn={signIn} />}

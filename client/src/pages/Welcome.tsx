@@ -4,11 +4,11 @@ import { Link } from "react-router-dom";
 import Header from "../partials/Header";
 import Banner from "../partials/Banner";
 
-function Welcome(props) {
+const Welcome:React.FC = () => {
   return (
     <div className="flex flex-col min-h-screen overflow-hidden">
       {/*  Site header */}
-      <Header loggedIn={props.loggedIn} user={props.user} where='/'/>
+      <Header where="/" />
 
       {/*  Page content */}
       <main className="flex-grow">
@@ -22,15 +22,12 @@ function Welcome(props) {
                   You can click on the link sent to verify your email address.
                 </p>
               </div>
-
-
             </div>
           </div>
         </section>
       </main>
-
     </div>
   );
-}
+};
 
 export default Welcome;

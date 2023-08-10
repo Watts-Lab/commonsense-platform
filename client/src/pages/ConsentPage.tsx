@@ -1,15 +1,17 @@
 import React from "react";
 
-import Result from "../components/Result";
+import Landing from "../components/Landing";
+import Feedback from "../components/Feedback/Feedback";
 
-function ConsentPage() {
+const ConsentPage:React.FC = () => {
   return (
     <div className="flex flex-col min-h-screen overflow-hidden">
       <main className="mx-auto p-3 max-w-3xl pb-14">
-        <Result />
+        <Landing />
+        <Feedback />
       </main>
     </div>
   );
-}
+};
 
 export default ConsentPage;

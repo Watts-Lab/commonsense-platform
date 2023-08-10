@@ -1,19 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, ChangeEvent, FormEvent } from "react";
 import { useSelector, useDispatch } from "react-redux";
-
 import Backend from "../apis/backend";
 
 import Header from "../partials/Header";
 import NotificationBox from "../utils/NotificationBox";
 
-function SignIn(props) {
+const SignIn:React.FC = () => {
   const [userEmail, setUserEmail] = useState("");
 
   const [notifBox, setNotifBox] = useState(false);
 
-  const surveySession = useSelector((state) => state.login.surveySession);
+  const surveySession = useSelector((state: any) => state.login.surveySession);
 
-  const signIn = async (email, magicLink) => {
+  const signIn = async (email: string, magicLink: string = "") => {
     try {
       let res = await Backend.post(`/users/enter`, {
         email,
@@ -21,20 +20,20 @@ function SignIn(props) {
         surveySession,
       });
       if (res.data.token) {
-        login(res.data.token);
+        setNotifBox(false);
       } else {
         setNotifBox(true);
       }
     } catch (error) {
-      alert(error);
+      console.log(error);
     }
   };
 
-  const enterEmail = (e) => {
+  const enterEmail = (e: ChangeEvent<HTMLInputElement>) => {
     setUserEmail(e.target.value);
   };
 
-  const emailSubmit = (e) => {
+  const emailSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     signIn(userEmail);
   };
@@ -105,6 +104,6 @@ function SignIn(props) {
       {/* <Banner /> */}
     </div>
   );
-}
+};
 
 export default SignIn;
