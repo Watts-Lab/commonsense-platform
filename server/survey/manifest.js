@@ -615,8 +615,8 @@ module.exports = {
       statements: getStatementById,
       statements_params: {
         ids: [
-          7025, 8549, 5081, 4838, 7587, 7259, 7664, 8531, 8139, 4539, // 10 statements from design space A1
-          8350, 7552, 7397, 5017, 8353, 7380, 5988, 6091, 8416, 8097, // 10 statements from design space A2
+          7025, 8549, 4855, 4838, 7587, 7259, 7664, 8531, 8139, 4539, // 10 statements from design space A1
+          8350, 7552, 7397, 5017, 8353, 7744, 5988, 6091, 6863, 8097, // 10 statements from design space A2
           8763, 7267, 7526, 6695, 7900, 8615, 7383, 7282, 8696, 7865, // 10 statements from design space B1
         ],
         // limit: 40,
@@ -634,9 +634,9 @@ module.exports = {
       statements: getStatementById,
       statements_params: {
         ids: [
-          7025, 8549, 5081, 4838, 7587, 7259, 7664, 8531, 8139, 4539, // 10 statements from design space A1
+          7025, 8549, 4855, 4838, 7587, 7259, 7664, 8531, 8139, 4539, // 10 statements from design space A1
           8763, 7267, 7526, 6695, 7900, 8615, 7383, 7282, 8696, 7865, // 10 statements from design space B1
-          7547, 4970, 4949, 7590, 8232, 7912, 7784, 7836, 7171, 7271, // 10 statements from design space B2
+          7547, 4970, 4949, 7590, 8222, 7912, 7784, 7836, 7171, 7271, // 10 statements from design space B2
         ],
         // limit: 40,
       },
