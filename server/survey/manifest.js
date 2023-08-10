@@ -4,6 +4,33 @@ const { getStatementsWeighted } = require("../controllers/statements.js");
 const { Sequelize, QueryTypes } = require("sequelize");
 const Op = Sequelize.Op;
 
+// type DesignSpace = {
+//   behavior: number;
+//   everyday: number;
+//   figure_of_speech: number;
+//   judgment: number;
+//   opinion: number;
+//   reasoning: number;
+// };
+
+// type StatementParams = {
+//   limit: number;
+//   space?: DesignSpace;
+//   ids?: number[];
+// };
+
+// type TestObject = {
+//   id: number;
+//   name: string;
+//   description: string;
+//   statements: any; // Adjust the type accordingly for getStatementByWeight, getDesignSpace, or getStatementById
+//   statements_params: StatementParams;
+//   critirion: {
+//     source: string;
+//   };
+//   randomization: string;
+// };
+
 function getRandom(arr, n) {
   var result = new Array(n),
     len = arr.length,
@@ -65,6 +92,22 @@ async function getAllStatements(params) {
   }
 }
 
+async function getStatementById(params) {
+  const statementsText = await statements.findAll({
+    where: {
+      id: params.ids,
+    },
+    attributes: ["id", "statement"],
+    order: Sequelize.literal("rand()"),
+  });
+
+  if (!params.limit) {
+    return statementsText;
+  } else {
+    return getRandom(statementsText, params.limit);
+  }
+}
+
 async function getDesignSpace(params) {
   // creates a pivot table of statement properties
   const statementsPivot = await statementproperties.findAll({
@@ -113,7 +156,10 @@ async function getDesignSpace(params) {
     include: [
       {
         model: statements,
-        attributes: ["id", "statement"], // Adjust the attributes as per your statement model
+        attributes: ["parentId", "statement"],
+        where: {
+          published: true, // Filter for published statements
+        },
       },
     ],
   }); // filters the pivot table by the params
@@ -133,7 +179,11 @@ async function getDesignSpace(params) {
       return { id: data.statementId, statement: data.statement };
     });
 
-  return getRandom(filteredStatementIds, params.limit);
+  if (!params.limit) {
+    return filteredStatementIds;
+  } else {
+    return getRandom(filteredStatementIds, params.limit);
+  }
 }
 
 // assignment functions
@@ -512,7 +562,89 @@ module.exports = {
       randomization: "none",
     },
 
-    
+    {
+      id: 12,
+      name: "Design Space A",
+      description: "get statements from design space [1,1,0,1,1,0]",
+      statements: getDesignSpace,
+      statements_params: {
+        space: {
+          // design space A
+          behavior: 1,
+          everyday: 1,
+          figure_of_speech: 0,
+          judgment: 1,
+          opinion: 1,
+          reasoning: 0,
+        },
+        limit: 10,
+      },
+      critirion: {
+        source: "mturktest",
+      },
+      randomization: "none",
+    },
+
+    {
+      id: 13,
+      name: "Design Space B",
+      description: "get statements from design space [1,1,0,1,0,0]",
+      statements: getDesignSpace,
+      statements_params: {
+        space: {
+          // design space B
+          behavior: 1,
+          everyday: 1,
+          figure_of_speech: 0,
+          judgment: 1,
+          opinion: 0,
+          reasoning: 0,
+        },
+        limit: 10,
+      },
+      critirion: {
+        source: "mturktest",
+      },
+      randomization: "none",
+    },
+
+    {
+      id: 14,
+      name: "MTurk Design Space A",
+      description: "get statements from design space [1,1,0,1,1,0] and [1,1,0,1,0,0]",
+      statements: getStatementById,
+      statements_params: {
+        ids: [
+          7025, 8549, 5081, 4838, 7587, 7259, 7664, 8531, 8139, 4539, // 10 statements from design space A1
+          8350, 7552, 7397, 5017, 8353, 7380, 5988, 6091, 8416, 8097, // 10 statements from design space A2
+          8763, 7267, 7526, 6695, 7900, 8615, 7383, 7282, 8696, 7865, // 10 statements from design space B1
+        ],
+        // limit: 40,
+      },
+      critirion: {
+        source: "mturk",
+      },
+      randomization: "none",
+    },
+
+    {
+      id: 15,
+      name: "MTurk Design Space B",
+      description: "get statements from design space [1,1,0,1,1,0] and [1,1,0,1,0,0]",
+      statements: getStatementById,
+      statements_params: {
+        ids: [
+          7025, 8549, 5081, 4838, 7587, 7259, 7664, 8531, 8139, 4539, // 10 statements from design space A1
+          8763, 7267, 7526, 6695, 7900, 8615, 7383, 7282, 8696, 7865, // 10 statements from design space B1
+          7547, 4970, 4949, 7590, 8232, 7912, 7784, 7836, 7171, 7271, // 10 statements from design space B2
+        ],
+        // limit: 40,
+      },
+      critirion: {
+        source: "mturk",
+      },
+      randomization: "none",
+    },
   ],
 
   // how are people assigned to a treatment?

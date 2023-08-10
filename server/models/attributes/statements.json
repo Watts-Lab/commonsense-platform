@@ -1,29 +1,36 @@
 {
-    "statement": {
-        "type": "TEXT",
-        "allowNull": false
-    },
+  "statement": {
+    "type": "TEXT",
+    "allowNull": false
+  },
 
-    "statementSource": {
-        "type": "STRING",
-        "allowNull": false
-    },
+  "statementSource": {
+    "type": "STRING",
+    "allowNull": false
+  },
 
-    "origLanguage": {
-        "type": "STRING",
-        "allowNull": false
-    },
+  "origLanguage": {
+    "type": "STRING",
+    "allowNull": false
+  },
 
-    "published": {
-        "type": "BOOLEAN",
-        "allowNull": true
-    },
+  "published": {
+    "type": "BOOLEAN",
+    "allowNull": true
+  },
 
-    "statementMedian": {
-        "type": "DOUBLE",
-        "allowNull": true
-    }
-    
+  "statementMedian": {
+    "type": "DOUBLE",
+    "allowNull": true
+  },
+
+  "statementCategory": {
+    "type": "STRING",
+    "allowNull": true
+  },
+
+  "origId": {
+    "type": "INTEGER",
+    "allowNull": true
+  }
 }
-
-

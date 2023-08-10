@@ -77,12 +77,36 @@ const readTreatments = async (req, res, next) => {
   );
 };
 
-const chooseTreatment = async (req_param) => {
-  const treatmentIds =
-    req_param.query.source === "facebook"
-      ? [4, 5, 6, 7, 8, 9, 10, 11]
-      : [1, 2, 3];
+const matchTreatments = (req_param) => {
+  const defaultTreatment = [];
+  const matchedTreatments = [];
 
+  // Return treatments with no criterion when no URL parameters are present
+  for (const treatment of manifest_treatments) {
+    if (!treatment.critirion) {
+      defaultTreatment.push(treatment.id);
+    }
+  }
+
+  // Match treatments based on query parameters
+  for (const treatment of manifest_treatments) {
+    const critirion = treatment.critirion;
+
+    if (critirion && critirion.source === req_param.query.source) {
+      matchedTreatments.push(treatment.id);
+    }
+  }
+
+  if (matchedTreatments.length === 0) {
+    return defaultTreatment;
+  } else {
+    return matchedTreatments;
+  }
+};
+
+const chooseTreatment = async (req_param) => {
+  const treatmentIds = matchTreatments(req_param);
+  console.log("treatmentIds", treatmentIds);
   const treatmentCount = await treatments
     .findAll({
       attributes: [
@@ -148,7 +172,6 @@ const getTreatment = async (req, res, next) => {
 
   if (req.query.source) {
     console.log("source", req.query.source);
-    
   }
   // 5, 10, 15, 20, 25, 30, 35, 40;
   //   ? roundRobin(fb_1, fb_2, fb_3) : randomWeight(point_1, point_2, point_3)
@@ -195,9 +218,19 @@ const updateTreatment = async (req, res, next) => {
     });
 };
 
+const readSpace = async (req, res, next) => {
+  // console.log(manifest_treatments[12]);
+  const assignedTreatment = manifest_treatments[12];
+
+  res.send(
+    await assignedTreatment.statements(assignedTreatment.statements_params)
+  );
+};
+
 module.exports = {
   getTreatment,
   readTreatments,
   getAllTreatments,
   updateTreatment,
+  readSpace,
 };
