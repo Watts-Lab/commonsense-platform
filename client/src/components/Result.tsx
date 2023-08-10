@@ -69,7 +69,7 @@ function Result(props) {
     });
 
     urlParams.forEach((obj) => {
-      if (obj.key === "source" && obj.value === "amazon") {
+      if (obj.key === "source" && obj.value === "mturk") {
         setATurkBox(true);
       }
     });
