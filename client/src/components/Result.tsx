@@ -12,7 +12,6 @@ import NotificationBox from "../utils/NotificationBox";
 import useStickyState from "../hooks/useStickyState";
 
 function Result(props) {
-
   const [statementsData, setStatementsData] = useStickyState(
     [],
     "statementsData"
@@ -49,14 +48,11 @@ function Result(props) {
   }
 
   useEffect(() => {
-
     setStatementsData([]);
-    
+
     Backend.post("/results", {
       withCredentials: true,
-      params: {
-        sessionId: props.sessionId,
-      },
+      sessionId: props.sessionId,
     }).then((response) => {
       console.log(response.data);
       setCommonSenseScore({

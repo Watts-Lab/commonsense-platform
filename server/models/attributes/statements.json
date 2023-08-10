@@ -29,7 +29,7 @@
     "allowNull": true
   },
 
-  "origId": {
+  "parentId": {
     "type": "INTEGER",
     "allowNull": true
   }

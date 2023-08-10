@@ -2,15 +2,16 @@ const express = require("express");
 const router = express.Router();
 const { answers, statements } = require("../models");
 
-const { query, validationResult } = require("express-validator");
+const { body, query, validationResult } = require("express-validator");
 
 const { Sequelize, literal } = require("sequelize");
 
 router.post(
   "/",
-  [query("sessionId").notEmpty().withMessage("sessionId is required")],
+  [body("sessionId").notEmpty().withMessage("sessionId is required")],
   async (req, res) => {
     // Check for validation errors
+    // console.log("req.body", req.body);
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
@@ -18,7 +19,7 @@ router.post(
     await answers
       .findAll({
         where: {
-          sessionId: req.query.sessionId,
+          sessionId: req.body.sessionId,
         },
         include: [
           {
