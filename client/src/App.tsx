@@ -6,12 +6,15 @@ import {
   useLocation,
   useSearchParams,
 } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+
+import { useAppSelector, useAppDispatch } from "./redux/hooks";
+
 import {
   setUserData,
   clearUserData,
   setSession,
 } from "./redux/slices/loginSlice";
+
 import { setUrlParams } from "./redux/slices/urlSlice";
 
 import "aos/dist/aos.css";
@@ -35,19 +38,20 @@ import Enter from "./components/Enter";
 // apis
 import Backend from "./apis/backend";
 
-function App(): JSX.Element {
-  const loggedIn = useSelector((state: any) => state.login.loggedIn);
-  const email = useSelector((state: any) => state.login.email);
-  const token = useSelector((state: any) => state.login.token);
-  const surveySession = useSelector((state: any) => state.login.surveySession);
+const App = () => {
 
-  const urlParams = useSelector((state: any) => state.urlslice.urlParams);
+  const loggedIn = useAppSelector((state) => state.login.loggedIn);
+  const email = useAppSelector((state) => state.login.email);
+  const token = useAppSelector((state) => state.login.token);
+  const surveySession = useAppSelector((state) => state.login.surveySession);
 
-  const dispatch = useDispatch();
+  const urlParams = useAppSelector((state) => state.urlslice.urlParams);
+
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const verify_token = async () => {
-      if (token === null) return dispatch(clearUserData(null));
+      if (token === null) return dispatch(clearUserData());
       try {
         Backend.defaults.headers.common["Authorization"] = token;
         const response = await Backend.post(`/users/verify`);
@@ -61,13 +65,13 @@ function App(): JSX.Element {
                 surveySession: response.data.sessionId,
               })
             )
-          : dispatch(clearUserData(null));
+          : dispatch(clearUserData());
       } catch (error) {
         console.log(error);
       }
     };
     verify_token();
-  }, [token, dispatch]);
+  }, []);
 
   useEffect(() => {
     // get survey session id
@@ -80,7 +84,7 @@ function App(): JSX.Element {
         );
       }
     });
-  }, [dispatch, surveySession]);
+  }, []);
 
   const signIn = async (email: string, magicLink: string) => {
     try {
@@ -132,7 +136,7 @@ function App(): JSX.Element {
     }
 
     // get url params
-    let paramString: { key: string; value: string }[] = [];
+    let paramString = [];
 
     for (const [key, value] of searchParams.entries()) {
       paramString.push({ key, value });
@@ -147,7 +151,7 @@ function App(): JSX.Element {
       );
       setSearchParamsNew("");
     }
-  }, [location.pathname, dispatch, searchParams, setSearchParamsNew]);
+  }, [location.pathname]);
 
   return (
     <div className="App">
@@ -169,6 +173,6 @@ function App(): JSX.Element {
       </div>
     </div>
   );
-}
+};
 
 export default App;
