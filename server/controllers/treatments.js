@@ -173,8 +173,7 @@ const getTreatment = async (req, res, next) => {
   if (req.query.source) {
     console.log("source", req.query.source);
   }
-  // 5, 10, 15, 20, 25, 30, 35, 40;
-  //   ? roundRobin(fb_1, fb_2, fb_3) : randomWeight(point_1, point_2, point_3)
+ 
 
   let user = await usertreatments.findOne({
     where: { sessionId: req.sessionID, finished: false },
@@ -182,8 +181,6 @@ const getTreatment = async (req, res, next) => {
 
   if (!user) {
     let treatment = await chooseTreatment(req);
-
-    // console.log("treatment", treatment);
 
     await usertreatments
       .create({
