@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 import Header from "../partials/Header";
 import Footer from "../partials/Footer";
-
+import Result from "../components/Result";
 import Backend from "../apis/backend";
 
+import { useAppSelector, useAppDispatch } from "../redux/hooks";
 interface Statement {
   statement: string;
 }
@@ -28,9 +29,11 @@ interface Answer {
 }
 
 const Dashboard: React.FC = () => {
-  
   const [answerList, setAnswerList] = useState<Answer[]>([]);
   const [activeTab, setActiveTab] = useState<string>("dashboard");
+
+  const containerRef = useRef();
+  const surveySession = useAppSelector((state) => state.login.surveySession);
 
   // const token = JSON.parse(localStorage.getItem("token"));
   const tokenString = localStorage.getItem("token");
@@ -99,7 +102,7 @@ const Dashboard: React.FC = () => {
                       Dashboard
                     </button>
                   </li>
-                  {/* <li className="mr-2" role="presentation">
+                  <li className="mr-2" role="presentation">
                     <button
                       className={`inline-block p-4 border-b-2 rounded-t-lg ${
                         activeTab === "profile"
@@ -111,9 +114,9 @@ const Dashboard: React.FC = () => {
                       aria-controls="profile"
                       aria-selected={activeTab === "profile"}
                     >
-                      Profile
+                      Score
                     </button>
-                  </li> */}
+                  </li>
 
                   <li className="mr-2" role="presentation">
                     <button
@@ -140,34 +143,82 @@ const Dashboard: React.FC = () => {
                     role="tabpanel"
                     aria-labelledby="dashboard-tab"
                   >
-                    <p className="pb-2">
-                      You have answered {answerList.length} statements so far.
-                    </p>
-                    <ol className="space-y-4 text-gray-500 list-decimal list-inside dark:text-gray-400">
-                      {answerList.map((answer, index) => (
-                        <li key={index}>
-                          {answer.statement.statement}
-                          <ul className="pl-5 mt-2 space-y-1 list-disc list-inside">
-                            <li>
-                              Is it common sense:{" "}
-                              {answer.I_agree === true ? (
-                                <span className="text-green-800">Yes</span>
-                              ) : (
-                                <span className="text-red-700">No</span>
-                              )}
-                            </li>
-                            <li>
-                              Others think it is common sense:{" "}
-                              {answer.others_agree === true ? (
-                                <span className="text-green-800">Yes</span>
-                              ) : (
-                                <span className="text-red-700">No</span>
-                              )}
-                            </li>
-                          </ul>
-                        </li>
-                      ))}
-                    </ol>
+
+                    <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+                      <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                        <caption className="p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800">
+                          Your answers
+                          <p className="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">
+                            Browse the list of statements you have answered so
+                            far
+                          </p>
+                        </caption>
+                        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                          <tr>
+                            <th scope="col" className="px-6 py-3">
+                              Statement
+                            </th>
+                            <th scope="col" className="px-6 py-3">
+                              Is it common sense?
+                            </th>
+                            <th scope="col" className="px-6 py-3">
+                              Others think it is common sense?
+                            </th>
+
+                            <th scope="col" className="px-6 py-3">
+                              <span className="sr-only">Edit</span>
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {answerList.length > 0 &&
+                            answerList.map((answer, index) => (
+                              <tr
+                                key={index}
+                                className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+                              >
+                                <td
+                                  scope="row"
+                                  className="min-w-[18rem] max-w-[60rem] px-6 py-4 font-medium text-gray-900 whitespace-normal dark:text-white"
+                                >
+                                  {answer.statement.statement}
+                                </td>
+                                <td className="px-6 py-4">
+                                  {answer.I_agree === true ? (
+                                    <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                      Yes
+                                    </span>
+                                  ) : (
+                                    <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                      No
+                                    </span>
+                                  )}
+                                </td>
+                                <td className="px-6 py-4">
+                                  {answer.others_agree === true ? (
+                                    <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                      Yes
+                                    </span>
+                                  ) : (
+                                    <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                      No
+                                    </span>
+                                  )}
+                                </td>
+
+                                <td className="px-6 py-4 text-right">
+                                  <a
+                                    href="#"
+                                    className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                                  >
+                                    Edit
+                                  </a>
+                                </td>
+                              </tr>
+                            ))}
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                   <div
                     className={`p-4 rounded-lg bg-gray-50 dark:bg-gray-800 ${
@@ -177,12 +228,7 @@ const Dashboard: React.FC = () => {
                     role="tabpanel"
                     aria-labelledby="profile-tab"
                   >
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                      This is some placeholder content the Profile tab's.
-                      Clicking another tab will toggle the visibility of this
-                      one for the next. The tab JavaScript swaps classes to
-                      control the content visibility and styling.
-                    </p>
+                    <Result sessionId={surveySession} showSignUpBox={false} />
                   </div>
 
                   <div

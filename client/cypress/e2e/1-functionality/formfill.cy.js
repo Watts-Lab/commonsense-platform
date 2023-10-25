@@ -10,6 +10,10 @@ describe("fill out the survay", () => {
     const numberOfIterations = 15;
 
     for (let i = 0; i < numberOfIterations; i++) {
+      cy.log(`Current page: ${i}`);
+
+      cy.wait(1000); // Wait for 1 second before selecting the radio button
+
       cy.get("input[type='radio'][id*='question1ag1']")
         .check({ force: true })
         .should("be.checked");

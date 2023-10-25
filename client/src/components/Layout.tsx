@@ -59,7 +59,11 @@ function Layout(props) {
     let finalSessionId = surveySession ? surveySession : sessionId;
     setStatementArray((oldArray) => [
       ...oldArray,
-      <Result key={oldArray.length} sessionId={finalSessionId} />,
+      <Result
+        key={oldArray.length}
+        sessionId={finalSessionId}
+        showSignUpBox={true}
+      />,
     ]);
   };
 
