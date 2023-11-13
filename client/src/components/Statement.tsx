@@ -3,6 +3,8 @@ import QuestionOne from "./QuestionOne";
 import QuestionTwo from "./QuestionTwo";
 import QuestionThree from "./QuestionThree";
 
+import SurveyImage from "./SurveyImage";
+
 import "./style.css";
 import ProgressBar from "./ProgressBar";
 
@@ -66,6 +68,9 @@ function Statement(props) {
         currentStep={props.currentStep}
         totalSteps={props.totalSteps}
       />
+
+      <SurveyImage imageName="exp1-1.jpg" />
+
       <p className="text-gray-600">
         Answer questions below about the following statement:
       </p>

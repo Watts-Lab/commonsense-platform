@@ -79,3 +79,8 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
+
+
+# cypress
+client/cypress/videos
+client/cypress/screenshots

@@ -50,6 +50,15 @@ app.use("/api/treatments", treatmentRouter);
 app.use("/api/feedbacks", feedbackRouter);
 
 
+// serve static files
+app.use(express.static('./survey/public'));
+app.get('/api/images/:imageName', (req, res) => {
+  const imageName = req.params.imageName;
+  console.log("imageName", imageName);
+  res.sendFile(`${__dirname}/survey/public/${imageName}`);
+});
+
+
 const { getAllTreatments } = require("./controllers/treatments");
 
 getAllTreatments();
