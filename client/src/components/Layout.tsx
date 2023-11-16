@@ -158,6 +158,7 @@ function Layout(props) {
                 currentStep={index + 1}
                 totalSteps={response.data.value.length}
                 statementText={statement.statement}
+                imageUrl={statement.image}
                 statementId={statement.id}
                 onChange={handleStatementChange}
                 onSaveStatement={handleAnswerSaving}

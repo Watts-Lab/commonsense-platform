@@ -611,13 +611,41 @@ module.exports = {
     {
       id: 14,
       name: "MTurk Design Space A",
-      description: "get statements from design space [1,1,0,1,1,0] and [1,1,0,1,0,0]",
+      description:
+        "get statements from design space [1,1,0,1,1,0] and [1,1,0,1,0,0]",
       statements: getStatementById,
       statements_params: {
         ids: [
-          7025, 8549, 4855, 4838, 7587, 7259, 7664, 8531, 8139, 4539, // 10 statements from design space A1
-          8350, 7552, 7397, 5017, 8353, 7744, 5988, 6091, 6863, 8097, // 10 statements from design space A2
-          8763, 7267, 7526, 6695, 7900, 8615, 7383, 7282, 8696, 7865, // 10 statements from design space B1
+          7025,
+          8549,
+          4855,
+          4838,
+          7587,
+          7259,
+          7664,
+          8531,
+          8139,
+          4539, // 10 statements from design space A1
+          8350,
+          7552,
+          7397,
+          5017,
+          8353,
+          7744,
+          5988,
+          6091,
+          6863,
+          8097, // 10 statements from design space A2
+          8763,
+          7267,
+          7526,
+          6695,
+          7900,
+          8615,
+          7383,
+          7282,
+          8696,
+          7865, // 10 statements from design space B1
         ],
         // limit: 40,
       },
@@ -630,18 +658,108 @@ module.exports = {
     {
       id: 15,
       name: "MTurk Design Space B",
-      description: "get statements from design space [1,1,0,1,1,0] and [1,1,0,1,0,0]",
+      description:
+        "get statements from design space [1,1,0,1,1,0] and [1,1,0,1,0,0]",
       statements: getStatementById,
       statements_params: {
         ids: [
-          7025, 8549, 4855, 4838, 7587, 7259, 7664, 8531, 8139, 4539, // 10 statements from design space A1
-          8763, 7267, 7526, 6695, 7900, 8615, 7383, 7282, 8696, 7865, // 10 statements from design space B1
-          7547, 4970, 4949, 7590, 8222, 7912, 7784, 7836, 7171, 7271, // 10 statements from design space B2
+          7025,
+          8549,
+          4855,
+          4838,
+          7587,
+          7259,
+          7664,
+          8531,
+          8139,
+          4539, // 10 statements from design space A1
+          8763,
+          7267,
+          7526,
+          6695,
+          7900,
+          8615,
+          7383,
+          7282,
+          8696,
+          7865, // 10 statements from design space B1
+          7547,
+          4970,
+          4949,
+          7590,
+          8222,
+          7912,
+          7784,
+          7836,
+          7171,
+          7271, // 10 statements from design space B2
         ],
         // limit: 40,
       },
       critirion: {
         source: "mturk",
+      },
+      randomization: "none",
+    },
+
+    {
+      id: 16,
+      name: "MTurk Design Space A, B with context",
+      description:
+        "get statements from design space [1,1,0,1,1,0] and [1,1,0,1,0,0]",
+      statements: [
+        {
+          id: 7664,
+          statement:
+            "I endorse reforms that would improve the lives of millions of Americans.",
+          image: "treatmeant16/exp1-1.jpg",
+        },
+        {
+          id: 7269,
+          statement: "People make mistakes while they work.",
+        },
+        {
+          id: 8763,
+          statement: "You would cut your hair because you want it shorter.",
+        },
+        {
+          id: 8531,
+          statement:
+            "We should support the conservative push to move things forward.",
+        },
+        {
+          id: 8549,
+          statement: "We should support voting by mail.",
+        },
+        {
+          id: 8696,
+          statement: "You are likely to find a human in homes.",
+        },
+        {
+          id: 7282,
+          statement: "People open a window when they feel hot.",
+        },
+        {
+          id: 7383,
+          statement: "Provide no-cost health care coverage for all.",
+        },
+        {
+          id: 8615,
+          statement:
+            "When people get together with friends, they usually engage in fun and healthy activities.",
+        },
+        {
+          id: 8139,
+          statement:
+            "Proper hand hygiene is the optimal way to prevent disease spread.",
+        },
+      ],
+      statements_params: {
+        limit: 15,
+      },
+      critirion: {
+        source: "mturk",
+        context: "image",
       },
       randomization: "none",
     },

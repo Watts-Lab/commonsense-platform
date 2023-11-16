@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from "react";
-import adler32 from "./adler32";
+import adler32 from "./hashing";
 
 function TwitterText(props) {
   const [isShared, setIsShared] = useState(false);
