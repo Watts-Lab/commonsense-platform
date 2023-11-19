@@ -11,7 +11,7 @@ const Research: React.FC = () => {
       <Navbar />
 
       {/*  Page content */}
-      <main className="flex-grow">
+      <main className="flex-grow bg-gray-100">
         {/*  Page sections */}
         <Publications />
       </main>
