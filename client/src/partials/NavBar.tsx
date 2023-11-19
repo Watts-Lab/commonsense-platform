@@ -30,13 +30,13 @@ const Navbar: React.FC = () => {
               className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-200 rounded-box w-52 text-gray-900"
             >
               <li>
-                <a href="#item1">About</a>
+                <a href="/about">About</a>
               </li>
               <li>
-                <a href="#parent">People</a>
+                <a href="/people">People</a>
               </li>
               <li>
-                <a href="#item3">Research</a>
+                <a href="/research">Research</a>
               </li>
             </ul>
           </div>
@@ -48,17 +48,17 @@ const Navbar: React.FC = () => {
         <div className="navbar-center hidden lg:flex justify-center flex-1">
           <ul className="flex space-x-8 lg:space-x-8">
             <li>
-              <a href="#item1" className="text-base hover:underline">
+              <a href="/about" className="text-base hover:underline">
                 About
               </a>
             </li>
             <li>
-              <a href="#parent" className="text-base hover:underline">
+              <a href="/people" className="text-base hover:underline">
                 People
               </a>
             </li>
             <li>
-              <a href="#item3" className="text-base hover:underline">
+              <a href="/research" className="text-base hover:underline">
                 Research
               </a>
             </li>

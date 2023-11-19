@@ -2,8 +2,8 @@ import { useEffect, useMemo, useRef } from "react";
 import * as d3 from "d3";
 
 const MARGIN = { top: 30, right: 30, bottom: 0, left: 50 };
-const BUCKET_NUMBER = 30;
-const BUCKET_PADDING = 1;
+const BUCKET_NUMBER = 22;
+const BUCKET_PADDING = 10;
 
 type HistogramProps = {
   width: number;

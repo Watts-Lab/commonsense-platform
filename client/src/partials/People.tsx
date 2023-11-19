@@ -1,73 +1,197 @@
+// import React from "react";
+
+// import nakhaeiheadshot from "../images/Photo-nakhaei.jpg";
+
+// function PeoplePartial() {
+//   const people = [
+//     {
+//       name: "Mark Whiting",
+//       image:
+//         "https://css.seas.upenn.edu/wp-content/uploads/2021/05/head_shots_MarkWhiting_v2.jpg",
+//     },
+//     {
+//       name: "Amirhossein Nakhaei",
+//       image: nakhaeiheadshot,
+//     },
+//     {
+//       name: "Karan Sampath",
+
+//       image:
+//         "https://css.seas.upenn.edu/wp-content/uploads/2021/06/Karan-Sampath-Headshot-e1624055267969.jpeg",
+//     },
+//     {
+//       name: "Josh Nguyen",
+
+//       image:
+//         "https://css.seas.upenn.edu/wp-content/uploads/2021/06/Karan-Sampath-Headshot-e1624055267969.jpeg",
+//     },
+//     {
+//       name: "Duncan Watts",
+
+//       image:
+//         "https://css.seas.upenn.edu/wp-content/uploads/2021/03/Watts-Duncan.jpg",
+//     },
+//   ];
+
+//   return (
+//     <section id="people" className="relative">
+//       <div
+//         className="absolute inset-0 top-1/2 md:mt-24 lg:mt-0 bg-gray-900 pointer-events-none"
+//         aria-hidden="true"
+//       ></div>
+//       <div className="absolute left-0 right-0 bottom-0 m-auto w-px p-px h-20 bg-gray-200 transform translate-y-1/2"></div>
+
+//       <div className="relative max-w-6xl mx-auto px-4 sm:px-6">
+//         <div className="py-12 md:py-20">
+//           {/* Section header */}
+//           <div className="max-w-3xl mx-auto text-center pb-12 md:pb-20">
+//             <h2 className="h2 mb-4">People</h2>
+//           </div>
+
+//           {/* Items */}
+//           <div className="max-w-sm mx-auto grid gap-6 md:grid-cols-2 lg:grid-cols-3 items-start md:max-w-2xl lg:max-w-none">
+//             {people.map((person, key) => (
+//               <div
+//                 key={key}
+//                 className="relative flex flex-col items-center p-6 bg-white rounded shadow-xl h-48"
+//               >
+//                 <img
+//                   className="inline-block h-12 w-12 rounded-full ring-2 ring-white"
+//                   src={person.image}
+//                 />
+//                 <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">
+//                   {person.name}
+//                 </h4>
+//                 <p className="text-gray-600 text-center">{person.title}</p>
+//               </div>
+//             ))}
+//           </div>
+//         </div>
+//       </div>
+//     </section>
+//   );
+// }
+
+// export default PeoplePartial;
+
 import React from "react";
 
+// Assuming nakhaeiheadshot is imported from an image file:
 import nakhaeiheadshot from "../images/Photo-nakhaei.jpg";
 
-function People() {
-  const people = [
-    {
-      name: "Duncan Watts",
-      title:
-        "Stevens University Professor & twenty-third Penn Integrates Knowledge Professor, University of Pennsylvania",
-      image:
-        "https://css.seas.upenn.edu/wp-content/uploads/2021/03/Watts-Duncan.jpg",
-    },
-    {
-      name: "Mark Whiting",
-      title:
-        "Senior Computational Social Scientist, University of Pennsylvania",
-      image:
-        "https://css.seas.upenn.edu/wp-content/uploads/2021/05/head_shots_MarkWhiting_v2.jpg",
-    },
-    {
-      name: "Karan Sampath",
-      title: "Undergraduate Student Researcher, University of Pennsylvania",
-      image:
-        "https://css.seas.upenn.edu/wp-content/uploads/2021/06/Karan-Sampath-Headshot-e1624055267969.jpeg",
-    },
-    {
-      name: "Amirhossein Nakhaei",
-      title: "Graduate Student Researcher, RWTH Aachen University",
-      image: nakhaeiheadshot,
-    },
-  ];
+interface PersonProps {
+  name: string;
+  image: string;
+  twitter?: string;
+  github?: string;
+}
 
+const people: PersonProps[] = [
+  {
+    name: "Mark Whiting",
+    image: "https://ca.slack-edge.com/T018UEKCXGS-U019QDPCXKP-bd0e7fa5ac77-512",
+    twitter: "https://twitter.com/markwhiting",
+    github: "https://github.com/markwhiting",
+  },
+  {
+    name: "Amirhossein Nakhaei",
+    image: "https://avatars.githubusercontent.com/u/6696894?v=4",
+    twitter: "https://twitter.com/amirhosnakh",
+    github: "https://github.com/amirrr",
+  },
+  {
+    name: "Karan Sampath",
+    image:
+      "https://css.seas.upenn.edu/wp-content/uploads/2021/06/Karan-Sampath-Headshot-e1624055267969.jpeg",
+    twitter: "https://twitter.com/karan_sampath",
+    github: "https://github.com/karansampath",
+  },
+  {
+    name: "Josh Nguyen",
+    image: "https://joshnguyen.net/images/avatar.jpeg",
+    twitter: "https://twitter.com/joshnguyen99",
+    github: "https://github.com/joshnguyen99",
+  },
+  {
+    name: "Duncan Watts",
+    image:
+      "https://css.seas.upenn.edu/wp-content/uploads/2021/03/Watts-Duncan.jpg",
+    twitter: "https://twitter.com/duncanjwatts",
+    github: "https://github.com/duncanjwatts",
+  },
+];
+
+const PeoplePartial: React.FC = () => {
   return (
-    <section id="people" className="relative">
-      <div
-        className="absolute inset-0 top-1/2 md:mt-24 lg:mt-0 bg-gray-900 pointer-events-none"
-        aria-hidden="true"
-      ></div>
-      <div className="absolute left-0 right-0 bottom-0 m-auto w-px p-px h-20 bg-gray-200 transform translate-y-1/2"></div>
+    <section className="bg-gray-100 dark:bg-gray-900">
+      <div className="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16 lg:px-6">
+        <div className="mx-auto mb-8 max-w-screen-sm lg:mb-16">
+          <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">
+            People
+          </h2>
+        </div>
+        <div className="grid gap-8 lg:gap-16 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          {people.map((person) => (
+            <div
+              key={person.name}
+              className="text-center text-gray-500 dark:text-gray-400"
+            >
+              <img
+                className="mx-auto mb-4 w-36 h-36 rounded-full"
+                src={person.image}
+                alt={person.name}
+              />
+              <h3 className="mb-1 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                {person.name}
+              </h3>
+              <ul className="flex justify-center mt-4 space-x-4">
+                {person.twitter && (
+                  <li>
+                    <a
+                      href={person.twitter}
+                      className="text-gray-500 hover:text-gray-900 dark:hover:text-white"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        className="fill-current"
+                      >
+                        <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"></path>
+                      </svg>
+                    </a>
+                  </li>
+                )}
 
-      <div className="relative max-w-6xl mx-auto px-4 sm:px-6">
-        <div className="py-12 md:py-20">
-          {/* Section header */}
-          <div className="max-w-3xl mx-auto text-center pb-12 md:pb-20">
-            <h2 className="h2 mb-4">People</h2>
-          </div>
-
-          {/* Items */}
-          <div className="max-w-sm mx-auto grid gap-6 md:grid-cols-2 lg:grid-cols-3 items-start md:max-w-2xl lg:max-w-none">
-            {people.map((person, key) => (
-              <div
-                key={key}
-                className="relative flex flex-col items-center p-6 bg-white rounded shadow-xl h-48"
-              >
-                <img
-                  className="inline-block h-12 w-12 rounded-full ring-2 ring-white"
-                  src={person.image}
-                />
-                <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">
-                  {person.name}
-                </h4>
-                <p className="text-gray-600 text-center">{person.title}</p>
-              </div>
-            ))}
-          </div>
+                {person.github && (
+                  <li>
+                    <a
+                      href={person.github}
+                      className="text-gray-500 hover:text-gray-900 dark:hover:text-white dark:text-gray-300"
+                    >
+                      <svg
+                        className="w-6 h-6"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
+                    </a>
+                  </li>
+                )}
+              </ul>
+            </div>
+          ))}
         </div>
       </div>
     </section>
   );
-}
+};
 
-export default People;
+export default PeoplePartial;

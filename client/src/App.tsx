@@ -24,6 +24,9 @@ import AOS from "aos";
 
 // pages
 import Home from "./pages/Home";
+import About from "./pages/About";
+import People from "./pages/People";
+import Research from "./pages/Research";
 import ConsentPage from "./pages/ConsentPage";
 import SurveyPage from "./pages/SurveyPage";
 import SignIn from "./pages/SignIn";
@@ -39,7 +42,6 @@ import Enter from "./components/Enter";
 import Backend from "./apis/backend";
 
 const App = () => {
-
   const loggedIn = useAppSelector((state) => state.login.loggedIn);
   const email = useAppSelector((state) => state.login.email);
   const token = useAppSelector((state) => state.login.token);
@@ -158,6 +160,9 @@ const App = () => {
       <div className="mx-auto">
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/people" element={<People />} />
+          <Route path="/research" element={<Research />} />
           <Route
             path="login/:email/:link"
             element={<Enter signIn={signIn} />}

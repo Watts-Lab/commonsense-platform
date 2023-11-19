@@ -30,11 +30,13 @@ const Banner: React.FC = () => {
             {/* Section header */}
             <div className="text-center pb-12 md:pb-16">
               <h1 className="text-5xl md:text-6xl font-bold leading-tighter tracking-tight mb-4">
-                The common sense meter
+                The common sense measure
               </h1>
               <div className="max-w-3xl mx-auto">
-                <p className="text-xl mb-8">
+                <p className="text-xl">
                   How much common sense do you have? How could you really know?
+                </p>
+                <p className="text-xl mb-8">
                   We are trying to measure common sense, and let people check
                   how much common sense they have.
                 </p>
