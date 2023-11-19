@@ -114,7 +114,23 @@ const Dashboard: React.FC = () => {
                       aria-controls="profile"
                       aria-selected={activeTab === "profile"}
                     >
-                      Score
+                      Answers
+                    </button>
+                  </li>
+
+                  <li className="mr-2" role="presentation">
+                    <button
+                      className={`inline-block p-4 border-b-2 rounded-t-lg ${
+                        activeTab === "statement"
+                          ? "border-brand-500"
+                          : "border-transparent"
+                      }`}
+                      onClick={() => handleTabClick("statement")}
+                      role="tab"
+                      aria-controls="statement"
+                      aria-selected={activeTab === "statement"}
+                    >
+                      <b className="text-red-900">Add statements</b>
                     </button>
                   </li>
 
@@ -143,7 +159,6 @@ const Dashboard: React.FC = () => {
                     role="tabpanel"
                     aria-labelledby="dashboard-tab"
                   >
-
                     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
                       <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                         <caption className="p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800">

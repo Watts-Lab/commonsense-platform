@@ -155,7 +155,7 @@ const App = () => {
 
   return (
     <div className="App">
-      <div className="mx-auto pb-14">
+      <div className="mx-auto">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route
