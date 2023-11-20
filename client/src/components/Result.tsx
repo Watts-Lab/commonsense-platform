@@ -185,7 +185,7 @@ function Result(props) {
       <p className="pb-4">
         This score is based on a calculation of how similar your beliefs are to
         others (yours are {commonSenseScore.awareness}% similar), and how
-        accurately you rated what others think (you were{" "}
+        accurately you rated what others think (you were
         {commonSenseScore.consensus}% accurate).
       </p>
 
@@ -195,18 +195,12 @@ function Result(props) {
         become more accurate as others answer more questions. If you log in
         below you can continue to see this score as it updates over time.
       </p>
-      {/* <p className="pb-4">
-        This score reflects the similarity of your beliefs to others, and the
-        accuracy of your perceptions about what others believe.
-      </p>
-      <p className="pb-4">
-        This is calculated by comparing your answers to others answers, so it
-        will become more accurate if you answer more questions and it will
-        become more accurate as others answer more questions. If you log in you
-        can continue to see this score as it updates over time.
-      </p> */}
+
       <div className="flex justify-center" ref={containerRef} />
-      <TwitterText percentage={commonSenseScore.commonsense} />
+      <TwitterText
+        percentage={commonSenseScore.commonsense}
+        sessionId={props.sessionId}
+      />
       {aTurkBox ? (
         <div className="flex flex-col items-center pt-7">
           <p className="pb-2">Thanks for completing our survey!</p>

@@ -5,7 +5,9 @@ import { useSelector } from "react-redux";
 
 import Backend from "../apis/backend";
 import TwitterText from "../utils/TwitterText";
-import NotificationBox from "../utils/NotificationBox";
+
+import { Radar } from "../components/RadarChart/Radar";
+import { Histogram } from "./Histogram";
 
 import useStickyState from "../hooks/useStickyState";
 
@@ -61,11 +63,7 @@ function DashboardChart(props) {
         consensus: Math.round(Number(response.data.consensus).toFixed(2) * 100),
       });
     });
-
-
   }, []);
-
-
 
   const containerRef = useRef();
   const [data, setData] = useState([]);
@@ -103,7 +101,10 @@ function DashboardChart(props) {
     const plot = Plot.plot({
       x: { percent: true, nice: true },
       y: { nice: true },
-      color: { scheme: "Magma" },
+      style: {
+        background: "#F9FAFB",
+      },
+      color: { scheme: "Viridis" },
       marks: [
         Plot.rectY(
           individualCommonsensicality,
@@ -129,48 +130,107 @@ function DashboardChart(props) {
     return () => plot.remove();
   }, [data]);
 
+  const data_radar = {
+    behavior: 0.5,
+    everyday: 0.8,
+    "figure of speech": 0.2,
+    judgment: 0.1,
+    opinion: 0.9,
+    reasoning: 0.7,
+
+    name: "mercedes",
+  };
+
   return (
-    <div className="text-justify leading-relaxed ">
-      <div className="flex justify-center pb-4">
-        <div className="h-52 w-44  rounded-2xl">
-          <div className="flex flex-col justify-center items-center h-full text-white">
-            <div className="text-gray-600 pb-4 text-2xl">Your score</div>
-            <div
-              className="radial-progress bg-gray-600 text-gray-300 border-4 border-gray-600"
-              style={{ "--value": commonSenseScore.commonsense }}
-              role="progressbar"
-            >
-              {commonSenseScore.commonsense}%
+    // <div className="text-justify leading-relaxed ">
+    //   <div className="flex justify-center pb-4">
+    //     <div className="h-52 w-44  rounded-2xl">
+    //       <div className="flex flex-col justify-center items-center h-full text-white">
+    //         <div className="text-gray-600 pb-4 text-2xl">Your score</div>
+    //         <div
+    //           className="radial-progress bg-gray-600 text-gray-300 border-4 border-gray-600"
+    //           style={{ "--value": commonSenseScore.commonsense }}
+    //           role="progressbar"
+    //         >
+    //           {commonSenseScore.commonsense}%
+    //         </div>
+    //       </div>
+    //     </div>
+    //   </div>
+    //   <p className="pb-4">
+    //     This score is based on a calculation of how similar your beliefs are to
+    //     others (yours are {commonSenseScore.awareness}% similar), and how
+    //     accurately you rated what others think (you were
+    //     {commonSenseScore.consensus}% accurate).
+    //   </p>
+
+    //   <p className="pb-4">
+    //     This is calculated by comparing your answers to others answers, so it
+    //     will become more accurate if you answer more questions and it will
+    //     become more accurate as others answer more questions. If you log in
+    //     below you can continue to see this score as it updates over time.
+    //   </p>
+
+    //   <div className="flex justify-center" ref={containerRef} />
+
+    //   <TwitterText percentage={commonSenseScore.commonsense} />
+    //   {aTurkBox ? (
+    //     <div className="flex flex-col items-center pt-7">
+    //       <p className="pb-2">Thanks for completing our survey!</p>
+    //       <p className="pb-2">
+    //         Copy the code below and paste it in the HIT as a completion
+    //         verification:
+    //       </p>
+    //       <p className="pb-2 font-semibold border-2 rounded py-1 px-3">
+    //         {props.sessionId}
+    //       </p>
+    //     </div>
+    //   ) : null}
+    // </div>
+    <div className="text-justify leading-relaxed px-4">
+      <div className="flex justify-center items-start pb-4 gap-x-8">
+        <div className="w-1/2 max-w-xs">
+          <div className="h-52 rounded-2xl mx-auto">
+            <div className="flex flex-col justify-center items-center h-full text-white">
+              <div className="text-gray-600 pb-4 text-2xl">Your score</div>
+              <div
+                className="radial-progress bg-gray-600 text-gray-300 border-4 border-gray-600"
+                style={{ "--value": commonSenseScore.commonsense }}
+                role="progressbar"
+              >
+                {commonSenseScore.commonsense}%
+              </div>
             </div>
           </div>
+          <p className="pt-4 text-center">
+            This score is based on a calculation of how similar your beliefs are
+            to others (yours are {commonSenseScore.awareness}% similar), and how
+            accurately you rated what others think (you were
+            {commonSenseScore.consensus}% accurate).
+          </p>
+        </div>
+
+        <div className="w-1/2 max-w-xs">
+          <Radar
+            data={data_radar}
+            width={450}
+            height={350}
+            axisConfig={[
+              { name: "behavior", max: 1 },
+              { name: "everyday", max: 1 },
+              { name: "figure of speech", max: 1 },
+              { name: "judgment", max: 1 },
+              { name: "opinion", max: 1 },
+              { name: "reasoning", max: 1 },
+            ]}
+          />
         </div>
       </div>
-      <p className="pb-4">
-        This score is based on a calculation of how similar your beliefs are to
-        others (yours are {commonSenseScore.awareness}% similar), and how
-        accurately you rated what others think (you were{" "}
-        {commonSenseScore.consensus}% accurate).
-      </p>
 
-      <p className="pb-4">
-        This is calculated by comparing your answers to others answers, so it
-        will become more accurate if you answer more questions and it will
-        become more accurate as others answer more questions. If you log in
-        below you can continue to see this score as it updates over time.
-      </p>
-      {/* <p className="pb-4">
-        This score reflects the similarity of your beliefs to others, and the
-        accuracy of your perceptions about what others believe.
-      </p>
-      <p className="pb-4">
-        This is calculated by comparing your answers to others answers, so it
-        will become more accurate if you answer more questions and it will
-        become more accurate as others answer more questions. If you log in you
-        can continue to see this score as it updates over time.
-      </p> */}
-      <div className="flex justify-center" ref={containerRef} />
-      <TwitterText percentage={commonSenseScore.commonsense} />
-      {aTurkBox ? (
+      <div className="flex justify-center mt-4" ref={containerRef} />
+
+      <TwitterText percentage={commonSenseScore.commonsense} sessionId={surveySession}/>
+      {aTurkBox && (
         <div className="flex flex-col items-center pt-7">
           <p className="pb-2">Thanks for completing our survey!</p>
           <p className="pb-2">
@@ -181,7 +241,7 @@ function DashboardChart(props) {
             {props.sessionId}
           </p>
         </div>
-      ) : null}
+      )}
     </div>
   );
 }

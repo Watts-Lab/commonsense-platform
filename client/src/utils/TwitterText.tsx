@@ -39,9 +39,9 @@ function TwitterText(props) {
   }
 
   const percentage = `My common sense is ${props.percentage}%`;
-  const textareaValue = `${percentage}\n${blocks.join(
-    ""
-  )}\nCheck yours: commonsensicality.org/` + adler32('Y1hNz2tgJPuK3ep3NCgapIG1nesd-EoT');
+  const textareaValue =
+    `${percentage}\n${blocks.join("")}\nCheck yours: commonsensicality.org/s/` +
+    props.sessionId.slice(0, 7);
 
   return (
     <div className="flex flex-col items-center pt-3">
