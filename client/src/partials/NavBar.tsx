@@ -1,9 +1,29 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { HashLink } from "react-router-hash-link";
+import { useAppSelector } from "../redux/hooks";
 
 import Icon from "../images/WEBSITE-LOGO.png";
 
 const Navbar: React.FC = () => {
+  const loggedIn = useAppSelector((state) => state.login.loggedIn);
+  const email = useAppSelector((state) => state.login.email);
+
+  const [top, setTop] = useState(true);
+  const [isMenuOpen, setMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setMenuOpen(!isMenuOpen);
+  };
+
+  useEffect(() => {
+    const onScroll = () => {
+      setTop(window.scrollY < 10);
+    };
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
     <div className="navbar bg-neutral text-neutral-content">
       <div className="mx-auto max-w-screen-xl w-full flex justify-between items-center px-2 lg:px-4">
@@ -38,6 +58,13 @@ const Navbar: React.FC = () => {
               <li>
                 <a href="/research">Research</a>
               </li>
+              <li>
+                {!loggedIn ? (
+                  <a href="/signin">Signin</a>
+                ) : (
+                  <a href="/dashboard">Dashboard</a>
+                )}
+              </li>
             </ul>
           </div>
 
@@ -46,7 +73,7 @@ const Navbar: React.FC = () => {
           </Link>
         </div>
         <div className="navbar-center hidden lg:flex justify-center flex-1">
-          <ul className="flex space-x-8 lg:space-x-8">
+          <ul className="flex space-x-10 lg:space-x-10">
             <li>
               <a href="/about" className="text-base hover:underline">
                 About
@@ -61,6 +88,23 @@ const Navbar: React.FC = () => {
               <a href="/research" className="text-base hover:underline">
                 Research
               </a>
+            </li>
+            <li>
+              {!loggedIn ? (
+                <a href="/signin" className="text-base hover:underline">
+                  Signin
+                </a>
+              ) : (
+                <>
+                  <a
+                    href="/dashboard"
+                    className="text-base hover:underline"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    Dashboard
+                  </a>
+                </>
+              )}
             </li>
           </ul>
         </div>

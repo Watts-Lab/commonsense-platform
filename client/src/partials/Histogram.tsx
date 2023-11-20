@@ -11,7 +11,7 @@ type HistogramProps = {
   data: number[];
 };
 
-export const Histogram = ({ width, height, data }: HistogramProps) => {
+export const Histogram: React.FC<HistogramProps> = ({ width, height, data }) => {
   const axesRef = useRef(null);
   const boundsWidth = width - MARGIN.right - MARGIN.left;
   const boundsHeight = height - MARGIN.top - MARGIN.bottom;
@@ -83,3 +83,4 @@ export const Histogram = ({ width, height, data }: HistogramProps) => {
     </svg>
   );
 };
+

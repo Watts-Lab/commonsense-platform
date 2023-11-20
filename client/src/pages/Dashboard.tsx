@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
-import Header from "../partials/Header";
+import Navbar from "../partials/NavBar";
 import Footer from "../partials/Footer";
-import Result from "../components/Result";
+import DashboardChart from "../partials/DashboardChart";
+import StatementForm from "../components/StatementForm";
 import Backend from "../apis/backend";
 
 import { useAppSelector, useAppDispatch } from "../redux/hooks";
@@ -29,10 +31,14 @@ interface Answer {
 }
 
 const Dashboard: React.FC = () => {
+  const loggedIn = useAppSelector((state) => state.login.loggedIn);
+
   const [answerList, setAnswerList] = useState<Answer[]>([]);
   const [activeTab, setActiveTab] = useState<string>("dashboard");
 
   const containerRef = useRef();
+  const navigate = useNavigate();
+
   const surveySession = useAppSelector((state) => state.login.surveySession);
 
   // const token = JSON.parse(localStorage.getItem("token"));
@@ -56,6 +62,12 @@ const Dashboard: React.FC = () => {
   };
 
   useEffect(() => {
+    if (!loggedIn) {
+      navigate("/signin");
+    }
+  }, [loggedIn, navigate]); // Whenever the `loggedIn` status changes, this effect will run
+
+  useEffect(() => {
     const getAnswers = async () => {
       if (token === null) return null;
       try {
@@ -75,7 +87,7 @@ const Dashboard: React.FC = () => {
   return (
     <div className="flex flex-col min-h-screen overflow-hidden">
       {/*  Site header */}
-      <Header where="/" />
+      <Navbar />
 
       {/*  Page content */}
       <main className="flex-grow">
@@ -130,7 +142,7 @@ const Dashboard: React.FC = () => {
                       aria-controls="statement"
                       aria-selected={activeTab === "statement"}
                     >
-                      <b className="text-red-900">Add statements</b>
+                      Add statements
                     </button>
                   </li>
 
@@ -159,6 +171,18 @@ const Dashboard: React.FC = () => {
                     role="tabpanel"
                     aria-labelledby="dashboard-tab"
                   >
+                    <DashboardChart
+                      sessionId={surveySession}
+                    />
+                  </div>
+                  <div
+                    className={`p-4 rounded-lg bg-gray-50 dark:bg-gray-800 ${
+                      activeTab === "profile" ? "block" : "hidden"
+                    }`}
+                    id="profile"
+                    role="tabpanel"
+                    aria-labelledby="profile-tab"
+                  >
                     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
                       <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                         <caption className="p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800">
@@ -178,10 +202,6 @@ const Dashboard: React.FC = () => {
                             </th>
                             <th scope="col" className="px-6 py-3">
                               Others think it is common sense?
-                            </th>
-
-                            <th scope="col" className="px-6 py-3">
-                              <span className="sr-only">Edit</span>
                             </th>
                           </tr>
                         </thead>
@@ -220,30 +240,22 @@ const Dashboard: React.FC = () => {
                                     </span>
                                   )}
                                 </td>
-
-                                <td className="px-6 py-4 text-right">
-                                  <a
-                                    href="#"
-                                    className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                                  >
-                                    Edit
-                                  </a>
-                                </td>
                               </tr>
                             ))}
                         </tbody>
                       </table>
                     </div>
                   </div>
+
                   <div
                     className={`p-4 rounded-lg bg-gray-50 dark:bg-gray-800 ${
-                      activeTab === "profile" ? "block" : "hidden"
+                      activeTab === "statement" ? "block" : "hidden"
                     }`}
-                    id="profile"
+                    id="statement"
                     role="tabpanel"
-                    aria-labelledby="profile-tab"
+                    aria-labelledby="statement-tab"
                   >
-                    <Result sessionId={surveySession} showSignUpBox={false} />
+                    <StatementForm />
                   </div>
 
                   <div

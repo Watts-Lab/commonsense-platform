@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import Backend from "../apis/backend";
 
 import Header from "../partials/Header";
+import Navbar from "../partials/NavBar";
 import NotificationBox from "../utils/NotificationBox";
 
 const SignIn:React.FC = () => {
@@ -41,7 +42,8 @@ const SignIn:React.FC = () => {
   return (
     <div className="flex flex-col min-h-screen overflow-hidden">
       {/*  Site header */}
-      <Header where="/" />
+      <Navbar />
+
 
       {/*  Page content */}
       <main className="flex-grow">
@@ -51,12 +53,13 @@ const SignIn:React.FC = () => {
               {/* Page header */}
               {!notifBox ? (
                 <div className="max-w-3xl mx-auto text-center pb-12 md:pb-20">
-                  <p className="h4">Welcome back</p>
+                  <p className="h4">Welcome</p>
                   <p>
-                    You can check on your common sense score or answer more
+                    Sign in so you can check on your common sense score or answer more
                     questions about statements to get a more accurate reading of
                     your score.
                   </p>
+                  <p>Or if you don't have an account, you can sign up by entering your email below.</p>
                 </div>
               ) : null}
 
@@ -88,7 +91,8 @@ const SignIn:React.FC = () => {
 
                     <div className="flex flex-wrap -mx-3 mt-6">
                       <div className="w-full px-3">
-                        <button className="btn text-white bg-blue-600 hover:bg-blue-700 w-full">
+                        <button className="btn text-white bg-gray-600 hover:bg-gray-700 w-full">
+                        {/* "text-white p-3 bg-gray-600 hover:bg-gray-700 w-full mb-4 rounded-md sm:w-auto sm:mb-0" */}
                           Sign in
                         </button>
                       </div>

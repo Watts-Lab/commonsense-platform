@@ -47,7 +47,7 @@ const Banner: React.FC = () => {
                       buttonClass="text-white p-3 bg-gray-600 hover:bg-gray-700 w-full mb-4 rounded-md sm:w-auto sm:mb-0"
                     />
                   </div>
-                  {/* More call-to-actions can be added here if needed */}
+
                 </div>
               </div>
             </div>
