@@ -99,13 +99,13 @@ const people: PersonProps[] = [
     twitter: "https://twitter.com/amirhosnakh",
     github: "https://github.com/amirrr",
   },
-  {
-    name: "Karan Sampath",
-    image:
-      "https://css.seas.upenn.edu/wp-content/uploads/2021/06/Karan-Sampath-Headshot-e1624055267969.jpeg",
-    twitter: "https://twitter.com/karan_sampath",
-    github: "https://github.com/karansampath",
-  },
+  // {
+  //   name: "Karan Sampath",
+  //   image:
+  //     "https://css.seas.upenn.edu/wp-content/uploads/2021/06/Karan-Sampath-Headshot-e1624055267969.jpeg",
+  //   twitter: "https://twitter.com/karan_sampath",
+  //   github: "https://github.com/karansampath",
+  // },
   {
     name: "Josh Nguyen",
     image: "https://joshnguyen.net/images/avatar.jpeg",

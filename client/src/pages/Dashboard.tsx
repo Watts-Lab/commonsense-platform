@@ -93,7 +93,7 @@ const Dashboard: React.FC = () => {
       <main className="flex-grow">
         <section className="bg-gradient-to-b from-gray-100 to-white">
           <div className="max-w-6xl mx-auto px-4 sm:px-6">
-            <div className="pt-32 pb-12 md:pt-40 md:pb-20">
+            <div className="pt-12 pb-12 md:pt-12 md:pb-20">
               <div className="mb-4 border-b border-gray-200 dark:border-gray-700">
                 <ul
                   className="flex flex-wrap -mb-px text-sm font-medium text-center"
@@ -111,7 +111,7 @@ const Dashboard: React.FC = () => {
                       aria-controls="dashboard"
                       aria-selected={activeTab === "dashboard"}
                     >
-                      Dashboard
+                      Insight
                     </button>
                   </li>
                   <li className="mr-2" role="presentation">

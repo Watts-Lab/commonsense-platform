@@ -142,54 +142,9 @@ function DashboardChart(props) {
   };
 
   return (
-    // <div className="text-justify leading-relaxed ">
-    //   <div className="flex justify-center pb-4">
-    //     <div className="h-52 w-44  rounded-2xl">
-    //       <div className="flex flex-col justify-center items-center h-full text-white">
-    //         <div className="text-gray-600 pb-4 text-2xl">Your score</div>
-    //         <div
-    //           className="radial-progress bg-gray-600 text-gray-300 border-4 border-gray-600"
-    //           style={{ "--value": commonSenseScore.commonsense }}
-    //           role="progressbar"
-    //         >
-    //           {commonSenseScore.commonsense}%
-    //         </div>
-    //       </div>
-    //     </div>
-    //   </div>
-    //   <p className="pb-4">
-    //     This score is based on a calculation of how similar your beliefs are to
-    //     others (yours are {commonSenseScore.awareness}% similar), and how
-    //     accurately you rated what others think (you were
-    //     {commonSenseScore.consensus}% accurate).
-    //   </p>
-
-    //   <p className="pb-4">
-    //     This is calculated by comparing your answers to others answers, so it
-    //     will become more accurate if you answer more questions and it will
-    //     become more accurate as others answer more questions. If you log in
-    //     below you can continue to see this score as it updates over time.
-    //   </p>
-
-    //   <div className="flex justify-center" ref={containerRef} />
-
-    //   <TwitterText percentage={commonSenseScore.commonsense} />
-    //   {aTurkBox ? (
-    //     <div className="flex flex-col items-center pt-7">
-    //       <p className="pb-2">Thanks for completing our survey!</p>
-    //       <p className="pb-2">
-    //         Copy the code below and paste it in the HIT as a completion
-    //         verification:
-    //       </p>
-    //       <p className="pb-2 font-semibold border-2 rounded py-1 px-3">
-    //         {props.sessionId}
-    //       </p>
-    //     </div>
-    //   ) : null}
-    // </div>
     <div className="text-justify leading-relaxed px-4">
       <div className="flex justify-center items-start pb-4 gap-x-8">
-        <div className="w-1/2 max-w-xs">
+        <div className="max-w-lg">
           <div className="h-52 rounded-2xl mx-auto">
             <div className="flex flex-col justify-center items-center h-full text-white">
               <div className="text-gray-600 pb-4 text-2xl">Your score</div>
@@ -202,15 +157,21 @@ function DashboardChart(props) {
               </div>
             </div>
           </div>
-          <p className="pt-4 text-center">
+          <p className="pb-4">
             This score is based on a calculation of how similar your beliefs are
             to others (yours are {commonSenseScore.awareness}% similar), and how
             accurately you rated what others think (you were
             {commonSenseScore.consensus}% accurate).
           </p>
+
+          <p className="pb-4">
+            This is calculated by comparing your answers to others answers, so
+            it will become more accurate if you answer more questions and it
+            will become more accurate as others answer more questions.
+          </p>
         </div>
 
-        <div className="w-1/2 max-w-xs">
+        {/* <div className="w-1/2 max-w-xs">
           <Radar
             data={data_radar}
             width={450}
@@ -224,12 +185,15 @@ function DashboardChart(props) {
               { name: "reasoning", max: 1 },
             ]}
           />
-        </div>
+        </div> */}
       </div>
 
       <div className="flex justify-center mt-4" ref={containerRef} />
 
-      <TwitterText percentage={commonSenseScore.commonsense} sessionId={surveySession}/>
+      <TwitterText
+        percentage={commonSenseScore.commonsense}
+        sessionId={surveySession}
+      />
       {aTurkBox && (
         <div className="flex flex-col items-center pt-7">
           <p className="pb-2">Thanks for completing our survey!</p>
