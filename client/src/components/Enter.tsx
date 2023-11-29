@@ -1,9 +1,8 @@
 import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
-// interface EnterProps {
-//   signIn: (email: string, link: string) => void;
-// }
+import Navbar from "../partials/NavBar";
+import Footer from "../partials/Footer";
 
 const Enter = ({ signIn }) => {
   let params = useParams();
@@ -20,8 +19,20 @@ const Enter = ({ signIn }) => {
   }, [params.email, params.link, navigate, signIn]);
 
   return (
-    <div>
-      <p>Verifying your magic link</p>
+    <div className="flex flex-col min-h-screen overflow-hidden">
+      {/*  Site header */}
+      <Navbar />
+
+      {/*  Page content */}
+      <main className="flex-grow bg-gray-100">
+        {/*  Page sections */}
+        <div>
+          <p>Verifying your magic link</p>
+        </div>
+      </main>
+
+      {/*  Site footer */}
+      <Footer />
     </div>
   );
 };

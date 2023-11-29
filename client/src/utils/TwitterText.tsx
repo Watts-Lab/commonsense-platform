@@ -1,4 +1,5 @@
 import React, { Fragment, useState } from "react";
+import adler32 from "./hashing";
 
 function TwitterText(props) {
   const [isShared, setIsShared] = useState(false);
@@ -17,43 +18,59 @@ function TwitterText(props) {
     }
   }
 
-  const totalBlocks = 100;
-  const filledBlocks = Math.floor(((props.percentage) / 100) * totalBlocks);
-  const emptyBlocks = totalBlocks - filledBlocks;
+  const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
-  const blocks = Array.from({ length: filledBlocks-1 }, (_, index) => "⬛");
+  const score = props.percentage;
+  const breakPoint = Math.min(Math.floor(score / 10));
+  const blocks = [];
 
-  if (filledBlocks < totalBlocks) {
-    blocks.push('😀');
+  for (let i = 0; i < 10; i++) {
+    if (i < breakPoint) {
+      if (i < 3) {
+        blocks.push("🟥"); // Red
+      } else if (i < 6) {
+        blocks.push("🟨"); // Yellow
+      } else if (i < 9) {
+        blocks.push("🟩"); // Green
+      }
+    } else if (i === breakPoint) {
+      blocks.push(
+        pick(
+          [
+            [..."🤯"],
+            [..."🤥😶😵‍💫"],
+            [..."😵🥴"],
+            [..."😏🫤😕"],
+            [..."🤨🙂😌"],
+            [..."😋😀"],
+            [..."😃😄😁"],
+            [..."🥸😎"],
+            [..."😆🥳🧐"],
+            [..."🤓🤩"],
+          ][breakPoint]
+        )
+      );
+    } else {
+      blocks.push("⬜"); // Gray block until 10
+    }
   }
 
-  for (let i = 0; i < emptyBlocks; i++) {
-    blocks.push("🔲");
-  }
-
-  const blocksWithLineBreaks = [];
-  for (let i = 0; i < blocks.length; i += 10) {
-    const lineBlocks = blocks.slice(i, i + 10);
-    blocksWithLineBreaks.push(lineBlocks.join(""));
-  }
-
-  const textareaValue = `I have more common sense than ${props.percentage}% of people!\n${blocksWithLineBreaks.join(
-    "\n"
-  )}\nhttps://commonsensicality.org`;
+  const percentage = `My common sense is ${props.percentage}%`;
+  const textareaValue =
+    `${percentage}\n${blocks.join("")}\nCheck yours: commonsensicality.org/s/` +
+    props.sessionId.slice(0, 7);
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center pt-3">
       <button
         onClick={handleShare}
         className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
       >
-        Copy score!
+        Copy & Share!
       </button>
 
       {isShared && (
         <div className="mt-4 p-4 bg-gray-100 rounded-md w-96">
-          
-
           <textarea
             id="tweetText"
             className="mt-2 p-2 text-gray-800 bg-white border border-gray-300 rounded-md resize-none w-full"
@@ -61,12 +78,6 @@ function TwitterText(props) {
             rows={5}
             readOnly
           />
-          {/* <button
-            onClick={handleCopy}
-            className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-          >
-            Copy
-          </button> */}
         </div>
       )}
     </div>

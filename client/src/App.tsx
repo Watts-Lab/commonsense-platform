@@ -24,6 +24,9 @@ import AOS from "aos";
 
 // pages
 import Home from "./pages/Home";
+import About from "./pages/About";
+import People from "./pages/People";
+import Research from "./pages/Research";
 import ConsentPage from "./pages/ConsentPage";
 import SurveyPage from "./pages/SurveyPage";
 import SignIn from "./pages/SignIn";
@@ -34,12 +37,13 @@ import Finish from "./pages/Finish";
 // components
 import Consent from "./components/Consent";
 import Enter from "./components/Enter";
+import SocialSurvey from "./components/SocialSurvey";
+import HumanNetwork from "./components/HumanNetwork";
 
 // apis
 import Backend from "./apis/backend";
 
 const App = () => {
-
   const loggedIn = useAppSelector((state) => state.login.loggedIn);
   const email = useAppSelector((state) => state.login.email);
   const token = useAppSelector((state) => state.login.token);
@@ -71,7 +75,7 @@ const App = () => {
       }
     };
     verify_token();
-  }, []);
+  }, [token]);
 
   useEffect(() => {
     // get survey session id
@@ -127,7 +131,6 @@ const App = () => {
 
   useEffect(() => {
     // scroll to top on route change
-
     const htmlElement = document.querySelector("html");
     if (htmlElement) {
       htmlElement.style.scrollBehavior = "auto";
@@ -137,7 +140,6 @@ const App = () => {
 
     // get url params
     let paramString = [];
-
     for (const [key, value] of searchParams.entries()) {
       paramString.push({ key, value });
     }
@@ -155,9 +157,12 @@ const App = () => {
 
   return (
     <div className="App">
-      <div className="mx-auto pb-14">
+      <div className="mx-auto">
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/people" element={<People />} />
+          <Route path="/research" element={<Research />} />
           <Route
             path="login/:email/:link"
             element={<Enter signIn={signIn} />}
@@ -169,6 +174,13 @@ const App = () => {
           <Route path="/finish" element={<Finish />} />
           <Route path="/welcome" element={<Welcome />} />
           <Route path="/dashboard" element={<Dashboard />} />
+
+          <Route
+            path="/social"
+            element={<SocialSurvey statementText={"hey hey"} />}
+          />
+
+          {/* <Route path="/:sharelink" element={<HumanNetwork />} /> */}
         </Routes>
       </div>
     </div>

@@ -100,7 +100,7 @@ const statementById = async (req, res) => {
     .then((data) => res.json(data));
 };
 
-async function getStatementFromList(statementList) {
+const getStatementFromList = async (statementList) => {
   const statementsText = await statements.findAll({
     where: {
       id: statementList,
@@ -110,8 +110,17 @@ async function getStatementFromList(statementList) {
   });
 
   return statementsText;
-}
+};
 
+const saveSubmitedStatements = async (req, res) => {
+  await statements
+    .findAll({
+      where: {
+        id: req.params.statementId,
+      },
+    })
+    .then((data) => res.json(data));
+};
 
 module.exports = {
   next,
@@ -119,4 +128,5 @@ module.exports = {
   statementById,
   getStatementsWeighted,
   getStatementFromList,
+  saveSubmitedStatements,
 };
