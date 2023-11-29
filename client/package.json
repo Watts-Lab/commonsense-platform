@@ -12,7 +12,7 @@
     "@headlessui/react": "^1.7.17",
     "@observablehq/plot": "^0.6.11",
     "@reduxjs/toolkit": "^1.9.7",
-    "@watts-lab/surveys": "file:/Users/amir/Documents/projects/surveys/dist/watts-lab-surveys-1.11.0.tgz",
+    "@watts-lab/surveys": "^1.10.0",
     "aos": "^2.3.4",
     "axios": "^1.6.2",
     "react": "^18.2.0",
