@@ -15,16 +15,14 @@ function Publications() {
       title: "Everything Is Obvious Book",
       type: "Book",
       authors: "Watts, Duncan",
-      venue:
-        "Crown, 2011, ISBN: 9780385531696, 0385531699.",
+      venue: "Crown, 2011, ISBN: 9780385531696, 0385531699.",
       year: "2011",
       link: "https://arxiv.org/abs/2101.00100",
     },
   ];
 
   return (
-    <section id="research" className="relative">
-
+    <section id="research" className="relative bg-gray-100">
       <div className="relative max-w-6xl mx-auto px-4 sm:px-6">
         <div className="py-12 md:py-20">
           {/* Section header */}
@@ -34,12 +32,14 @@ function Publications() {
 
           {/* Items */}
           <div className="max-w-sm mx-auto grid gap-6 grid-cols-1 items-start md:max-w-2xl lg:max-w-none">
-
             {publicationsList.map((publication, key) => (
-              <div key={key} className="relative flex flex-col p-6 bg-white rounded shadow-xl h-40">
+              <div
+                key={key}
+                className="relative flex flex-col p-6 bg-gray-50 rounded shadow-xl h-40"
+              >
                 <h4 className="text-xl font-bold leading-snug tracking-tight pb-3">
                   {publication.title}
-                  <span className="bg-blue-600 text-gray-200 text-xs font-medium mx-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">  
+                  <span className="bg-blue-600 text-gray-200 text-xs font-medium mx-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">
                     {publication.type}
                   </span>
                 </h4>
@@ -47,8 +47,6 @@ function Publications() {
                 <p className="text-gray-600">{publication.venue}</p>
               </div>
             ))}
-            
-
           </div>
         </div>
       </div>

@@ -1,10 +1,10 @@
 import React from "react";
 
 import Navbar from "../partials/NavBar";
-import Banner from "../partials/Banner";
+import PeoplePartial from "../partials/People";
 import Footer from "../partials/Footer";
 
-const Home: React.FC = () => {
+const People: React.FC = () => {
   return (
     <div className="flex flex-col min-h-screen overflow-hidden">
       {/*  Site header */}
@@ -13,7 +13,7 @@ const Home: React.FC = () => {
       {/*  Page content */}
       <main className="flex-grow bg-gray-100">
         {/*  Page sections */}
-        <Banner />
+        <PeoplePartial />
       </main>
 
       {/*  Site footer */}
@@ -22,4 +22,4 @@ const Home: React.FC = () => {
   );
 };
 
-export default Home;
+export default People;

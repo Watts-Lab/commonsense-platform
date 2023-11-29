@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import FeaturesElement2 from "../images/Common-Sens.png";
 
-const About: React.FC = () => {
+const AboutPartial: React.FC = () => {
   const [tab, setTab] = useState<number>(1);
 
   const tabs = useRef<HTMLDivElement | null>(null);
@@ -12,19 +12,17 @@ const About: React.FC = () => {
       tabs.current.style.height = childElement.offsetHeight + "px";
     }
   };
-  
+
   useEffect(() => {
     heightFix();
   }, [tab]);
 
   return (
     <section id="about" className="relative">
-      {/* Section background (needs .relative class on parent and next sibling elements) */}
       <div
-        className="absolute inset-0 bg-gray-100 pointer-events-none mb-16"
+        className="absolute inset-0 bg-gray-100 pointer-events-none"
         aria-hidden="true"
       ></div>
-      <div className="absolute left-0 right-0 m-auto w-px p-px h-20 bg-gray-200 transform -translate-y-1/2"></div>
 
       <div className="relative max-w-6xl mx-auto px-4 sm:px-6">
         <div className="pt-12 md:pt-20">
@@ -42,11 +40,11 @@ const About: React.FC = () => {
               or how common they are.
             </p>
             <p className="mb-2">
-              This project tackles the definitional conundrum of common sense
-              head on via a massive online survey experiment. Participants are
-              asked to rate thousands of statements, spanning a wide range of
-              knowledge domains, both in terms of their own agreement with the
-              statement and their belief about the agreement of others. The team
+              This project seeks to resolve the intrinsic ambiguity of common
+              sense empirically via a massive online survey experiment.
+              Participants will rate short statements "claims" that span a wide
+              range of knowledge domains, both in terms of their own claim with
+              the statement and their belief about what others will say. We have
               developed novel methods to extract statements from several diverse
               sources including appearances in mass media, non-fiction books,
               and political campaign emails, as well as statements elicited from
@@ -61,11 +59,19 @@ const About: React.FC = () => {
               ML) who wish to explore and simulate this ubiquitous yet
               frustratingly elusive concept.
             </p>
+
+            <p className="mb-2">
+              Read about the research{" "}
+              <a href="" className="underline">
+                here
+              </a>
+              .
+            </p>
           </div>
 
           {/* Section content */}
-          <div className="md:grid md:grid-cols-12 md:gap-6">
-            {/* Content */}
+          {/* <div className="md:grid md:grid-cols-12 md:gap-6 pb-32">
+
             <div
               className="max-w-xl md:max-w-none md:w-full mx-auto md:col-span-7 lg:col-span-6 md:mt-6"
               data-aos="fade-right"
@@ -85,14 +91,14 @@ const About: React.FC = () => {
               </div>
             </div>
 
-            {/* Tabs items */}
+
             <div
               className="max-w-xl md:max-w-none md:w-full mx-auto md:col-span-5 lg:col-span-6 mb-8 md:mb-0 md:order-1"
               data-aos="zoom-y-out"
               ref={tabs}
             >
               <div className="relative flex flex-col text-center lg:text-right">
-                {/* Item 1 */}
+
                 <div className="relative inline-flex flex-col">
                   <img
                     src={FeaturesElement2}
@@ -101,11 +107,11 @@ const About: React.FC = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </section>
   );
 };
 
-export default About;
+export default AboutPartial;

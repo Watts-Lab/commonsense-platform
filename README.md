@@ -3,7 +3,12 @@
 ## Description
 This project is a web application built using Express.js and React. It serves as a platform for users to complete a common sense survey. The application allows users to answer survey questions and provides an interactive interface for collecting and analyzing survey data.
 
-
+  // "scripts": {
+  //   "test": "echo \"Error: no test specified\" && exit 1",
+  //   "start": "node server",
+  //   "dev": "nodemon server"
+  // },
+  
 ## Goals and Vision
 
 The primary goal of the platform is to create an online space where individuals can actively contribute to the Common Sense project. Users are encouraged to participate in surveys and provide valuable data that contributes to the understanding of common sense.

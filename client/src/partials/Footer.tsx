@@ -5,69 +5,63 @@ import Icon from "../images/cropped-favicon-192x192.png";
 
 function Footer() {
   return (
-    <footer>
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
-        {/* Top area: Blocks */}
-        <div className="grid sm:grid-cols-12 gap-8 py-8 md:py-12 border-t border-gray-200">
-          {/* 1st block */}
-          <div className="sm:col-span-12 lg:col-span-3">
-            <div className="mb-2">
-              {/* Logo */}
-              <Link to="/" className="inline-block" aria-label="Cruip">
-                <img className="w-8 h-8" src={Icon} />
-              </Link>
-            </div>
-            
-          </div>
-
-          {/* 2nd block */}
-          <div className="sm:col-span-6 md:col-span-4 lg:col-span-2">
-            <h6 className="text-gray-800 font-medium mb-2">Navigate</h6>
-            <ul className="text-sm">
-              <li className="mb-2">
-                <Link
-                  to=""
-                  className="text-gray-600 hover:text-gray-900 transition duration-150 ease-in-out"
-                >
-                  Home
-                </Link>
-              </li>
-              <li className="mb-2">
-                <Link
-                  to="https://css.seas.upenn.edu/"
-                  className="text-gray-600 hover:text-gray-900 transition duration-150 ease-in-out"
-                >
-                  Upenn
-                </Link>
-              </li>
-              <li className="mb-2">
-                <Link
-                  to="/signin"
-                  className="text-gray-600 hover:text-gray-900 transition duration-150 ease-in-out"
-                >
-                  SignIn
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          
-
-          {/* 4th block */}
-          
-
-          {/* 5th block */}
-          <div className="sm:col-span-6 md:col-span-4 lg:col-span-3">
-            <h6 className="text-gray-800 font-medium mb-2">Contact</h6>
-            <p className="text-sm text-gray-600 mb-4">
-              3401 Walnut Street Suite 417B Philadelphia PA, 19104
-            </p>
-            <p className="text-sm text-gray-600 mb-2">CSSLab@seas.upenn.edu</p>
-            <p className="text-sm text-gray-600 mb-2">(215) 573-7098</p>
-          </div>
+    <footer className="footer footer-center p-10 bg-base-200 text-base-content rounded">
+      <nav className="grid grid-flow-col gap-4">
+        <a href="" className="link link-hover">
+          About us
+        </a>
+        <a href="mailto:CSSLab@seas.upenn.edu" className="link link-hover">
+          Contact
+        </a>
+        <a href="https://css.seas.upenn.edu/" className="link link-hover">
+          CSSLab
+        </a>
+        <a href="https://www.seas.upenn.edu/" className="link link-hover">
+          Penn Engineering
+        </a>
+      </nav>
+      <nav>
+        <div className="grid grid-flow-col gap-4">
+          <a href="https://twitter.com/csspenn">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="30"
+              height="30"
+              viewBox="0 0 64 64"
+            >
+              <path d="M57,17.114c-1.32,1.973-2.991,3.707-4.916,5.097c0.018,0.423,0.028,0.847,0.028,1.274c0,13.013-9.902,28.018-28.016,28.018	c-5.562,0-12.81-1.948-15.095-4.423c0.772,0.092,1.556,0.138,2.35,0.138c4.615,0,8.861-1.575,12.23-4.216	c-4.309-0.079-7.946-2.928-9.199-6.84c1.96,0.308,4.447-0.17,4.447-0.17s-7.7-1.322-7.899-9.779c2.226,1.291,4.46,1.231,4.46,1.231	s-4.441-2.734-4.379-8.195c0.037-3.221,1.331-4.953,1.331-4.953c8.414,10.361,20.298,10.29,20.298,10.29s-0.255-1.471-0.255-2.243	c0-5.437,4.408-9.847,9.847-9.847c2.832,0,5.391,1.196,7.187,3.111c2.245-0.443,4.353-1.263,6.255-2.391	c-0.859,3.44-4.329,5.448-4.329,5.448S54.314,18.335,57,17.114z"></path>
+            </svg>
+          </a>
+          {/* <a>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              x="0px"
+              y="0px"
+              width="30"
+              height="30"
+              viewBox="0 0 64 64"
+            >
+              <path d="M53.527,17.427C55.714,19.677,56,23.252,56,32s-0.286,12.323-2.473,14.573C51.34,48.822,49.062,49,32,49	s-19.34-0.178-21.527-2.427C8.286,44.323,8,40.748,8,32s0.286-12.323,2.473-14.573S14.938,15,32,15S51.34,15.178,53.527,17.427z M27.95,39.417l12.146-7.038L27.95,25.451V39.417z"></path>
+            </svg>
+          </a> */}
+          <a href="https://www.linkedin.com/company/csslab">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              x="0px"
+              y="0px"
+              width="30"
+              height="30"
+              viewBox="0 0 64 64"
+            >
+              <path d="M40.227,12C51.145,12,52,12.854,52,23.773v16.453C52,51.145,51.145,52,40.227,52H23.773C12.855,52,12,51.145,12,40.227	V23.773C12,12.854,12.855,12,23.773,12H40.227z M25.029,43V26.728h-5.057V43H25.029z M22.501,24.401	c1.625,0,2.947-1.322,2.947-2.949c0-1.625-1.322-2.947-2.947-2.947c-1.629,0-2.949,1.32-2.949,2.947S20.87,24.401,22.501,24.401z M44,43v-8.925c0-4.382-0.946-7.752-6.067-7.752c-2.46,0-4.109,1.349-4.785,2.628H33.08v-2.223h-4.851V43h5.054v-8.05	c0-2.122,0.405-4.178,3.036-4.178c2.594,0,2.628,2.427,2.628,4.315V43H44z"></path>
+            </svg>
+          </a>
         </div>
-
-      </div>
+      </nav>
+      <aside>
+        <p>3401 Walnut Street Suite 417B, Philadelphia PA, 19104</p>
+        <p>Copyright © 2023 - All right reserved by CSS lab at UPenn</p>
+      </aside>
     </footer>
   );
 }

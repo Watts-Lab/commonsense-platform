@@ -185,7 +185,7 @@ function Result(props) {
       <p className="pb-4">
         This score is based on a calculation of how similar your beliefs are to
         others (yours are {commonSenseScore.awareness}% similar), and how
-        accurately you rated what others think (you were{" "}
+        accurately you rated what others think (you were
         {commonSenseScore.consensus}% accurate).
       </p>
 
@@ -195,18 +195,12 @@ function Result(props) {
         become more accurate as others answer more questions. If you log in
         below you can continue to see this score as it updates over time.
       </p>
-      {/* <p className="pb-4">
-        This score reflects the similarity of your beliefs to others, and the
-        accuracy of your perceptions about what others believe.
-      </p>
-      <p className="pb-4">
-        This is calculated by comparing your answers to others answers, so it
-        will become more accurate if you answer more questions and it will
-        become more accurate as others answer more questions. If you log in you
-        can continue to see this score as it updates over time.
-      </p> */}
+
       <div className="flex justify-center" ref={containerRef} />
-      <TwitterText percentage={commonSenseScore.commonsense} />
+      <TwitterText
+        percentage={commonSenseScore.commonsense}
+        sessionId={props.sessionId}
+      />
       {aTurkBox ? (
         <div className="flex flex-col items-center pt-7">
           <p className="pb-2">Thanks for completing our survey!</p>
@@ -219,47 +213,50 @@ function Result(props) {
           </p>
         </div>
       ) : null}
-      <div className="flex flex-col items-center pt-7">
-        <div className="w-full bg-white md:mt-0 sm:max-w-lg xl:p-0 dark:bg-gray-800 dark:border-gray-700">
-          <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-              Create an account
-            </h1>
 
-            {notifBox ? (
-              <NotificationBox userEmail={userEmail} />
-            ) : (
-              <form onSubmit={emailSubmit} className="space-y-4 md:space-y-6">
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+      {props.showSignUpBox ? (
+        <div className="flex flex-col items-center pt-7">
+          <div className="w-full bg-white md:mt-0 sm:max-w-lg xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+            <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
+              <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+                Create an account
+              </h1>
+
+              {notifBox ? (
+                <NotificationBox userEmail={userEmail} />
+              ) : (
+                <form onSubmit={emailSubmit} className="space-y-4 md:space-y-6">
+                  <div>
+                    <label
+                      htmlFor="email"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Your email
+                    </label>
+                    <input
+                      onChange={enterEmail}
+                      value={userEmail}
+                      type="email"
+                      name="email"
+                      id="email"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      placeholder="name@company.com"
+                      required
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
                   >
-                    Your email
-                  </label>
-                  <input
-                    onChange={enterEmail}
-                    value={userEmail}
-                    type="email"
-                    name="email"
-                    id="email"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="name@company.com"
-                    required
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-                >
-                  Create an account
-                </button>
-              </form>
-            )}
+                    Create an account
+                  </button>
+                </form>
+              )}
+            </div>
           </div>
         </div>
-      </div>
+      ) : null}
     </div>
   );
 }

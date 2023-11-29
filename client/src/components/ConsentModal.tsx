@@ -1,17 +1,22 @@
 import { Fragment, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { useSelector, useDispatch } from "react-redux";
+
+import { useAppSelector, useAppDispatch } from "../redux/hooks";
 import { setConsent } from "../redux/slices/consentSlice";
 
 import Consent from "./Consent";
 import { Link, useNavigate } from "react-router-dom";
 
-function Modal(props) {
+interface ConsentModalProps {
+  buttonText: string;
+  buttonClass: string;
+}
 
+const ConsentModal = ({ buttonText, buttonClass }: ConsentModalProps) => {
   const [open, setOpen] = useState(false);
 
-  const consent = useSelector((state) => state.consent.consent);
-  const dispatch = useDispatch();
+  const consent = useAppSelector((state) => state.consent.consent);
+  const dispatch = useAppDispatch();
 
   const navigateTo = useNavigate();
 
@@ -31,8 +36,8 @@ function Modal(props) {
 
   return (
     <>
-      <button type="button" onClick={openModal} className={props.buttonClass}>
-        {props.buttonText}
+      <button type="button" onClick={openModal} className={buttonClass}>
+        {buttonText}
       </button>
       <Transition.Root show={open} as={Fragment}>
         <Dialog
@@ -64,7 +69,10 @@ function Modal(props) {
                 leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                 leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
               >
-                <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+                <Dialog.Panel
+                  className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg"
+                  id="concent-modal"
+                >
                   <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                     <div className="sm:flex sm:items-start">
                       <div className="mt-3 text-center sm:mt-0 sm:text-left">
@@ -104,7 +112,7 @@ function Modal(props) {
                     <Link to="/statements">
                       <button
                         type="button"
-                        className="inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 sm:ml-3 sm:w-auto"
+                        className="inline-flex w-full justify-center rounded-md bg-gray-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-700 sm:ml-3 sm:w-auto"
                         onClick={() => {
                           setOpen(false);
                           dispatch(setConsent());
@@ -130,6 +138,6 @@ function Modal(props) {
       </Transition.Root>
     </>
   );
-}
+};
 
-export default Modal;
+export default ConsentModal;

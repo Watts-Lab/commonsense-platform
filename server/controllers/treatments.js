@@ -90,18 +90,29 @@ const matchTreatments = (req_param) => {
 
   // Match treatments based on query parameters
   for (const treatment of manifest_treatments) {
-    const critirion = treatment.critirion;
+    const { critirion } = treatment;
 
-    if (critirion && critirion.source === req_param.query.source) {
-      matchedTreatments.push(treatment.id);
+    // Check if there are criteria and the number of them matches the number of query params
+    if (
+      critirion &&
+      Object.keys(critirion).length === Object.keys(req_param.query).length
+    ) {
+      let isMatch = true;
+
+      for (const [key, value] of Object.entries(critirion)) {
+        if (req_param.query[key] !== value) {
+          isMatch = false;
+          break;
+        }
+      }
+
+      if (isMatch) {
+        matchedTreatments.push(treatment.id);
+      }
     }
   }
 
-  if (matchedTreatments.length === 0) {
-    return defaultTreatment;
-  } else {
-    return matchedTreatments;
-  }
+  return matchedTreatments.length > 0 ? matchedTreatments : defaultTreatment;
 };
 
 const chooseTreatment = async (req_param) => {
@@ -173,8 +184,6 @@ const getTreatment = async (req, res, next) => {
   if (req.query.source) {
     console.log("source", req.query.source);
   }
-  // 5, 10, 15, 20, 25, 30, 35, 40;
-  //   ? roundRobin(fb_1, fb_2, fb_3) : randomWeight(point_1, point_2, point_3)
 
   let user = await usertreatments.findOne({
     where: { sessionId: req.sessionID, finished: false },
@@ -182,8 +191,6 @@ const getTreatment = async (req, res, next) => {
 
   if (!user) {
     let treatment = await chooseTreatment(req);
-
-    // console.log("treatment", treatment);
 
     await usertreatments
       .create({
