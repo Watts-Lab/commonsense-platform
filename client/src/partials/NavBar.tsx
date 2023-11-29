@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { HashLink } from "react-router-hash-link";
 import { useAppSelector } from "../redux/hooks";
 
+import ConsentModal from "../components/ConsentModal";
+
 import Icon from "../images/WEBSITE-LOGO.png";
 
 const Navbar: React.FC = () => {
@@ -110,9 +112,10 @@ const Navbar: React.FC = () => {
         </div>
 
         <div className="navbar-end flex items-center">
-          <a href="#button" className="btn ">
+          <ConsentModal buttonText="Participate →" buttonClass="btn" />
+          {/* <a href="#button" className="btn ">
             Participate →
-          </a>
+          </a> */}
           <div className="dropdown dropdown-end">
             <label tabIndex={0} className="btn btn-ghost">
               <svg

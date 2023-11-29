@@ -188,7 +188,7 @@ import { slide as Menu } from "react-burger-menu";
 
 import Icon from "../images/WEBSITE-LOGO.png";
 
-import Modal from "../components/Modal";
+import ConsentModal from "../components/ConsentModal";
 
 interface HeaderProps {
   where: string;
@@ -287,7 +287,7 @@ const Header: React.FC<HeaderProps> = ({ where }) => {
                   </p>
                 </>
               )}
-              <Modal
+              <ConsentModal
                 buttonText="Participate →"
                 buttonClass="btn-sm text-white bg-gray-900 hover:bg-gray-600 ml-3"
               />
@@ -343,7 +343,7 @@ const Header: React.FC<HeaderProps> = ({ where }) => {
                 )}
               </li>
               <li>
-                <Modal
+                <ConsentModal
                   buttonText="Participate →"
                   buttonClass="btn-sm text-white bg-gray-900 hover:bg-gray-600 ml-3"
                 />

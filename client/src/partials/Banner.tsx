@@ -5,7 +5,7 @@ import { Histogram } from "./Histogram";
 
 import { commonsensicalityScores } from "./Scores";
 
-import Modal from "../components/Modal";
+import ConsentModal from "../components/ConsentModal";
 
 const Banner: React.FC = () => {
   const heroImage =
@@ -42,7 +42,7 @@ const Banner: React.FC = () => {
                 </p>
                 <div className="max-w-xs mx-auto sm:max-w-none sm:flex sm:justify-center">
                   <div>
-                    <Modal
+                    <ConsentModal
                       buttonText="Test Your Common Sense"
                       buttonClass="text-white p-3 bg-gray-600 hover:bg-gray-700 w-full mb-4 rounded-md sm:w-auto sm:mb-0"
                     />

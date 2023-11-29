@@ -160,8 +160,7 @@ function DashboardChart(props) {
           <p className="pb-4">
             This score is based on a calculation of how similar your beliefs are
             to others (yours are {commonSenseScore.awareness}% similar), and how
-            accurately you rated what others think (you were
-            {commonSenseScore.consensus}% accurate).
+            accurately you rated what others think (you were {commonSenseScore.consensus}% accurate).
           </p>
 
           <p className="pb-4">

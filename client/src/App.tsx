@@ -37,6 +37,8 @@ import Finish from "./pages/Finish";
 // components
 import Consent from "./components/Consent";
 import Enter from "./components/Enter";
+import SocialSurvey from "./components/SocialSurvey";
+import HumanNetwork from "./components/HumanNetwork";
 
 // apis
 import Backend from "./apis/backend";
@@ -73,7 +75,7 @@ const App = () => {
       }
     };
     verify_token();
-  }, []);
+  }, [token]);
 
   useEffect(() => {
     // get survey session id
@@ -129,7 +131,6 @@ const App = () => {
 
   useEffect(() => {
     // scroll to top on route change
-
     const htmlElement = document.querySelector("html");
     if (htmlElement) {
       htmlElement.style.scrollBehavior = "auto";
@@ -139,7 +140,6 @@ const App = () => {
 
     // get url params
     let paramString = [];
-
     for (const [key, value] of searchParams.entries()) {
       paramString.push({ key, value });
     }
@@ -174,6 +174,13 @@ const App = () => {
           <Route path="/finish" element={<Finish />} />
           <Route path="/welcome" element={<Welcome />} />
           <Route path="/dashboard" element={<Dashboard />} />
+
+          <Route
+            path="/social"
+            element={<SocialSurvey statementText={"hey hey"} />}
+          />
+
+          {/* <Route path="/:sharelink" element={<HumanNetwork />} /> */}
         </Routes>
       </div>
     </div>

@@ -18,7 +18,9 @@ function TwitterText(props) {
     }
   }
 
-  const score = 97; // Your score out of 100
+  const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
+  const score = props.percentage;
   const breakPoint = Math.min(Math.floor(score / 10));
   const blocks = [];
 
@@ -26,13 +28,28 @@ function TwitterText(props) {
     if (i < breakPoint) {
       if (i < 3) {
         blocks.push("🟥"); // Red
-      } else if (i > 3 && i <= 6) {
+      } else if (i < 6) {
         blocks.push("🟨"); // Yellow
-      } else if (i >= 7 && i < 9) {
+      } else if (i < 9) {
         blocks.push("🟩"); // Green
       }
     } else if (i === breakPoint) {
-      blocks.push("😀");
+      blocks.push(
+        pick(
+          [
+            [..."🤯"],
+            [..."🤥😶😵‍💫"],
+            [..."😵🥴"],
+            [..."😏🫤😕"],
+            [..."🤨🙂😌"],
+            [..."😋😀"],
+            [..."😃😄😁"],
+            [..."🥸😎"],
+            [..."😆🥳🧐"],
+            [..."🤓🤩"],
+          ][breakPoint]
+        )
+      );
     } else {
       blocks.push("⬜"); // Gray block until 10
     }
