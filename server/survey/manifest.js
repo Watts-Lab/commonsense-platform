@@ -447,6 +447,9 @@ module.exports = {
         },
         limit: 15,
       },
+      critirion: {
+        source: "legacy",
+      },
       randomization: "none",
     },
 
