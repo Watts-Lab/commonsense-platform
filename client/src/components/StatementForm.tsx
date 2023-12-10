@@ -198,12 +198,12 @@ const StatementForm = () => {
           {Object.entries(features).map(
             ([key, { checked, text, description }]) => (
               <div className="flex items-center justify-between my-4" key={key}>
-                <div className="label grow-0">
+                <div className="label grow-0 px-2">
                   <span className="label-text">
                     {text}: <small>{description}</small>
                   </span>
                 </div>
-                <label className="label cursor-pointer">
+                <label className="label cursor-pointer px-2">
                   <input
                     type="checkbox"
                     className="toggle toggle-gray-300 toggle-sm"
