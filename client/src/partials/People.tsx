@@ -100,6 +100,7 @@ const people: PersonProps[] = [
     image: "https://avatars.githubusercontent.com/u/6696894?v=4",
     twitter: "https://twitter.com/amirhosnakh",
     github: "https://github.com/amirrr",
+    website: "https://amirrr.github.io",
   },
   // {
   //   name: "Karan Sampath",
@@ -149,20 +150,22 @@ const PeoplePartial: React.FC = () => {
                 {person.name}
               </h3>
               <ul className="flex justify-center mt-4 space-x-4">
-              {person.website && (
+                {person.website && (
                   <li>
                     <a
                       href={person.website}
                       className="text-gray-500 hover:text-gray-900 dark:hover:text-white"
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
                       <svg
-                        xmlns="http://www.w3.org/2000/svg"
+                        className="fill-current"
                         width="24"
                         height="24"
-                        viewBox="0 0 24 24"
-                        className="fill-current"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
                       >
-                        <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"></path>
+                        <path d="M10 .5a9.5 9.5 0 1 0 0 19 9.5 9.5 0 0 0 0-19ZM8.374 17.4a7.6 7.6 0 0 1-5.9-7.4c0-.83.137-1.655.406-2.441l.239.019a3.887 3.887 0 0 1 2.082 2.5 4.1 4.1 0 0 0 2.441 2.8c1.148.522 1.389 2.007.732 4.522Zm3.6-8.829a.997.997 0 0 0-.027-.225 5.456 5.456 0 0 0-2.811-3.662c-.832-.527-1.347-.854-1.486-1.89a7.584 7.584 0 0 1 8.364 2.47c-1.387.208-2.14 2.237-2.14 3.307a1.187 1.187 0 0 1-1.9 0Zm1.626 8.053-.671-2.013a1.9 1.9 0 0 1 1.771-1.757l2.032.619a7.553 7.553 0 0 1-3.132 3.151Z" />
                       </svg>
                     </a>
                   </li>
@@ -173,6 +176,8 @@ const PeoplePartial: React.FC = () => {
                     <a
                       href={person.twitter}
                       className="text-gray-500 hover:text-gray-900 dark:hover:text-white"
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -186,12 +191,13 @@ const PeoplePartial: React.FC = () => {
                     </a>
                   </li>
                 )}
-
                 {person.github && (
                   <li>
                     <a
                       href={person.github}
                       className="text-gray-500 hover:text-gray-900 dark:hover:text-white dark:text-gray-300"
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
                       <svg
                         className="w-6 h-6"
