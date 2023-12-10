@@ -1,31 +1,25 @@
 /// <reference types="cypress" />
 
-describe("fill out the survay", () => {
+describe("fill out the survey", () => {
   beforeEach(() => {
     // go to the url
     cy.visit("http://localhost:5173/");
   });
 
   it("check website structure", () => {
-    cy.log("checking the menu for the survey link");
+    cy.log("checking for the Participate button");
 
-    // Locate the menu element by its selector (update this selector)
-    cy.get(".bm-item-list").as("menu");
+    // Wait for the button to be available to interact with
+    cy.get(".navbar-end")
+      .contains("button", "Participate →")
+      .as("participateButton");
+    cy.get("@participateButton").should("be.visible").click();
 
-    // Find all <a> links inside the menu
-    cy.get("@menu").find("a").as("menuLinks").should("have.length.gt", 0); // Ensure there are links in the menu
+    cy.get("#concent-modal").should("be.visible");
 
-    // Iterate through the links and click on the "participate" link
-
-    // cy.get("@menu").contains("button", "Participate").click();
-    cy.get("@menu").contains("button", "Participate").click({ force: true });
-
-    cy.get("#concent-modal") 
-    .contains("button", "Check Your Common Sense")
-    .closest("a")
-    .click();
+    cy.get("#concent-modal")
+      .contains("button", "Check Your Common Sense")
+      .click();
+    cy.url().should("include", "/statements");
   });
-
-  
-  
 });

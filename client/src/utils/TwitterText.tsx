@@ -1,8 +1,14 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import adler32 from "./hashing";
 
-function TwitterText(props) {
+interface TwitterTextProps {
+  percentage: number;
+  sessionId: string;
+}
+
+const TwitterText = (props: TwitterTextProps) => {
   const [isShared, setIsShared] = useState(false);
+  const [textareaValue, setTextareaValue] = useState("");
 
   function handleShare() {
     setIsShared(true);
@@ -18,47 +24,65 @@ function TwitterText(props) {
     }
   }
 
-  const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+  const generateBlocksArray = () => {
+    const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
-  const score = props.percentage;
-  const breakPoint = Math.min(Math.floor(score / 10));
-  const blocks = [];
+    const score = props.percentage;
+    const breakPoint = Math.min(Math.floor(score / 10));
+    const blocks = [];
 
-  for (let i = 0; i < 10; i++) {
-    if (i < breakPoint) {
-      if (i < 3) {
-        blocks.push("🟥"); // Red
-      } else if (i < 6) {
-        blocks.push("🟨"); // Yellow
-      } else if (i < 9) {
-        blocks.push("🟩"); // Green
+    for (let i = 0; i < 10; i++) {
+      if (i < breakPoint) {
+        if (i < 3) {
+          blocks.push("🟥"); // Red
+        } else if (i < 6) {
+          blocks.push("🟨"); // Yellow
+        } else if (i < 9) {
+          blocks.push("🟩"); // Green
+        }
+      } else if (i === breakPoint) {
+        blocks.push(
+          pick(
+            [
+              [..."🤯"],
+              [..."🤥😶😵‍💫"],
+              [..."😵🥴"],
+              [..."😏🫤😕"],
+              [..."🤨🙂😌"],
+              [..."😋😀"],
+              [..."😃😄😁"],
+              [..."🥸😎"],
+              [..."😆🥳🧐"],
+              [..."🤓🤩"],
+            ][breakPoint]
+          )
+        );
+      } else {
+        blocks.push("⬜"); // Gray block until 10
       }
-    } else if (i === breakPoint) {
-      blocks.push(
-        pick(
-          [
-            [..."🤯"],
-            [..."🤥😶😵‍💫"],
-            [..."😵🥴"],
-            [..."😏🫤😕"],
-            [..."🤨🙂😌"],
-            [..."😋😀"],
-            [..."😃😄😁"],
-            [..."🥸😎"],
-            [..."😆🥳🧐"],
-            [..."🤓🤩"],
-          ][breakPoint]
-        )
-      );
-    } else {
-      blocks.push("⬜"); // Gray block until 10
     }
-  }
 
-  const percentage = `My common sense is ${props.percentage}%`;
-  const textareaValue =
-    `${percentage}\n${blocks.join("")}\nCheck yours: commonsensicality.org/s/` +
-    props.sessionId.slice(0, 7);
+    return blocks;
+  };
+
+  useEffect(() => {
+    // Call the function to generate blocks array
+    const blocks = generateBlocksArray();
+    const percentage = `My common sense is ${props.percentage}%`;
+    const newValue =
+      props.sessionId === null
+        ? `${percentage}\n${blocks.join(
+            ""
+          )}\nCheck yours: commonsensicality.org`
+        : `${percentage}\n${blocks.join(
+            ""
+          )}\nCheck yours: commonsensicality.org/s/${props.sessionId.slice(
+            0,
+            7
+          )}`;
+
+    setTextareaValue(newValue);
+  }, [props.percentage, props.sessionId]); // Update dependencies array
 
   return (
     <div className="flex flex-col items-center pt-3">
@@ -82,6 +106,6 @@ function TwitterText(props) {
       )}
     </div>
   );
-}
+};
 
 export default TwitterText;
