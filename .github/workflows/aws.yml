@@ -31,7 +31,7 @@ jobs:
         run: docker run -d -p 80:80 my-app
 
       - name: Run Cypress Tests
-        run: npx cypress run --record --key ${{ secrets.CYPRESS_RECORD_KEY }}
+        run: npx cypress run --record --key ${{ secrets.CYPRESS_RECORD_KEY }} --headed
 
       - name: Archive Test Artifacts on Failure
         if: failure()
