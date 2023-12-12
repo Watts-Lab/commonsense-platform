@@ -23,6 +23,8 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
+        with:
+          submodules: recursive
 
       - name: Build Docker Image
         run: docker build -t my-app .
@@ -31,9 +33,15 @@ jobs:
         run: docker run -d -p 80:80 my-app
 
       - name: Run Cypress Tests
-        working-directory: client
-        run: npx cypress run --record --key ${{ secrets.CYPRESS_RECORD_KEY }} --headed --config-file cypress.config.ts
-
+        uses: cypress-io/github-action@v6.3.0
+        with:
+          working-directory: client
+          browser: chrome
+          config-file: cypress.config.ts
+          record: true
+          key: ${{ secrets.CYPRESS_RECORD_KEY }}
+          headed: true
+      
       - name: Archive Test Artifacts on Failure
         if: failure()
         uses: actions/upload-artifact@v2
