@@ -138,17 +138,23 @@ const App = () => {
       htmlElement.style.scrollBehavior = "";
     }
 
-    // get url params
-    let paramString = [];
-    for (const [key, value] of searchParams.entries()) {
-      paramString.push({ key, value });
+    // Get the current URL parameters
+    const currentParams = searchParams.entries();
+    const URLParams = [...currentParams].map(([key, value]) => ({
+      key,
+      value,
+    }));
+
+    if (location.pathname.startsWith("/s/")) {
+      const shareLink = location.pathname.substring(3);
+      URLParams.push({ key: "shareLink", value: shareLink });
     }
 
-    // save url params in redux store
-    if (paramString.length > 0) {
+    // Dispatch the updated parameters
+    if (URLParams.length > 0) {
       dispatch(
         setUrlParams({
-          urlParams: paramString,
+          urlParams: URLParams,
         })
       );
       setSearchParamsNew("");
@@ -160,6 +166,7 @@ const App = () => {
       <div className="mx-auto">
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/:shareLink" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/people" element={<People />} />
           <Route path="/research" element={<Research />} />

@@ -3,9 +3,9 @@
 @tailwind utilities;
 
 .dark {
-    @apply bg-gray-800 text-zinc-50;
- }
+  @apply bg-gray-800 text-zinc-50;
+}
 
- .sv_image_image {
-    width: 100%;
+.sv_image_image {
+  width: 100%;
 }

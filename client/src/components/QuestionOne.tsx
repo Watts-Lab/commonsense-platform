@@ -42,8 +42,8 @@ function QuestionOne(props) {
         </div>
 
         <p className="text-gray-600">
-          (if the answer depends, respond with your most common or most likely
-          answer)
+          (if the answer is, it depends, respond with your most common or most
+          likely answer)
         </p>
 
         <ul className="grid w-full gap-2 md:grid-cols-2 py-2">
@@ -84,9 +84,11 @@ function QuestionOne(props) {
               <Option
                 key={index}
                 text={reason}
-                id_v={questionIdentifier + '-' + reason}
+                id_v={questionIdentifier + "-" + reason}
                 statementClass={questionIdentifier + "opinion"}
-                checked={props.questionOneOpinion === questionIdentifier + '-' + reason}
+                checked={
+                  props.questionOneOpinion === questionIdentifier + "-" + reason
+                }
                 required={true}
               />
             );

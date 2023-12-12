@@ -7,8 +7,6 @@ const { statements, users, answers } = require("../models");
 
 const { header, body, validationResult } = require("express-validator");
 
-
-
 router.post(
   "/",
   body("statementId").not().isEmpty().isInt({ min: 1 }),

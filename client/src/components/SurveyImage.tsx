@@ -12,19 +12,14 @@ const SurveyImage: React.FC<SurveyImageProps> = (props) => {
   const [imageUrl, setImageUrl] = useState<string>("");
 
   useEffect(() => {
+    if (!props.imageName) return;
+
     Backend.get(`/images/${props.imageName}`, { responseType: "blob" })
       .then((response) => {
         const url = URL.createObjectURL(response.data);
         setImageUrl(url);
       })
       .catch((error) => console.error("Error fetching image:", error));
-
-    // Backend.get(`/images/${props.imageName}`, {
-    //   withCredentials: true,
-    // })
-    //   .then((response) => response.data)
-    //   .then((url) => setImageUrl(url))
-    //   .catch((error) => console.error("Error fetching image URL:", error));
   }, [props.imageName]);
 
   return (

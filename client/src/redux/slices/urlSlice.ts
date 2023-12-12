@@ -1,7 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-
-
 const urlParamsString = localStorage.getItem("urlParams");
 const urlParams: Array<{ key: string; value: string }> =
   urlParamsString !== null ? JSON.parse(urlParamsString) : [];
@@ -28,8 +26,25 @@ export const urlSlice = createSlice({
         urlParams: Array<{ key: string; value: string }>;
       }>
     ) => {
-      state.urlParams = action.payload.urlParams;
-      setUrlFunction(action.payload.urlParams);
+      // Update the state
+      const updatedParams = action.payload.urlParams.reduce(
+        (accumulator, newParam) => {
+          // Check if param already exists
+          const index = accumulator.findIndex((p) => p.key === newParam.key);
+          if (index > -1) {
+            // Update the existing parameter
+            accumulator[index].value = newParam.value;
+          } else {
+            accumulator.push(newParam);
+          }
+          return accumulator;
+        },
+        [...state.urlParams]
+      );
+
+      state.urlParams = updatedParams;
+
+      setUrlFunction(updatedParams);
     },
   },
 });
