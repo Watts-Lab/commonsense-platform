@@ -32,7 +32,7 @@ jobs:
 
       - name: Run Cypress Tests
         working-directory: client
-        run: npx cypress run --record --key ${{ secrets.CYPRESS_RECORD_KEY }} --headed
+        run: npx cypress run --record --key ${{ secrets.CYPRESS_RECORD_KEY }} --headed --config-file cypress.config.ts
 
       - name: Archive Test Artifacts on Failure
         if: failure()
