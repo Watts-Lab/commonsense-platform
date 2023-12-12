@@ -10,7 +10,7 @@ env:
   ECS_SERVICE: common-sense-service # Amazon ECS service name
   ECS_CLUSTER: common-sense-cluster # Amazon ECS cluster name
   ECS_TASK_DEFINITION: .aws/task-definition.json # Amazon ECS task definition
-  CONTAINER_NAME: common-sense-ecr-repo 
+  CONTAINER_NAME: common-sense-ecr-repo
 
 permissions:
   id-token: write
@@ -31,6 +31,7 @@ jobs:
         run: docker run -d -p 80:80 my-app
 
       - name: Run Cypress Tests
+        working-directory: client
         run: npx cypress run --record --key ${{ secrets.CYPRESS_RECORD_KEY }} --headed
 
       - name: Archive Test Artifacts on Failure
