@@ -39,8 +39,10 @@ jobs:
           browser: chrome
           config-file: cypress.config.ts
           record: true
-          key: ${{ secrets.CYPRESS_RECORD_KEY }}
           headed: true
+          spec: e2e/*.{js,jsx,ts,tsx}
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
       
       - name: Archive Test Artifacts on Failure
         if: failure()
