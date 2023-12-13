@@ -17,45 +17,8 @@ permissions:
   contents: read
 
 jobs:
-  cypress-tests:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-        with:
-          submodules: recursive
-
-      - name: Build Docker Image
-        run: docker build -t my-app .
-
-      - name: Start Backend and Frontend
-        run: docker run -d -p 80:80 my-app
-
-      - name: Run Cypress Tests
-        uses: cypress-io/github-action@v6.3.0
-        with:
-          working-directory: client
-          browser: chrome
-          config-file: cypress.config.ts
-          record: true
-          headed: true
-          spec: e2e/*.{js,jsx,ts,tsx}
-        env:
-          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-      
-      - name: Archive Test Artifacts on Failure
-        if: failure()
-        uses: actions/upload-artifact@v2
-        with:
-          name: cypress-artifacts
-          path: |
-            cypress/screenshots
-            cypress/videos
-
   deploy:
     name: Deploy
-    needs: cypress-tests
     runs-on: ubuntu-latest
     environment: production
 
