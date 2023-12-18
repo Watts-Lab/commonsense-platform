@@ -58,16 +58,25 @@ function MultiStepForm(props) {
 
       // if the user answered the statement, then save the answer and set the answerSaved flag to true
       if (!props.steps[currentStepIndex].answereSaved) {
+        console.log
         Backend.post("/answers", {
           statementId: props.steps[currentStepIndex].id,
-          I_agree: props.steps[currentStepIndex].answers[0].slice(-1),
+          I_agree:
+            props.steps[currentStepIndex].answers[0].split("-")[1] === "Yes"
+              ? 1
+              : 0,
           I_agree_reason:
             props.steps[currentStepIndex].answers[1].split("-")[1],
-          others_agree: props.steps[currentStepIndex].answers[2].slice(-1),
+          others_agree:
+            props.steps[currentStepIndex].answers[2].split("-")[1] === "Yes"
+              ? 1
+              : 0,
           others_agree_reason:
             props.steps[currentStepIndex].answers[3].split("-")[1],
           perceived_commonsense:
-            props.steps[currentStepIndex].answers[4].slice(-1),
+            props.steps[currentStepIndex].answers[4].split("-")[1] === "Yes"
+              ? 1
+              : 0,
           clarity: props.steps[currentStepIndex].answers[5].split("-")[1],
           origLanguage: "en",
           sessionId: props.sessionId,
