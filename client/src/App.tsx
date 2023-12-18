@@ -59,7 +59,6 @@ const App = () => {
       try {
         Backend.defaults.headers.common["Authorization"] = token;
         const response = await Backend.post(`/users/verify`);
-        console.log(response);
         return response.data.ok
           ? dispatch(
               setUserData({

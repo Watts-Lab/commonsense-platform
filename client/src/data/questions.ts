@@ -4,6 +4,7 @@ export interface IQuestionData {
   description?: string;
   possibleAnswers: string[];
   tooltip: string;
+  required: boolean;
 }
 
 export const questionData: IQuestionData[] = [
@@ -14,6 +15,7 @@ export const questionData: IQuestionData[] = [
       "(if the answer is, it depends, respond with your most common or most likely answer)",
     possibleAnswers: ["Yes", "No"],
     tooltip: "If you think the statement is true or false.",
+    required: true,
   },
   {
     id: 2,
@@ -26,6 +28,7 @@ export const questionData: IQuestionData[] = [
     ],
     tooltip:
       "Why you chose the specific answer, we aim to understand the factors that influenced your decision. Please provide an explanation or rationale for your response.",
+    required: true,
   },
   {
     id: 3,
@@ -36,6 +39,7 @@ export const questionData: IQuestionData[] = [
     possibleAnswers: ["Yes", "No"],
     tooltip:
       "This question seeks to gather insights on the perceived consensus among individuals regarding the given statement. We are interested in understanding your opinion about whether you believe that the majority of other people would agree with the statement presented.",
+    required: true,
   },
   {
     id: 4,
@@ -49,6 +53,7 @@ export const questionData: IQuestionData[] = [
     ],
     tooltip:
       "This question aims to explore the reasoning behind your response regarding the perceived agreement of most other people with the given statement. We are interested in understanding the factors that influenced your decision and your perspective on how others might interpret or respond to the statement.",
+    required: true,
   },
   {
     id: 5,
@@ -57,6 +62,7 @@ export const questionData: IQuestionData[] = [
     possibleAnswers: ["Yes", "No"],
     tooltip:
       "This question seeks to gather insights on the perceived consensus among individuals regarding the given statement. We are interested in understanding your opinion about whether you believe that the majority of other people would agree with the statement presented.",
+    required: true,
   },
   {
     id: 6,
@@ -70,6 +76,7 @@ export const questionData: IQuestionData[] = [
     ],
     tooltip:
       "This question aims to explore the reasoning behind your response regarding the perceived agreement of most other people with the given statement. We are interested in understanding the factors that influenced your decision and your perspective on how others might interpret or respond to the statement.",
+    required: true,
   },
   {
     id: 7,
@@ -80,6 +87,7 @@ export const questionData: IQuestionData[] = [
     possibleAnswers: ["Yes, it is common sense", "No, it is not common sense"],
     tooltip:
       "This question aims to gauge your perception of the given statement as an example of common sense. We are interested in understanding your overall evaluation and whether you believe the statement aligns with widely accepted general knowledge or intuitive understanding.",
+    required: true,
   },
   {
     id: 8,
@@ -92,5 +100,6 @@ export const questionData: IQuestionData[] = [
     ],
     tooltip:
       "This question aims to gather insights on how you believe most people would categorize the given statement in terms of common sense. We are interested in understanding your perception of how the majority of individuals would classify or label the statement in relation to its alignment with widely accepted general knowledge or intuitive understanding.",
+    required: false,
   },
 ];

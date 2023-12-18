@@ -29,10 +29,6 @@ function MultiStepForm(props) {
   }
 
   function next() {
-    console.log(
-      "current step " + currentStepIndex + " array length " + props.steps.length
-    );
-
     if (checkAnswers(props.steps[currentStepIndex].answers.slice(0, 5))) {
       setCurrentStepIndex((i) => {
         if (i > props.steps.length - 1) return i;
@@ -42,9 +38,6 @@ function MultiStepForm(props) {
       if (currentStepIndex === props.steps.length - 1) {
         props.pushResultComponent();
       }
-
-      console.log("current step ", currentStepIndex);
-      console.log("array length ", props.steps.length);
 
       // if user finishes a statement, then get new statement (stays 2 steps ahead)
       if (
@@ -58,7 +51,6 @@ function MultiStepForm(props) {
 
       // if the user answered the statement, then save the answer and set the answerSaved flag to true
       if (!props.steps[currentStepIndex].answereSaved) {
-        console.log
         Backend.post("/answers", {
           statementId: props.steps[currentStepIndex].id,
           I_agree:
@@ -82,14 +74,12 @@ function MultiStepForm(props) {
           sessionId: props.sessionId,
           withCredentials: true,
         }).then((response) => {
-          console.log(response.data);
           props.handleAnswerSaving(props.steps[currentStepIndex].id, true);
           props.steps[currentStepIndex].answereSaved = true;
         });
       }
     } else {
       // TODO: invoke error on the button
-      // console.log(whichQuestion(props.steps[currentStepIndex].answers.slice(0, 5)));
       props.setUnansweredQuestionIndex(
         whichQuestion(props.steps[currentStepIndex].answers.slice(0, 5))
       );

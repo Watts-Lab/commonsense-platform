@@ -6,9 +6,7 @@ import { setSession } from "../redux/slices/loginSlice";
 
 import Statement from "./Statement";
 import MultiStepForm from "./MultiStepForm";
-import Buttons from "./Buttons";
 import Result from "./Result";
-import Feedback from "./Feedback/Feedback";
 
 import { questionData } from "../data/questions";
 
@@ -49,7 +47,6 @@ function Layout(props) {
         withCredentials: true,
         params: { sessionId: sessionId },
       });
-      console.log("new fetched statement:", response);
       return response;
     } catch (error) {
       console.log(error);
@@ -57,7 +54,6 @@ function Layout(props) {
   };
 
   const pushResultComponent = (statementId, statementText) => {
-    console.log("adding Result component");
     let finalSessionId = surveySession ? surveySession : sessionId;
     setStatementArray((oldArray) => [
       ...oldArray,
@@ -70,8 +66,6 @@ function Layout(props) {
   };
 
   const pushNewStatement = (statementId, statementText) => {
-    console.log("adding new statement");
-
     setStatementsData((oldArray) => [
       ...oldArray,
       {
@@ -189,7 +183,6 @@ function Layout(props) {
   }, []);
 
   const submitHandler = (event) => {
-    console.log("submitting");
     event.preventDefault();
     next();
   };

@@ -18,7 +18,6 @@ const TwitterText = (props: TwitterTextProps) => {
   async function handleCopy() {
     try {
       await navigator.clipboard.writeText(textareaValue);
-      console.log("Text copied to clipboard");
     } catch (error) {
       console.error("Failed to copy text:", error);
     }

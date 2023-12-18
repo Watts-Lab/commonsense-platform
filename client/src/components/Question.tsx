@@ -58,7 +58,7 @@ function Question({
               id_v={optionIdentifier}
               statementClass={questionIdentifier}
               checked={answerValue === optionIdentifier}
-              required={true}
+              required={question.required}
               onChange={onChange}
             />
           );

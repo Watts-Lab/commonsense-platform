@@ -54,7 +54,6 @@ function DashboardChart(props) {
       withCredentials: true,
       sessionId: surveySession,
     }).then((response) => {
-      console.log(response.data);
       setCommonSenseScore({
         commonsense: Math.round(
           Number(response.data.commonsensicality).toFixed(2) * 100
