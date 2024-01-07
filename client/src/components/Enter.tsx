@@ -11,7 +11,7 @@ const Enter = ({ signIn }) => {
   useEffect(() => {
     if (params.email && params.link) {
       signIn(params.email, params.link);
-      navigate("/");
+      navigate("/dashboard");
     } else {
       // Handle the case where either params.email or params.link is undefined
       console.error("Email or link is missing");
