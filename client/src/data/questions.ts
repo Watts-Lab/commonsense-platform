@@ -67,31 +67,6 @@ export const questionData: IQuestionData[] = [
   {
     id: 6,
     question:
-      "Why did you answer the way you did about most <b>other people?</b> *",
-    possibleAnswers: [
-      "I think most people have good judgement with regard to this topic",
-      "I think most people lack good judgment with regard to this topic",
-      "I think it's mostly a matter of opinion",
-      "I don't know",
-    ],
-    tooltip:
-      "This question aims to explore the reasoning behind your response regarding the perceived agreement of most other people with the given statement. We are interested in understanding the factors that influenced your decision and your perspective on how others might interpret or respond to the statement.",
-    required: true,
-  },
-  {
-    id: 7,
-    question:
-      "Do you think most other people would agree with this statement? *",
-    description:
-      "(if the answer is, it depends, respond with your most common or most likely answer)",
-    possibleAnswers: ["Yes, it is common sense", "No, it is not common sense"],
-    tooltip:
-      "This question aims to gauge your perception of the given statement as an example of common sense. We are interested in understanding your overall evaluation and whether you believe the statement aligns with widely accepted general knowledge or intuitive understanding.",
-    required: true,
-  },
-  {
-    id: 8,
-    question:
       "<b>Optional:</b> How do you think most people would categorize this statement",
     possibleAnswers: [
       "Clear: it is clearly written and I can understand the meaning",
