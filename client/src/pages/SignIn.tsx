@@ -52,7 +52,7 @@ const SignIn:React.FC = () => {
             <div className="pt-32 pb-12 md:pt-40 md:pb-20">
               {/* Page header */}
               {!notifBox ? (
-                <div className="max-w-3xl mx-auto text-center pb-12 md:pb-20">
+                <div className="max-w-3xl mx-auto pb-12 md:pb-20">
                   <p className="h4">Welcome</p>
                   <p>
                     Sign in so you can check on your common sense score or answer more

@@ -59,55 +59,15 @@ const AboutPartial: React.FC = () => {
               ML) who wish to explore and simulate this ubiquitous yet
               frustratingly elusive concept.
             </p>
-
+            {/* 
             <p className="mb-2">
               Read about the research{" "}
               <a href="" className="underline">
                 here
               </a>
               .
-            </p>
+            </p> */}
           </div>
-
-          {/* Section content */}
-          {/* <div className="md:grid md:grid-cols-12 md:gap-6 pb-32">
-
-            <div
-              className="max-w-xl md:max-w-none md:w-full mx-auto md:col-span-7 lg:col-span-6 md:mt-6"
-              data-aos="fade-right"
-            >
-              <div className="md:pr-4 lg:pr-12 xl:pr-16 mb-8">
-                <h3 className="h3 mb-3">Belief calibration by topic</h3>
-                <p className="text-xl text-gray-600">
-                  Calibration of one’s own beliefs about what others think is
-                  true—one characterization of common sense—is heavily dependent
-                  on the topic of a statement. For example, for statements
-                  related to religion (represented by the large light green
-                  circle to the lower left of the plot), people systematically
-                  overestimate others’ beliefs. Statements related to technical
-                  topics (represented by the yellow circle in the upper right of
-                  the plot) are almost perfectly calibrated on average.
-                </p>
-              </div>
-            </div>
-
-
-            <div
-              className="max-w-xl md:max-w-none md:w-full mx-auto md:col-span-5 lg:col-span-6 mb-8 md:mb-0 md:order-1"
-              data-aos="zoom-y-out"
-              ref={tabs}
-            >
-              <div className="relative flex flex-col text-center lg:text-right">
-
-                <div className="relative inline-flex flex-col">
-                  <img
-                    src={FeaturesElement2}
-                    alt="Common Sense Computational Social Science Lab"
-                  />
-                </div>
-              </div>
-            </div>
-          </div> */}
         </div>
       </div>
     </section>
