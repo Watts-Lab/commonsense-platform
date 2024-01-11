@@ -1,3 +1,7 @@
+// Original TreatmentInterface
+
+
+
 type TreatmentInterface = {
   id?: number;
   name?: string;
@@ -8,4 +12,19 @@ type TreatmentInterface = {
   createdAt?: Date;
 };
 
-export default TreatmentInterface;
+// Design point conditions
+type DesignSpace = {
+  behavior: boolean;
+  everyday: boolean;
+  figure_of_speech: boolean;
+  judgment: boolean;
+  opinion: boolean;
+  reasoning: boolean;
+};
+
+// New type that extends TreatmentInterface with the addition of ConditionBooleans
+type TreatmentWithDesignSpaceInterface = TreatmentInterface & {
+  conditions: DesignSpace;
+};
+
+export { TreatmentWithDesignSpaceInterface, TreatmentInterface };

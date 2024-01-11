@@ -41,7 +41,8 @@ const resultRouter = require("./routes/results");
 const userRouter = require("./routes/users");
 const treatmentRouter = require("./routes/treatments");
 const feedbackRouter = require("./routes/feedbacks");
-const userStatements = require("./routes/userstatements");
+const userStatementsRouter = require("./routes/userstatements");
+const designRouter = require("./routes/designtest");
 
 app.use("/api/statements", statementRouter);
 app.use("/api/answers", answerRouter);
@@ -49,7 +50,8 @@ app.use("/api/results", resultRouter);
 app.use("/api/users", userRouter);
 app.use("/api/treatments", treatmentRouter);
 app.use("/api/feedbacks", feedbackRouter);
-app.use("/api/userstatements", userStatements);
+app.use("/api/userstatements", userStatementsRouter);
+app.use("/api/designtest", designRouter);
 
 // serve static files
 app.use(express.static("./survey/public"));

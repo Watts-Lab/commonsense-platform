@@ -4,33 +4,6 @@ const { getStatementsWeighted } = require("../controllers/statements.js");
 const { Sequelize, QueryTypes } = require("sequelize");
 const Op = Sequelize.Op;
 
-// type DesignSpace = {
-//   behavior: number;
-//   everyday: number;
-//   figure_of_speech: number;
-//   judgment: number;
-//   opinion: number;
-//   reasoning: number;
-// };
-
-// type StatementParams = {
-//   limit: number;
-//   space?: DesignSpace;
-//   ids?: number[];
-// };
-
-// type TestObject = {
-//   id: number;
-//   name: string;
-//   description: string;
-//   statements: any; // Adjust the type accordingly for getStatementByWeight, getDesignSpace, or getStatementById
-//   statements_params: StatementParams;
-//   critirion: {
-//     source: string;
-//   };
-//   randomization: string;
-// };
-
 function getRandom(arr, n) {
   var result = new Array(n),
     len = arr.length,
