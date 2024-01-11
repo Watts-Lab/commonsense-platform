@@ -20,7 +20,6 @@ const Banner: React.FC = () => {
           aria-hidden="true"
           style={{ opacity: 0.1 }}
         >
-          {/* <img src={heroImage} alt="Hero" /> */}
           <Histogram width={1000} height={500} data={commonsensicalityScores} />
         </div>
 
@@ -28,11 +27,11 @@ const Banner: React.FC = () => {
           {/* Hero content */}
           <div className="pt-32 pb-12 md:pt-40 md:pb-40">
             {/* Section header */}
-            <div className="text-center pb-12 md:pb-16">
-              <h1 className="text-5xl md:text-6xl font-bold leading-tighter tracking-tight mb-4">
+            <div className="pb-10 md:pb-16">
+              <h1 className="text-5xl text-center md:text-6xl font-bold leading-tighter tracking-tight mb-4">
                 The common sense measure
               </h1>
-              <div className="max-w-3xl mx-auto">
+              <div className="max-w-3xl mx-auto px-10">
                 <p className="text-xl">
                   How much common sense do you have? How could you really know?
                 </p>
