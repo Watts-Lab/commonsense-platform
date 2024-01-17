@@ -3,7 +3,17 @@ import React from "react";
 function Publications() {
   const publicationsList = [
     {
-      title: "Common Sense and Sociological Explanations",
+      title:
+        "A framework for quantifying individual and collective common sense",
+      type: "Journal Article",
+      authors: "Whiting, Mark and Watts, Duncan",
+      venue:
+        "In: Proceedings of the National Academy of Sciences, vol. 121, no. 4, 2024.",
+      year: "2024",
+      link: "https://doi.org/10.1073/pnas.2309535121",
+    },
+    {
+      title: "Common sense and sociological explanations",
       type: "Journal Article",
       authors: "Watts, Duncan",
       venue:
@@ -12,7 +22,7 @@ function Publications() {
       link: "https://arxiv.org/abs/2101.00100",
     },
     {
-      title: "Everything Is Obvious Book",
+      title: "Everything is obvious",
       type: "Book",
       authors: "Watts, Duncan",
       venue: "Crown, 2011, ISBN: 9780385531696, 0385531699.",
