@@ -561,9 +561,9 @@ module.exports = {
         },
         limit: 15,
       },
-      // critirion: {
-      //   source: "mturktest",
-      // },
+      critirion: {
+        source: "mturktest",
+      },
       randomization: "none",
     },
 
@@ -584,9 +584,9 @@ module.exports = {
         },
         limit: 15,
       },
-      // critirion: {
-      //   source: "mturktest",
-      // },
+      critirion: {
+        source: "mturktest",
+      },
       randomization: "none",
     },
 
@@ -751,6 +751,16 @@ module.exports = {
       critirion: {
         source: "mturk",
         context: "image",
+      },
+      randomization: "none",
+    },
+    {
+      id: 17,
+      name: "random statements",
+      description: "get 15 statements by weight for launch",
+      statements: getStatementByWeight,
+      statements_params: {
+        limit: 15,
       },
       randomization: "none",
     },
