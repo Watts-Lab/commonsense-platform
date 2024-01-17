@@ -61,8 +61,11 @@ const AboutPartial: React.FC = () => {
             </p>
 
             <p className="mb-2">
-              Read about the research
-              <a href="https://doi.org/10.1073/pnas.2309535121" className="underline">
+              Read about the research{" "}
+              <a
+                href="https://doi.org/10.1073/pnas.2309535121"
+                className="underline"
+              >
                 here
               </a>
               .
