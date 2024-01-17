@@ -54,7 +54,6 @@ function Result(props) {
       withCredentials: true,
       sessionId: props.sessionId,
     }).then((response) => {
-      console.log(response.data);
       setCommonSenseScore({
         commonsense: Math.round(
           Number(response.data.commonsensicality).toFixed(2) * 100

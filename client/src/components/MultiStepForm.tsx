@@ -29,10 +29,6 @@ function MultiStepForm(props) {
   }
 
   function next() {
-    console.log(
-      "current step " + currentStepIndex + " array length " + props.steps.length
-    );
-
     if (checkAnswers(props.steps[currentStepIndex].answers.slice(0, 5))) {
       setCurrentStepIndex((i) => {
         if (i > props.steps.length - 1) return i;
@@ -42,9 +38,6 @@ function MultiStepForm(props) {
       if (currentStepIndex === props.steps.length - 1) {
         props.pushResultComponent();
       }
-
-      console.log("current step ", currentStepIndex);
-      console.log("array length ", props.steps.length);
 
       // if user finishes a statement, then get new statement (stays 2 steps ahead)
       if (
@@ -60,27 +53,33 @@ function MultiStepForm(props) {
       if (!props.steps[currentStepIndex].answereSaved) {
         Backend.post("/answers", {
           statementId: props.steps[currentStepIndex].id,
-          I_agree: props.steps[currentStepIndex].answers[0].slice(-1),
+          I_agree:
+            props.steps[currentStepIndex].answers[0].split("-")[1] === "Yes"
+              ? 1
+              : 0,
           I_agree_reason:
             props.steps[currentStepIndex].answers[1].split("-")[1],
-          others_agree: props.steps[currentStepIndex].answers[2].slice(-1),
+          others_agree:
+            props.steps[currentStepIndex].answers[2].split("-")[1] === "Yes"
+              ? 1
+              : 0,
           others_agree_reason:
             props.steps[currentStepIndex].answers[3].split("-")[1],
           perceived_commonsense:
-            props.steps[currentStepIndex].answers[4].slice(-1),
+            props.steps[currentStepIndex].answers[4].split("-")[1] === "Yes"
+              ? 1
+              : 0,
           clarity: props.steps[currentStepIndex].answers[5].split("-")[1],
           origLanguage: "en",
           sessionId: props.sessionId,
           withCredentials: true,
         }).then((response) => {
-          console.log(response.data);
           props.handleAnswerSaving(props.steps[currentStepIndex].id, true);
           props.steps[currentStepIndex].answereSaved = true;
         });
       }
     } else {
       // TODO: invoke error on the button
-      // console.log(whichQuestion(props.steps[currentStepIndex].answers.slice(0, 5)));
       props.setUnansweredQuestionIndex(
         whichQuestion(props.steps[currentStepIndex].answers.slice(0, 5))
       );

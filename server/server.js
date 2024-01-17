@@ -56,7 +56,6 @@ app.use(express.static("./survey/public"));
 app.get("/api/images/*", (req, res) => {
   // Use req.params[0] to capture the wildcard part of the URL
   const imageName = req.params[0];
-  console.log("imageName", imageName);
   res.sendFile(`${__dirname}/survey/public/${imageName}`);
 });
 
