@@ -75,7 +75,7 @@ const TwitterText = (props: TwitterTextProps) => {
           )}\nCheck yours: commonsensicality.org`
         : `${percentage}\n${blocks.join(
             ""
-          )}\nCheck yours: commonsensicality.org/s/${props.sessionId.slice(
+          )}\nCheck yours: commonsensicality.org/${props.sessionId.slice(
             0,
             7
           )}`;
