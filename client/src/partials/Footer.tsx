@@ -1,8 +1,3 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import About from "../pages/About";
-import { Popover } from "@headlessui/react";
-import WidgetForm from "../components/Feedback/WidgetForm";
 import ReportIssue from "../components/Feedback/ReportIssue";
 
 function Footer() {
