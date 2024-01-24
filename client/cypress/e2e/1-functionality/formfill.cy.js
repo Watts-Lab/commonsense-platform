@@ -14,28 +14,29 @@ describe("fill out the survay", () => {
 
       cy.wait(1000); // Wait for 1 second before selecting the radio button
 
-      cy.get("input[type='radio'][id*='question1ag1']")
+      cy.get("input[type='radio'][id*='question1-No']")
         .check({ force: true })
         .should("be.checked");
-      cy.get("input[type='radio'][id*=\"question1-It's obvious\"]")
+      cy.get("input[type='radio'][id*=\"question2-It's obvious\"]")
         .check({ force: true })
         .should("be.checked");
-      cy.get("input[type='radio'][id*='question2ag1']")
-        .check({ force: true })
-        .should("be.checked");
-      cy.get(
-        "input[type='radio'][id*=\"question2-I think most people have good judgement with regard to this topic\"]"
-      )
-        .check({ force: true })
-        .should("be.checked");
-      cy.get("input[type='radio'][id*='question3ag1']")
+      cy.get("input[type='radio'][id*='question3-No']")
         .check({ force: true })
         .should("be.checked");
       cy.get(
-        "input[type='radio'][id*=\"question3-Clear: it is clearly written and I can understand the meaning\"]"
+        "input[type='radio'][id*=\"question4-I think most people lack good judgment with regard to this topic\"]"
       )
         .check({ force: true })
         .should("be.checked");
+      cy.get("input[type='radio'][id*='question5-No']")
+        .check({ force: true })
+        .should("be.checked");
+      // cy.get(
+        
+      //   "input[type='radio'][id*=\"question6-I think most people have good judgement with regard to this topic\"]"
+      // )
+      //   .check({ force: true })
+      //   .should("be.checked");
 
       // Check if it's the 15th iteration and select the "Finish" button
       if (i === numberOfIterations - 1) {

@@ -111,12 +111,10 @@ const Navbar: React.FC = () => {
           </ul>
         </div>
 
-        <div className="navbar-end flex items-center">
+        <div className="navbar-end flex items-center px-2 lg:px-4">
           <ConsentModal buttonText="Participate →" buttonClass="btn" />
-          {/* <a href="#button" className="btn ">
-            Participate →
-          </a> */}
-          <div className="dropdown dropdown-end">
+
+          {/* <div className="dropdown dropdown-end">
             <label tabIndex={0} className="btn btn-ghost">
               <svg
                 className="h-5 w-5 fill-current"
@@ -168,7 +166,7 @@ const Navbar: React.FC = () => {
                 </button>
               </li>
             </ul>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

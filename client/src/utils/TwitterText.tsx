@@ -18,7 +18,6 @@ const TwitterText = (props: TwitterTextProps) => {
   async function handleCopy() {
     try {
       await navigator.clipboard.writeText(textareaValue);
-      console.log("Text copied to clipboard");
     } catch (error) {
       console.error("Failed to copy text:", error);
     }
@@ -76,7 +75,7 @@ const TwitterText = (props: TwitterTextProps) => {
           )}\nCheck yours: commonsensicality.org`
         : `${percentage}\n${blocks.join(
             ""
-          )}\nCheck yours: commonsensicality.org/s/${props.sessionId.slice(
+          )}\nCheck yours: commonsensicality.org/${props.sessionId.slice(
             0,
             7
           )}`;

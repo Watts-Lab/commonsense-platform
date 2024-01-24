@@ -276,6 +276,9 @@ module.exports = {
       statements_params: {
         limit: 15,
       },
+      critirion: {
+        source: "duncan",
+      },
       randomization: "none",
     },
     {
@@ -358,6 +361,9 @@ module.exports = {
           reasoning: 0,
         },
         limit: 15,
+      },
+      critirion: {
+        source: "duncan",
       },
       randomization: "weighted",
     },
@@ -448,7 +454,7 @@ module.exports = {
         limit: 15,
       },
       critirion: {
-        source: "legacy",
+        source: "duncan",
       },
       randomization: "none",
     },
@@ -580,7 +586,7 @@ module.exports = {
           opinion: 1,
           reasoning: 0,
         },
-        limit: 10,
+        limit: 15,
       },
       critirion: {
         source: "mturktest",
@@ -603,7 +609,7 @@ module.exports = {
           opinion: 0,
           reasoning: 0,
         },
-        limit: 10,
+        limit: 15,
       },
       critirion: {
         source: "mturktest",
@@ -772,6 +778,16 @@ module.exports = {
       critirion: {
         source: "mturk",
         context: "image",
+      },
+      randomization: "none",
+    },
+    {
+      id: 17,
+      name: "random statements",
+      description: "get 15 statements by weight for launch",
+      statements: getStatementByWeight,
+      statements_params: {
+        limit: 15,
       },
       randomization: "none",
     },

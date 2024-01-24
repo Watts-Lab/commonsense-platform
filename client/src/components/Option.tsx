@@ -3,7 +3,16 @@ import React, { useEffect, useState } from "react";
 
 import "./style.css";
 
-function Option(props) {
+interface OptionProps {
+  id_v: string;
+  statementClass: string;
+  text: string;
+  checked: boolean;
+  required: boolean;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+function Option(props: OptionProps) {
   return (
     //  peer opacity-0 h-px w-px absolute
     <li>
@@ -14,7 +23,7 @@ function Option(props) {
         value={props.id_v}
         className="peer opacity-0 h-px w-px absolute"
         checked={props.checked}
-        onChange={(e) => {}}
+        onChange={props.onChange}
         required={props.required}
       />
       <label

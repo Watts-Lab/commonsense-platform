@@ -6,9 +6,9 @@ import { setSession } from "../redux/slices/loginSlice";
 
 import Statement from "./Statement";
 import MultiStepForm from "./MultiStepForm";
-import Buttons from "./Buttons";
 import Result from "./Result";
-import Feedback from "./Feedback/Feedback";
+
+import { questionData } from "../data/questions";
 
 import useStickyState from "../hooks/useStickyState";
 
@@ -47,7 +47,6 @@ function Layout(props) {
         withCredentials: true,
         params: { sessionId: sessionId },
       });
-      console.log("new fetched statement:", response);
       return response;
     } catch (error) {
       console.log(error);
@@ -55,7 +54,6 @@ function Layout(props) {
   };
 
   const pushResultComponent = (statementId, statementText) => {
-    console.log("adding Result component");
     let finalSessionId = surveySession ? surveySession : sessionId;
     setStatementArray((oldArray) => [
       ...oldArray,
@@ -68,8 +66,6 @@ function Layout(props) {
   };
 
   const pushNewStatement = (statementId, statementText) => {
-    console.log("adding new statement");
-
     setStatementsData((oldArray) => [
       ...oldArray,
       {
@@ -130,17 +126,14 @@ function Layout(props) {
       }, {}),
     })
       .then((response) => {
-        console.log(response.data);
-        setStatementsData(
-          response.data.value.map((statement) => {
-            return {
-              id: statement.id,
-              answers: ["", "", "", "", "", ""],
-              answereSaved: false,
-            };
-          })
-        );
+        const initialAnswers = response.data.value.map((statement) => ({
+          id: statement.id,
+          answers: new Array(questionData.length).fill(""),
+          answereSaved: false,
+        }));
 
+        setStatementsData(initialAnswers);
+        setSurveyLength(response.data.value.length);
         return response;
       })
       .then((response) => {

@@ -18,8 +18,8 @@ const ses = new aws.SES({
   region: process.env.AWS_REGION,
   credentials: {
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID
-  }
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  },
 });
 
 // create Nodemailer SES transporter
@@ -33,8 +33,6 @@ const URL =
     : "http://localhost:5173/login/";
 
 const send_magic_link = async (email, link, which) => {
-
-
   if (which === "signup") {
     var subj = "Sign Up Common Sense Platform",
       body =
@@ -67,25 +65,16 @@ const send_magic_link = async (email, link, which) => {
     },
   };
 
-
   try {
     const response = await transporter.sendMail(mailOptions, (err, info) => {
       console.log(info.envelope);
       console.log(info.messageId);
     });
-    // console.log(response);
     return { ok: true, message: "email sent" };
   } catch (err) {
     console.log("Something didn't work out", err);
     return { ok: false, message: err };
   }
 };
-
-
-
-
-
-
-
 
 module.exports = { send_magic_link };

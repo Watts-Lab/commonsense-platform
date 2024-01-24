@@ -18,7 +18,6 @@ const HumanNetwork = ({}) => {
           shareLink: params.sharelink,
         })
       );
-      console.log(params.sharelink);
       navigate("/");
     } else {
       console.error("Email or link is missing");

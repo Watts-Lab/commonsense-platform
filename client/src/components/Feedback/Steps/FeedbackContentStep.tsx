@@ -16,7 +16,6 @@ export function FeedbackContentStep({
   async function handleSubmitFeedback(e) {
     e.preventDefault();
     setIsSendingFeedback(true);
-    //*console.log({screenshot, comment});
     await Backend.post("/feedbacks", {
       type: feedbackType,
       comment,
@@ -57,7 +56,6 @@ export function FeedbackContentStep({
         <CloseButton />
       </header>
       <form onSubmit={handleSubmitFeedback} className="mt-4 w-full">
-        
         <textarea
           className="min-w-[384px] w-full min-h-[112px] text-sm 
         placeholder-zinc-400 text-black border-zinc-600 bg-transparent rounded-md 
