@@ -69,9 +69,7 @@ const App = () => {
               })
             )
           : dispatch(clearUserData());
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
     };
     verify_token();
   }, [token]);
