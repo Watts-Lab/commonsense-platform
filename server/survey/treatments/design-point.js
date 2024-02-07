@@ -1,46 +1,28 @@
 const { statements, statementproperties } = require("../../models");
-const { getStatementsWeighted } = require("../../controllers/statements.js");
-// import { TreatmentWithDesignSpaceInterface } from "./treatment.types";
+
 const { Sequelize, QueryTypes } = require("sequelize");
 const Op = Sequelize.Op;
 
 // Assuming this function doesn't use 'this', which arrow functions don't bind
-const GetRandomStatement = (params) => {
-  const designSpace = getDesignSpace(params);
-  const statements = getStatementsWeighted(designSpace);
-  return statements;
+const DesignPointRandomized = ({ randomSeed, desingPointParams }) => {
+  const designSpace = getDesignSpace(desingPointParams);
+  console.log(designSpace);
+  return designSpace;
 };
 
-// type StatementData = {
-//   statementId: number;
-//   behavior: number;
-//   everyday: number;
-//   figure_of_speech: number;
-//   judgment: number;
-//   opinion: number;
-//   reasoning: number;
-//   statement: string;
-//   published: number;
-// };
-
-const treatmentWithConditions = {
-  id: 1,
-  name: "Example Treatment",
-  description: "This is an example treatment with conditions.",
-  published: true,
-  randomization: false,
-  seed: 42,
-  createdAt: new Date(),
-  conditions: {
-    behavior: true,
-    everyday: true,
-    figure_of_speech: false,
-    judgment: true,
-    opinion: false,
-    reasoning: true,
-  },
-};
-
+/**
+ * Retrieves the design space based on the provided parameters.
+ *
+ * @param {Object} params - The parameters for filtering the design space.
+ * @param {Object} params.conditions - The conditions for filtering the design space.
+ * @param {string} params.conditions.behavior - The behavior condition.
+ * @param {string} params.conditions.everyday - The everyday condition.
+ * @param {string} params.conditions.figure_of_speech - The figure of speech condition.
+ * @param {string} params.conditions.judgment - The judgment condition.
+ * @param {string} params.conditions.opinion - The opinion condition.
+ * @param {string} params.conditions.reasoning - The reasoning condition.
+ * @returns {Array} - An array of filtered statement IDs and their corresponding statements.
+ */
 const getDesignSpace = async (params) => {
   // creates a pivot table of statement properties
   const statementsPivot = await statementproperties.findAll({
@@ -119,6 +101,5 @@ const getDesignSpace = async (params) => {
 };
 
 module.exports = {
-  getDesignSpace,
-  GetRandomStatement,
+  DesignPointRandomized,
 };
