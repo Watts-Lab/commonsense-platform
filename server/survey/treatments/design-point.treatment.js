@@ -1,26 +1,32 @@
 const { statements, statementproperties } = require("../../models");
+const { seededRandom } = require("./utils/random-shuffle");
 
-const { Sequelize, QueryTypes } = require("sequelize");
-const Op = Sequelize.Op;
+const { Sequelize } = require("sequelize");
 
-// Assuming this function doesn't use 'this', which arrow functions don't bind
-const DesignPointRandomized = ({ randomSeed, desingPointParams }) => {
-  const designSpace = getDesignSpace(desingPointParams);
-  console.log(designSpace);
-  return designSpace;
+const DesignPointRandomized = async ({
+  randomSeed,
+  numberOfStatements,
+  desingPointParams,
+}) => {
+  const designSpace = await getDesignSpace(desingPointParams);
+
+  const { shuffle } = seededRandom({
+    seed: String(randomSeed),
+  });
+
+  return shuffle(designSpace).slice(0, numberOfStatements);
 };
 
 /**
  * Retrieves the design space based on the provided parameters.
  *
  * @param {Object} params - The parameters for filtering the design space.
- * @param {Object} params.conditions - The conditions for filtering the design space.
- * @param {string} params.conditions.behavior - The behavior condition.
- * @param {string} params.conditions.everyday - The everyday condition.
- * @param {string} params.conditions.figure_of_speech - The figure of speech condition.
- * @param {string} params.conditions.judgment - The judgment condition.
- * @param {string} params.conditions.opinion - The opinion condition.
- * @param {string} params.conditions.reasoning - The reasoning condition.
+ * @param {string} params.behavior - The behavior condition.
+ * @param {string} params.everyday - The everyday condition.
+ * @param {string} params.figure_of_speech - The figure of speech condition.
+ * @param {string} params.judgment - The judgment condition.
+ * @param {string} params.opinion - The opinion condition.
+ * @param {string} params.reasoning - The reasoning condition.
  * @returns {Array} - An array of filtered statement IDs and their corresponding statements.
  */
 const getDesignSpace = async (params) => {
@@ -81,16 +87,15 @@ const getDesignSpace = async (params) => {
     logging: console.log,
   }); // filters the pivot table by the params
 
-  console.log(statementsPivot[0]);
   const filteredStatementIds = statementsPivot
     .filter((data) => {
       return (
-        data.behavior === params.conditions.behavior &&
-        data.everyday === params.conditions.everyday &&
-        data.figure_of_speech === params.conditions.figure_of_speech &&
-        data.judgment === params.conditions.judgment &&
-        data.opinion === params.conditions.opinion &&
-        data.reasoning === params.conditions.reasoning
+        data.behavior === params.behavior &&
+        data.everyday === params.everyday &&
+        data.figure_of_speech === params.figure_of_speech &&
+        data.judgment === params.judgment &&
+        data.opinion === params.opinion &&
+        data.reasoning === params.reasoning
       );
     })
     .map((data) => {
