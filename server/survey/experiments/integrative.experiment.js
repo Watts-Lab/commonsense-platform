@@ -22,7 +22,6 @@ const designPoints = [
     },
     function: DesignPointRandomized,
   },
-
   {
     params: {
       randomSeed: 13,
