@@ -1,0 +1,18 @@
+###
+
+POST http://localhost:4000/api/experiments HTTP/1.1
+content-type: application/json
+
+[{
+    "name": "Experiment 1",
+    "status": "draft",
+    "start_date": "2019-01-01",
+    "end_date": "2019-01-31",
+    "metrics": [
+        {
+            "name": "Metric 1",
+            "goal": "minimize",
+            "unit": "seconds"
+        }
+    ]
+}]

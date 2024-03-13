@@ -6,6 +6,10 @@ const { body, query, validationResult } = require("express-validator");
 
 const { Sequelize, literal } = require("sequelize");
 
+router.get("/", (req, res) => {
+  res.status(200).json({ message: "Result route" });
+});
+
 router.post(
   "/",
   [body("sessionId").notEmpty().withMessage("sessionId is required")],
@@ -68,7 +72,6 @@ router.post(
 );
 
 router.get("/all", async (req, res) => {
-
   await answers
     .findAll({
       include: [

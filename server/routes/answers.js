@@ -7,6 +7,10 @@ const { statements, users, answers } = require("../models");
 
 const { header, body, validationResult } = require("express-validator");
 
+router.get("/", (req, res) => {
+  res.status(200).json({ message: "Answer route" });
+});
+
 router.post(
   "/",
   body("statementId").not().isEmpty().isInt({ min: 1 }),

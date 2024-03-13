@@ -1,78 +1,54 @@
+// External Module Imports
 const express = require("express");
-const app = express();
 const cors = require("cors");
-require("dotenv").config();
-
-// app.use(cors());
-app.use(cors({ credentials: true, origin: true }));
-app.use(express.json());
-
-const db = require("./models");
-
-// session management and store
 const session = require("express-session");
-
 const mysql = require("mysql2");
 const MySQLStore = require("express-mysql-session")(session);
-const options = require(__dirname + "/config/config.js").dboptions;
-const pool = mysql.createPool(options);
-const sessionStore = new MySQLStore(options, pool);
 
-app.use(
-  session({
-    name: "survey-session",
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: true,
-    store: sessionStore,
-    cookie: {
-      path: "/",
-      maxAge: 1000 * 60 * 60 * 1, // 1 hour
-      sameSite: true,
-      secure: false, // remove in production
-    },
-  })
-);
+// Configuration and Initialization
+require("dotenv").config();
+const { dboptions } = require("./config/config.js");
+const pool = mysql.createPool(dboptions);
+const sessionStore = new MySQLStore(dboptions, pool);
+const app = express();
 
-// routers
-const statementRouter = require("./routes/statements");
-const answerRouter = require("./routes/answers");
-const resultRouter = require("./routes/results");
-const userRouter = require("./routes/users");
-const treatmentRouter = require("./routes/treatments");
-const feedbackRouter = require("./routes/feedbacks");
-const userStatementsRouter = require("./routes/userstatements");
-const designRouter = require("./routes/designtest");
-
-app.use("/api/statements", statementRouter);
-app.use("/api/answers", answerRouter);
-app.use("/api/results", resultRouter);
-app.use("/api/users", userRouter);
-app.use("/api/treatments", treatmentRouter);
-app.use("/api/feedbacks", feedbackRouter);
-app.use("/api/userstatements", userStatementsRouter);
-app.use("/api/designtest", designRouter);
-
-// serve static files
+// Middleware
+app.use(cors({ credentials: true, origin: true }));
+app.use(express.json());
 app.use(express.static("./survey/public"));
+app.use(require("./config/sessionConfig")(session, sessionStore));
+
+// Routers
+const routers = [
+  { path: "/api/statements", router: require("./routes/statements") },
+  { path: "/api/answers", router: require("./routes/answers") },
+  { path: "/api/results", router: require("./routes/results") },
+  { path: "/api/users", router: require("./routes/users") },
+  { path: "/api/treatments", router: require("./routes/treatments") },
+  { path: "/api/feedbacks", router: require("./routes/feedbacks") },
+  { path: "/api/userstatements", router: require("./routes/userstatements") },
+  { path: "/api/experiments", router: require("./routes/experiment") },
+];
+
+routers.forEach(({ path, router }) => app.use(path, router));
+
+// Static Files and Catch-all Routes
 app.get("/api/images/*", (req, res) => {
-  // Use req.params[0] to capture the wildcard part of the URL
   const imageName = req.params[0];
   res.sendFile(`${__dirname}/survey/public/${imageName}`);
 });
 
-const { getAllTreatments } = require("./controllers/treatments");
-
-getAllTreatments();
-
-// Access the session as req.session
-app.get("/api", function (req, res) {
+app.get("/api", (req, res) => {
   res.send(req.sessionID);
 });
 
+// Database Sync and Server Initialization
+const db = require("./models");
 db.sequelize.sync().then(() => {
   app.listen(4000, () => {
-    console.log("server on port 4000");
+    console.log("Server running on port 4000");
     console.log("Github Commit Hash: ", process.env.GITHUB_HASH);
   });
 });
+
+module.exports = app;
