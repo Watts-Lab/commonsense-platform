@@ -12,18 +12,17 @@ const designPoints = [
       everyday: 0,
       figure_of_speech: 0,
       judgment: 1,
-      reasoning: 1,
       opinion: 1,
+      reasoning: 1,
       category: "Health and fitness",
     },
   }),
-
   DesignPointRandomized({
     randomSeed: 13,
     numberOfStatements: 15,
     desingPointParams: {
-      everyday: 0,
       behavior: 1,
+      everyday: 0,
       figure_of_speech: 0,
       judgment: 0,
       opinion: 1,
@@ -34,7 +33,7 @@ const designPoints = [
 ];
 
 const experiment = {
-  name: "design-point",
+  name: "design-point-with-id",
   treatments: designPoints,
   treatmentSelector: findExprimentCount,
 };

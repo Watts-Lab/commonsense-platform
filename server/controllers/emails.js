@@ -5,14 +5,6 @@ const aws = require("@aws-sdk/client-ses");
 
 require("dotenv").config();
 
-const transport = nodemailer.createTransport({
-  service: "Gmail",
-  auth: {
-    user: process.env.NODEMAILER_EMAIL,
-    pass: process.env.NODEMAILER_PASSWORD,
-  },
-});
-
 const ses = new aws.SES({
   apiVersion: "2010-12-01",
   region: process.env.AWS_REGION,

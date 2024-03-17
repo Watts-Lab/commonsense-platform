@@ -14,7 +14,24 @@ const DesignPointRandomized = async ({
     seed: String(randomSeed),
   });
 
-  return shuffle(designSpace).slice(0, numberOfStatements);
+  const designId = {
+    behavior: desingPointParams.behavior,
+    everyday: desingPointParams.everyday,
+    figure_of_speech: desingPointParams.figure_of_speech,
+    reasoning: desingPointParams.reasoning,
+    judgment: desingPointParams.judgment,
+    opinion: desingPointParams.opinion,
+    category: desingPointParams.category,
+  };
+  return {
+    id: JSON.stringify({
+      randomSeed,
+      numberOfStatements,
+      desingPointParams: designId,
+    }),
+    description: this.name,
+    answer: shuffle(designSpace).slice(0, numberOfStatements),
+  };
 };
 
 /**
@@ -27,6 +44,7 @@ const DesignPointRandomized = async ({
  * @param {string} params.judgment - The judgment condition.
  * @param {string} params.opinion - The opinion condition.
  * @param {string} params.reasoning - The reasoning condition.
+ * @param {string} params.category - The category condition.
  * @returns {Array} - An array of filtered statement IDs and their corresponding statements.
  */
 const getDesignSpace = async (params) => {
@@ -72,6 +90,7 @@ const getDesignSpace = async (params) => {
       ],
       [Sequelize.col("statement.statement"), "statement"],
       [Sequelize.col("statement.published"), "published"],
+      [Sequelize.col("statement.statementCategory"), "category"],
     ],
     group: ["statementId"],
     raw: true,
@@ -95,7 +114,8 @@ const getDesignSpace = async (params) => {
         data.figure_of_speech === params.figure_of_speech &&
         data.judgment === params.judgment &&
         data.opinion === params.opinion &&
-        data.reasoning === params.reasoning
+        data.reasoning === params.reasoning &&
+        data.category === params.category
       );
     })
     .map((data) => {
