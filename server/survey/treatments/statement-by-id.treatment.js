@@ -15,11 +15,15 @@ const GetStatementById = async (params) => {
     order: Sequelize.literal("rand()"),
   });
 
-  if (!params.limit) {
-    return statementsText;
-  } else {
-    return getRandom(statementsText, params.limit);
-  }
+  return {
+    id: stringy({
+      params,
+    }),
+    description: "GetStatementById",
+    answer: params.limit
+      ? getRandom(statementsText, params.limit)
+      : statementsText,
+  };
 };
 
 module.exports = {

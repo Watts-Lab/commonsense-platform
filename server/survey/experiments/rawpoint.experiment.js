@@ -1,4 +1,4 @@
-const { findExprimentCount } = require("./utils/find-count");
+const { findExprimentCount } = require("./utils/find-experiment-count");
 const {
   DesignPointRandomized,
 } = require("../treatments/design-point.treatment");

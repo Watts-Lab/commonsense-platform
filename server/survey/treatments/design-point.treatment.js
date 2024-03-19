@@ -1,6 +1,6 @@
 const { statements, statementproperties } = require("../../models");
 const { seededRandom } = require("./utils/random-shuffle");
-
+const { stringy } = require("./utils/id-generator");
 const { Sequelize } = require("sequelize");
 
 const DesignPointRandomized = async ({
@@ -14,22 +14,13 @@ const DesignPointRandomized = async ({
     seed: String(randomSeed),
   });
 
-  const designId = {
-    behavior: desingPointParams.behavior,
-    everyday: desingPointParams.everyday,
-    figure_of_speech: desingPointParams.figure_of_speech,
-    reasoning: desingPointParams.reasoning,
-    judgment: desingPointParams.judgment,
-    opinion: desingPointParams.opinion,
-    category: desingPointParams.category,
-  };
   return {
-    id: JSON.stringify({
+    id: stringy({
       randomSeed,
       numberOfStatements,
-      desingPointParams: designId,
+      desingPointParams,
     }),
-    description: this.name,
+    description: "DesignPointRandomized",
     answer: shuffle(designSpace).slice(0, numberOfStatements),
   };
 };

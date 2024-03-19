@@ -7,11 +7,11 @@
  * @returns {Promise<Array>} - A promise that resolves to an array of weighted statements.
  * @throws {Error} - If an error occurs during the retrieval process.
  */
-const GetStatementsWeighted = async (
+const GetStatementsWeighted = async ({
   sessionId,
   validStatementList,
-  numberOfStatements = 1
-) => {
+  numberOfStatements = 1,
+}) => {
   try {
     let query = `
         WITH weighted_questions AS (
@@ -49,7 +49,15 @@ const GetStatementsWeighted = async (
       type: sequelize.QueryTypes.SELECT,
     });
 
-    return results;
+    return {
+      id: stringy({
+        sessionId,
+        validStatementList,
+        numberOfStatements,
+      }),
+      description: "GetStatementById",
+      answer: results,
+    };
   } catch (error) {
     console.error(error);
     throw new Error("An error occurred");

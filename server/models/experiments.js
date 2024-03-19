@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
     },
 
     experimentId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       allowNull: false,
     },
 
