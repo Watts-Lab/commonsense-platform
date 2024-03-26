@@ -20,6 +20,7 @@ const designPoints = [
         category: "Health and fitness",
       },
     },
+    validity: (req) => req.body.source === "facebook",
     function: DesignPointRandomized,
   },
   {
@@ -36,6 +37,7 @@ const designPoints = [
         category: "Health and fitness",
       },
     },
+    validity: (req) => req.body.source === "facebook",
     function: DesignPointRandomized,
   },
 ];
