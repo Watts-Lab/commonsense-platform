@@ -119,7 +119,7 @@ function Layout(props) {
   };
 
   useEffect(() => {
-    Backend.get("/treatments", {
+    Backend.get("/experiments", {
       params: urlParams.reduce((acc, param) => {
         acc[param.key] = param.value;
         return acc;

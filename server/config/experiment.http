@@ -1,13 +1,21 @@
 ###
-
-POST http://localhost:4000/api/experiments HTTP/1.1
+GET http://localhost:4000/api/experiments HTTP/1.1
 content-type: application/json
 
 {
+    "source": "facebook",
     "location": "USA",
     "language": "en-en",
     "params": {
         "param1": "value1",
         "param2": "value2"
     }
+}
+
+###
+GET http://localhost:4000/api/treatments HTTP/1.1
+content-type: application/json
+
+{
+    
 }

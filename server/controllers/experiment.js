@@ -3,59 +3,56 @@ const { stringy } = require("../survey/treatments/utils/id-generator");
 const {
   saveExperiment,
 } = require("../survey/experiments/utils/save-experiment");
+const {
+  FindLeastFrequentExperiment,
+} = require("../survey/experiments/utils/reverse-weight-selector");
 
 const returnStatements = async (req, res) => {
-  const oursobject = experiments.flatMap((experiment) =>
-    experiment.treatments.map((treatment) => {
-      return {
-        validity: () => true,
-        ...experiment,
-        ...treatment,
-        ...req.body,
-      };
-    })
-  );
+  const oursobject = experiments
+    .flatMap((experiment) =>
+      experiment.treatments.map((treatment) => {
+        return {
+          validity: () => true,
+          req: { ...req.body },
+          ...experiment,
+          ...treatment,
+        };
+      })
+    )
+    .filter((treatment) => treatment.validity({ ...req }));
 
   console.log(oursobject);
-  // .filter((treatment) =>
-  //   treatment.validity({ ...req, responses: responses })
-  // ) || fallback_treatment;
+  const selectedTreatment = await FindLeastFrequentExperiment(
+    oursobject.map((treatment) => {
+      return treatment.params;
+    })
+  ).then((selectedTreatmentParam) => {
+    return oursobject.find((treatment) => {
+      return stringy(treatment.params) === selectedTreatmentParam;
+    });
+  });
 
-  // const SelectorFunction = experiments[0].treatmentSelector;
-  // const selectedTreatment = await SelectorFunction(
-  //   experiments[0].treatments.map((treatment) => {
-  //     return treatment.params;
-  //   })
-  // );
+  const result = await selectedTreatment.function(selectedTreatment.params);
 
-  // let resolvedExperiment;
-  // experiments[0].treatments.forEach((treatment) => {
-  //   if (stringy(treatment.params) === selectedTreatment) {
-  //     resolvedExperiment = treatment;
-  //   }
-  // });
+  const experimentData = {
+    userSessionId: req.sessionID,
+    experimentId: stringy(selectedTreatment.params),
+    experimentType: selectedTreatment.experimentName,
+    experimentInfo: selectedTreatment.params,
+    statementList: result.answer,
+    urlParams: req.query.source ? req.query.source : null,
+    finished: false,
+  };
 
-  // const result = await resolvedExperiment.function(resolvedExperiment.params);
+  saveExperiment(experimentData)
+    .then((newExperiment) => {
+      console.log("Experiment saved:", newExperiment.id);
+    })
+    .catch((error) => {
+      console.error("Error saving experiment:", error);
+    });
 
-  // const experimentData = {
-  //   userSessionId: req.sessionID,
-  //   experimentId: stringy(resolvedExperiment.params),
-  //   experimentType: experiments[0].name,
-  //   experimentInfo: resolvedExperiment.params,
-  //   statementList: result.answer,
-  //   urlParams: req.query.source ? req.query.source : null,
-  //   finished: false,
-  // };
-
-  // saveExperiment(experimentData)
-  //   .then((newExperiment) => {
-  //     console.log("Experiment saved:", newExperiment.id);
-  //   })
-  //   .catch((error) => {
-  //     console.error("Error saving experiment:", error);
-  //   });
-
-  res.json({ message: "Experiment saved" });
+  res.json({ value: result.answer });
 };
 
 module.exports = {

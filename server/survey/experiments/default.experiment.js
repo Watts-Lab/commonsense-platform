@@ -5,14 +5,15 @@ const defaultTreatment = [
     params: {
       statementIds: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
     },
+    validity: (req) => false,
     function: GetStatementById,
   },
 ];
 
 const experiment = {
-  name: "design-point",
+  name: "default",
   treatments: defaultTreatment,
-  treatmentSelector: () => defaultTreatment[0],
+  treatmentAssigner: () => defaultTreatment[0],
 };
 
 module.exports = experiment;

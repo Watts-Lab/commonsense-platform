@@ -1,7 +1,4 @@
 const {
-  FindLeastFrequentExperiment,
-} = require("./utils/reverse-weight-selector");
-const {
   DesignPointRandomized,
 } = require("../treatments/design-point.treatment");
 
@@ -20,7 +17,6 @@ const designPoints = [
         category: "Health and fitness",
       },
     },
-    validity: (req) => req.body.source === "facebook",
     function: DesignPointRandomized,
   },
   {
@@ -37,15 +33,19 @@ const designPoints = [
         category: "Health and fitness",
       },
     },
-    validity: (req) => req.body.source === "facebook",
+    validity: (req) => {
+      req.source === "facebook";
+    },
     function: DesignPointRandomized,
   },
 ];
 
 const experiment = {
-  name: "design-point",
+  experimentName: "design-point",
   treatments: designPoints,
-  treatmentSelector: FindLeastFrequentExperiment,
+  treatmentAssigner: (subject, treatments) => {
+    return treatments[Math.floor(Math.random() * treatments.length)];
+  },
 };
 
 module.exports = experiment;
