@@ -1,42 +1,23 @@
-const {
-  DesignPointRandomized,
-} = require("../treatments/design-point.treatment");
+const { GetStatementById } = require("../treatments/statement-by-id.treatment");
 
 const designPoints = [
   {
     params: {
-      randomSeed: 13,
-      numberOfStatements: 15,
-      desingPointParams: {
-        behavior: 1,
-        everyday: 0,
-        figure_of_speech: 0,
-        judgment: 1,
-        reasoning: 1,
-        opinion: 1,
-        category: "Health and fitness",
-      },
+      ids: [
+        8830, 8831, 8832, 8833, 8834, 8835, 8836, 8837, 8838, 8839, 8840, 8841,
+        8842, 8843, 8844,
+      ],
     },
-    function: DesignPointRandomized,
+    function: GetStatementById,
   },
   {
     params: {
-      randomSeed: 13,
-      numberOfStatements: 15,
-      desingPointParams: {
-        everyday: 0,
-        behavior: 1,
-        figure_of_speech: 0,
-        judgment: 0,
-        opinion: 1,
-        reasoning: 1,
-        category: "Health and fitness",
-      },
+      ids: [
+        8845, 8846, 8847, 8848, 8849, 8850, 8851, 8852, 8853, 8854, 8855, 8856,
+        8857, 8858, 8859,
+      ],
     },
-    validity: (req) => {
-      req.source === "facebook";
-    },
-    function: DesignPointRandomized,
+    function: GetStatementById,
   },
 ];
 

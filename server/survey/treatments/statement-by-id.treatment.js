@@ -1,3 +1,7 @@
+const { Sequelize } = require("sequelize");
+const { statements } = require("../../models");
+const { stringy } = require("./utils/id-generator");
+
 /**
  * Retrieves statements by their IDs.
  *
@@ -20,9 +24,7 @@ const GetStatementById = async (params) => {
       params,
     }),
     description: "GetStatementById",
-    answer: params.limit
-      ? getRandom(statementsText, params.limit)
-      : statementsText,
+    answer: statementsText,
   };
 };
 

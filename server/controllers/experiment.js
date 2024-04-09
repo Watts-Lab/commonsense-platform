@@ -1,11 +1,12 @@
 const experiments = require("../survey/experiments");
-const { stringy } = require("../survey/treatments/utils/id-generator");
 const {
   saveExperiment,
 } = require("../survey/experiments/utils/save-experiment");
 const {
   FindLeastFrequentExperiment,
 } = require("../survey/experiments/utils/reverse-weight-selector");
+
+const { stringy } = require("../survey/treatments/utils/id-generator");
 
 const returnStatements = async (req, res) => {
   const oursobject = experiments
@@ -21,24 +22,36 @@ const returnStatements = async (req, res) => {
     )
     .filter((treatment) => treatment.validity({ ...req }));
 
-  console.log(oursobject);
+  const groupedExperiments = oursobject.reduce((acc, experiment) => {
+    const experimentName = experiment.experimentName;
+    if (!acc[experimentName]) {
+      acc[experimentName] = [];
+    }
+    acc[experimentName].push(experiment);
+    return acc;
+  }, {});
+
+  console.log("groupedExperiments", groupedExperiments);
+
   const selectedTreatment = await FindLeastFrequentExperiment(
     oursobject.map((treatment) => {
       return treatment.params;
     })
-  ).then((selectedTreatmentParam) => {
-    return oursobject.find((treatment) => {
-      return stringy(treatment.params) === selectedTreatmentParam;
-    });
+  );
+
+  const treatmentObject = oursobject.find((treatment) => {
+    return stringy(treatment.params) === selectedTreatment;
   });
 
-  const result = await selectedTreatment.function(selectedTreatment.params);
+  const result = await treatmentObject.function(treatmentObject.params);
+
+  console.log("result", treatmentObject);
 
   const experimentData = {
     userSessionId: req.sessionID,
-    experimentId: stringy(selectedTreatment.params),
-    experimentType: selectedTreatment.experimentName,
-    experimentInfo: selectedTreatment.params,
+    experimentId: stringy(treatmentObject.params),
+    experimentType: treatmentObject.experimentName,
+    experimentInfo: treatmentObject,
     statementList: result.answer,
     urlParams: req.query.source ? req.query.source : null,
     finished: false,
@@ -52,7 +65,7 @@ const returnStatements = async (req, res) => {
       console.error("Error saving experiment:", error);
     });
 
-  res.json({ value: result.answer });
+  res.json({ statements: result.answer });
 };
 
 module.exports = {

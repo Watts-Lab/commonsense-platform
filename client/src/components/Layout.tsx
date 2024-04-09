@@ -126,30 +126,30 @@ function Layout(props) {
       }, {}),
     })
       .then((response) => {
-        const initialAnswers = response.data.value.map((statement) => ({
+        const initialAnswers = response.data.statements.map((statement) => ({
           id: statement.id,
           answers: new Array(questionData.length).fill(""),
           answereSaved: false,
         }));
 
         setStatementsData(initialAnswers);
-        setSurveyLength(response.data.value.length);
+        setSurveyLength(response.data.statements.length);
         return response;
       })
       .then((response) => {
         localStorage.setItem("statementsData", JSON.stringify(statementsData));
 
-        setSurveyLength(response.data.value.length);
+        setSurveyLength(response.data.statements.length);
 
         setStatementArray(
-          response.data.value.map((statement, index) => {
+          response.data.statements.map((statement, index) => {
             return (
               <Statement
                 key={index}
                 next={next}
                 back={back}
                 currentStep={index + 1}
-                totalSteps={response.data.value.length}
+                totalSteps={response.data.statements.length}
                 statementText={statement.statement}
                 imageUrl={statement.image}
                 statementId={statement.id}
