@@ -45,8 +45,6 @@ const returnStatements = async (req, res) => {
 
   const result = await treatmentObject.function(treatmentObject.params);
 
-  console.log("result", treatmentObject);
-
   const experimentData = {
     userSessionId: req.sessionID,
     experimentId: stringy(treatmentObject.params),
