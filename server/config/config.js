@@ -29,8 +29,9 @@ module.exports = {
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     connectionLimit: 10,
-    createDatabaseTable: false,
+    createDatabaseTable: true,
     clearExpired: false,
+    endConnectionOnClose: true,
     schema: {
       tableName: "sessions",
       columnNames: {

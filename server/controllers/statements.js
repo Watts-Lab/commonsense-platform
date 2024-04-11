@@ -13,8 +13,6 @@ const sequelize = new Sequelize(
   config
 );
 
-const { valid_statementlist } = require("../routes/statement_clear.js");
-
 const getStatementsWeighted = async (
   sessionId,
   validStatementList,
@@ -68,7 +66,7 @@ const next = async (req, res) => {
   try {
     const sessionId = req.query.sessionId || null;
 
-    const results = await getStatementsWeighted(sessionId, valid_statementlist);
+    const results = await getStatementsWeighted(sessionId, []);
 
     res.json(results);
   } catch (error) {
