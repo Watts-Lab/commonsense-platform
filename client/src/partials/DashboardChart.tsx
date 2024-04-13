@@ -100,9 +100,6 @@ function DashboardChart(props) {
     const plot = Plot.plot({
       x: { percent: true, nice: true, domain: [0, 100] },
       y: { axis: false },
-      style: {
-        background: "#F9FAFB",
-      },
       color: { scheme: "Viridis" },
       marks: [
         Plot.rectY(
