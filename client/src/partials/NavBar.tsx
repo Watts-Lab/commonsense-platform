@@ -5,7 +5,7 @@ import { useAppSelector } from "../redux/hooks";
 
 import ConsentModal from "../components/ConsentModal";
 
-import Icon from "../images/WEBSITE-LOGO.png";
+import Icon from "../images/Light-mode.svg";
 
 const Navbar: React.FC = () => {
   const loggedIn = useAppSelector((state) => state.login.loggedIn);
@@ -52,9 +52,6 @@ const Navbar: React.FC = () => {
               className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-200 rounded-box w-52 text-gray-900"
             >
               <li>
-                <a href="/about">About</a>
-              </li>
-              <li>
                 <a href="/people">People</a>
               </li>
               <li>
@@ -70,17 +67,15 @@ const Navbar: React.FC = () => {
             </ul>
           </div>
 
-          <Link to="/" className="" aria-label="Logo">
+          <Link to="/" className="flex items-center" aria-label="Logo">
             <img className="h-9 block" src={Icon} alt="Logo" />
+            <span className="text-lg font-bold inline-block ml-2">
+              Commonsensicality.org
+            </span>
           </Link>
         </div>
         <div className="navbar-center hidden lg:flex justify-center flex-1">
           <ul className="flex space-x-10 lg:space-x-10">
-            <li>
-              <a href="/about" className="text-base hover:underline">
-                About
-              </a>
-            </li>
             <li>
               <a href="/people" className="text-base hover:underline">
                 People
