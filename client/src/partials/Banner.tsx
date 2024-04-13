@@ -39,13 +39,18 @@ const Banner: React.FC = () => {
                 src={commonsenseLogo}
                 alt="Common Sense Logo"
               />
-              <h1 className="text-5xl text-center md:text-6xl font-bold leading-tighter tracking-tight mb-4">
-                Measure your common sense!
-              </h1>
               <div className="max-w-3xl mx-auto px-10">
-                <p className="text-xl">
+                <h1 className="text-5xl text-center md:text-6xl font-bold leading-tighter tracking-tight mb-4">
                   How common is common sense really? Join us to find out!
-                </p>
+                </h1>
+                <div className="max-w-xs my-auto sm:max-w-none sm:flex sm:justify-center">
+                  <div>
+                    <ConsentModal
+                      buttonText="Measure your common sense"
+                      buttonClass="text-white p-3 bg-gray-600 hover:bg-gray-700 w-full my-4 rounded-md sm:w-auto sm:mb-0"
+                    />
+                  </div>
+                </div>
                 <p className="text-md my-8">
                   Common sense is usually defined as “what all sensible people
                   know,” but this definition is circular: how do we know someone
@@ -80,8 +85,11 @@ const Banner: React.FC = () => {
                     A framework for quantifying individual and collective common
                     sense
                   </a>
-                  , recently out at PNAS. 
-                  <span className="font-semibold"> To jump to the juicy stuff:</span>
+                  , recently out at PNAS.
+                  <span className="font-semibold">
+                    {" "}
+                    To jump to the juicy stuff:
+                  </span>
                 </p>
 
                 <div className="max-w-xs mx-auto sm:max-w-none sm:flex sm:justify-center">
