@@ -62,9 +62,9 @@ const Dashboard: React.FC = () => {
   };
 
   useEffect(() => {
-    // if (!loggedIn) {
-    //   navigate("/signin");
-    // }
+    if (!loggedIn) {
+      navigate("/signin");
+    }
   }, [loggedIn, navigate]);
 
   useEffect(() => {

@@ -164,7 +164,6 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/:shareLink" element={<Home />} />
-          <Route path="/about" element={<About />} />
           <Route path="/people" element={<People />} />
           <Route path="/research" element={<Research />} />
           <Route
@@ -183,8 +182,6 @@ const App = () => {
             path="/social"
             element={<SocialSurvey statementText={"hey hey"} />}
           />
-
-          {/* <Route path="/:sharelink" element={<HumanNetwork />} /> */}
         </Routes>
       </div>
     </div>
