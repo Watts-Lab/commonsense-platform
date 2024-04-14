@@ -1,7 +1,6 @@
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import * as Plot from "@observablehq/plot";
-import { useSelector } from "react-redux";
 
 import "./style.css";
 
@@ -10,9 +9,15 @@ import TwitterText from "../utils/TwitterText";
 import NotificationBox from "../utils/NotificationBox";
 
 import useStickyState from "../hooks/useStickyState";
+import { useAppSelector } from "../redux/hooks";
 
-function Result(props) {
-  const [statementsData, setStatementsData] = useStickyState(
+type ResultProps = {
+  sessionId: string;
+  showSignUpBox: boolean;
+};
+
+function Result(props: ResultProps) {
+  const [_statementsData, setStatementsData] = useStickyState(
     [],
     "statementsData"
   );
@@ -26,26 +31,9 @@ function Result(props) {
   const [userEmail, setUserEmail] = useState("");
   const [notifBox, setNotifBox] = useState(false);
 
-  const surveySession = useSelector((state) => state.login.surveySession);
-
-  const urlParams = useSelector((state) => state.urlslice.urlParams);
-
-  const navigateTo = useNavigate();
+  const urlParams = useAppSelector((state) => state.urlslice.urlParams);
 
   const [aTurkBox, setATurkBox] = useState(false);
-
-  function handleRedirect() {
-    navigateTo("/welcome");
-  }
-
-  function isUserDone(statementsData) {
-    for (let i = 0; i < statementsData.length; i++) {
-      if (!statementsData[i].answereSaved) {
-        return false;
-      }
-    }
-    return true;
-  }
 
   useEffect(() => {
     setStatementsData([]);
@@ -56,10 +44,10 @@ function Result(props) {
     }).then((response) => {
       setCommonSenseScore({
         commonsense: Math.round(
-          Number(response.data.commonsensicality).toFixed(2) * 100
+          Number(response.data.commonsensicality.toFixed(2)) * 100
         ),
-        awareness: Math.round(Number(response.data.awareness).toFixed(2) * 100),
-        consensus: Math.round(Number(response.data.consensus).toFixed(2) * 100),
+        awareness: Math.round(Number(response.data.awareness.toFixed(2)) * 100),
+        consensus: Math.round(Number(response.data.consensus.toFixed(2)) * 100),
       });
     });
 
@@ -77,7 +65,7 @@ function Result(props) {
     });
   }, []);
 
-  const signUp = async (email, sessionId) => {
+  const signUp = async (email: string, sessionId: string) => {
     try {
       let res = await Backend.post(`/users/enter`, { email, sessionId });
       if (res.data.token) {
@@ -90,11 +78,11 @@ function Result(props) {
     }
   };
 
-  const enterEmail = (e) => {
+  const enterEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserEmail(e.target.value);
   };
 
-  const emailSubmit = (e) => {
+  const emailSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     signUp(userEmail, props.sessionId);
     setNotifBox(true);
@@ -115,7 +103,10 @@ function Result(props) {
       .then((response) => {
         setData(
           response.data.sort(
-            (a, b) => a.commonsensicality - b.commonsensicality
+            (
+              a: { commonsensicality: number },
+              b: { commonsensicality: number }
+            ) => a.commonsensicality - b.commonsensicality
           )
         );
 
@@ -123,11 +114,16 @@ function Result(props) {
       })
       .then((data) => {
         setIndividualCommonsensicality(
-          data.map((value, index) => ({
-            sessionId: value.sessionId,
-            commonsensicality: value.commonsensicality,
-            count: 1,
-          }))
+          data.map(
+            (
+              value: { sessionId: any; commonsensicality: any },
+              _index: any
+            ) => ({
+              sessionId: value.sessionId,
+              commonsensicality: value.commonsensicality,
+              count: 1,
+            })
+          )
         );
       });
   }, []);
@@ -196,6 +192,7 @@ function Result(props) {
       </p>
 
       <div className="flex justify-center" ref={containerRef} />
+      
       <TwitterText
         percentage={commonSenseScore.commonsense}
         sessionId={props.sessionId}
@@ -245,7 +242,6 @@ function Result(props) {
                   </div>
 
                   <button
-                    onSubmit={emailSubmit}
                     type="submit"
                     className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
                   >
