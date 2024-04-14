@@ -28,7 +28,7 @@ function Option(props: OptionProps) {
       />
       <label
         htmlFor={props.id_v}
-        className="h-20 text-s peer-focus:ring inline-flex w-full cursor-pointer items-center justify-between rounded-md border border-gray-200 bg-gray-200 p-5 text-gray-800 hover:bg-gray-300 hover:text-gray-600 peer-checked:border-blue-600 peer-checked:bg-blue-600 peer-checked:text-white dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:peer-checked:text-blue-500"
+        className="h-20 text-s peer-focus:ring inline-flex w-full cursor-pointer items-center justify-between rounded-md border border-gray-200 bg-gray-200 p-5 text-gray-800 hover:bg-gray-300 hover:text-gray-600 peer-checked:border-blue-600 peer-checked:bg-blue-600 peer-checked:text-white dark:border-gray-700 dark:bg-gray-400 dark:text-black dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:peer-checked:text-blue-800 dark:peer-checked:bg-blue-100"
       >
         <div className="block">
           <div className="text-md w-full">{props.text}</div>

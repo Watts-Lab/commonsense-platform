@@ -4,11 +4,7 @@ import ChatIcon from "./ChatIcon";
 
 import WidgetForm from "./WidgetForm";
 
-function Feedback(props) {
-  function nextClick() {
-    return;
-  }
-
+function Feedback() {
   return (
     <>
       <Popover className="fixed bottom-4 right-4 md:bottom-8 md:right-8 flex flex-col items-end">

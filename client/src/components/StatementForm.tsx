@@ -175,12 +175,12 @@ const StatementForm = () => {
         <form onSubmit={handleSubmit} className="w-full max-w-4xl">
           <div className="form-control my-4">
             <label className="label">
-              <span className="label-text">
+              <span className="label-text font-semibold">
                 Enter your common sense statement:
               </span>
             </label>
             <textarea
-              className="textarea textarea-bordered h-24 p-3 bg-white w-full rounded-md"
+              className="textarea textarea-bordered h-24 p-3 bg-white dark:bg-gray-300 w-full rounded-md"
               placeholder="Type here"
               value={statement}
               onChange={(e) => setStatement(e.target.value)}
@@ -193,14 +193,14 @@ const StatementForm = () => {
             <p className="text-red-500">Statement is required.</p>
           )}
 
-          <div className="divider text-sm">optional</div>
+          <div className="divider text-md">optional</div>
 
           {Object.entries(features).map(
             ([key, { checked, text, description }]) => (
               <div className="flex items-center justify-between my-4" key={key}>
                 <div className="label grow-0 px-2">
                   <span className="label-text">
-                    {text}: <small>{description}</small>
+                    <span className="font-semibold">{text}</span>: {description}
                   </span>
                 </div>
                 <label className="label cursor-pointer px-2">
