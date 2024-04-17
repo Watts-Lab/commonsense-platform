@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { setSession } from "../redux/slices/loginSlice";
 
-import { CRT, RmeTen, Demographic } from "@watts-lab/surveys";
+import { CRT, RmeTen, Demographics } from "@watts-lab/surveys";
 
 import Statement from "./Statement";
 import MultiStepForm from "./MultiStepForm";
@@ -33,14 +33,13 @@ function Layout() {
   const [unansweredQuestionIndex, setUnansweredQuestionIndex] = useState(null);
 
   const onCompleteCallback = (record: any) => {
-    console.log(record);
     Backend.post("/experiments/individual", {
       sessionId: surveySession,
       informationType: record.surveyName,
       experimentInfo: record,
+    }).finally(() => {
+      setCurrentStepIndex((i) => i + 1);
     });
-
-    next();
   };
 
   const handleAnswerSaving = (tid, answerState) => {
@@ -64,13 +63,14 @@ function Layout() {
       console.log(error);
     }
   };
-  
+
   const pushResultComponent = (statementId, statementText) => {
     let finalSessionId = surveySession ? surveySession : sessionId;
     setStatementArray((oldArray) => [
       ...oldArray,
       <CRT onComplete={onCompleteCallback} />,
       <RmeTen onComplete={onCompleteCallback} />,
+      <Demographics onComplete={onCompleteCallback} />,
       <Result
         key={oldArray.length}
         sessionId={finalSessionId}
@@ -112,15 +112,16 @@ function Layout() {
     ]);
   };
 
-  const { steps, currentStepIndex, back, next } = MultiStepForm({
-    steps: statementsData,
-    sessionId: surveySession ? surveySession : sessionId,
-    handleAnswerSaving: handleAnswerSaving,
-    getNextStatement: getNextStatement,
-    pushNewStatement: pushNewStatement,
-    pushResultComponent: pushResultComponent,
-    setUnansweredQuestionIndex: setUnansweredQuestionIndex,
-  });
+  const { steps, setCurrentStepIndex, currentStepIndex, back, next } =
+    MultiStepForm({
+      steps: statementsData,
+      sessionId: surveySession ? surveySession : sessionId,
+      handleAnswerSaving: handleAnswerSaving,
+      getNextStatement: getNextStatement,
+      pushNewStatement: pushNewStatement,
+      pushResultComponent: pushResultComponent,
+      setUnansweredQuestionIndex: setUnansweredQuestionIndex,
+    });
 
   const handleStatementChange = (tid, updatedData) => {
     setStatementsData((prevState) =>
@@ -152,7 +153,7 @@ function Layout() {
       .then((response) => {
         localStorage.setItem("statementsData", JSON.stringify(statementsData));
 
-        setSurveyLength(response.data.statements.length + 2);
+        setSurveyLength(response.data.statements.length + 3);
 
         setStatementArray(
           response.data.statements.map(
@@ -210,7 +211,9 @@ function Layout() {
       <form id="main-survey" onSubmit={submitHandler}>
         {statementArray[currentStepIndex]}
 
-        {currentStepIndex < surveyLength - 2 && (
+        {console.log("currentStepIndex", currentStepIndex)}
+
+        {currentStepIndex < surveyLength - 3 && (
           <div className="flex justify-between">
             <button
               onClick={back}
