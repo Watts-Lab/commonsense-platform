@@ -211,8 +211,6 @@ function Layout() {
       <form id="main-survey" onSubmit={submitHandler}>
         {statementArray[currentStepIndex]}
 
-        {console.log("currentStepIndex", currentStepIndex)}
-
         {currentStepIndex < surveyLength - 3 && (
           <div className="flex justify-between">
             <button
