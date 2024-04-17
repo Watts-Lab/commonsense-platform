@@ -3,6 +3,9 @@ const {
   saveExperiment,
 } = require("../survey/experiments/utils/save-experiment");
 const {
+  saveIndividualDB,
+} = require("../survey/experiments/utils/save-individual");
+const {
   FindLeastFrequentExperiment,
 } = require("../survey/experiments/utils/reverse-weight-selector");
 
@@ -66,6 +69,27 @@ const returnStatements = async (req, res) => {
   res.json({ statements: result.answer });
 };
 
+const saveIndividual = async (req, res) => {
+  const individualData = {
+    userSessionId: req.sessionID,
+    informationType: req.body.informationType,
+    experimentInfo: req.body.experimentInfo,
+    urlParams: req.query.source ? req.query.source : null,
+    finished: true,
+  };
+
+  saveIndividualDB(individualData)
+    .then((newIndividual) => {
+      console.log("Individual saved:", newIndividual.id);
+    })
+    .catch((error) => {
+      console.error("Error saving individual:", error);
+    });
+
+  res.json({ ok: true });
+};
+
 module.exports = {
   returnStatements,
+  saveIndividual,
 };

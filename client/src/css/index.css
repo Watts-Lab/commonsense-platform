@@ -9,3 +9,20 @@
 .sv_image_image {
   width: 100%;
 }
+
+.sv-root-modern .sv-btn {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  padding-top: 0.625rem;
+  padding-bottom: 0.625rem;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+  --tw-bg-opacity: 1;
+  background-color: rgb(29 78 216 / var(--tw-bg-opacity)) !important;
+  border-radius: 0.5rem;
+  display: inline-flex;
+  order: 9999;
+}
