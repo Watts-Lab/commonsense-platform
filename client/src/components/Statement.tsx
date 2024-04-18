@@ -7,7 +7,7 @@ import { questionData, IQuestionData } from "../data/questions"; // Import here
 
 interface StatementProps {
   statementText: string;
-  imageUrl: string;
+  imageUrl?: string;
   data: {
     answers: string[];
   };

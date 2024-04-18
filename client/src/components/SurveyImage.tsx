@@ -5,10 +5,10 @@ import React, { useState, useEffect } from "react";
 import Backend from "../apis/backend";
 
 interface SurveyImageProps {
-  imageName: string;
+  imageName?: string;
 }
 
-const SurveyImage: React.FC<SurveyImageProps> = (props) => {
+const SurveyImage = (props: SurveyImageProps) => {
   const [imageUrl, setImageUrl] = useState<string>("");
 
   useEffect(() => {

@@ -1,8 +1,9 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-
+import { useSelector } from "react-redux";
 import { setSession } from "../redux/slices/loginSlice";
+
+import { CRT, RmeTen, Demographics } from "@watts-lab/surveys";
 
 import Statement from "./Statement";
 import MultiStepForm from "./MultiStepForm";
@@ -16,7 +17,7 @@ import Backend from "../apis/backend";
 
 import "./style.css";
 
-function Layout(props) {
+function Layout() {
   const [statementArray, setStatementArray] = useState([]);
   const [statementsData, setStatementsData] = useStickyState(
     [],
@@ -30,6 +31,16 @@ function Layout(props) {
 
   const [sessionId, setSessionId] = useStickyState(null, "surveySessionId");
   const [unansweredQuestionIndex, setUnansweredQuestionIndex] = useState(null);
+
+  const onCompleteCallback = (record: any) => {
+    Backend.post("/experiments/individual", {
+      sessionId: surveySession,
+      informationType: record.surveyName,
+      experimentInfo: record,
+    }).finally(() => {
+      setCurrentStepIndex((i) => i + 1);
+    });
+  };
 
   const handleAnswerSaving = (tid, answerState) => {
     setStatementsData((prevState) =>
@@ -57,6 +68,9 @@ function Layout(props) {
     let finalSessionId = surveySession ? surveySession : sessionId;
     setStatementArray((oldArray) => [
       ...oldArray,
+      <CRT onComplete={onCompleteCallback} />,
+      <RmeTen onComplete={onCompleteCallback} />,
+      <Demographics onComplete={onCompleteCallback} />,
       <Result
         key={oldArray.length}
         sessionId={finalSessionId}
@@ -98,15 +112,16 @@ function Layout(props) {
     ]);
   };
 
-  const { steps, currentStepIndex, back, next } = MultiStepForm({
-    steps: statementsData,
-    sessionId: surveySession ? surveySession : sessionId,
-    handleAnswerSaving: handleAnswerSaving,
-    getNextStatement: getNextStatement,
-    pushNewStatement: pushNewStatement,
-    pushResultComponent: pushResultComponent,
-    setUnansweredQuestionIndex: setUnansweredQuestionIndex,
-  });
+  const { steps, setCurrentStepIndex, currentStepIndex, back, next } =
+    MultiStepForm({
+      steps: statementsData,
+      sessionId: surveySession ? surveySession : sessionId,
+      handleAnswerSaving: handleAnswerSaving,
+      getNextStatement: getNextStatement,
+      pushNewStatement: pushNewStatement,
+      pushResultComponent: pushResultComponent,
+      setUnansweredQuestionIndex: setUnansweredQuestionIndex,
+    });
 
   const handleStatementChange = (tid, updatedData) => {
     setStatementsData((prevState) =>
@@ -133,39 +148,43 @@ function Layout(props) {
         }));
 
         setStatementsData(initialAnswers);
-        setSurveyLength(response.data.statements.length);
         return response;
       })
       .then((response) => {
         localStorage.setItem("statementsData", JSON.stringify(statementsData));
 
-        setSurveyLength(response.data.statements.length);
+        setSurveyLength(response.data.statements.length + 3);
 
         setStatementArray(
-          response.data.statements.map((statement, index) => {
-            return (
-              <Statement
-                key={index}
-                next={next}
-                back={back}
-                currentStep={index + 1}
-                totalSteps={response.data.statements.length}
-                statementText={statement.statement}
-                imageUrl={statement.image}
-                statementId={statement.id}
-                onChange={handleStatementChange}
-                onSaveStatement={handleAnswerSaving}
-                data={
-                  statementsData[index] || {
-                    id: statement.id,
-                    answers: ["", "", "", "", "", ""],
-                    answereSaved: false,
+          response.data.statements.map(
+            (
+              statement: { statement: string; image?: string; id: number },
+              index: number
+            ) => {
+              return (
+                <Statement
+                  key={index}
+                  next={next}
+                  back={back}
+                  currentStep={index + 1}
+                  totalSteps={response.data.statements.length}
+                  statementText={statement.statement}
+                  imageUrl={statement.image}
+                  statementId={statement.id}
+                  onChange={handleStatementChange}
+                  onSaveStatement={handleAnswerSaving}
+                  data={
+                    statementsData[index] || {
+                      id: statement.id,
+                      answers: ["", "", "", "", "", ""],
+                      answereSaved: false,
+                    }
                   }
-                }
-                unansweredQuestionIndex={unansweredQuestionIndex}
-              />
-            );
-          })
+                  unansweredQuestionIndex={unansweredQuestionIndex}
+                />
+              );
+            }
+          )
         );
       })
       .then(() => {
@@ -189,10 +208,10 @@ function Layout(props) {
 
   return (
     <>
-      <form onSubmit={submitHandler}>
+      <form id="main-survey" onSubmit={submitHandler}>
         {statementArray[currentStepIndex]}
 
-        {currentStepIndex < surveyLength && (
+        {currentStepIndex < surveyLength - 3 && (
           <div className="flex justify-between">
             <button
               onClick={back}
@@ -200,7 +219,7 @@ function Layout(props) {
               className="order-1 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             >
               {(() => {
-                if (props.currentStepIndex === 0) {
+                if (currentStepIndex === 0) {
                   return <Link to="/consent">Start</Link>;
                 } else {
                   return "← Previous";
@@ -213,9 +232,9 @@ function Layout(props) {
               className="order-last text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             >
               {(() => {
-                if (currentStepIndex === surveyLength - 1) {
+                if (currentStepIndex === surveyLength - 3) {
                   // return <Link to="/finish">Finish</Link>;
-                  return "Finish";
+                  return "Continue";
                 } else {
                   return "Next →";
                 }

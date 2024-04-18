@@ -110,6 +110,7 @@ function MultiStepForm(props) {
 
   return {
     currentStepIndex,
+    setCurrentStepIndex,
     step: props.steps[currentStepIndex],
     goTo,
     next,
