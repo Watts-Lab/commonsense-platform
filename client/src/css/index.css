@@ -26,3 +26,28 @@
   display: inline-flex;
   order: 9999;
 }
+
+/* // sv-title sv-question__title
+// sv-title sv-question__title sv-question__title--answer */
+
+.sv-title {
+  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;
+  font-feature-settings: normal !important;
+  font-variation-settings: normal !important;
+  font-weight: 700;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  position: relative;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0.25em 0.44em;
+  cursor: default;
+  font-size: 1.25em;
+  word-break: break-word;
+}
+
+.sv-root-modern .sv-question__title--answer {
+  background-color: rgba(37, 100, 235, 0.213) !important;
+}
