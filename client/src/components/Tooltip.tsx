@@ -26,7 +26,7 @@ const Tooltip = (props) => {
           ></path>
         </svg>
         {hover && (
-          <div className="absolute bottom-0 inline-block w-80 px-4 py-3 mb-10 -ml-72 text-white bg-gray-600 rounded-lg">
+          <div className="absolute bottom-0 inline-block w-80 px-4 py-3 mb-10 -ml-72 text-white bg-gray-600 rounded-lg z-10">
             <span className="inline-block text-sm leading-tight">
               {props.text}
             </span>

@@ -47,7 +47,7 @@ function Statement({
     <>
       <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
       <SurveyImage imageName={imageUrl} />
-      <div className="!sticky !top-0 !z-50 bg-white border-double border-blue-600 border-b-2">
+      <div className="!sticky !top-0 !z-10 bg-white border-double border-blue-600 border-b-2 rounded-b-lg dark:bg-slate-400">
         <h3 className="mt-3.5 text-xl font-medium text-gray-900 dark:text-white text-center py-4">
           {statementText}
         </h3>

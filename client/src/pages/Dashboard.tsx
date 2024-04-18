@@ -65,7 +65,7 @@ const Dashboard: React.FC = () => {
     if (!loggedIn) {
       navigate("/signin");
     }
-  }, [loggedIn, navigate]); // Whenever the `loggedIn` status changes, this effect will run
+  }, [loggedIn, navigate]);
 
   useEffect(() => {
     const getAnswers = async () => {
@@ -91,7 +91,7 @@ const Dashboard: React.FC = () => {
 
       {/*  Page content */}
       <main className="flex-grow">
-        <section className="bg-gradient-to-b from-gray-100 to-white">
+        <section className="bg-gray-200 dark:bg-gray-800">
           <div className="max-w-6xl mx-auto px-4 sm:px-6">
             <div className="pt-12 pb-12 md:pt-12 md:pb-20">
               <div className="mb-4 border-b border-gray-200 dark:border-gray-700">
@@ -171,9 +171,7 @@ const Dashboard: React.FC = () => {
                     role="tabpanel"
                     aria-labelledby="dashboard-tab"
                   >
-                    <DashboardChart
-                      sessionId={surveySession}
-                    />
+                    <DashboardChart sessionId={surveySession} />
                   </div>
                   <div
                     className={`p-4 rounded-lg bg-gray-50 dark:bg-gray-800 ${
