@@ -46,7 +46,7 @@ const SignIn: React.FC = () => {
 
       {/*  Page content */}
       <main className="flex-grow">
-        <section className="bg-gradient-to-b from-gray-100 to-white">
+        <section className="bg-gray-100 dark:bg-gray-600 text-gray-800 dark:text-gray-300">
           <div className="max-w-6xl mx-auto px-4 sm:px-6">
             <div className="pt-32 pb-12 md:pt-40 md:pb-20">
               {/* Page header */}
@@ -74,7 +74,7 @@ const SignIn: React.FC = () => {
                     <div className="flex flex-wrap -mx-3 mb-4">
                       <div className="w-full px-3">
                         <label
-                          className="block text-gray-800 text-sm font-medium mb-1"
+                          className="block text-gray-800 dark:text-gray-300 text-sm font-medium mb-1"
                           htmlFor="email"
                         >
                           Email
@@ -93,8 +93,7 @@ const SignIn: React.FC = () => {
 
                     <div className="flex flex-wrap -mx-3 mt-6">
                       <div className="w-full px-3">
-                        <button className="btn text-white bg-gray-600 hover:bg-gray-700 w-full">
-                          {/* "text-white p-3 bg-gray-600 hover:bg-gray-700 w-full mb-4 rounded-md sm:w-auto sm:mb-0" */}
+                        <button className="btn text-white bg-gray-600 hover:bg-gray-700 w-full dark:bg-gray-800">
                           Sign in
                         </button>
                       </div>
