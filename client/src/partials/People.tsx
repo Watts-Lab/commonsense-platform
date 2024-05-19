@@ -52,7 +52,7 @@ const people: PersonProps[] = [
 
 const PeoplePartial: React.FC = () => {
   return (
-    <section className="bg-gray-100 dark:bg-gray-900">
+    <section className="bg-gray-100 dark:bg-gray-600 text-gray-800 dark:text-gray-300">
       <div className="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16 lg:px-6">
         <div className="mx-auto mb-8 max-w-screen-sm lg:mb-16">
           <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">
@@ -70,7 +70,10 @@ const PeoplePartial: React.FC = () => {
                 src={person.image}
                 alt={person.name}
               />
-              <a className="mb-1 text-xl font-bold tracking-tight text-gray-900 dark:text-white" href={person.website}>
+              <a
+                className="mb-1 text-xl font-bold tracking-tight text-gray-900 dark:text-white"
+                href={person.website}
+              >
                 <span className="underline">{person.name} </span>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -96,4 +99,3 @@ const PeoplePartial: React.FC = () => {
 };
 
 export default PeoplePartial;
-    
