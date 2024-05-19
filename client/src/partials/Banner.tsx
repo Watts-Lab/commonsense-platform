@@ -33,6 +33,9 @@ const Banner: React.FC = () => {
                 <h1 className="text-3xl text-center md:text-4xl font-bold leading-tighter tracking-tight mb-4">
                   How common is common sense really? Join us to find out!
                 </h1>
+                <h2 className="text-1xl md:text-2xl font-bold leading-tighter tracking-tight mb-4">
+                  Join us to find out!
+                </h2>
                 <div className="max-w-xs sm:max-w-none sm:flex sm:justify-center">
                   <div>
                     <ConsentModal
