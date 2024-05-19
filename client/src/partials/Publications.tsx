@@ -32,7 +32,10 @@ function Publications() {
   ];
 
   return (
-    <section id="research" className="relative bg-gray-100">
+    <section
+      id="research"
+      className="relative bg-gray-100 dark:bg-gray-600 text-gray-800 dark:text-gray-300"
+    >
       <div className="relative max-w-6xl mx-auto px-4 sm:px-6">
         <div className="py-12 md:py-20">
           {/* Section header */}
@@ -45,7 +48,7 @@ function Publications() {
             {publicationsList.map((publication, key) => (
               <div
                 key={key}
-                className="relative flex flex-col p-6 bg-gray-50 rounded shadow-xl h-40"
+                className="relative flex flex-col p-6 bg-gray-50 dark:bg-slate-900 rounded shadow-xl h-40"
               >
                 <h4 className="text-xl font-bold leading-snug tracking-tight pb-3">
                   <a href={publication.link} target="_blank">
@@ -55,8 +58,8 @@ function Publications() {
                     {publication.type}
                   </span>
                 </h4>
-                <p className="text-gray-600 pb-1">{publication.authors}</p>
-                <p className="text-gray-600">{publication.venue}</p>
+                <p className="text-gray-600 dark:text-gray-100 pb-1">{publication.authors}</p>
+                <p className="text-gray-600 dark:text-gray-200">{publication.venue}</p>
               </div>
             ))}
           </div>
