@@ -25,6 +25,8 @@ const returnStatements = async (req, res) => {
     )
     .filter((treatment) => treatment.validity({ ...req }));
 
+  console.log(oursobject);
+
   const groupedExperiments = oursobject.reduce((acc, experiment) => {
     const experimentName = experiment.experimentName;
     if (!acc[experimentName]) {
@@ -33,8 +35,6 @@ const returnStatements = async (req, res) => {
     acc[experimentName].push(experiment);
     return acc;
   }, {});
-
-  console.log("groupedExperiments", groupedExperiments);
 
   const selectedTreatment = await FindLeastFrequentExperiment(
     oursobject.map((treatment) => {
