@@ -34,8 +34,6 @@ const returnStatements = async (req, res) => {
     return acc;
   }, {});
 
-  console.log("groupedExperiments", groupedExperiments);
-
   const selectedTreatment = await FindLeastFrequentExperiment(
     oursobject.map((treatment) => {
       return treatment.params;
