@@ -8,7 +8,9 @@ const designPoints = [
         8842, 8843, 8844,
       ],
     },
-    validity: (req) => false,
+    validity: (req) => {
+      return req.query.source != "mturk";
+    },
     function: GetStatementById,
   },
   {
@@ -18,7 +20,9 @@ const designPoints = [
         8857, 8858, 8859,
       ],
     },
-    validity: (req) => false,
+    validity: (req) => {
+      return req.query.source != "mturk";
+    },
     function: GetStatementById,
   },
 ];

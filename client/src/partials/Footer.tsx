@@ -1,5 +1,8 @@
 import ReportIssue from "../components/Feedback/ReportIssue";
 
+import cssLabLogo from "../images/logo_css_white.png";
+import uPenn from "../images/logo_penn_white.png";
+
 function Footer() {
   const updateDate = () => {
     const date = new Date();
@@ -8,23 +11,24 @@ function Footer() {
   };
 
   return (
-    <footer className="footer footer-center p-10 bg-base-200 text-base-content rounded">
-      <nav className="grid grid-flow-col gap-4">
-        <a
-          href="mailto:contact@commonsensicality.org"
-          className="link link-hover"
-        >
-          Contact
-        </a>
-        <a href="https://css.seas.upenn.edu/" className="link link-hover">
-          CSSLab
-        </a>
-        <a href="https://www.seas.upenn.edu/" className="link link-hover">
-          Penn Engineering
-        </a>
-      </nav>
+    <footer className="footer footer-center p-10 bg-neutral-500 text-base-content rounded">
       <nav>
         <div className="grid grid-flow-col gap-4">
+          <a href="https://css.seas.upenn.edu">
+            <img
+              src={cssLabLogo}
+              alt="CSSLab Logo"
+              className="h-12 object-cover"
+            />
+          </a>
+          <a href="https://www.upenn.edu/">
+            <img src={uPenn} alt="UPenn Logo" className="h-12 object-cover" />
+          </a>
+        </div>
+      </nav>
+      <aside>
+        <div className="flex items-center space-x-4">
+          <p>3401 Walnut Street Suite 417B, Philadelphia PA, 19104</p>
           <a href="https://twitter.com/csspenn">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -47,10 +51,22 @@ function Footer() {
               <path d="M40.227,12C51.145,12,52,12.854,52,23.773v16.453C52,51.145,51.145,52,40.227,52H23.773C12.855,52,12,51.145,12,40.227	V23.773C12,12.854,12.855,12,23.773,12H40.227z M25.029,43V26.728h-5.057V43H25.029z M22.501,24.401	c1.625,0,2.947-1.322,2.947-2.949c0-1.625-1.322-2.947-2.947-2.947c-1.629,0-2.949,1.32-2.949,2.947S20.87,24.401,22.501,24.401z M44,43v-8.925c0-4.382-0.946-7.752-6.067-7.752c-2.46,0-4.109,1.349-4.785,2.628H33.08v-2.223h-4.851V43h5.054v-8.05	c0-2.122,0.405-4.178,3.036-4.178c2.594,0,2.628,2.427,2.628,4.315V43H44z"></path>
             </svg>
           </a>
+
+          <a
+            href="mailto:contact@commonsensicality.org"
+            className="link link-hover"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              width="24"
+              height="24"
+            >
+              <path d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a3 3 0 0 1-3.144 0L1.5 8.67Z" />
+              <path d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z" />
+            </svg>
+          </a>
         </div>
-      </nav>
-      <aside>
-        <p>3401 Walnut Street Suite 417B, Philadelphia PA, 19104</p>
 
         <div className="flex items-center space-x-2">
           <span>

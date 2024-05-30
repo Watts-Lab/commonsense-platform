@@ -25,8 +25,6 @@ const returnStatements = async (req, res) => {
     )
     .filter((treatment) => treatment.validity({ ...req }));
 
-  console.log(oursobject);
-
   const groupedExperiments = oursobject.reduce((acc, experiment) => {
     const experimentName = experiment.experimentName;
     if (!acc[experimentName]) {

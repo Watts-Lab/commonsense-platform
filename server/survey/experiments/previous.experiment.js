@@ -18,6 +18,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -36,6 +39,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -54,6 +60,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -72,6 +81,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -90,6 +102,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -108,6 +123,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -126,6 +144,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -144,6 +165,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -162,6 +186,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -180,6 +207,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -198,6 +228,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -216,6 +249,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -234,6 +270,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -252,6 +291,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -270,6 +312,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -288,6 +333,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -306,6 +354,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -324,6 +375,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -342,6 +396,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -360,6 +417,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -378,6 +438,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -396,6 +459,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -414,6 +480,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -432,6 +501,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -450,6 +522,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -468,6 +543,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -486,6 +564,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -504,6 +585,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -522,6 +606,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -540,6 +627,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -558,6 +648,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -576,6 +669,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -594,6 +690,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -612,6 +711,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -630,6 +732,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -648,6 +753,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -666,6 +774,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -684,6 +795,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -702,6 +816,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -720,6 +837,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -738,6 +858,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -756,6 +879,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -774,6 +900,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -792,6 +921,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -810,6 +942,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -828,6 +963,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -846,6 +984,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -864,6 +1005,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -882,6 +1026,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -900,6 +1047,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -918,6 +1068,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -936,6 +1089,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -954,6 +1110,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -972,6 +1131,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -990,6 +1152,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -1008,6 +1173,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -1026,6 +1194,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -1044,6 +1215,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -1062,6 +1236,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -1080,6 +1257,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -1098,6 +1278,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -1116,6 +1299,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -1134,6 +1320,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -1152,6 +1341,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -1170,6 +1362,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -1188,6 +1383,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
   {
     design_point: {
@@ -1206,6 +1404,9 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
+    validity: (req) => {
+      return req.query.source === "mturk";
+    },
   },
 ];
 
