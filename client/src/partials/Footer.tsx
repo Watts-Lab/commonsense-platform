@@ -54,7 +54,7 @@ function Footer() {
 
         <div className="flex items-center space-x-2">
           <span>
-            Copyright © 2023 - 2024 - All right reserved by CSS lab at UPenn
+            Copyright © 2023 - 2024 - All right reserved by CSSLab at UPenn
           </span>
           <span>|</span>
           <ReportIssue />

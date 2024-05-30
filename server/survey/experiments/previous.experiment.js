@@ -2,13 +2,13 @@ const { GetStatementById } = require("../treatments/statement-by-id.treatment");
 
 const defaultTreatment = [
   {
-    point: {
-      behavior: 1,
-      everyday: 1,
-      figure_of_speech: 0,
-      judgment: 1,
-      opinion: 1,
-      reasoning: 1,
+    design_point: {
+      behavior: "Social",
+      everyday: "Everyday",
+      figure_of_speech: "Literal language",
+      judgment: "Normative",
+      opinion: "Opinion",
+      reasoning: "Reasoning",
       category: "People and self",
     },
     params: {
@@ -20,13 +20,13 @@ const defaultTreatment = [
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 1,
-      everyday: 1,
-      figure_of_speech: 0,
-      judgment: 1,
-      opinion: 1,
-      reasoning: 1,
+    design_point: {
+      behavior: "Social",
+      everyday: "Everyday",
+      figure_of_speech: "Literal language",
+      judgment: "Normative",
+      opinion: "Opinion",
+      reasoning: "Reasoning",
       category: "Human activities",
     },
     params: {
@@ -38,13 +38,13 @@ const defaultTreatment = [
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 1,
-      everyday: 1,
-      figure_of_speech: 0,
-      judgment: 1,
-      opinion: 1,
-      reasoning: 1,
+    design_point: {
+      behavior: "Social",
+      everyday: "Everyday",
+      figure_of_speech: "Literal language",
+      judgment: "Normative",
+      opinion: "Opinion",
+      reasoning: "Reasoning",
       category: "Society and social sciences",
     },
     params: {
@@ -56,13 +56,13 @@ const defaultTreatment = [
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 1,
-      everyday: 1,
-      figure_of_speech: 0,
-      judgment: 1,
-      opinion: 1,
-      reasoning: 0,
+    design_point: {
+      behavior: "Social",
+      everyday: "Everyday",
+      figure_of_speech: "Literal language",
+      judgment: "Normative",
+      opinion: "Opinion",
+      reasoning: "Knowledge",
       category: "Society and social sciences",
     },
     params: {
@@ -74,13 +74,13 @@ const defaultTreatment = [
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 1,
-      everyday: 1,
-      figure_of_speech: 0,
-      judgment: 1,
-      opinion: 1,
-      reasoning: 0,
+    design_point: {
+      behavior: "Social",
+      everyday: "Everyday",
+      figure_of_speech: "Literal language",
+      judgment: "Normative",
+      opinion: "Opinion",
+      reasoning: "Knowledge",
       category: "People and self",
     },
     params: {
@@ -92,13 +92,13 @@ const defaultTreatment = [
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 1,
-      everyday: 0,
-      figure_of_speech: 0,
-      judgment: 1,
-      opinion: 1,
-      reasoning: 0,
+    design_point: {
+      behavior: "Social",
+      everyday: "Abstract",
+      figure_of_speech: "Literal language",
+      judgment: "Normative",
+      opinion: "Opinion",
+      reasoning: "Knowledge",
       category: "Society and social sciences",
     },
     params: {
@@ -110,13 +110,13 @@ const defaultTreatment = [
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 1,
-      everyday: 1,
-      figure_of_speech: 0,
-      judgment: 1,
-      opinion: 1,
-      reasoning: 1,
+    design_point: {
+      behavior: "Social",
+      everyday: "Everyday",
+      figure_of_speech: "Literal language",
+      judgment: "Normative",
+      opinion: "Opinion",
+      reasoning: "Reasoning",
       category: "General reference",
     },
     params: {
@@ -128,13 +128,13 @@ const defaultTreatment = [
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 1,
-      everyday: 0,
-      figure_of_speech: 0,
-      judgment: 1,
-      opinion: 1,
-      reasoning: 1,
+    design_point: {
+      behavior: "Social",
+      everyday: "Abstract",
+      figure_of_speech: "Literal language",
+      judgment: "Normative",
+      opinion: "Opinion",
+      reasoning: "Reasoning",
       category: "Society and social sciences",
     },
     params: {
@@ -146,13 +146,13 @@ const defaultTreatment = [
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 1,
-      everyday: 1,
-      figure_of_speech: 0,
-      judgment: 1,
-      opinion: 1,
-      reasoning: 0,
+    design_point: {
+      behavior: "Social",
+      everyday: "Everyday",
+      figure_of_speech: "Literal language",
+      judgment: "Normative",
+      opinion: "Opinion",
+      reasoning: "Knowledge",
       category: "Human activities",
     },
     params: {
@@ -164,13 +164,13 @@ const defaultTreatment = [
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 1,
-      everyday: 1,
-      figure_of_speech: 0,
-      judgment: 1,
-      opinion: 0,
-      reasoning: 1,
+    design_point: {
+      behavior: "Social",
+      everyday: "Everyday",
+      figure_of_speech: "Literal language",
+      judgment: "Normative",
+      opinion: "Fact",
+      reasoning: "Reasoning",
       category: "People and self",
     },
     params: {
@@ -182,13 +182,13 @@ const defaultTreatment = [
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 1,
-      everyday: 0,
-      figure_of_speech: 0,
-      judgment: 1,
-      opinion: 1,
-      reasoning: 1,
+    design_point: {
+      behavior: "Social",
+      everyday: "Abstract",
+      figure_of_speech: "Literal language",
+      judgment: "Normative",
+      opinion: "Opinion",
+      reasoning: "Reasoning",
       category: "People and self",
     },
     params: {
@@ -200,13 +200,13 @@ const defaultTreatment = [
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 0,
-      everyday: 0,
-      figure_of_speech: 0,
-      judgment: 0,
-      opinion: 0,
-      reasoning: 1,
+    design_point: {
+      behavior: "Physical",
+      everyday: "Abstract",
+      figure_of_speech: "Literal language",
+      judgment: "Positive",
+      opinion: "Fact",
+      reasoning: "Reasoning",
       category: "General reference",
     },
     params: {
@@ -218,13 +218,13 @@ const defaultTreatment = [
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 0,
-      everyday: 1,
-      figure_of_speech: 0,
-      judgment: 0,
-      opinion: 0,
-      reasoning: 0,
+    design_point: {
+      behavior: "Physical",
+      everyday: "Everyday",
+      figure_of_speech: "Literal language",
+      judgment: "Positive",
+      opinion: "Fact",
+      reasoning: "Knowledge",
       category: "Natural and physical sciences",
     },
     params: {
@@ -236,13 +236,13 @@ const defaultTreatment = [
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 1,
-      everyday: 0,
-      figure_of_speech: 1,
-      judgment: 1,
-      opinion: 1,
-      reasoning: 1,
+    design_point: {
+      behavior: "Social",
+      everyday: "Abstract",
+      figure_of_speech: "Figure of speech",
+      judgment: "Normative",
+      opinion: "Opinion",
+      reasoning: "Reasoning",
       category: "Philosophy and thinking",
     },
     params: {
@@ -254,13 +254,13 @@ const defaultTreatment = [
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 1,
-      everyday: 1,
-      figure_of_speech: 0,
-      judgment: 1,
-      opinion: 1,
-      reasoning: 0,
+    design_point: {
+      behavior: "Social",
+      everyday: "Everyday",
+      figure_of_speech: "Literal language",
+      judgment: "Normative",
+      opinion: "Opinion",
+      reasoning: "Knowledge",
       category: "General reference",
     },
     params: {
@@ -272,13 +272,13 @@ const defaultTreatment = [
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 1,
-      everyday: 0,
-      figure_of_speech: 1,
-      judgment: 1,
-      opinion: 1,
-      reasoning: 0,
+    design_point: {
+      behavior: "Social",
+      everyday: "Abstract",
+      figure_of_speech: "Figure of speech",
+      judgment: "Normative",
+      opinion: "Opinion",
+      reasoning: "Knowledge",
       category: "Philosophy and thinking",
     },
     params: {
@@ -290,13 +290,13 @@ const defaultTreatment = [
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 1,
-      everyday: 1,
-      figure_of_speech: 1,
-      judgment: 1,
-      opinion: 1,
-      reasoning: 1,
+    design_point: {
+      behavior: "Social",
+      everyday: "Everyday",
+      figure_of_speech: "Figure of speech",
+      judgment: "Normative",
+      opinion: "Opinion",
+      reasoning: "Reasoning",
       category: "People and self",
     },
     params: {
@@ -308,13 +308,13 @@ const defaultTreatment = [
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 1,
-      everyday: 1,
-      figure_of_speech: 0,
-      judgment: 1,
-      opinion: 0,
-      reasoning: 1,
+    design_point: {
+      behavior: "Social",
+      everyday: "Everyday",
+      figure_of_speech: "Literal language",
+      judgment: "Normative",
+      opinion: "Fact",
+      reasoning: "Reasoning",
       category: "Human activities",
     },
     params: {
@@ -326,13 +326,13 @@ const defaultTreatment = [
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 1,
-      everyday: 0,
-      figure_of_speech: 0,
-      judgment: 1,
-      opinion: 1,
-      reasoning: 1,
+    design_point: {
+      behavior: "Social",
+      everyday: "Abstract",
+      figure_of_speech: "Literal language",
+      judgment: "Normative",
+      opinion: "Opinion",
+      reasoning: "Reasoning",
       category: "Philosophy and thinking",
     },
     params: {
@@ -344,13 +344,13 @@ const defaultTreatment = [
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 1,
-      everyday: 1,
-      figure_of_speech: 0,
-      judgment: 1,
-      opinion: 1,
-      reasoning: 1,
+    design_point: {
+      behavior: "Social",
+      everyday: "Everyday",
+      figure_of_speech: "Literal language",
+      judgment: "Normative",
+      opinion: "Opinion",
+      reasoning: "Reasoning",
       category: "Health and fitness",
     },
     params: {
@@ -362,13 +362,13 @@ const defaultTreatment = [
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 1,
-      everyday: 0,
-      figure_of_speech: 1,
-      judgment: 1,
-      opinion: 1,
-      reasoning: 1,
+    design_point: {
+      behavior: "Social",
+      everyday: "Abstract",
+      figure_of_speech: "Figure of speech",
+      judgment: "Normative",
+      opinion: "Opinion",
+      reasoning: "Reasoning",
       category: "People and self",
     },
     params: {
@@ -380,13 +380,13 @@ const defaultTreatment = [
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 1,
-      everyday: 1,
-      figure_of_speech: 0,
-      judgment: 1,
-      opinion: 0,
-      reasoning: 0,
+    design_point: {
+      behavior: "Social",
+      everyday: "Everyday",
+      figure_of_speech: "Literal language",
+      judgment: "Normative",
+      opinion: "Fact",
+      reasoning: "Knowledge",
       category: "Human activities",
     },
     params: {
@@ -398,13 +398,13 @@ const defaultTreatment = [
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 0,
-      everyday: 1,
-      figure_of_speech: 0,
-      judgment: 1,
-      opinion: 0,
-      reasoning: 1,
+    design_point: {
+      behavior: "Physical",
+      everyday: "Everyday",
+      figure_of_speech: "Literal language",
+      judgment: "Normative",
+      opinion: "Fact",
+      reasoning: "Reasoning",
       category: "General reference",
     },
     params: {
@@ -416,31 +416,13 @@ const defaultTreatment = [
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 1,
-      everyday: 1,
-      figure_of_speech: 0,
-      judgment: 1,
-      opinion: 1,
-      reasoning: 1,
-      category: "Culture and the arts",
-    },
-    params: {
-      ids: [
-        255, 3028, 2226, 4393, 2310, 2320, 3912, 1444, 1732, 989, 4061, 1472,
-        4375, 2105, 1325,
-      ],
-    },
-    function: GetStatementById,
-  },
-  {
-    point: {
-      behavior: 0,
-      everyday: 1,
-      figure_of_speech: 0,
-      judgment: 0,
-      opinion: 0,
-      reasoning: 0,
+    design_point: {
+      behavior: "Physical",
+      everyday: "Everyday",
+      figure_of_speech: "Literal language",
+      judgment: "Positive",
+      opinion: "Fact",
+      reasoning: "Knowledge",
       category: "Human activities",
     },
     params: {
@@ -452,31 +434,31 @@ const defaultTreatment = [
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 1,
-      everyday: 1,
-      figure_of_speech: 0,
-      judgment: 1,
-      opinion: 0,
-      reasoning: 0,
-      category: "General reference",
+    design_point: {
+      behavior: "Social",
+      everyday: "Everyday",
+      figure_of_speech: "Literal language",
+      judgment: "Normative",
+      opinion: "Opinion",
+      reasoning: "Reasoning",
+      category: "Culture and the arts",
     },
     params: {
       ids: [
-        3155, 3160, 4382, 3412, 4062, 3157, 3460, 3069, 3413, 2767, 1909, 4301,
-        3391, 563, 3168,
+        255, 3028, 2226, 4393, 2310, 2320, 3912, 1444, 1732, 989, 4061, 1472,
+        4375, 2105, 1325,
       ],
     },
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 1,
-      everyday: 1,
-      figure_of_speech: 0,
-      judgment: 1,
-      opinion: 1,
-      reasoning: 1,
+    design_point: {
+      behavior: "Social",
+      everyday: "Everyday",
+      figure_of_speech: "Literal language",
+      judgment: "Normative",
+      opinion: "Opinion",
+      reasoning: "Reasoning",
       category: "Philosophy and thinking",
     },
     params: {
@@ -488,49 +470,31 @@ const defaultTreatment = [
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 0,
-      everyday: 1,
-      figure_of_speech: 0,
-      judgment: 1,
-      opinion: 0,
-      reasoning: 0,
+    design_point: {
+      behavior: "Social",
+      everyday: "Everyday",
+      figure_of_speech: "Literal language",
+      judgment: "Normative",
+      opinion: "Fact",
+      reasoning: "Knowledge",
       category: "General reference",
     },
     params: {
       ids: [
-        2324, 333, 3289, 3479, 3189, 3506, 3125, 3416, 4288, 2594, 4300, 3134,
-        3422, 3153, 3390,
+        3155, 3160, 4382, 3412, 4062, 3157, 3460, 3069, 3413, 2767, 1909, 4301,
+        3391, 563, 3168,
       ],
     },
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 1,
-      everyday: 1,
-      figure_of_speech: 1,
-      judgment: 1,
-      opinion: 1,
-      reasoning: 1,
-      category: "Philosophy and thinking",
-    },
-    params: {
-      ids: [
-        2001, 2382, 3817, 3261, 2672, 2622, 666, 561, 2263, 4339, 307, 2245,
-        3736, 2411, 2578,
-      ],
-    },
-    function: GetStatementById,
-  },
-  {
-    point: {
-      behavior: 0,
-      everyday: 0,
-      figure_of_speech: 0,
-      judgment: 0,
-      opinion: 0,
-      reasoning: 1,
+    design_point: {
+      behavior: "Physical",
+      everyday: "Abstract",
+      figure_of_speech: "Literal language",
+      judgment: "Positive",
+      opinion: "Fact",
+      reasoning: "Reasoning",
       category: "Culture and the arts",
     },
     params: {
@@ -542,67 +506,49 @@ const defaultTreatment = [
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 0,
-      everyday: 1,
-      figure_of_speech: 0,
-      judgment: 0,
-      opinion: 0,
-      reasoning: 0,
-      category: "Geography and places",
+    design_point: {
+      behavior: "Social",
+      everyday: "Everyday",
+      figure_of_speech: "Figure of speech",
+      judgment: "Normative",
+      opinion: "Opinion",
+      reasoning: "Reasoning",
+      category: "Philosophy and thinking",
     },
     params: {
       ids: [
-        2636, 3618, 3549, 587, 4281, 3552, 3342, 3163, 3341, 4327, 3345, 3595,
-        3558, 338, 2287,
+        2001, 2382, 3817, 3261, 2672, 2622, 666, 561, 2263, 4339, 307, 2245,
+        3736, 2411, 2578,
       ],
     },
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 1,
-      everyday: 0,
-      figure_of_speech: 0,
-      judgment: 1,
-      opinion: 1,
-      reasoning: 0,
+    design_point: {
+      behavior: "Physical",
+      everyday: "Everyday",
+      figure_of_speech: "Literal language",
+      judgment: "Normative",
+      opinion: "Fact",
+      reasoning: "Knowledge",
       category: "General reference",
     },
     params: {
       ids: [
-        3325, 2885, 509, 3075, 4303, 459, 3263, 4144, 3791, 418, 3974, 3881,
-        3376, 948, 2494,
+        2324, 333, 3289, 3479, 3189, 3506, 3125, 3416, 4288, 2594, 4300, 3134,
+        3422, 3153, 3390,
       ],
     },
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 0,
-      everyday: 0,
-      figure_of_speech: 0,
-      judgment: 1,
-      opinion: 0,
-      reasoning: 1,
-      category: "General reference",
-    },
-    params: {
-      ids: [
-        298, 2518, 4221, 1124, 859, 835, 1186, 2504, 937, 2601, 2523, 3711, 819,
-        3439, 1419,
-      ],
-    },
-    function: GetStatementById,
-  },
-  {
-    point: {
-      behavior: 0,
-      everyday: 0,
-      figure_of_speech: 0,
-      judgment: 0,
-      opinion: 1,
-      reasoning: 1,
+    design_point: {
+      behavior: "Physical",
+      everyday: "Abstract",
+      figure_of_speech: "Literal language",
+      judgment: "Positive",
+      opinion: "Opinion",
+      reasoning: "Reasoning",
       category: "General reference",
     },
     params: {
@@ -614,13 +560,67 @@ const defaultTreatment = [
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 1,
-      everyday: 1,
-      figure_of_speech: 0,
-      judgment: 1,
-      opinion: 0,
-      reasoning: 1,
+    design_point: {
+      behavior: "Social",
+      everyday: "Abstract",
+      figure_of_speech: "Literal language",
+      judgment: "Normative",
+      opinion: "Opinion",
+      reasoning: "Knowledge",
+      category: "General reference",
+    },
+    params: {
+      ids: [
+        3325, 2885, 509, 3075, 4303, 459, 3263, 4144, 3791, 418, 3974, 3881,
+        3376, 948, 2494,
+      ],
+    },
+    function: GetStatementById,
+  },
+  {
+    design_point: {
+      behavior: "Physical",
+      everyday: "Everyday",
+      figure_of_speech: "Literal language",
+      judgment: "Positive",
+      opinion: "Fact",
+      reasoning: "Knowledge",
+      category: "Geography and places",
+    },
+    params: {
+      ids: [
+        2636, 3618, 3549, 587, 4281, 3552, 3342, 3163, 3341, 4327, 3345, 3595,
+        3558, 338, 2287,
+      ],
+    },
+    function: GetStatementById,
+  },
+  {
+    design_point: {
+      behavior: "Physical",
+      everyday: "Abstract",
+      figure_of_speech: "Literal language",
+      judgment: "Normative",
+      opinion: "Fact",
+      reasoning: "Reasoning",
+      category: "General reference",
+    },
+    params: {
+      ids: [
+        298, 2518, 4221, 1124, 859, 835, 1186, 2504, 937, 2601, 2523, 3711, 819,
+        3439, 1419,
+      ],
+    },
+    function: GetStatementById,
+  },
+  {
+    design_point: {
+      behavior: "Social",
+      everyday: "Everyday",
+      figure_of_speech: "Literal language",
+      judgment: "Normative",
+      opinion: "Fact",
+      reasoning: "Reasoning",
       category: "General reference",
     },
     params: {
@@ -632,13 +632,13 @@ const defaultTreatment = [
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 0,
-      everyday: 1,
-      figure_of_speech: 0,
-      judgment: 0,
-      opinion: 0,
-      reasoning: 0,
+    design_point: {
+      behavior: "Physical",
+      everyday: "Everyday",
+      figure_of_speech: "Literal language",
+      judgment: "Positive",
+      opinion: "Fact",
+      reasoning: "Knowledge",
       category: "General reference",
     },
     params: {
@@ -650,13 +650,13 @@ const defaultTreatment = [
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 1,
-      everyday: 0,
-      figure_of_speech: 0,
-      judgment: 1,
-      opinion: 1,
-      reasoning: 1,
+    design_point: {
+      behavior: "Social",
+      everyday: "Abstract",
+      figure_of_speech: "Literal language",
+      judgment: "Normative",
+      opinion: "Opinion",
+      reasoning: "Reasoning",
       category: "General reference",
     },
     params: {
@@ -668,67 +668,13 @@ const defaultTreatment = [
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 1,
-      everyday: 1,
-      figure_of_speech: 0,
-      judgment: 1,
-      opinion: 0,
-      reasoning: 0,
-      category: "People and self",
-    },
-    params: {
-      ids: [
-        4208, 86, 96, 2860, 95, 4290, 2462, 4356, 1504, 2907, 1977, 1477, 938,
-        357, 1636,
-      ],
-    },
-    function: GetStatementById,
-  },
-  {
-    point: {
-      behavior: 1,
-      everyday: 0,
-      figure_of_speech: 0,
-      judgment: 1,
-      opinion: 1,
-      reasoning: 1,
-      category: "Human activities",
-    },
-    params: {
-      ids: [
-        345, 454, 3317, 1865, 412, 1934, 4368, 3265, 852, 2890, 1698, 828, 4385,
-        1579, 3829,
-      ],
-    },
-    function: GetStatementById,
-  },
-  {
-    point: {
-      behavior: 1,
-      everyday: 0,
-      figure_of_speech: 0,
-      judgment: 1,
-      opinion: 1,
-      reasoning: 0,
-      category: "People and self",
-    },
-    params: {
-      ids: [
-        3014, 2290, 3035, 504, 2463, 120, 657, 3816, 3531, 2633, 503, 205, 2768,
-        104, 3961,
-      ],
-    },
-    function: GetStatementById,
-  },
-  {
-    point: {
-      behavior: 0,
-      everyday: 0,
-      figure_of_speech: 0,
-      judgment: 0,
-      opinion: 0,
-      reasoning: 0,
+    design_point: {
+      behavior: "Physical",
+      everyday: "Abstract",
+      figure_of_speech: "Literal language",
+      judgment: "Positive",
+      opinion: "Fact",
+      reasoning: "Knowledge",
       category: "General reference",
     },
     params: {
@@ -740,13 +686,49 @@ const defaultTreatment = [
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 1,
-      everyday: 1,
-      figure_of_speech: 0,
-      judgment: 1,
-      opinion: 1,
-      reasoning: 0,
+    design_point: {
+      behavior: "Social",
+      everyday: "Abstract",
+      figure_of_speech: "Literal language",
+      judgment: "Normative",
+      opinion: "Opinion",
+      reasoning: "Reasoning",
+      category: "Human activities",
+    },
+    params: {
+      ids: [
+        345, 454, 3317, 1865, 412, 1934, 4368, 3265, 852, 2890, 1698, 828, 4385,
+        1579, 3829,
+      ],
+    },
+    function: GetStatementById,
+  },
+  {
+    design_point: {
+      behavior: "Social",
+      everyday: "Abstract",
+      figure_of_speech: "Literal language",
+      judgment: "Normative",
+      opinion: "Opinion",
+      reasoning: "Knowledge",
+      category: "People and self",
+    },
+    params: {
+      ids: [
+        3014, 2290, 3035, 504, 2463, 120, 657, 3816, 3531, 2633, 503, 205, 2768,
+        104, 3961,
+      ],
+    },
+    function: GetStatementById,
+  },
+  {
+    design_point: {
+      behavior: "Social",
+      everyday: "Everyday",
+      figure_of_speech: "Literal language",
+      judgment: "Normative",
+      opinion: "Opinion",
+      reasoning: "Knowledge",
       category: "Philosophy and thinking",
     },
     params: {
@@ -758,49 +740,31 @@ const defaultTreatment = [
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 0,
-      everyday: 1,
-      figure_of_speech: 0,
-      judgment: 0,
-      opinion: 0,
-      reasoning: 1,
-      category: "Culture and the arts",
+    design_point: {
+      behavior: "Social",
+      everyday: "Everyday",
+      figure_of_speech: "Literal language",
+      judgment: "Normative",
+      opinion: "Fact",
+      reasoning: "Knowledge",
+      category: "People and self",
     },
     params: {
       ids: [
-        3502, 1502, 821, 4048, 2888, 2399, 2845, 1423, 2441, 1085, 1335, 1429,
-        816, 977, 2377,
+        4208, 86, 96, 2860, 95, 4290, 2462, 4356, 1504, 2907, 1977, 1477, 938,
+        357, 1636,
       ],
     },
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 0,
-      everyday: 0,
-      figure_of_speech: 0,
-      judgment: 0,
-      opinion: 0,
-      reasoning: 1,
-      category: "Religion and belief systems",
-    },
-    params: {
-      ids: [
-        339, 3833, 3731, 2209, 2414, 2241, 2963, 4060, 1282, 2379, 2481, 1013,
-        1333, 1038, 1283,
-      ],
-    },
-    function: GetStatementById,
-  },
-  {
-    point: {
-      behavior: 0,
-      everyday: 1,
-      figure_of_speech: 0,
-      judgment: 0,
-      opinion: 0,
-      reasoning: 1,
+    design_point: {
+      behavior: "Physical",
+      everyday: "Everyday",
+      figure_of_speech: "Literal language",
+      judgment: "Positive",
+      opinion: "Fact",
+      reasoning: "Reasoning",
       category: "People and self",
     },
     params: {
@@ -812,13 +776,49 @@ const defaultTreatment = [
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 1,
-      everyday: 0,
-      figure_of_speech: 0,
-      judgment: 1,
-      opinion: 1,
-      reasoning: 0,
+    design_point: {
+      behavior: "Physical",
+      everyday: "Everyday",
+      figure_of_speech: "Literal language",
+      judgment: "Positive",
+      opinion: "Fact",
+      reasoning: "Reasoning",
+      category: "Culture and the arts",
+    },
+    params: {
+      ids: [
+        3502, 1502, 821, 4048, 2888, 2399, 2845, 1423, 2441, 1085, 1335, 1429,
+        816, 977, 2377,
+      ],
+    },
+    function: GetStatementById,
+  },
+  {
+    design_point: {
+      behavior: "Physical",
+      everyday: "Abstract",
+      figure_of_speech: "Literal language",
+      judgment: "Positive",
+      opinion: "Fact",
+      reasoning: "Reasoning",
+      category: "Religion and belief systems",
+    },
+    params: {
+      ids: [
+        339, 3833, 3731, 2209, 2414, 2241, 2963, 4060, 1282, 2379, 2481, 1013,
+        1333, 1038, 1283,
+      ],
+    },
+    function: GetStatementById,
+  },
+  {
+    design_point: {
+      behavior: "Social",
+      everyday: "Abstract",
+      figure_of_speech: "Literal language",
+      judgment: "Normative",
+      opinion: "Opinion",
+      reasoning: "Knowledge",
       category: "Philosophy and thinking",
     },
     params: {
@@ -830,13 +830,13 @@ const defaultTreatment = [
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 1,
-      everyday: 0,
-      figure_of_speech: 1,
-      judgment: 1,
-      opinion: 1,
-      reasoning: 0,
+    design_point: {
+      behavior: "Social",
+      everyday: "Abstract",
+      figure_of_speech: "Figure of speech",
+      judgment: "Normative",
+      opinion: "Opinion",
+      reasoning: "Knowledge",
       category: "General reference",
     },
     params: {
@@ -848,49 +848,13 @@ const defaultTreatment = [
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 0,
-      everyday: 1,
-      figure_of_speech: 0,
-      judgment: 1,
-      opinion: 0,
-      reasoning: 1,
-      category: "Human activities",
-    },
-    params: {
-      ids: [
-        2292, 2476, 46, 910, 2300, 3786, 4070, 3353, 1358, 1014, 291, 3379,
-        3743, 888, 1873,
-      ],
-    },
-    function: GetStatementById,
-  },
-  {
-    point: {
-      behavior: 0,
-      everyday: 1,
-      figure_of_speech: 0,
-      judgment: 0,
-      opinion: 0,
-      reasoning: 0,
-      category: "Health and fitness",
-    },
-    params: {
-      ids: [
-        2759, 2540, 3324, 2758, 4181, 35, 524, 522, 3063, 527, 407, 3049, 2785,
-        3064, 571,
-      ],
-    },
-    function: GetStatementById,
-  },
-  {
-    point: {
-      behavior: 1,
-      everyday: 0,
-      figure_of_speech: 1,
-      judgment: 1,
-      opinion: 1,
-      reasoning: 1,
+    design_point: {
+      behavior: "Social",
+      everyday: "Abstract",
+      figure_of_speech: "Figure of speech",
+      judgment: "Normative",
+      opinion: "Opinion",
+      reasoning: "Reasoning",
       category: "General reference",
     },
     params: {
@@ -902,49 +866,49 @@ const defaultTreatment = [
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 1,
-      everyday: 1,
-      figure_of_speech: 1,
-      judgment: 1,
-      opinion: 1,
-      reasoning: 1,
-      category: "General reference",
+    design_point: {
+      behavior: "Physical",
+      everyday: "Everyday",
+      figure_of_speech: "Literal language",
+      judgment: "Normative",
+      opinion: "Fact",
+      reasoning: "Reasoning",
+      category: "Human activities",
     },
     params: {
       ids: [
-        3774, 4276, 2426, 4318, 4066, 113, 2804, 133, 1527, 2326, 2748, 41,
-        1231, 463, 881,
+        2292, 2476, 46, 910, 2300, 3786, 4070, 3353, 1358, 1014, 291, 3379,
+        3743, 888, 1873,
       ],
     },
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 0,
-      everyday: 0,
-      figure_of_speech: 0,
-      judgment: 0,
-      opinion: 1,
-      reasoning: 1,
-      category: "Culture and the arts",
+    design_point: {
+      behavior: "Physical",
+      everyday: "Everyday",
+      figure_of_speech: "Literal language",
+      judgment: "Positive",
+      opinion: "Fact",
+      reasoning: "Knowledge",
+      category: "Health and fitness",
     },
     params: {
       ids: [
-        3841, 2218, 861, 1056, 735, 781, 1089, 3232, 3301, 787, 1246, 1378,
-        1291, 802, 844,
+        2759, 2540, 3324, 2758, 4181, 35, 524, 522, 3063, 527, 407, 3049, 2785,
+        3064, 571,
       ],
     },
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 0,
-      everyday: 1,
-      figure_of_speech: 0,
-      judgment: 0,
-      opinion: 0,
-      reasoning: 1,
+    design_point: {
+      behavior: "Physical",
+      everyday: "Everyday",
+      figure_of_speech: "Literal language",
+      judgment: "Positive",
+      opinion: "Fact",
+      reasoning: "Reasoning",
       category: "Human activities",
     },
     params: {
@@ -956,49 +920,49 @@ const defaultTreatment = [
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 1,
-      everyday: 1,
-      figure_of_speech: 1,
-      judgment: 1,
-      opinion: 1,
-      reasoning: 0,
-      category: "Philosophy and thinking",
+    design_point: {
+      behavior: "Physical",
+      everyday: "Abstract",
+      figure_of_speech: "Literal language",
+      judgment: "Positive",
+      opinion: "Opinion",
+      reasoning: "Reasoning",
+      category: "Culture and the arts",
     },
     params: {
       ids: [
-        2641, 3569, 3812, 574, 455, 4189, 3328, 2413, 3571, 2697, 3689, 308,
-        2706, 648, 54,
+        3841, 2218, 861, 1056, 735, 781, 1089, 3232, 3301, 787, 1246, 1378,
+        1291, 802, 844,
       ],
     },
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 0,
-      everyday: 1,
-      figure_of_speech: 0,
-      judgment: 0,
-      opinion: 0,
-      reasoning: 1,
-      category: "Health and fitness",
+    design_point: {
+      behavior: "Social",
+      everyday: "Everyday",
+      figure_of_speech: "Figure of speech",
+      judgment: "Normative",
+      opinion: "Opinion",
+      reasoning: "Reasoning",
+      category: "General reference",
     },
     params: {
       ids: [
-        4326, 1010, 1217, 3093, 1798, 2942, 2302, 4380, 438, 4150, 3360, 92,
-        472, 1339, 720,
+        3774, 4276, 2426, 4318, 4066, 113, 2804, 133, 1527, 2326, 2748, 41,
+        1231, 463, 881,
       ],
     },
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 0,
-      everyday: 0,
-      figure_of_speech: 0,
-      judgment: 1,
-      opinion: 1,
-      reasoning: 0,
+    design_point: {
+      behavior: "Physical",
+      everyday: "Abstract",
+      figure_of_speech: "Literal language",
+      judgment: "Normative",
+      opinion: "Opinion",
+      reasoning: "Knowledge",
       category: "General reference",
     },
     params: {
@@ -1010,49 +974,49 @@ const defaultTreatment = [
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 0,
-      everyday: 1,
-      figure_of_speech: 0,
-      judgment: 1,
-      opinion: 0,
-      reasoning: 0,
-      category: "People and self",
+    design_point: {
+      behavior: "Physical",
+      everyday: "Everyday",
+      figure_of_speech: "Literal language",
+      judgment: "Positive",
+      opinion: "Fact",
+      reasoning: "Reasoning",
+      category: "Health and fitness",
     },
     params: {
       ids: [
-        3118, 4354, 3417, 2190, 3198, 1751, 2224, 2632, 3485, 827, 4377, 3126,
-        3371, 2169, 1799,
+        4326, 1010, 1217, 3093, 1798, 2942, 2302, 4380, 438, 4150, 3360, 92,
+        472, 1339, 720,
       ],
     },
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 1,
-      everyday: 0,
-      figure_of_speech: 0,
-      judgment: 1,
-      opinion: 1,
-      reasoning: 0,
-      category: "Religion and belief systems",
+    design_point: {
+      behavior: "Social",
+      everyday: "Everyday",
+      figure_of_speech: "Figure of speech",
+      judgment: "Normative",
+      opinion: "Opinion",
+      reasoning: "Knowledge",
+      category: "Philosophy and thinking",
     },
     params: {
       ids: [
-        2727, 2457, 4109, 603, 3963, 599, 600, 2583, 3669, 365, 4114, 3332, 505,
-        2740, 2339,
+        2641, 3569, 3812, 574, 455, 4189, 3328, 2413, 3571, 2697, 3689, 308,
+        2706, 648, 54,
       ],
     },
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 1,
-      everyday: 1,
-      figure_of_speech: 0,
-      judgment: 1,
-      opinion: 1,
-      reasoning: 0,
+    design_point: {
+      behavior: "Social",
+      everyday: "Everyday",
+      figure_of_speech: "Literal language",
+      judgment: "Normative",
+      opinion: "Opinion",
+      reasoning: "Knowledge",
       category: "Health and fitness",
     },
     params: {
@@ -1064,31 +1028,13 @@ const defaultTreatment = [
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 1,
-      everyday: 1,
-      figure_of_speech: 1,
-      judgment: 1,
-      opinion: 1,
-      reasoning: 0,
-      category: "General reference",
-    },
-    params: {
-      ids: [
-        3487, 2506, 3866, 3101, 139, 2444, 2922, 683, 279, 3108, 274, 42, 3746,
-        1165, 3720,
-      ],
-    },
-    function: GetStatementById,
-  },
-  {
-    point: {
-      behavior: 0,
-      everyday: 1,
-      figure_of_speech: 0,
-      judgment: 0,
-      opinion: 0,
-      reasoning: 0,
+    design_point: {
+      behavior: "Physical",
+      everyday: "Everyday",
+      figure_of_speech: "Literal language",
+      judgment: "Positive",
+      opinion: "Fact",
+      reasoning: "Knowledge",
       category: "Technology and applied sciences",
     },
     params: {
@@ -1100,13 +1046,67 @@ const defaultTreatment = [
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 1,
-      everyday: 1,
-      figure_of_speech: 0,
-      judgment: 0,
-      opinion: 0,
-      reasoning: 1,
+    design_point: {
+      behavior: "Social",
+      everyday: "Abstract",
+      figure_of_speech: "Literal language",
+      judgment: "Normative",
+      opinion: "Opinion",
+      reasoning: "Knowledge",
+      category: "Religion and belief systems",
+    },
+    params: {
+      ids: [
+        2727, 2457, 4109, 603, 3963, 599, 600, 2583, 3669, 365, 4114, 3332, 505,
+        2740, 2339,
+      ],
+    },
+    function: GetStatementById,
+  },
+  {
+    design_point: {
+      behavior: "Physical",
+      everyday: "Everyday",
+      figure_of_speech: "Literal language",
+      judgment: "Normative",
+      opinion: "Fact",
+      reasoning: "Knowledge",
+      category: "People and self",
+    },
+    params: {
+      ids: [
+        3118, 4354, 3417, 2190, 3198, 1751, 2224, 2632, 3485, 827, 4377, 3126,
+        3371, 2169, 1799,
+      ],
+    },
+    function: GetStatementById,
+  },
+  {
+    design_point: {
+      behavior: "Social",
+      everyday: "Everyday",
+      figure_of_speech: "Figure of speech",
+      judgment: "Normative",
+      opinion: "Opinion",
+      reasoning: "Knowledge",
+      category: "General reference",
+    },
+    params: {
+      ids: [
+        3487, 2506, 3866, 3101, 139, 2444, 2922, 683, 279, 3108, 274, 42, 3746,
+        1165, 3720,
+      ],
+    },
+    function: GetStatementById,
+  },
+  {
+    design_point: {
+      behavior: "Social",
+      everyday: "Everyday",
+      figure_of_speech: "Literal language",
+      judgment: "Positive",
+      opinion: "Fact",
+      reasoning: "Reasoning",
       category: "People and self",
     },
     params: {
@@ -1118,13 +1118,13 @@ const defaultTreatment = [
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 1,
-      everyday: 1,
-      figure_of_speech: 0,
-      judgment: 0,
-      opinion: 0,
-      reasoning: 1,
+    design_point: {
+      behavior: "Social",
+      everyday: "Everyday",
+      figure_of_speech: "Literal language",
+      judgment: "Positive",
+      opinion: "Fact",
+      reasoning: "Reasoning",
       category: "Human activities",
     },
     params: {
@@ -1136,31 +1136,13 @@ const defaultTreatment = [
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 0,
-      everyday: 1,
-      figure_of_speech: 0,
-      judgment: 0,
-      opinion: 0,
-      reasoning: 1,
-      category: "General reference",
-    },
-    params: {
-      ids: [
-        146, 3252, 2906, 66, 2410, 2934, 1280, 1433, 2836, 3684, 746, 1201,
-        3794, 1100, 1153,
-      ],
-    },
-    function: GetStatementById,
-  },
-  {
-    point: {
-      behavior: 0,
-      everyday: 0,
-      figure_of_speech: 0,
-      judgment: 0,
-      opinion: 0,
-      reasoning: 1,
+    design_point: {
+      behavior: "Physical",
+      everyday: "Abstract",
+      figure_of_speech: "Literal language",
+      judgment: "Positive",
+      opinion: "Fact",
+      reasoning: "Reasoning",
       category: "History and events",
     },
     params: {
@@ -1172,13 +1154,13 @@ const defaultTreatment = [
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 1,
-      everyday: 0,
-      figure_of_speech: 0,
-      judgment: 1,
-      opinion: 1,
-      reasoning: 1,
+    design_point: {
+      behavior: "Social",
+      everyday: "Abstract",
+      figure_of_speech: "Literal language",
+      judgment: "Normative",
+      opinion: "Opinion",
+      reasoning: "Reasoning",
       category: "Religion and belief systems",
     },
     params: {
@@ -1190,13 +1172,31 @@ const defaultTreatment = [
     function: GetStatementById,
   },
   {
-    point: {
-      behavior: 1,
-      everyday: 1,
-      figure_of_speech: 1,
-      judgment: 1,
-      opinion: 1,
-      reasoning: 1,
+    design_point: {
+      behavior: "Physical",
+      everyday: "Everyday",
+      figure_of_speech: "Literal language",
+      judgment: "Positive",
+      opinion: "Fact",
+      reasoning: "Reasoning",
+      category: "General reference",
+    },
+    params: {
+      ids: [
+        146, 3252, 2906, 66, 2410, 2934, 1280, 1433, 2836, 3684, 746, 1201,
+        3794, 1100, 1153,
+      ],
+    },
+    function: GetStatementById,
+  },
+  {
+    design_point: {
+      behavior: "Social",
+      everyday: "Everyday",
+      figure_of_speech: "Figure of speech",
+      judgment: "Normative",
+      opinion: "Opinion",
+      reasoning: "Reasoning",
       category: "Culture and the arts",
     },
     params: {
@@ -1210,7 +1210,7 @@ const defaultTreatment = [
 ];
 
 const experiment = {
-  experimentName: "design-point-old-statements",
+  experimentName: "design-design_point-old-statements",
   treatments: defaultTreatment,
   treatmentAssigner: (subject, treatments) => {
     return treatments[Math.floor(Math.random() * treatments.length)];

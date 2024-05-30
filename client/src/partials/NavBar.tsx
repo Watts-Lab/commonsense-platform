@@ -70,7 +70,7 @@ const Navbar: React.FC = () => {
           <Link to="/" className="flex items-center" aria-label="Logo">
             <img className="h-9 block" src={Icon} alt="Logo" />
             <span className="text-lg font-bold inline-block ml-2">
-              Commonsensicality.org
+              The common sense project
             </span>
           </Link>
         </div>
