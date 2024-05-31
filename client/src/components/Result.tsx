@@ -27,7 +27,6 @@ function Result(props) {
   const [notifBox, setNotifBox] = useState(false);
 
   const surveySession = useSelector((state) => state.login.surveySession);
-
   const urlParams = useSelector((state) => state.urlslice.urlParams);
 
   const navigateTo = useNavigate();
@@ -52,7 +51,7 @@ function Result(props) {
 
     Backend.post("/results", {
       withCredentials: true,
-      sessionId: surveySession,
+      sessionId: props.sessionId,
     }).then((response) => {
       setCommonSenseScore({
         commonsense: Math.round(
@@ -71,7 +70,7 @@ function Result(props) {
 
     Backend.get("/treatments/update", {
       withCredentials: true,
-      params: { sessionId: surveySession },
+      params: { sessionId: props.sessionId },
     }).then((response) => {
       console.log(response.data);
     });
@@ -96,7 +95,7 @@ function Result(props) {
 
   const emailSubmit = (e) => {
     e.preventDefault();
-    signUp(userEmail, surveySession);
+    signUp(userEmail, props.sessionId);
     setNotifBox(true);
   };
 
@@ -109,7 +108,7 @@ function Result(props) {
     Backend.get("/results/all", {
       withCredentials: true,
       params: {
-        sessionId: surveySession,
+        sessionId: props.sessionId,
       },
     })
       .then((response) => {
@@ -164,7 +163,7 @@ function Result(props) {
 
   async function handleCopy() {
     try {
-      await navigator.clipboard.writeText(surveySession);
+      await navigator.clipboard.writeText(props.sessionId);
     } catch (error) {
       console.error("Failed to copy text:", error);
     }
@@ -181,7 +180,7 @@ function Result(props) {
               verification:
             </p>
             <p className="pb-2 mb-3 font-semibold border-2 rounded py-1 px-3">
-              {surveySession}
+              {props.sessionId}
             </p>
             <button
               onClick={handleCopy}
@@ -233,7 +232,7 @@ function Result(props) {
       <div className="flex justify-center" ref={containerRef} />
       <TwitterText
         percentage={commonSenseScore.commonsense}
-        sessionId={surveySession}
+        sessionId={props.sessionId}
       />
 
       <div className="flex flex-col items-center pt-7">
