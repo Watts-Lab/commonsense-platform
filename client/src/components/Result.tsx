@@ -52,7 +52,7 @@ function Result(props) {
 
     Backend.post("/results", {
       withCredentials: true,
-      sessionId: props.sessionId,
+      sessionId: surveySession,
     }).then((response) => {
       setCommonSenseScore({
         commonsense: Math.round(
@@ -71,7 +71,7 @@ function Result(props) {
 
     Backend.get("/treatments/update", {
       withCredentials: true,
-      params: { sessionId: props.sessionId },
+      params: { sessionId: surveySession },
     }).then((response) => {
       console.log(response.data);
     });
@@ -96,7 +96,7 @@ function Result(props) {
 
   const emailSubmit = (e) => {
     e.preventDefault();
-    signUp(userEmail, props.sessionId);
+    signUp(userEmail, surveySession);
     setNotifBox(true);
   };
 
@@ -109,7 +109,7 @@ function Result(props) {
     Backend.get("/results/all", {
       withCredentials: true,
       params: {
-        sessionId: props.sessionId,
+        sessionId: surveySession,
       },
     })
       .then((response) => {
@@ -134,8 +134,8 @@ function Result(props) {
 
   useEffect(() => {
     const plot = Plot.plot({
-      x: { percent: true, nice: true },
-      y: { nice: true },
+      x: { percent: true, domain: [0, 100], clamp: true },
+      y: { axis: false },
       color: { scheme: "Magma" },
       marks: [
         Plot.rectY(
@@ -162,9 +162,44 @@ function Result(props) {
     return () => plot.remove();
   }, [data]);
 
+  async function handleCopy() {
+    try {
+      await navigator.clipboard.writeText(surveySession);
+    } catch (error) {
+      console.error("Failed to copy text:", error);
+    }
+  }
+
   return (
     <div className="text-justify leading-relaxed">
-      <p className="pb-4">
+      {aTurkBox ? (
+        <>
+          <div className="flex flex-col items-center py-7">
+            <p className="pb-2 text-3xl">Thanks for completing our survey!</p>
+            <p className="pb-2">
+              Copy the code below and paste it in the HIT as a completion
+              verification:
+            </p>
+            <p className="pb-2 mb-3 font-semibold border-2 rounded py-1 px-3">
+              {surveySession}
+            </p>
+            <button
+              onClick={handleCopy}
+              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+            >
+              Copy code
+            </button>
+
+            <p className="text-2xl mt-3  pt-2 px-3">
+              Scroll down to see your results — not required.
+            </p>
+          </div>
+
+          <hr />
+        </>
+      ) : null}
+
+      <p className="py-4">
         You've completed the common sense trial. At any point you can answer
         more questions by logging in.
       </p>
@@ -198,65 +233,51 @@ function Result(props) {
       <div className="flex justify-center" ref={containerRef} />
       <TwitterText
         percentage={commonSenseScore.commonsense}
-        sessionId={props.sessionId}
+        sessionId={surveySession}
       />
-      {aTurkBox ? (
-        <div className="flex flex-col items-center pt-7">
-          <p className="pb-2">Thanks for completing our survey!</p>
-          <p className="pb-2">
-            Copy the code below and paste it in the HIT as a completion
-            verification:
-          </p>
-          <p className="pb-2 font-semibold border-2 rounded py-1 px-3">
-            {props.sessionId}
-          </p>
-        </div>
-      ) : null}
 
-      {props.showSignUpBox ? (
-        <div className="flex flex-col items-center pt-7">
-          <div className="w-full bg-white md:mt-0 sm:max-w-lg xl:p-0 dark:bg-gray-800 dark:border-gray-700">
-            <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-              <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-                Create an account
-              </h1>
+      <div className="flex flex-col items-center pt-7">
+        <div className="w-full bg-white md:mt-0 sm:max-w-lg xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+          <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
+            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+              Create an account (optional)
+            </h1>
 
-              {notifBox ? (
-                <NotificationBox userEmail={userEmail} />
-              ) : (
-                <form onSubmit={emailSubmit} className="space-y-4 md:space-y-6">
-                  <div>
-                    <label
-                      htmlFor="email"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                      Your email
-                    </label>
-                    <input
-                      onChange={enterEmail}
-                      value={userEmail}
-                      type="email"
-                      name="email"
-                      id="email"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      placeholder="name@company.com"
-                      required
-                    />
-                  </div>
-
-                  <button
-                    onSubmit={emailSubmit}
-                    type="submit"
-                    className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+            {notifBox ? (
+              <NotificationBox userEmail={userEmail} />
+            ) : (
+              <form onSubmit={emailSubmit} className="space-y-4 md:space-y-6">
+                <div>
+                  <label
+                    htmlFor="email"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
-                    Create an account
-                  </button>
-                </form>
-              )}
-            </div>
+                    Your email
+                  </label>
+                  <input
+                    onChange={enterEmail}
+                    value={userEmail}
+                    type="email"
+                    name="email"
+                    id="email"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="name@company.com"
+                    required
+                  />
+                </div>
+
+                <button
+                  onSubmit={emailSubmit}
+                  type="submit"
+                  className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                >
+                  Create an account
+                </button>
+              </form>
+            )}
           </div>
         </div>
-      ) : null}
+      </div>
     </div>
   );
 }
