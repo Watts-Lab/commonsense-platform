@@ -64,17 +64,17 @@ export const questionData: IQuestionData[] = [
       "This question seeks to gather insights on the perceived consensus among individuals regarding the given statement. We are interested in understanding your opinion about whether you believe that the majority of other people would agree with the statement presented.",
     required: true,
   },
-  {
-    id: 6,
-    question:
-      "<b>Optional:</b> How do you think most people would categorize this statement",
-    possibleAnswers: [
-      "Clear: it is clearly written and I can understand the meaning",
-      "Confusing: I don't quite understand what it means, but it seems like it is written correctly",
-      "Gibberish: I don't know what it means, it is gibberish or poorly written so it doesn't make sense",
-    ],
-    tooltip:
-      "This question aims to gather insights on how you believe most people would categorize the given statement in terms of common sense. We are interested in understanding your perception of how the majority of individuals would classify or label the statement in relation to its alignment with widely accepted general knowledge or intuitive understanding.",
-    required: false,
-  },
+  // {
+  //   id: 6,
+  //   question:
+  //     "<b>Optional:</b> How do you think most people would categorize this statement",
+  //   possibleAnswers: [
+  //     "Clear: it is clearly written and I can understand the meaning",
+  //     "Confusing: I don't quite understand what it means, but it seems like it is written correctly",
+  //     "Gibberish: I don't know what it means, it is gibberish or poorly written so it doesn't make sense",
+  //   ],
+  //   tooltip:
+  //     "This question aims to gather insights on how you believe most people would categorize the given statement in terms of common sense. We are interested in understanding your perception of how the majority of individuals would classify or label the statement in relation to its alignment with widely accepted general knowledge or intuitive understanding.",
+  //   required: false,
+  // },
 ];

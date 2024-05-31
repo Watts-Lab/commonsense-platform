@@ -69,7 +69,7 @@ function MultiStepForm(props) {
             props.steps[currentStepIndex].answers[4].split("-")[1] === "Yes"
               ? 1
               : 0,
-          clarity: props.steps[currentStepIndex].answers[5].split("-")[1],
+          clarity: 'removed',
           origLanguage: "en",
           sessionId: props.sessionId,
           withCredentials: true,
