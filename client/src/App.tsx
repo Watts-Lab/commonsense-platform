@@ -43,6 +43,9 @@ import HumanNetwork from "./components/HumanNetwork";
 // apis
 import Backend from "./apis/backend";
 
+// internationalization
+//import './i18n';
+
 const App = () => {
   const loggedIn = useAppSelector((state) => state.login.loggedIn);
   const email = useAppSelector((state) => state.login.email);
