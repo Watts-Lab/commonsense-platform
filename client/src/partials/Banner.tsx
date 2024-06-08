@@ -4,14 +4,44 @@ import { Histogram } from "./Histogram";
 import { commonsensicalityScores } from "./Scores";
 import ConsentModal from "../components/ConsentModal";
 import commonsenseLogo from "../images/Light-mode.svg";
-import { useTranslation } from 'react-i18next'; // import necessary i18 functions
+import { useTranslation } from 'react-i18next';
+
+type Language = {
+  nativeName: string;
+};
+
+type Languages = {
+  [key: string]: Language;
+};
+
+const lngs: Languages = {
+  en: { nativeName: 'English' },
+  es: { nativeName: 'Spanish' }
+}
 
 const Banner: React.FC = () => {
-  const { t } = useTranslation(); // define translation function
+  const { t, i18n } = useTranslation(); 
 
   return (
     <>
       <section className="relative bg-gray-100 dark:bg-gray-600 text-gray-800 dark:text-gray-300">
+        {/* Language selection dropdown */}
+        <div>
+          {Object.keys(lngs).map((lng) => (
+            <button 
+              key={lng} 
+              style={{ 
+                fontWeight: i18n.resolvedLanguage === lng ? 'bold' : 'normal', 
+                marginRight: '10px' 
+              }} 
+              type="submit" 
+              onClick={() => i18n.changeLanguage(lng)}
+            >
+              {lngs[lng].nativeName}
+            </button>
+          ))}
+        </div>
+
         {/* Illustration behind hero content */}
         <div
           className="absolute left-1/2 transform -translate-x-1/2 top-32 pointer-events-none"
