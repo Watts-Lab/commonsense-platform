@@ -11,7 +11,9 @@ ReactDOM.createRoot(document.getElementById("root") as Element).render(
   <React.StrictMode>
     <Provider store={store}>
       <Router>
-        <App />
+        <React.Suspense fallback="loading..."> 
+          <App />
+        </React.Suspense>
       </Router>
     </Provider>
   </React.StrictMode>

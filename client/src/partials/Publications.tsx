@@ -1,29 +1,32 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 function Publications() {
+  const { t } = useTranslation();
+
   const publicationsList = [
     {
       title:
-        "A framework for quantifying individual and collective common sense",
-      type: "Journal Article",
-      authors: "Whiting, Mark and Watts, Duncan",
+        t("A framework for quantifying individual and collective common sense"),
+      type: t('Journal Article'),
+      authors: t("Whiting, Mark and Watts, Duncan"),
       venue:
-        "In: Proceedings of the National Academy of Sciences, vol. 121, no. 4, 2024.",
+        t("In: Proceedings of the National Academy of Sciences, vol. 121, no. 4, 2024."),
       year: "2024",
       link: "https://doi.org/10.1073/pnas.2309535121",
     },
     {
-      title: "Common sense and sociological explanations",
-      type: "Journal Article",
+      title: t("Common sense and sociological explanations"),
+      type: t('Journal Article'),
       authors: "Watts, Duncan",
       venue:
-        "In: American Journal of Sociology, vol. 120, no. 2, pp. 313-351, 2014.",
+        t("In: American Journal of Sociology, vol. 120, no. 2, pp. 313-351, 2014."),
       year: "2014",
       link: "https://arxiv.org/abs/2101.00100",
     },
     {
-      title: "Everything is obvious",
-      type: "Book",
+      title: t("Everything is obvious"),
+      type: t("Book"),
       authors: "Watts, Duncan",
       venue: "Crown, 2011, ISBN: 9780385531696, 0385531699.",
       year: "2011",
@@ -40,7 +43,7 @@ function Publications() {
         <div className="py-12 md:py-20">
           {/* Section header */}
           <div className="max-w-3xl mx-auto text-center pb-12 md:pb-20">
-            <h2 className="h2 mb-4">Research Publications</h2>
+            <h2 className="h2 mb-4">{t('Research Publications')}</h2>
           </div>
 
           {/* Items */}
