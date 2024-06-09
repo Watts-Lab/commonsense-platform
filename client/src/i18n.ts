@@ -3,28 +3,15 @@ import { initReactI18next } from 'react-i18next';
 import Backend from 'i18next-http-backend'; // later replace the http-backend with locize-backend
 import LanguageDetector from 'i18next-browser-languagedetector';
 
-import en from '../public/locales/en/translation.json';
-import es from '../public/locales/es/translation.json';
-
 i18n
   .use(initReactI18next)
-  .use(Backend)
-  .use(LanguageDetector)
+  .use(Backend) // loads the translations from backend plugin
+  .use(LanguageDetector) // detects the preferred language of the user
   .init({
     debug: true,
-    lng: 'es', // default language
-    fallbackLng: 'es', 
+    fallbackLng: 'en', 
     interpolation: {
       escapeValue: false,
-    },
-    saveMissing: true, // locize
-    resources: {
-      en: {
-        translation: en
-      },
-      es: {
-        translation: es
-      }
     }
   });
 

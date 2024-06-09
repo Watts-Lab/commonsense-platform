@@ -20,18 +20,18 @@ function Footer() {
           <a href="https://css.seas.upenn.edu">
             <img
               src={cssLabLogo}
-              alt={t('CSSLab Logo')}
+              alt={t('footer.css-lab')}
               className="h-12 object-cover"
             />
           </a>
           <a href="https://www.upenn.edu/">
-            <img src={uPenn} alt={t('UPenn Logo')} className="h-12 object-cover" />
+            <img src={uPenn} alt={t('footer.upenn-logo')} className="h-12 object-cover" />
           </a>
         </div>
       </nav>
       <aside>
         <div className="flex items-center space-x-4 text-gray-300">
-          <p>{t("3401 Walnut Street Suite 417B, Philadelphia PA, 19104")}</p>
+          <p>3401 Walnut Street Suite 417B, Philadelphia PA, 19104</p>
           <a href="https://twitter.com/csspenn">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -76,7 +76,8 @@ function Footer() {
 
         <div className="flex items-center space-x-2 text-gray-300">
           <span>
-            {t("Copyright © 2023 - 2024 - All right reserved by CSSLab at UPenn")}
+            {/* Copyright © 2023 - 2024 - All right reserved by CSSLab at UPenn */}
+            {t("footer.copyright")}
           </span>
           <span>|</span>
           <ReportIssue />

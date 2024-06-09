@@ -7,26 +7,26 @@ function Publications() {
   const publicationsList = [
     {
       title:
-        t("A framework for quantifying individual and collective common sense"),
-      type: t('Journal Article'),
-      authors: t("Whiting, Mark and Watts, Duncan"),
+        t("publications.journal1"),
+      type: t('publications.type1'),
+      authors: t("publications.author1"),
       venue:
-        t("In: Proceedings of the National Academy of Sciences, vol. 121, no. 4, 2024."),
+        t("publications.publication1"),
       year: "2024",
       link: "https://doi.org/10.1073/pnas.2309535121",
     },
     {
-      title: t("Common sense and sociological explanations"),
-      type: t('Journal Article'),
+      title: t("publications.journal2"),
+      type: t('publications.type1'),
       authors: "Watts, Duncan",
       venue:
-        t("In: American Journal of Sociology, vol. 120, no. 2, pp. 313-351, 2014."),
+        t("publications.publication2"),
       year: "2014",
       link: "https://arxiv.org/abs/2101.00100",
     },
     {
-      title: t("Everything is obvious"),
-      type: t("Book"),
+      title: t("publications.journal3"),
+      type: t("publications.type2"),
       authors: "Watts, Duncan",
       venue: "Crown, 2011, ISBN: 9780385531696, 0385531699.",
       year: "2011",
@@ -43,7 +43,7 @@ function Publications() {
         <div className="py-12 md:py-20">
           {/* Section header */}
           <div className="max-w-3xl mx-auto text-center pb-12 md:pb-20">
-            <h2 className="h2 mb-4">{t('Research Publications')}</h2>
+            <h2 className="h2 mb-4">{t('publications.title')}</h2>
           </div>
 
           {/* Items */}
