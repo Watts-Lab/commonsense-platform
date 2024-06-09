@@ -1,0 +1,74 @@
+name: Run Tests (End-to-End)
+
+on: [push]
+
+jobs:
+  cypress-test:
+    name: Run Cypress tests
+    env:
+      MYSQL_USER: "developer"
+      MYSQL_PWD: "password"
+      MYSQL_DB: "CommonsenseDB"
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Shutdown Ubuntu MySQL (SUDO)
+        run: sudo service mysql stop # Shutdown the Default MySQL, "sudo" is necessary, please do not remove it
+
+      - name: Set up MariaDB
+        uses: getong/mariadb-action@v1.1
+        with:
+          host port: 3306 # Optional, default value is 3306. The port of host
+          container port: 3307 # Optional, default value is 3306. The port of container
+          character set server: "utf8" # Optional, default value is 'utf8mb4'. The '--character-set-server' option for mysqld
+          collation server: "utf8_general_ci" # Optional, default value is 'utf8mb4_general_ci'. The '--collation-server' option for mysqld
+          mariadb version: "10.4.10" # Optional, default value is "latest". The version of the MariaDB
+          mysql database: ${{ env.MYSQL_DB }}
+          mysql root password: ${{ env.MYSQL_PWD }}
+          mysql user: ${{ env.MYSQL_USER }}
+          mysql password: ${{ env.MYSQL_PWD }}
+
+      - name: Wait for MariaDB to be ready
+        run: sleep 10
+
+      # - name: Import SQL file
+      #   env:
+      #     MYSQL_PWD: ${{ env.MYSQL_PWD }}
+      #   run: |
+      #     mysql -u developer -h 127.0.0.1 -P 3307 $MYSQL_DB < path/to/your/sqlfile.sql
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "16.x"
+
+      - name: Install server dependencies
+        working-directory: server
+        run: npm install
+
+      - name: Start backend server
+        working-directory: server
+        run: npm start &
+        env:
+          DB_USER: ${{ env.MYSQL_USER }}
+          DB_PASSWORD: ${{ env.MYSQL_PWD }}
+          DB_NAME: ${{ env.MYSQL_DB }}
+          DB_HOST: "localhost"
+          DB_PORT: "3307"
+          DB_DRIVER: "mariadb"
+
+      - name: Wait for backend server to be ready
+        run: sleep 15
+
+      - name: Install client dependencies
+        working-directory: client
+        run: npm install
+
+      - name: Run Cypress tests
+        working-directory: client
+        run: npm run cypress:run
+        env:
+          CYPRESS_baseUrl: http://localhost:3000
