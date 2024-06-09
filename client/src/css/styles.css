@@ -1,0 +1,7 @@
+.button-long-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 150px; 
+}
+  

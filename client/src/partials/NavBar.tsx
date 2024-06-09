@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import ConsentModal from "../components/ConsentModal";
 
 import Icon from "../images/Light-mode.svg";
+import '../css/styles.css';
 
 const Navbar: React.FC = () => {
   const loggedIn = useAppSelector((state) => state.login.loggedIn);
@@ -80,20 +81,20 @@ const Navbar: React.FC = () => {
         <div className="navbar-center hidden lg:flex justify-center flex-1">
           <ul className="flex space-x-10 lg:space-x-10">
             <li>
-              <a href="/people" className="text-base hover:underline">
+              <a href="/people" className="button-long-text">
                 {/* People */}
                 {t('navbar.people')}
               </a>
             </li>
             <li>
-              <a href="/research" className="text-base hover:underline">
+              <a href="/research" className="button-long-text">
                 {/* Research */}
                 {t('navbar.research')}
               </a>
             </li>
             <li>
               {!loggedIn ? (
-                <a href="/signin" className="text-base hover:underline">
+                <a href="/signin" className="button-long-text">
                   {/* Signin */}
                   {t('navbar.signin')}
                 </a>
