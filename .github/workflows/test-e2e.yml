@@ -43,7 +43,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "16.x"
+          node-version: "18.x"
 
       - name: Install server dependencies
         working-directory: server
@@ -51,7 +51,7 @@ jobs:
 
       - name: Start backend server
         working-directory: server
-        run: npm start &
+        run: npm run dev &
         env:
           DB_USER: ${{ env.MYSQL_USER }}
           DB_PASSWORD: ${{ env.MYSQL_PWD }}
