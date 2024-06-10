@@ -30,7 +30,7 @@ jobs:
           --health-retries 5
 
     steps:
-      - name: Checkout code
+      - name: Checkout repo
         uses: actions/checkout@v4
 
       - name: Create database
@@ -45,6 +45,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "18.x"
+          cache: "npm"
 
       - name: Install server dependencies
         working-directory: server
@@ -67,10 +68,11 @@ jobs:
 
       - name: Install client dependencies
         working-directory: client
-        env:
-          NODE_ENV: "development"
-        run: CYPRESS_CACHE_FOLDER=./tmp/Cypress npm install & npm run dev &
+        run: |
+          echo NODE_ENV=development > .env
+          echo NODE_ENV
+          CYPRESS_CACHE_FOLDER=/home/runner/.cache/Cypress npm install & npm run dev &
 
       - name: Run Cypress tests
         working-directory: client
-        run: CYPRESS_CACHE_FOLDER=./tmp/Cypress npx cypress run --record --key ${{ secrets.CYPRESS_RECORD_KEY }}
+        run: CYPRESS_CACHE_FOLDER=/home/runner/.cache/Cypress npx cypress run --record --key ${{ secrets.CYPRESS_RECORD_KEY }}
