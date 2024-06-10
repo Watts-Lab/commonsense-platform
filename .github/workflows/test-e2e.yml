@@ -62,7 +62,7 @@ jobs:
           DB_PASSWORD: ${{ env.MYSQL_PWD }}
           DB_NAME: ${{ env.MYSQL_DB }}
           DB_HOST: "localhost"
-          DB_PORT: "3306"
+          DB_PORT: "33306"
           DB_DRIVER: "mariadb"
 
       - name: Wait for backend server to be ready
