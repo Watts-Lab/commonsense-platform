@@ -12,6 +12,8 @@ jobs:
       MYSQL_HOST: "127.0.0.1"
       MYSQL_PORT: "33306"
       SESSION_SECRET: "secret"
+      CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+      COMMIT_INFO_BRANCH: ${{ github.ref_name }}
 
     runs-on: ubuntu-latest
 
@@ -70,6 +72,6 @@ jobs:
         with:
           start: npm run dev
           working-directory: client
+          record: true
         env:
-          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-          COMMIT_INFO_BRANCH: ${{ github.ref_name }}
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
