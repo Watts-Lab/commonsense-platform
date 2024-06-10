@@ -23,7 +23,7 @@ jobs:
         with:
           host port: 3306 # Optional, default value is 3306. The port of host
           character set server: "utf8" # Optional, default value is 'utf8mb4'. The '--character-set-server' option for mysqld
-          collation server: "utf8_general_ci" # Optional, default value is 'utf8mb4_general_ci'. The '--collation-server' option for mysqld
+          collation server: "utf8mb4_0900_ai_ci" # Optional, default value is 'utf8mb4_general_ci'. The '--collation-server' option for mysqld
           mariadb version: "10.4.10" # Optional, default value is "latest". The version of the MariaDB
           mysql database: ${{ env.MYSQL_DB }}
           mysql root password: ${{ env.MYSQL_PWD }}
@@ -66,4 +66,4 @@ jobs:
 
       - name: Run Cypress tests
         working-directory: client
-        run: npx cypress run
+        run: npx cypress run --record --key ${{ secrets.CYPRESS_RECORD_KEY }}
