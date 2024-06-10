@@ -65,13 +65,11 @@ jobs:
       - name: Wait for backend server to be ready
         run: sleep 10
 
-      - name: Install client dependencies
-        working-directory: client
-        run: |
-          echo NODE_ENV=development > .env
-          echo NODE_ENV
-          CYPRESS_CACHE_FOLDER=/home/runner/.cache/Cypress npm install & npm run dev &
-
       - name: Run Cypress tests
-        working-directory: client
-        run: CYPRESS_CACHE_FOLDER=/home/runner/.cache/Cypress npx cypress run --record --key ${{ secrets.CYPRESS_RECORD_KEY }}
+        uses: cypress-io/github-action@v6
+        with:
+          start: npm run dev
+          project: client
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          COMMIT_INFO_BRANCH: ${{ github.ref_name }}
