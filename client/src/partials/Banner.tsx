@@ -5,6 +5,7 @@ import { commonsensicalityScores } from "./Scores";
 import ConsentModal from "../components/ConsentModal";
 import commonsenseLogo from "../images/Light-mode.svg";
 import { useTranslation } from 'react-i18next';
+import LocaleSwitcher from "../components/LocaleSwitcher";
 
 type Language = {
   nativeName: string;
@@ -14,18 +15,18 @@ type Languages = {
   [key: string]: Language;
 };
 
-const lngs: Languages = {
-  en: { nativeName: 'English' },
-  es: { nativeName: 'Spanish' },
-  zh: { nativeName: 'Chinese' },
-  ar: { nativeName: 'Arabic' },
-  hi: { nativeName: 'Hindi' },
-  bn: { nativeName: 'Bengali' },
-  pt: { nativeName: 'Portuguese' },
-  fr: { nativeName: 'French' },
-  ja: { nativeName: 'Japanese' },
-  ru: { nativeName: 'Russian' }
-}
+// const lngs: Languages = {
+//   en: { nativeName: 'English' },
+//   es: { nativeName: 'Spanish' },
+//   zh: { nativeName: 'Chinese' },
+//   ar: { nativeName: 'Arabic' },
+//   hi: { nativeName: 'Hindi' },
+//   bn: { nativeName: 'Bengali' },
+//   pt: { nativeName: 'Portuguese' },
+//   fr: { nativeName: 'French' },
+//   ja: { nativeName: 'Japanese' },
+//   ru: { nativeName: 'Russian' }
+// }
 
 const Banner: React.FC = () => {
   const { t, i18n } = useTranslation(); 
@@ -33,22 +34,8 @@ const Banner: React.FC = () => {
   return (
     <>
       <section className="relative bg-gray-100 dark:bg-gray-600 text-gray-800 dark:text-gray-300">
-        {/* Language selection dropdown */}
-        <div>
-          {Object.keys(lngs).map((lng) => (
-            <button 
-              key={lng} 
-              style={{ 
-                fontWeight: i18n.resolvedLanguage === lng ? 'bold' : 'normal', 
-                marginRight: '10px' 
-              }} 
-              type="submit" 
-              onClick={() => i18n.changeLanguage(lng)}
-            >
-              {lngs[lng].nativeName}
-            </button>
-          ))}
-        </div>
+        {/* Language selection */}
+        <LocaleSwitcher />
 
         {/* Illustration behind hero content */}
         <div

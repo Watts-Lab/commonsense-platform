@@ -11,7 +11,10 @@ ReactDOM.createRoot(document.getElementById("root") as Element).render(
   <React.StrictMode>
     <Provider store={store}>
       <Router>
-        <React.Suspense fallback="loading..."> 
+        <React.Suspense 
+          // notifies users that active translation files are downloading during slow connections
+          fallback={<div>Loading...</div>}
+        > 
           <App />
         </React.Suspense>
       </Router>
