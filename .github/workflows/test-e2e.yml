@@ -58,7 +58,7 @@ jobs:
           DB_USER: ${{ env.MYSQL_USER }}
           DB_PASSWORD: ${{ env.MYSQL_PWD }}
           DB_NAME: ${{ env.MYSQL_DB }}
-          DB_HOST: "localhost"
+          DB_HOST: "127.0.0.1"
           DB_PORT: "33306"
           DB_DRIVER: "mysql"
           SESSION_SECRET: ${{ env.SESSION_SECRET }}
