@@ -19,12 +19,12 @@ jobs:
         run: sudo service mysql stop # Shutdown the Default MySQL, "sudo" is necessary, please do not remove it
 
       - name: Set up MariaDB
-        uses: getong/mariadb-action@v1.1
+        uses: mirromutth/mysql-action@v1.1
         with:
-          host port: 3306 # Optional, default value is 3306. The port of host
-          character set server: "utf8" # Optional, default value is 'utf8mb4'. The '--character-set-server' option for mysqld
-          collation server: "utf8mb4_0900_ai_ci" # Optional, default value is 'utf8mb4_general_ci'. The '--collation-server' option for mysqld
-          mariadb version: "10.4.10" # Optional, default value is "latest". The version of the MariaDB
+          host port: 3306
+          container port: 3307 # Optional, default value is 3306. The port of container to expose
+          character set server: "utf8mb4"
+          collation server: "utf8mb4_0900_ai_ci"
           mysql database: ${{ env.MYSQL_DB }}
           mysql root password: ${{ env.MYSQL_PWD }}
           mysql user: ${{ env.MYSQL_USER }}
@@ -36,7 +36,7 @@ jobs:
 
       - name: Seed the database
         run: |
-          sudo mariadb -h 127.0.0.1 -P 3306 -u ${{ env.MYSQL_USER }} -p${{ env.MYSQL_PWD }} ${{ env.MYSQL_DB }} < test/init.sql
+          sudo mariadb -h 127.0.0.1 -P 3307 -u ${{ env.MYSQL_USER }} -p${{ env.MYSQL_PWD }} ${{ env.MYSQL_DB }} < test/init.sql
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
