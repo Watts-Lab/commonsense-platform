@@ -63,12 +63,14 @@ jobs:
           SESSION_SECRET: ${{ env.SESSION_SECRET }}
 
       - name: Wait for backend server to be ready
-        run: sleep 15
+        run: sleep 10
 
       - name: Install client dependencies
         working-directory: client
-        run: npm install & npm cypress install & npm run dev &
+        env:
+          NODE_ENV: "development"
+        run: CYPRESS_CACHE_FOLDER=./tmp/Cypress npm install & npm run dev &
 
       - name: Run Cypress tests
         working-directory: client
-        run: npx cypress run --record --key ${{ secrets.CYPRESS_RECORD_KEY }}
+        run: CYPRESS_CACHE_FOLDER=./tmp/Cypress npx cypress run --record --key ${{ secrets.CYPRESS_RECORD_KEY }}
