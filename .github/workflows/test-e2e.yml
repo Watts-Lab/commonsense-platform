@@ -33,17 +33,17 @@ jobs:
       - name: Show docker containers
         run: docker ps -a
 
-      - name: Seed the database
+      - name: Create database
         run: |
           mysql --protocol=tcp -h 127.0.0.1 --port 33306 -uroot -ppassword -e "CREATE DATABASE IF NOT EXISTS CommonsenseDB;"
 
-      - name: Wait for MariaDB to be ready
+      - name: Wait for MySQL to be ready
         run: |
-          sleep 10
+          sleep 5
 
       - name: Seed the database
         run: |
-          sudo mysql -h 127.0.0.1 -P 3307 -u ${{ env.MYSQL_USER }} -p${{ env.MYSQL_PWD }} ${{ env.MYSQL_DB }} < test/init.sql
+          mysql --protocol=tcp -h 127.0.0.1 --port 33306 -u${{ env.MYSQL_USER }} -p${{ env.MYSQL_PWD }} ${{ env.MYSQL_DB }} < test/init.sql
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
