@@ -33,6 +33,7 @@ jobs:
       - name: Wait for MariaDB to be ready
         run: |
           sleep 10
+          sudo service mysql status
 
       - name: Seed the database
         run: |
