@@ -9,6 +9,7 @@ jobs:
       MYSQL_USER: "root"
       MYSQL_PWD: "password"
       MYSQL_DB: "CommonsenseDB"
+      SESSION_SECRET: "secret"
 
     runs-on: ubuntu-latest
 
@@ -35,11 +36,7 @@ jobs:
 
       - name: Create database
         run: |
-          mysql --protocol=tcp -h 127.0.0.1 --port 33306 -uroot -ppassword -e "CREATE DATABASE IF NOT EXISTS CommonsenseDB;"
-
-      - name: Wait for MySQL to be ready
-        run: |
-          sleep 5
+          mysql --protocol=tcp -h 127.0.0.1 --port 33306 -uroot -ppassword -e "CREATE DATABASE IF NOT EXISTS ${{ env.MYSQL_DB }};"
 
       - name: Seed the database
         run: |
@@ -56,7 +53,7 @@ jobs:
 
       - name: Start backend server
         working-directory: server
-        run: npm run dev &
+        run: node server.js &
         env:
           DB_USER: ${{ env.MYSQL_USER }}
           DB_PASSWORD: ${{ env.MYSQL_PWD }}
@@ -64,6 +61,7 @@ jobs:
           DB_HOST: "127.0.0.1"
           DB_PORT: "33306"
           DB_DRIVER: "mysql"
+          SESSION_SECRET: ${{ env.SESSION_SECRET }}
 
       - name: Wait for backend server to be ready
         run: sleep 15
