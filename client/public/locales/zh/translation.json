@@ -1,4 +1,7 @@
 {
+    "app": {
+        "title": "衡量你的常识"
+    },
     "navbar": {
         "commonsense": "常识项目",
         "people": "人员",

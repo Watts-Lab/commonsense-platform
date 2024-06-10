@@ -1,4 +1,7 @@
 {
+    "app": {
+        "title": "Mide tu sentido común"
+    },
     "navbar": {
         "commonsense": "El proyecto de sentido común",
         "people": "Gente",

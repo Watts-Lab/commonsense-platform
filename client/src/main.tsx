@@ -12,7 +12,7 @@ ReactDOM.createRoot(document.getElementById("root") as Element).render(
     <Provider store={store}>
       <Router>
         <React.Suspense 
-          // notifies users that active translation files are downloading during slow connections
+          // notify users that active translation files are downloading during slow connections
           fallback={<div>Loading...</div>}
         > 
           <App />

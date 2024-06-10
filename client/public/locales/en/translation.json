@@ -1,4 +1,7 @@
 {
+    "app": {
+        "title": "Measure your common sense"
+    },
     "navbar": {
         "commonsense": "The common sense project",
         "people": "People",

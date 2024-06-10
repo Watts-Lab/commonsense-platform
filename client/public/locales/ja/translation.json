@@ -1,4 +1,7 @@
 {
+    "app": {
+        "title": "自分の常識を測ってみよう"
+    },
     "navbar": {
         "commonsense": "常識プロジェクト",
         "people": "人々",

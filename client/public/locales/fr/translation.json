@@ -1,4 +1,7 @@
 {
+    "app": {
+        "title": "Mesurez votre bon sens"
+    },
     "navbar": {
         "commonsense": "Le projet du bon sens",
         "people": "Personnes",
