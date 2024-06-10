@@ -33,11 +33,9 @@ jobs:
       - name: Wait for MariaDB to be ready
         run: sleep 10
 
-      # - name: Import SQL file
-      #   env:
-      #     MYSQL_PWD: ${{ env.MYSQL_PWD }}
-      #   run: |
-      #     mysql -u developer -h 127.0.0.1 -P 3307 $MYSQL_DB < path/to/your/sqlfile.sql
+      - name: Seed the database
+        run: |
+          mysql -h localhost -P 3306 -u${{ env.MYSQL_USER }} -p${{ env.MYSQL_PWD }} ${{ env.MYSQL_DB }} < test/init.sql
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
