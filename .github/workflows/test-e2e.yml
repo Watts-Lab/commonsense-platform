@@ -11,29 +11,35 @@ jobs:
       MYSQL_DB: "CommonsenseDB"
 
     runs-on: ubuntu-latest
+
+    services:
+      db:
+        image: mysql:8
+        ports:
+          - 33306:3306
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: CommonsenseDB
+        options: >-
+          --health-cmd "mysqladmin ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Shutdown Ubuntu MySQL (SUDO)
-        run: sudo service mysql stop # Shutdown the Default MySQL, "sudo" is necessary, please do not remove it
+      - name: Show docker containers
+        run: docker ps -a
 
-      - name: Set up MariaDB
-        uses: mirromutth/mysql-action@v1.1
-        with:
-          host port: 3306
-          container port: 3307 # Optional, default value is 3306. The port of container to expose
-          character set server: "utf8mb4"
-          collation server: "utf8mb4_0900_ai_ci"
-          mysql database: ${{ env.MYSQL_DB }}
-          mysql root password: ${{ env.MYSQL_PWD }}
-          mysql user: ${{ env.MYSQL_USER }}
-          mysql password: ${{ env.MYSQL_PWD }}
+      - name: Seed the database
+        run: |
+          mysql --protocol=tcp -h 127.0.0.1 --port 33306 -uroot -ppassword -e "CREATE DATABASE IF NOT EXISTS CommonsenseDB;"
 
       - name: Wait for MariaDB to be ready
         run: |
           sleep 10
-          sudo service mysql status
 
       - name: Seed the database
         run: |
