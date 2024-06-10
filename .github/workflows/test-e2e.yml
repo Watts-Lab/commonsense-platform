@@ -35,7 +35,7 @@ jobs:
 
       - name: Seed the database
         run: |
-          mysql -h localhost -P 3306 -u${{ env.MYSQL_USER }} -p${{ env.MYSQL_PWD }} ${{ env.MYSQL_DB }} < test/init.sql
+          sudo mysql -u ${{ env.MYSQL_USER }} -h 127.0.0.1 -P 3306 ${{ env.MYSQL_DB }} < test/init.sql
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
