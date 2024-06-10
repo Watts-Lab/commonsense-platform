@@ -69,7 +69,7 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           start: npm run dev
-          project: client
+          working-directory: client
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           COMMIT_INFO_BRANCH: ${{ github.ref_name }}
