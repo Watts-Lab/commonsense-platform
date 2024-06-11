@@ -1,0 +1,59 @@
+{
+    "app": {
+        "title": "Mesurez votre bon sens"
+    },
+    "navbar": {
+        "commonsense": "Le projet du bon sens",
+        "people": "Personnes",
+        "research": "Recherche",
+        "signin": "Se connecter",
+        "dashboard": "Tableau de bord",
+        "participate →": "Participer →"
+    },
+    "banner": {
+        "title": "À quel point le bon sens est-il vraiment commun?",
+        "subtitle": "Rejoignez-nous pour le découvrir!",
+        "button": "Mesurez votre bon sens",
+        "paragraph1": "Le bon sens est souvent défini comme \"ce que toutes les personnes sensées savent\", mais cette définition est circulaire: comment savons-nous que quelqu'un est sensé à part qu'il possède le bon sens? En conséquence, la plupart des gens croient qu'ils possèdent eux-mêmes le bon sens, mais ne peuvent pas articuler quelles sont leurs croyances de bon sens ou à quel point leurs croyances sont communes aux autres.",
+        "paragraph2": "Ce projet cherche à quantifier le bon sens empiriquement via une expérience de sondage en ligne massive. Les participants liront une série de \"déclarations\" sur le monde physique et social (par exemple, \"Les cailloux lâchés tombent au sol\" ou \"Les fusils d'assaut entièrement automatiques devraient être interdits\"), indiqueront s'ils sont d'accord avec chaque déclaration, et indiqueront également ce qu'ils pensent que la plupart des autres pensent.",
+        "paragraph3": "Nous avons développé des méthodes novatrices pour extraire des déclarations de plusieurs sources diverses, y compris des apparitions dans les médias de masse, des livres de non-fiction et des courriels de campagne politique, ainsi que des déclarations obtenues auprès de répondants humains et générées par des systèmes d'IA. Nos résultats éclaireront la nature et les limites du bon sens, aidant ainsi les communautés de recherche (par exemple, IA et ML) qui souhaitent explorer et simuler ce concept omniprésent mais frustrant et insaisissable.",
+        "paragraph4-1": "Pour plus de détails sur ce travail, consultez notre récent article",
+        "paper": "Un cadre pour quantifier le bon sens individuel et collectif",
+        "paragraph4-2": ", publié",
+        "paragraph4-3": "dans The Proceedings of the National Academy of Sciences.",
+        "logo": "Logo du Bon Sens"
+    },
+    "footer": {
+        "copyright": "Droits d'auteur © 2023 - 2024 - Tous droits réservés par CSSLab à UPenn",
+        "csslab-logo": "Logo de CSSLab",
+        "upenn-logo": "Logo de UPenn"
+    },
+    "report": {
+        "trigger": "Signaler un problème",
+        "title": "Signaler un problème",
+        "description": "Faites-nous savoir ce qui s'est mal passé.",
+        "button": "envoyer",
+        "placeholder": "Décrivez le problème et si vous souhaitez avoir un retour de notre part, laissez votre e-mail à la fin.",
+        "send-feedback": "Envoyer des commentaires"
+    },
+    "publications": {
+        "title": "Publications de Recherche",
+        "journal1": "Un cadre pour quantifier le bon sens individuel et collectif",
+        "type1": "Article de Journal",
+        "author1": "Whiting, Mark et Watts, Duncan",
+        "publication1": "In: Proceedings of the National Academy of Sciences, vol. 121, no. 4, 2024.",
+        "journal2": "Le bon sens et les explications sociologiques",
+        "author2": "Watts, Duncan",
+        "publication2": "In: American Journal of Sociology, vol. 120, no. 2, pp. 313-351, 2014.",
+        "journal3": "Tout est évident",
+        "type2": "Livre"
+    },
+    "signin": {
+        "welcome": "Bienvenue",
+        "subtitle1": "Connectez-vous pour vérifier votre score de bon sens ou répondre à plus de questions sur des déclarations pour obtenir une lecture plus précise de votre score.",
+        "subtitle2": " Ou si vous n'avez pas de compte, vous pouvez vous inscrire en entrant votre e-mail ci-dessous.",
+        "email": "Email",
+        "placeholder": "Entrez votre adresse e-mail",
+        "signIn": "Se connecter"
+    }
+}

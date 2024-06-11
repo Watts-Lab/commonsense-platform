@@ -1,0 +1,65 @@
+{
+    "app": {
+        "title": "Mide tu sentido común"
+    },
+    "navbar": {
+        "commonsense": "El proyecto de sentido común",
+        "people": "Gente",
+        "research": "Investigación",
+        "signin": "Iniciar sesión",
+        "dashboard": "Tablero",
+        "participate →": "Participar →"
+    },
+    "banner": {
+        "title": "¿Qué tan común es realmente el sentido común?",
+        "subtitle": "¡Únete a nosotros para descubrirlo!",
+        "button": "Mide tu sentido común",
+        "paragraph1": "El sentido común se define a menudo como “lo que todas las personas sensatas saben”, pero esta definición es circular: ¿cómo sabemos que alguien es sensato si no es porque posee sentido común? Como resultado, la mayoría de las personas creen que poseen sentido común, pero no pueden articular cuáles de sus creencias son de sentido común o cuán comunes son sus creencias para los demás.",
+        "paragraph2": "Este proyecto busca cuantificar empíricamente el sentido común a través de un experimento de encuesta en línea masiva. Los participantes leerán una serie de \"afirmaciones\" sobre el mundo físico y social (por ejemplo, \"Las piedras caídas caen al suelo\" o \"Se deberían prohibir los rifles de asalto totalmente automáticos\"), indicarán si están de acuerdo con cada afirmación y también indicarán lo que creen que piensa la mayoría de las demás personas.",
+        "paragraph3": "Hemos desarrollado métodos novedosos para extraer declaraciones de varias fuentes diversas, incluyendo apariciones en medios de comunicación masivos, libros de no ficción y correos electrónicos de campañas políticas, así como declaraciones obtenidas de encuestados humanos y generadas por sistemas de IA. Nuestros hallazgos arrojarán luz sobre la naturaleza y los límites del sentido común, ayudando así a las comunidades de investigación (por ejemplo, IA y ML) que desean explorar y simular este concepto omnipresente pero frustrantemente esquivo.",
+        "paragraph4-1": "Para obtener más detalles sobre este trabajo, consulte nuestro reciente artículo",
+        "paper": "Un marco para cuantificar el sentido común individual y colectivo",
+        "paragraph4-2": ", publicado",
+        "paragraph4-3": "en Las Actas de la Academia Nacional de Ciencias.",
+        "logo": "logotipo de sentido común"
+    },
+    "footer": {
+        "copyright": "Derechos de autor © 2023 - 2024 - Todos los derechos reservados por CSSLab en UPenn",
+        "csslab-logo": "Logo de CSSLab",
+        "upenn-logo": "Logo de UPenn"
+    },
+    "report-issue": {
+        "trigger": "Informar problema",
+        "title": "Reportar un problema",
+        "description": "Háganos saber qué salió mal.",
+        "button": "enviando"
+    },
+    "report": {
+        "trigger": "Informar problema",
+        "title": "Informar un problema",
+        "description": "Háganos saber qué salió mal.",
+        "button": "enviando",
+        "placeholder": "Describa el problema y si desea recibir noticias nuestras, deje su correo electrónico al final.",
+        "send-feedback": "Enviar comentarios"
+    },
+    "publications": {
+        "title": "Publicaciones de Investigación",
+        "journal1": "Un marco para cuantificar el sentido común individual y colectivo",
+        "type1": "Artículo de Revista",
+        "author1": "Whiting, Mark y Watts, Duncan",
+        "publication1": "En: Actas de la Academia Nacional de Ciencias, vol. 121, no. 4, 2024.",
+        "journal2": "Sentido común y explicaciones sociológicas",
+        "author2": "Watts, Duncan",
+        "publication2": "En: Revista Americana de Sociología, vol. 120, no. 2, pp. 313-351, 2014.",
+        "journal3": "Todo es obvio",
+        "type2": "Libro"
+    },
+    "signin": {
+        "welcome": "Bienvenido",
+        "subtitle1": "Inicia sesión para que puedas verificar tu puntuación de sentido común o responder más preguntas sobre declaraciones para obtener una lectura más precisa de tu puntuación.",
+        "subtitle2": "O si no tienes una cuenta, puedes registrarte ingresando tu correo electrónico a continuación.",
+        "email": "Correo electrónico",
+        "placeholder": "Ingresa tu dirección de correo electrónico",
+        "signIn": "Iniciar sesión"
+    } 
+}

@@ -1,0 +1,59 @@
+{
+    "app": {
+        "title": "Meça seu bom senso"
+    },
+    "navbar": {
+        "commonsense": "O projeto do senso comum",
+        "people": "Pessoas",
+        "research": "Pesquisa",
+        "signin": "Entrar",
+        "dashboard": "Painel de controle",
+        "participate →": "Participar →"
+    },
+    "banner": {
+        "title": "Quão comum é realmente o senso comum?",
+        "subtitle": "Junte-se a nós para descobrir!",
+        "button": "Meça seu senso comum",
+        "paragraph1": "O senso comum é frequentemente definido como \"o que todas as pessoas sensatas sabem\", mas essa definição é circular: como sabemos que alguém é sensato além de que ele possui senso comum? Como resultado, a maioria das pessoas acredita que elas próprias possuem senso comum, mas não conseguem articular quais de suas crenças são senso comum ou quão comuns são suas crenças para os outros.",
+        "paragraph2": "Este projeto busca quantificar o senso comum empiricamente através de um experimento de pesquisa online em massa. Os participantes lerão uma série de \"afirmações\" sobre o mundo físico e social (por exemplo, \"Pedras soltas caem no chão\" ou \"Rifles de assalto totalmente automáticos devem ser proibidos\"), declararão se concordam com cada afirmação e também declararão o que acham que a maioria das outras pessoas pensa.",
+        "paragraph3": "Desenvolvemos métodos inovadores para extrair declarações de várias fontes diversas, incluindo aparições na mídia de massa, livros de não-ficção e e-mails de campanhas políticas, bem como declarações extraídas de respondentes humanos e geradas por sistemas de IA. Nossas descobertas lançarão luz sobre a natureza e os limites do senso comum, ajudando assim as comunidades de pesquisa (por exemplo, IA e ML) que desejam explorar e simular esse conceito onipresente, mas frustrantemente elusivo.",
+        "paragraph4-1": "Para mais detalhes sobre este trabalho, veja nosso artigo recente",
+        "paper": "Uma estrutura para quantificar o senso comum individual e coletivo",
+        "paragraph4-2": ", publicado",
+        "paragraph4-3": "em The Proceedings of the National Academy of Sciences.",
+        "logo": "Logotipo do Senso Comum"
+    },
+    "footer": {
+        "copyright": "Copyright © 2023 - 2024 - Todos os direitos reservados pelo CSSLab na UPenn",
+        "csslab-logo": "Logotipo do CSSLab",
+        "upenn-logo": "Logotipo da UPenn"
+    },
+    "report": {
+        "trigger": "Relatar problema",
+        "title": "Relatar um problema",
+        "description": "Deixe-nos saber o que deu errado.",
+        "button": "enviando",
+        "placeholder": "Descreva o problema e se você quiser ouvir de volta de nós, deixe seu e-mail no final.",
+        "send-feedback": "Enviar feedback"
+    },
+    "publications": {
+        "title": "Publicações de Pesquisa",
+        "journal1": "Uma estrutura para quantificar o senso comum individual e coletivo",
+        "type1": "Artigo de Jornal",
+        "author1": "Whiting, Mark e Watts, Duncan",
+        "publication1": "In: Proceedings of the National Academy of Sciences, vol. 121, no. 4, 2024.",
+        "journal2": "Senso comum e explicações sociológicas",
+        "author2": "Watts, Duncan",
+        "publication2": "In: American Journal of Sociology, vol. 120, no. 2, pp. 313-351, 2014.",
+        "journal3": "Tudo é óbvio",
+        "type2": "Livro"
+    },
+    "signin": {
+        "welcome": "Bem-vindo",
+        "subtitle1": "Faça login para que você possa verificar sua pontuação de senso comum ou responder a mais perguntas sobre declarações para obter uma leitura mais precisa de sua pontuação.",
+        "subtitle2": " Ou se você não tem uma conta, você pode se inscrever inserindo seu e-mail abaixo.",
+        "email": "Email",
+        "placeholder": "Digite seu endereço de e-mail",
+        "signIn": "Entrar"
+    }
+}
