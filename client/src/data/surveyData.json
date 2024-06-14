@@ -1,0 +1,54 @@
+{
+    "questions": [
+      {
+        "id": 1,
+        "question_text": "Do you agree with this statement? * (if the answer is, it depends, respond with your most common or most likely answer)",
+        "answers": [
+          {"option": "Yes", "value": 1},
+          {"option": "No", "value": 0}
+        ],
+        "field": "I_agree"
+      },
+      {
+        "id": 2,
+        "question_text": "Why did you answer the way you did about yourself? *",
+        "answers": [
+          {"option": "It's obvious", "value": "It's obvious"},
+          {"option": "It's something I learned", "value": "It's something I learned"},
+          {"option": "It's my opinion", "value": "It's my opinion"},
+          {"option": "I don't know", "value": "I don't know"}
+        ],
+        "field": "I_agree_reason"
+      },
+      {
+        "id": 3,
+        "question_text": "Do you think most other people would agree with this statement? * (if the answer is, it depends, respond with your most common or most likely answer)",
+        "answers": [
+          {"option": "Yes", "value": 1},
+          {"option": "No", "value": 0}
+        ],
+        "field": "others_agree"
+      },
+      {
+        "id": 4,
+        "question_text": "Why did you answer the way you did about most other people? *",
+        "answers": [
+          {"option": "I think most people have good judgment with regard to this topic", "value": "I think most people have good judgment with regard to this topic"},
+          {"option": "I think most people lack good judgment with regard to this topic", "value": "I think most people lack good judgment with regard to this topic"},
+          {"option": "I think it's mostly a matter of opinion", "value": "I think it's mostly a matter of opinion"},
+          {"option": "I don't know", "value": "I don't know"}
+        ],
+        "field": "others_agree_reason"
+      },
+      {
+        "id": 5,
+        "question_text": "Overall, do you think this statement is an example of common sense?",
+        "answers": [
+          {"option": "Yes", "value": 1},
+          {"option": "No", "value": 0}
+        ],
+        "field": "perceived_commonsense"
+      }
+    ]
+  }
+  
