@@ -1,5 +1,5 @@
-import { useTranslation } from "react-i18next";
 import { supportedLngs } from "../i18n/config";
+import { useTranslation } from "react-i18next";
 
 export default function LocaleSwitcher() {
     const { i18n } = useTranslation();
@@ -20,4 +20,4 @@ export default function LocaleSwitcher() {
         </div>
       </div>
     );
-  }
+}
