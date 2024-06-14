@@ -55,13 +55,13 @@ const Navbar: React.FC = () => {
               tabIndex={0}
               className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-200 rounded-box w-52 text-gray-900"
             >
-              <li>
+              <li className="mb-2">
                 <a href="/people">{t('navbar.people')}</a>
               </li>
-              <li>
+              <li className="mb-2">
                 <a href="/research">{t('navbar.research')}</a>
               </li>
-              <li>
+              <li className="mb-2">
                 {!loggedIn ? (
                   <a href="/signin">{t('navbar.signin')}</a>
                 ) : (
@@ -81,19 +81,19 @@ const Navbar: React.FC = () => {
         </div>
         <div className="navbar-center hidden lg:flex justify-center flex-1">
           <ul className="flex space-x-10 lg:space-x-10">
-            <li>
+            <li className="mb-2">
               <a href="/people" className="button-long-text">
                 {/* People */}
                 {t('navbar.people')}
               </a>
             </li>
-            <li>
+            <li className="mb-2">
               <a href="/research" className="button-long-text">
                 {/* Research */}
                 {t('navbar.research')}
               </a>
             </li>
-            <li>
+            <li className="mb-2">
               {!loggedIn ? (
                 <a href="/signin" className="button-long-text">
                   {/* Signin */}

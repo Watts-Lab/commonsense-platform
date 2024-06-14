@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "download": "locize download --project-id a3b147a4-3bec-4d40-bfcd-b811b00e4e31 --api-key 4aa5615c-161a-4abd-b62a-8c6039b9a7fe --path public/locales"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.18",

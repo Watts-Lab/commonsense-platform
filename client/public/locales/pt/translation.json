@@ -1,130 +1,130 @@
 {
-    "app": {
-        "title": "Meça seu bom senso"
-    },
-    "navbar": {
-        "commonsense": "O projeto do senso comum",
-        "people": "Pessoas",
-        "research": "Pesquisa",
-        "signin": "Entrar",
-        "dashboard": "Painel de controle",
-        "participate →": "Participar →"
-    },
-    "banner": {
-        "title": "Quão comum é realmente o senso comum?",
-        "subtitle": "Junte-se a nós para descobrir!",
-        "button": "Meça seu senso comum",
-        "paragraph1": "O senso comum é frequentemente definido como \"o que todas as pessoas sensatas sabem\", mas essa definição é circular: como sabemos que alguém é sensato além de que ele possui senso comum? Como resultado, a maioria das pessoas acredita que elas próprias possuem senso comum, mas não conseguem articular quais de suas crenças são senso comum ou quão comuns são suas crenças para os outros.",
-        "paragraph2": "Este projeto busca quantificar o senso comum empiricamente através de um experimento de pesquisa online em massa. Os participantes lerão uma série de \"afirmações\" sobre o mundo físico e social (por exemplo, \"Pedras soltas caem no chão\" ou \"Rifles de assalto totalmente automáticos devem ser proibidos\"), declararão se concordam com cada afirmação e também declararão o que acham que a maioria das outras pessoas pensa.",
-        "paragraph3": "Desenvolvemos métodos inovadores para extrair declarações de várias fontes diversas, incluindo aparições na mídia de massa, livros de não-ficção e e-mails de campanhas políticas, bem como declarações extraídas de respondentes humanos e geradas por sistemas de IA. Nossas descobertas lançarão luz sobre a natureza e os limites do senso comum, ajudando assim as comunidades de pesquisa (por exemplo, IA e ML) que desejam explorar e simular esse conceito onipresente, mas frustrantemente elusivo.",
-        "paragraph4-1": "Para mais detalhes sobre este trabalho, veja nosso artigo recente",
-        "paper": "Uma estrutura para quantificar o senso comum individual e coletivo",
-        "paragraph4-2": ", publicado",
-        "paragraph4-3": "em The Proceedings of the National Academy of Sciences.",
-        "logo": "Logotipo do Senso Comum"
-    },
-    "footer": {
-        "copyright": "Copyright © 2023 - 2024 - Todos os direitos reservados pelo CSSLab na UPenn",
-        "csslab-logo": "Logotipo do CSSLab",
-        "upenn-logo": "Logotipo da UPenn"
-    },
-    "report": {
-        "trigger": "Relatar problema",
-        "title": "Relatar um problema",
-        "description": "Deixe-nos saber o que deu errado.",
-        "button": "enviando",
-        "placeholder": "Descreva o problema e se você quiser ouvir de volta de nós, deixe seu e-mail no final.",
-        "send-feedback": "Enviar feedback"
-    },
-    "publications": {
-        "title": "Publicações de Pesquisa",
-        "journal1": "Uma estrutura para quantificar o senso comum individual e coletivo",
-        "type1": "Artigo de Jornal",
-        "author1": "Whiting, Mark e Watts, Duncan",
-        "publication1": "In: Proceedings of the National Academy of Sciences, vol. 121, no. 4, 2024.",
-        "journal2": "Senso comum e explicações sociológicas",
-        "author2": "Watts, Duncan",
-        "publication2": "In: American Journal of Sociology, vol. 120, no. 2, pp. 313-351, 2014.",
-        "journal3": "Tudo é óbvio",
-        "type2": "Livro"
-    },
-    "signin": {
-        "welcome": "Bem-vindo",
-        "subtitle1": "Faça login para que você possa verificar sua pontuação de senso comum ou responder a mais perguntas sobre declarações para obter uma leitura mais precisa de sua pontuação.",
-        "subtitle2": " Ou se você não tem uma conta, você pode se inscrever inserindo seu e-mail abaixo.",
-        "email": "Email",
-        "placeholder": "Digite seu endereço de e-mail",
-        "signIn": "Entrar"
-    },
-    "landing": {
-        "title": "Plataforma de Senso Comum",
-        "subtitle": "Você está prestes a completar uma pesquisa para medir seu senso comum. Para a maioria das pessoas, leva menos de 15 minutos.",
-        "acknowledgement": "Ao prosseguir, você concorda em participar deste projeto de pesquisa.",
-        "button": "Verifique seu Senso Comum"
-    },
-    "consent": {
-        "title": "Resumo do Estudo de Pesquisa para Participantes Potenciais",
-        "description-p1": "Estamos estudando o senso comum na sociedade. Participar deste estudo envolverá responder a perguntas básicas por 10-20 minutos.",
-        "description-p2": "Você está sendo convidado a participar de um estudo de pesquisa. Sua participação é voluntária, e você deve participar apenas se entender completamente o que o estudo exige e quais são os riscos de participação. Você deve fazer ao grupo de estudo qualquer pergunta que tenha relacionada à participação antes de concordar em participar do estudo. Se você tiver alguma dúvida sobre seus direitos como participante de pesquisa humana a qualquer momento antes, durante ou após a participação, entre em contato com a Comissão de Revisão Institucional (IRB) pelo número (215) 898-2614 para obter assistência.",
-        "description-p3": "O estudo de pesquisa está sendo conduzido para entender a natureza do senso comum na sociedade.",
-        "description-p4": "Se você concordar em participar do estudo, será solicitado a completar uma breve pesquisa. Sua participação nesse aspecto do estudo durará de 10 a 20 minutos no total.",
-        "description-p5": "Vamos acomodá-lo por participar deste experimento e, mais importante, participar pode nos ajudar a entender e apoiar equipes em um contexto científico. Os riscos mais comuns de participação são que partes do estudo podem não ser interessantes para você. Não prevemos outros riscos.",
-        "description-p6": "Observe que há outros fatores a serem considerados antes de concordar em participar, como procedimentos adicionais, uso de suas informações pessoais, custos e outros possíveis riscos não discutidos aqui. Você é livre para recusar ou parar de participar a qualquer momento durante ou após o processo de consentimento inicial.",
-        "question1": "Por que me pediram para participar do estudo?",
-        "answer1": "Nosso estudo requer adultos com acesso à internet. Você está sendo convidado a participar porque atende a esse requisito.",
-        "question2": "Onde o estudo será realizado?",
-        "answer2": "O estudo será realizado neste site.",
-        "question3": "O que me será pedido para fazer?",
-        "answer3": "Será solicitado que você responda a uma série de perguntas sobre declarações, bem como algumas outras perguntas padrão da pesquisa.",
-        "question4": "Quais são os riscos?",
-        "answer4": "Existem riscos potenciais de desinteresse na atividade do estudo, por isso foi projetado para ser divertido e torná-lo mais atraente. Também existem riscos potenciais de segurança de dados, portanto, o estudo foi projetado para coletar o mínimo possível de informações e armazenar informações sobre os participantes de forma segura, anônima e não identificada, usando servidores protegidos por senha.",
-        "question5": "Como me beneficiarei do estudo?",
-        "answer5": "Você será compensado por completar esta pesquisa e poderá ter acesso a um relatório de seus resultados após completar a pesquisa, o que fornecerá insights interessantes de sua participação. Este trabalho também será valioso para a sociedade em geral, então participar pode ser valioso nesse contexto também.",
-        "question6": "Receberei os resultados dos testes de pesquisa?",
-        "answer6": "Os resultados completos serão tornados públicos quando a pesquisa for compartilhada abertamente após a eventual publicação.",
-        "question7": "Quais outras opções eu tenho?",
-        "answer7": "Sua alternativa para estar no estudo é não estar no estudo. Se você não quiser participar do estudo, não continue esta pesquisa e devolva o HIT.",
-        "question8": "O que acontece se eu optar por não participar do estudo de pesquisa?",
-        "answer8": "Você pode optar por participar do estudo ou optar por não participar do estudo. Sua participação é voluntária.",
-        "question9": "Quando o estudo termina? Posso sair do estudo antes que ele termine?",
-        "answer9-1": "Espera-se que o estudo termine após todos os participantes terem concluído a pesquisa e todas as informações terem sido coletadas. O estudo pode ser interrompido sem o seu consentimento pelos seguintes motivos: O PI considera que é melhor para a sua segurança e/ou saúde - você será informado dos motivos. Você não seguiu as instruções do estudo. O PI, o patrocinador ou a Comissão de Revisão Institucional (IRB) da Universidade da Pensilvânia podem interromper o estudo a qualquer momento.",
-        "answer9-2": "Você tem o direito de sair do estudo de pesquisa a qualquer momento durante sua participação. Não há penalidade ou perda de benefícios a que você tem direito se decidir fazê-lo. A retirada não interferirá em seus cuidados futuros. Se você não quiser mais participar do estudo de pesquisa, entre em contato com Mark Whiting pelo número 352-226-9212 e informe que deseja ser retirado do estudo.",
-        "question10": "Como minhas informações pessoais serão protegidas durante o estudo?",
-        "answer10": "Faremos o possível para garantir que as informações pessoais obtidas durante o curso deste estudo de pesquisa sejam mantidas privadas. No entanto, não podemos garantir total privacidade. Suas informações pessoais podem ser divulgadas se exigido por lei. Se as informações deste estudo forem publicadas ou apresentadas em reuniões científicas, seu nome e outras informações pessoais não serão usados. A Comissão de Revisão Institucional (IRB) da Universidade da Pensilvânia terá acesso aos seus registros. Os registros serão desidentificados e mantidos em sigilo em armazenamento seguro. Uma exceção à confidencialidade é se você relatar abuso ou negligência de crianças ou idosos, ou se relatar pensamentos ou intenções suicidas ou homicidas para a equipe de pesquisa. Qualquer informação sobre abuso de crianças ou idosos ou intenção de se machucar ou machucar outras pessoas será relatada às autoridades, conforme exigido por lei.",
-        "question11": "O que pode acontecer com minhas informações coletadas neste estudo?",
-        "answer11": "Os registros serão desidentificados e mantidos em sigilo em armazenamento seguro. Em alguns casos, as informações dos participantes serão totalmente anônimas.",
-        "future-data": "Uso futuro de dados",
-        "future-data-answer": "Suas informações serão desidentificadas. Desidentificado significa que todos os identificadores foram removidos. As informações podem ser armazenadas e compartilhadas para pesquisas futuras dessa maneira desidentificada. Não seria possível para futuros pesquisadores identificá-lo, pois não compartilharemos nenhuma informação identificável sobre você com futuros pesquisadores. Isso pode ser feito sem pedir novamente o seu consentimento no futuro, conforme permitido por lei. O uso futuro de suas informações se aplica apenas às informações coletadas neste estudo.",
-        "question12": "Terei que pagar por alguma coisa?",
-        "answer12": "Não há custos associados à participação no estudo.",
-        "question13": "Serei pago por participar deste estudo?",
-        "answer13": "A participação será compensada diretamente por meio da plataforma de recrutamento após sua participação ou a conclusão do estudo ou como informações sobre sua participação se você se voluntariar para participar deste estudo.",
-        "question14": "Com quem posso falar se tiver dúvidas, reclamações ou se estiver preocupado com meus direitos como participante da pesquisa?",
-        "answer14": "Se você tiver dúvidas, preocupações ou reclamações sobre sua participação neste estudo de pesquisa ou se tiver dúvidas sobre seus direitos como participante da pesquisa, você deve falar com Mark Whiting pelo número 352-226-9212. Se não for possível entrar em contato com um membro da equipe de pesquisa ou se desejar falar com alguém que não esteja trabalhando no estudo, entre em contato com a IRB pelo número (215) 898 2614."
-    },
-    "dashboard": {
-        "insight": "Visão",
-        "answers": "Respostas",
-        "add-statements": "Adicionar declarações",
-        "settings": "Configurações",
-        "your-answers": "Suas respostas",
-        "browse-list": "Navegue pela lista de declarações que você respondeu até agora",
-        "statement": "Declaração",
-        "is-it-common-sense": "É senso comum?",
-        "others-think": "Os outros acham que é senso comum?",
-        "yes": "sim",
-        "no": "não",
-        "delete-accout": "Excluir conta"
-    },
-    "welcome": {
-        "title": "Bem-vindo à Plataforma de Senso Comum",
-        "subtitle": "Você pode clicar no link enviado para verificar seu endereço de e-mail."
-    },
-    "consent-modal": {
-        "title": "Plataforma de Senso Comum",
-        "subtitle": "Você está prestes a completar uma pesquisa para medir seu senso comum. Para a maioria das pessoas, leva menos de 15 minutos.",
-        "acknowledgement": "Ao prosseguir, você concorda em participar deste projeto de pesquisa.",
-        "button": "Verifique seu Senso Comum",
-        "cancel": "Cancelar"
-    }
+  "app": {
+    "title": "Meça seu bom senso"
+  },
+  "banner": {
+    "button": "Meça seu senso comum",
+    "logo": "Logotipo do Senso Comum",
+    "paper": "Uma estrutura para quantificar o senso comum individual e coletivo",
+    "paragraph1": "O senso comum é frequentemente definido como \"o que todas as pessoas sensatas sabem\", mas essa definição é circular: como sabemos que alguém é sensato além de que ele possui senso comum? Como resultado, a maioria das pessoas acredita que elas próprias possuem senso comum, mas não conseguem articular quais de suas crenças são senso comum ou quão comuns são suas crenças para os outros.",
+    "paragraph2": "Este projeto busca quantificar o senso comum empiricamente através de um experimento de pesquisa online em massa. Os participantes lerão uma série de \"afirmações\" sobre o mundo físico e social (por exemplo, \"Pedras soltas caem no chão\" ou \"Rifles de assalto totalmente automáticos devem ser proibidos\"), declararão se concordam com cada afirmação e também declararão o que acham que a maioria das outras pessoas pensa.",
+    "paragraph3": "Desenvolvemos métodos inovadores para extrair declarações de várias fontes diversas, incluindo aparições na mídia de massa, livros de não-ficção e e-mails de campanhas políticas, bem como declarações extraídas de respondentes humanos e geradas por sistemas de IA. Nossas descobertas lançarão luz sobre a natureza e os limites do senso comum, ajudando assim as comunidades de pesquisa (por exemplo, IA e ML) que desejam explorar e simular esse conceito onipresente, mas frustrantemente elusivo.",
+    "paragraph4-1": "Para mais detalhes sobre este trabalho, veja nosso artigo recente",
+    "paragraph4-2": ", publicado",
+    "paragraph4-3": "em The Proceedings of the National Academy of Sciences.",
+    "subtitle": "Junte-se a nós para descobrir!",
+    "title": "Quão comum é realmente o senso comum?"
+  },
+  "consent-modal": {
+    "acknowledgement": "Ao prosseguir, você concorda em participar deste projeto de pesquisa.",
+    "button": "Verifique seu Senso Comum",
+    "cancel": "Cancelar",
+    "subtitle": "Você está prestes a completar uma pesquisa para medir seu senso comum. Para a maioria das pessoas, leva menos de 15 minutos.",
+    "title": "Plataforma de Senso Comum"
+  },
+  "consent": {
+    "answer1": "Nosso estudo requer adultos com acesso à internet. Você está sendo convidado a participar porque atende a esse requisito.",
+    "answer10": "Faremos o possível para garantir que as informações pessoais obtidas durante o curso deste estudo de pesquisa sejam mantidas privadas. No entanto, não podemos garantir total privacidade. Suas informações pessoais podem ser divulgadas se exigido por lei. Se as informações deste estudo forem publicadas ou apresentadas em reuniões científicas, seu nome e outras informações pessoais não serão usados. A Comissão de Revisão Institucional (IRB) da Universidade da Pensilvânia terá acesso aos seus registros. Os registros serão desidentificados e mantidos em sigilo em armazenamento seguro. Uma exceção à confidencialidade é se você relatar abuso ou negligência de crianças ou idosos, ou se relatar pensamentos ou intenções suicidas ou homicidas para a equipe de pesquisa. Qualquer informação sobre abuso de crianças ou idosos ou intenção de se machucar ou machucar outras pessoas será relatada às autoridades, conforme exigido por lei.",
+    "answer11": "Os registros serão desidentificados e mantidos em sigilo em armazenamento seguro. Em alguns casos, as informações dos participantes serão totalmente anônimas.",
+    "answer12": "Não há custos associados à participação no estudo.",
+    "answer13": "A participação será compensada diretamente por meio da plataforma de recrutamento após sua participação ou a conclusão do estudo ou como informações sobre sua participação se você se voluntariar para participar deste estudo.",
+    "answer14": "Se você tiver dúvidas, preocupações ou reclamações sobre sua participação neste estudo de pesquisa ou se tiver dúvidas sobre seus direitos como participante da pesquisa, você deve falar com Mark Whiting pelo número 352-226-9212. Se não for possível entrar em contato com um membro da equipe de pesquisa ou se desejar falar com alguém que não esteja trabalhando no estudo, entre em contato com a IRB pelo número (215) 898 2614.",
+    "answer2": "O estudo será realizado neste site.",
+    "answer3": "Será solicitado que você responda a uma série de perguntas sobre declarações, bem como algumas outras perguntas padrão da pesquisa.",
+    "answer4": "Existem riscos potenciais de desinteresse na atividade do estudo, por isso foi projetado para ser divertido e torná-lo mais atraente. Também existem riscos potenciais de segurança de dados, portanto, o estudo foi projetado para coletar o mínimo possível de informações e armazenar informações sobre os participantes de forma segura, anônima e não identificada, usando servidores protegidos por senha.",
+    "answer5": "Você será compensado por completar esta pesquisa e poderá ter acesso a um relatório de seus resultados após completar a pesquisa, o que fornecerá insights interessantes de sua participação. Este trabalho também será valioso para a sociedade em geral, então participar pode ser valioso nesse contexto também.",
+    "answer6": "Os resultados completos serão tornados públicos quando a pesquisa for compartilhada abertamente após a eventual publicação.",
+    "answer7": "Sua alternativa para estar no estudo é não estar no estudo. Se você não quiser participar do estudo, não continue esta pesquisa e devolva o HIT.",
+    "answer8": "Você pode optar por participar do estudo ou optar por não participar do estudo. Sua participação é voluntária.",
+    "answer9-1": "Espera-se que o estudo termine após todos os participantes terem concluído a pesquisa e todas as informações terem sido coletadas. O estudo pode ser interrompido sem o seu consentimento pelos seguintes motivos: O PI considera que é melhor para a sua segurança e/ou saúde - você será informado dos motivos. Você não seguiu as instruções do estudo. O PI, o patrocinador ou a Comissão de Revisão Institucional (IRB) da Universidade da Pensilvânia podem interromper o estudo a qualquer momento.",
+    "answer9-2": "Você tem o direito de sair do estudo de pesquisa a qualquer momento durante sua participação. Não há penalidade ou perda de benefícios a que você tem direito se decidir fazê-lo. A retirada não interferirá em seus cuidados futuros. Se você não quiser mais participar do estudo de pesquisa, entre em contato com Mark Whiting pelo número 352-226-9212 e informe que deseja ser retirado do estudo.",
+    "description-p1": "Estamos estudando o senso comum na sociedade. Participar deste estudo envolverá responder a perguntas básicas por 10-20 minutos.",
+    "description-p2": "Você está sendo convidado a participar de um estudo de pesquisa. Sua participação é voluntária, e você deve participar apenas se entender completamente o que o estudo exige e quais são os riscos de participação. Você deve fazer ao grupo de estudo qualquer pergunta que tenha relacionada à participação antes de concordar em participar do estudo. Se você tiver alguma dúvida sobre seus direitos como participante de pesquisa humana a qualquer momento antes, durante ou após a participação, entre em contato com a Comissão de Revisão Institucional (IRB) pelo número (215) 898-2614 para obter assistência.",
+    "description-p3": "O estudo de pesquisa está sendo conduzido para entender a natureza do senso comum na sociedade.",
+    "description-p4": "Se você concordar em participar do estudo, será solicitado a completar uma breve pesquisa. Sua participação nesse aspecto do estudo durará de 10 a 20 minutos no total.",
+    "description-p5": "Vamos acomodá-lo por participar deste experimento e, mais importante, participar pode nos ajudar a entender e apoiar equipes em um contexto científico. Os riscos mais comuns de participação são que partes do estudo podem não ser interessantes para você. Não prevemos outros riscos.",
+    "description-p6": "Observe que há outros fatores a serem considerados antes de concordar em participar, como procedimentos adicionais, uso de suas informações pessoais, custos e outros possíveis riscos não discutidos aqui. Você é livre para recusar ou parar de participar a qualquer momento durante ou após o processo de consentimento inicial.",
+    "future-data": "Uso futuro de dados",
+    "future-data-answer": "Suas informações serão desidentificadas. Desidentificado significa que todos os identificadores foram removidos. As informações podem ser armazenadas e compartilhadas para pesquisas futuras dessa maneira desidentificada. Não seria possível para futuros pesquisadores identificá-lo, pois não compartilharemos nenhuma informação identificável sobre você com futuros pesquisadores. Isso pode ser feito sem pedir novamente o seu consentimento no futuro, conforme permitido por lei. O uso futuro de suas informações se aplica apenas às informações coletadas neste estudo.",
+    "question1": "Por que me pediram para participar do estudo?",
+    "question10": "Como minhas informações pessoais serão protegidas durante o estudo?",
+    "question11": "O que pode acontecer com minhas informações coletadas neste estudo?",
+    "question12": "Terei que pagar por alguma coisa?",
+    "question13": "Serei pago por participar deste estudo?",
+    "question14": "Com quem posso falar se tiver dúvidas, reclamações ou se estiver preocupado com meus direitos como participante da pesquisa?",
+    "question2": "Onde o estudo será realizado?",
+    "question3": "O que me será pedido para fazer?",
+    "question4": "Quais são os riscos?",
+    "question5": "Como me beneficiarei do estudo?",
+    "question6": "Receberei os resultados dos testes de pesquisa?",
+    "question7": "Quais outras opções eu tenho?",
+    "question8": "O que acontece se eu optar por não participar do estudo de pesquisa?",
+    "question9": "Quando o estudo termina? Posso sair do estudo antes que ele termine?",
+    "title": "Resumo do Estudo de Pesquisa para Participantes Potenciais"
+  },
+  "dashboard": {
+    "add-statements": "Adicionar declarações",
+    "answers": "Respostas",
+    "browse-list": "Navegue pela lista de declarações que você respondeu até agora",
+    "delete-accout": "Excluir conta",
+    "insight": "Visão",
+    "is-it-common-sense": "É senso comum?",
+    "no": "não",
+    "others-think": "Os outros acham que é senso comum?",
+    "settings": "Configurações",
+    "statement": "Declaração",
+    "yes": "sim",
+    "your-answers": "Suas respostas"
+  },
+  "footer": {
+    "copyright": "Copyright © 2023 - 2024 - Todos os direitos reservados pelo CSSLab na UPenn",
+    "csslab-logo": "Logotipo do CSSLab",
+    "upenn-logo": "Logotipo da UPenn"
+  },
+  "landing": {
+    "acknowledgement": "Ao prosseguir, você concorda em participar deste projeto de pesquisa.",
+    "button": "Verifique seu Senso Comum",
+    "subtitle": "Você está prestes a completar uma pesquisa para medir seu senso comum. Para a maioria das pessoas, leva menos de 15 minutos.",
+    "title": "Plataforma de Senso Comum"
+  },
+  "navbar": {
+    "commonsense": "O projeto do senso comum",
+    "dashboard": "Painel de controle",
+    "people": "Pessoas",
+    "research": "Pesquisa",
+    "signin": "Entrar"
+  },
+  "navbar.participate →": "Participar →",
+  "publications": {
+    "author1": "Whiting, Mark e Watts, Duncan",
+    "author2": "Watts, Duncan",
+    "journal1": "Uma estrutura para quantificar o senso comum individual e coletivo",
+    "journal2": "Senso comum e explicações sociológicas",
+    "journal3": "Tudo é óbvio",
+    "publication1": "In: Proceedings of the National Academy of Sciences, vol. 121, no. 4, 2024.",
+    "publication2": "In: American Journal of Sociology, vol. 120, no. 2, pp. 313-351, 2014.",
+    "title": "Publicações de Pesquisa",
+    "type1": "Artigo de Jornal",
+    "type2": "Livro"
+  },
+  "report": {
+    "button": "enviando",
+    "description": "Deixe-nos saber o que deu errado.",
+    "placeholder": "Descreva o problema e se você quiser ouvir de volta de nós, deixe seu e-mail no final.",
+    "send-feedback": "Enviar feedback",
+    "title": "Relatar um problema",
+    "trigger": "Relatar problema"
+  },
+  "signin": {
+    "email": "Email",
+    "placeholder": "Digite seu endereço de e-mail",
+    "signIn": "Entrar",
+    "subtitle1": "Faça login para que você possa verificar sua pontuação de senso comum ou responder a mais perguntas sobre declarações para obter uma leitura mais precisa de sua pontuação.",
+    "subtitle2": " Ou se você não tem uma conta, você pode se inscrever inserindo seu e-mail abaixo.",
+    "welcome": "Bem-vindo"
+  },
+  "welcome": {
+    "subtitle": "Você pode clicar no link enviado para verificar seu endereço de e-mail.",
+    "title": "Bem-vindo à Plataforma de Senso Comum"
+  }
 }
