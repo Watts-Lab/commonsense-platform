@@ -61,5 +61,76 @@
         "email": "Correo electrónico",
         "placeholder": "Ingresa tu dirección de correo electrónico",
         "signIn": "Iniciar sesión"
-    } 
+    },
+    "landing": {
+        "title": "Plataforma de Sentido Común",
+        "subtitle": "Estás a punto de completar una encuesta para medir tu sentido común. A la mayoría de las personas les toma menos de 15 minutos.",
+        "acknowledgement": "Al avanzar, das tu consentimiento para participar en este proyecto de investigación.",
+        "button": "Verifica Tu Sentido Común"
+    },
+    "consent": {
+        "title": "Resumen del Estudio de Investigación para Sujetos Potenciales",
+        "description-p1": "Estamos estudiando el sentido común en la sociedad. Participar en este estudio implicará responder preguntas básicas durante 10-20 minutos.",
+        "description-p2": "Se le invita a participar en un estudio de investigación. Su participación es voluntaria, y solo debe participar si entiende completamente lo que requiere el estudio y cuáles son los riesgos de participación. Debe hacerle cualquier pregunta al equipo del estudio relacionada con la participación antes de aceptar unirse al estudio. Si tiene alguna pregunta sobre sus derechos como participante de investigación en cualquier momento antes, durante o después de la participación, comuníquese con la Junta de Revisión Institucional (IRB) al (215) 898-2614 para obtener ayuda.",
+        "description-p3": "El estudio de investigación se está llevando a cabo para comprender la naturaleza del sentido común en la sociedad.",
+        "description-p4": "Si acepta unirse al estudio, se le pedirá que complete una breve encuesta. Su participación en este aspecto del estudio durará un total de 10-20 minutos.",
+        "description-p5": "Le compensaremos por participar en este experimento y, lo que es más importante, participar puede ayudarnos a comprender y apoyar a los equipos en un contexto científico. Los riesgos más comunes de participación son que algunas partes del estudio pueden no ser interesantes para usted. No anticipamos otros riesgos.",
+        "description-p6": "Tenga en cuenta que hay otros factores a considerar antes de aceptar participar, como procedimientos adicionales, uso de su información personal, costos y otros posibles riesgos no discutidos aquí. Es libre de rechazar o detener la participación en cualquier momento durante o después del proceso de consentimiento inicial.",
+        "question1": "¿Por qué se me pidió que participara en el estudio?",
+        "answer1": "Nuestro estudio requiere adultos con acceso a internet. Se le pide que participe porque cumple con este requisito.",
+        "question2": "¿Dónde tendrá lugar el estudio?",
+        "answer2": "El estudio se llevará a cabo en este sitio web.",
+        "question3": "¿Qué se me pedirá que haga?",
+        "answer3": "Se le pedirá que responda a una serie de preguntas sobre afirmaciones y algunas otras preguntas estándar de la encuesta.",
+        "question4": "¿Cuáles son los riesgos?",
+        "answer4": "Existen posibles riesgos de desinterés en la actividad del estudio, por lo que se ha diseñado para ser entretenido y hacerlo más atractivo. También existen posibles riesgos de seguridad de los datos, por lo que el estudio está diseñado para recopilar la menor cantidad de información posible y almacenar la información sobre los participantes de manera segura, anónima y desidentificada usando servidores protegidos con contraseña.",
+        "question5": "¿Cómo me beneficiaré del estudio?",
+        "answer5": "Será compensado por completar esta encuesta y puede tener acceso a un informe de sus resultados después de completar la encuesta, lo cual proporcionará información interesante de su participación. Este trabajo también será valioso para la sociedad en general, por lo que participar también puede ser valioso en ese contexto.",
+        "question6": "¿Recibiré los resultados de las pruebas de investigación?",
+        "answer6": "Los resultados completos se harán públicos cuando la investigación se comparta abiertamente al momento de su eventual publicación.",
+        "question7": "¿Qué otras opciones tengo?",
+        "answer7": "Su alternativa a estar en el estudio es no estar en el estudio. Si no desea participar en el estudio, no continúe con esta encuesta y devuelva el HIT.",
+        "question8": "¿Qué pasa si no elijo unirme al estudio de investigación?",
+        "answer8": "Puede elegir unirse al estudio o puede elegir no unirse al estudio. Su participación es voluntaria.",
+        "question9": "¿Cuándo termina el estudio? ¿Puedo dejar el estudio antes de que termine?",
+        "answer9-1": "Se espera que el estudio termine después de que todos los participantes hayan completado la encuesta y se haya recopilado toda la información. El estudio puede detenerse sin su consentimiento por las siguientes razones: El PI considera que es lo mejor para su seguridad y/o salud; se le informará de las razones. No ha seguido las instrucciones del estudio. El PI, el patrocinador o la Junta de Revisión Institucional (IRB) de la Universidad de Pensilvania pueden detener el estudio en cualquier momento.",
+        "answer9-2": "Tiene derecho a abandonar el estudio de investigación en cualquier momento durante su participación. No hay penalización ni pérdida de beneficios a los que de otro modo tendría derecho si decide hacerlo. La retirada no interferirá con su atención futura. Si ya no desea participar en el estudio de investigación, comuníquese con Mark Whiting al 352-226-9212 e infórmele que desea ser retirado del estudio.",
+        "question10": "¿Cómo se protegerá mi información personal durante el estudio?",
+        "answer10": "Haremos todo lo posible para asegurarnos de que la información personal obtenida durante el transcurso de este estudio de investigación se mantenga privada. Sin embargo, no podemos garantizar la privacidad total. Su información personal puede ser divulgada si así lo exige la ley. Si la información de este estudio se publica o presenta en reuniones científicas, no se utilizarán su nombre y otra información personal. La Junta de Revisión Institucional (IRB) de la Universidad de Pensilvania tendrá acceso a sus registros. Los registros serán desidentificados y se mantendrán de forma privada en almacenamiento seguro. Una excepción a la confidencialidad es si informa abuso o negligencia de niños o ancianos, o si informa ideación o intención suicida u homicida al equipo de investigación. Cualquier información sobre abuso de niños o ancianos o intención de hacerse daño a usted mismo o a otros será informada a las autoridades, según lo exija la ley.",
+        "question11": "¿Qué puede pasar con mi información recopilada en este estudio?",
+        "answer11": "Los registros serán desidentificados y se mantendrán de forma privada en almacenamiento seguro. En algunos casos, la información de los participantes será completamente anónima.",
+        "future-data": "Uso Futuro de Datos",
+        "future-data-answer": "Su información será desidentificada. Desidentificada significa que se han eliminado todos los identificadores. La información podría almacenarse y compartirse para futuras investigaciones de esta manera desidentificada. No sería posible que los futuros investigadores lo identifiquen ya que no compartiríamos ninguna información identificable sobre usted con futuros investigadores. Esto se puede hacer sin volver a solicitar su consentimiento en el futuro, según lo permita la ley. El uso futuro de su información solo se aplica a la información recopilada en este estudio.",
+        "question12": "¿Tendré que pagar algo?",
+        "answer12": "No hay costos asociados con la participación en el estudio.",
+        "question13": "¿Se me pagará por participar en este estudio?",
+        "answer13": "La participación será compensada directamente a través de la plataforma de reclutamiento después de su participación o la finalización del estudio o como información sobre su participación si se ofrece como voluntario para participar en este estudio.",
+        "question14": "¿A quién puedo llamar con preguntas, quejas o si me preocupa mis derechos como sujeto de investigación?",
+        "answer14": "Si tiene preguntas, inquietudes o quejas sobre su participación en este estudio de investigación o si tiene alguna pregunta sobre sus derechos como sujeto de investigación, debe hablar con Mark Whiting al 352-226-9212. Si no se puede contactar a un miembro del equipo de investigación o desea hablar con alguien que no esté trabajando en el estudio, puede comunicarse con la IRB al (215) 898 2614."
+    },
+    "dashboard": {
+        "insight": "Perspectiva",
+        "answers": "Respuestas",
+        "add-statements": "Agregar declaraciones",
+        "settings": "Configuración",
+        "your-answers": "Tus respuestas",
+        "browse-list": "Navega por la lista de declaraciones que has respondido hasta ahora",
+        "statement": "Declaración",
+        "is-it-common-sense": "¿Es sentido común?",
+        "others-think": "¿Otros piensan que es sentido común?",
+        "yes": "sí",
+        "no": "no",
+        "delete-accout": "Eliminar cuenta"
+    },
+    "welcome": {
+        "title": "Bienvenido a la Plataforma de Sentido Común",
+        "subtitle": "Puedes hacer clic en el enlace enviado para verificar tu dirección de correo electrónico."
+    },
+    "consent-modal": {
+        "title": "Plataforma de Sentido Común",
+        "subtitle": "Estás a punto de completar una encuesta para medir tu sentido común. A la mayoría de las personas les toma menos de 15 minutos.",
+        "acknowledgement": "Al avanzar, das tu consentimiento para participar en este proyecto de investigación.",
+        "button": "Verifica Tu Sentido Común",
+        "cancel": "Cancelar"
+    }
 }

@@ -8,6 +8,7 @@ describe("i18n Coverage Test", () => {
     cy.fixture(`locales/${baseLocale}/translation.json`).as("baseTranslations");
   });
 
+  // verify that all keys in each locale have been translated
   locales.forEach((locale) => {
     if (locale !== baseLocale) {
       it(`should have all keys translated for ${locale}`, function () {

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 import Navbar from "../partials/NavBar";
 import Footer from "../partials/Footer";
@@ -31,6 +32,8 @@ interface Answer {
 }
 
 const Dashboard: React.FC = () => {
+  const { t } = useTranslation();
+
   const loggedIn = useAppSelector((state) => state.login.loggedIn);
 
   const [answerList, setAnswerList] = useState<Answer[]>([]);
@@ -111,7 +114,8 @@ const Dashboard: React.FC = () => {
                       aria-controls="dashboard"
                       aria-selected={activeTab === "dashboard"}
                     >
-                      Insight
+                      {/* Insight */}
+                      {t("dashboard.insight")}
                     </button>
                   </li>
                   <li className="mr-2" role="presentation">
@@ -126,7 +130,8 @@ const Dashboard: React.FC = () => {
                       aria-controls="profile"
                       aria-selected={activeTab === "profile"}
                     >
-                      Answers
+                      {/* Answers */}
+                      {t("dashboard.answers")}
                     </button>
                   </li>
 
@@ -142,7 +147,8 @@ const Dashboard: React.FC = () => {
                       aria-controls="statement"
                       aria-selected={activeTab === "statement"}
                     >
-                      Add statements
+                      {/* Add statements */}
+                      {t("dashboard.add-statements")}
                     </button>
                   </li>
 
@@ -158,7 +164,8 @@ const Dashboard: React.FC = () => {
                       aria-controls="settings"
                       aria-selected={activeTab === "settings"}
                     >
-                      Settings
+                      {/* Settings */}
+                      {t("dashboard.settings")}
                     </button>
                   </li>
                 </ul>
@@ -184,22 +191,27 @@ const Dashboard: React.FC = () => {
                     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
                       <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                         <caption className="p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800">
-                          Your answers
+                          {/* Your answers */}
+                          {t("dashboard.your-answers")}
                           <p className="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">
-                            Browse the list of statements you have answered so
-                            far
+                            {/* Browse the list of statements you have answered so
+                            far */}
+                            {t("dashboard.browse-list")}
                           </p>
                         </caption>
                         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                           <tr>
                             <th scope="col" className="px-6 py-3">
-                              Statement
+                              {/* Statement */}
+                              {t("dashboard.statement")}
                             </th>
                             <th scope="col" className="px-6 py-3">
-                              Is it common sense?
+                              {/* Is it common sense? */}
+                              {t("dashboard.is-it-common-sense")}
                             </th>
                             <th scope="col" className="px-6 py-3">
-                              Others think it is common sense?
+                              {/* Others think it is common sense? */}
+                              {t("dashboard.others-think")}
                             </th>
                           </tr>
                         </thead>
@@ -219,22 +231,26 @@ const Dashboard: React.FC = () => {
                                 <td className="px-6 py-4">
                                   {answer.I_agree === true ? (
                                     <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                      Yes
+                                      {/* Yes */}
+                                      {t('dashboard.yes')}
                                     </span>
                                   ) : (
                                     <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                                      No
+                                      {/* No */}
+                                      {t('dashboard.no')}
                                     </span>
                                   )}
                                 </td>
                                 <td className="px-6 py-4">
                                   {answer.others_agree === true ? (
                                     <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                      Yes
+                                      {/* Yes */}
+                                      {t('dashboard.yes')}
                                     </span>
                                   ) : (
                                     <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                                      No
+                                      {/* No */}
+                                      {t('dashboard.no')}
                                     </span>
                                   )}
                                 </td>
@@ -264,7 +280,10 @@ const Dashboard: React.FC = () => {
                     role="tabpanel"
                     aria-labelledby="settings-tab"
                   >
-                    <button onClick={deleteAccount}>Delete account</button>
+                    <button onClick={deleteAccount}>
+                      {/* Delete account */}
+                      {t("dashboard.delete-account")}
+                    </button>
                   </div>
                 </div>
               </div>

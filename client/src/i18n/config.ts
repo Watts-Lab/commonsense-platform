@@ -25,7 +25,7 @@ i18n
     debug: true, // enable outputs in dev console
     fallbackLng: 'en', // fallback language when a translation is missing in the locale
     interpolation: {
-      escapeValue: false, // might not be needed since we're using react
+      escapeValue: false, 
     }
   });
 
