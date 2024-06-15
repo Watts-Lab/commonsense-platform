@@ -15,6 +15,7 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
+    "types": ["vite/client"] // allows import.meta to be typed
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]

@@ -17,6 +17,11 @@ export const supportedLngs = {
   ru: "Russian (Русский)"
 }
 
+const locizeOptions = {
+  projectId: import.meta.env.VITE_LOCIZE_PROJECT_ID,
+  apiKey: import.meta.env.VITE_LOCIZE_API_KEY
+}
+
 i18n 
   .use(initReactI18next) // pass the instance to react-i18next to make it available to all the components
   .use(Backend) // load the translations using backend plugin
@@ -28,11 +33,8 @@ i18n
     interpolation: {
       escapeValue: false, 
     },
-    backend: {
-      projectId: 'a3b147a4-3bec-4d40-bfcd-b811b00e4e31',
-      apiKey: '4aa5615c-161a-4abd-b62a-8c6039b9a7fe'
-    },
-    saveMissing: true
+    backend: locizeOptions,
+    saveMissing: true // only use this in development and not in production
   });
 
 export default i18n;
