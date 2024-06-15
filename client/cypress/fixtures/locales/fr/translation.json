@@ -1,59 +1,130 @@
 {
-    "app": {
-        "title": "Mesurez votre bon sens"
-    },
-    "navbar": {
-        "commonsense": "Le projet du bon sens",
-        "people": "Personnes",
-        "research": "Recherche",
-        "signin": "Se connecter",
-        "dashboard": "Tableau de bord",
-        "participate →": "Participer →"
-    },
-    "banner": {
-        "title": "À quel point le bon sens est-il vraiment commun?",
-        "subtitle": "Rejoignez-nous pour le découvrir!",
-        "button": "Mesurez votre bon sens",
-        "paragraph1": "Le bon sens est souvent défini comme \"ce que toutes les personnes sensées savent\", mais cette définition est circulaire: comment savons-nous que quelqu'un est sensé à part qu'il possède le bon sens? En conséquence, la plupart des gens croient qu'ils possèdent eux-mêmes le bon sens, mais ne peuvent pas articuler quelles sont leurs croyances de bon sens ou à quel point leurs croyances sont communes aux autres.",
-        "paragraph2": "Ce projet cherche à quantifier le bon sens empiriquement via une expérience de sondage en ligne massive. Les participants liront une série de \"déclarations\" sur le monde physique et social (par exemple, \"Les cailloux lâchés tombent au sol\" ou \"Les fusils d'assaut entièrement automatiques devraient être interdits\"), indiqueront s'ils sont d'accord avec chaque déclaration, et indiqueront également ce qu'ils pensent que la plupart des autres pensent.",
-        "paragraph3": "Nous avons développé des méthodes novatrices pour extraire des déclarations de plusieurs sources diverses, y compris des apparitions dans les médias de masse, des livres de non-fiction et des courriels de campagne politique, ainsi que des déclarations obtenues auprès de répondants humains et générées par des systèmes d'IA. Nos résultats éclaireront la nature et les limites du bon sens, aidant ainsi les communautés de recherche (par exemple, IA et ML) qui souhaitent explorer et simuler ce concept omniprésent mais frustrant et insaisissable.",
-        "paragraph4-1": "Pour plus de détails sur ce travail, consultez notre récent article",
-        "paper": "Un cadre pour quantifier le bon sens individuel et collectif",
-        "paragraph4-2": ", publié",
-        "paragraph4-3": "dans The Proceedings of the National Academy of Sciences.",
-        "logo": "Logo du Bon Sens"
-    },
-    "footer": {
-        "copyright": "Droits d'auteur © 2023 - 2024 - Tous droits réservés par CSSLab à UPenn",
-        "csslab-logo": "Logo de CSSLab",
-        "upenn-logo": "Logo de UPenn"
-    },
-    "report": {
-        "trigger": "Signaler un problème",
-        "title": "Signaler un problème",
-        "description": "Faites-nous savoir ce qui s'est mal passé.",
-        "button": "envoyer",
-        "placeholder": "Décrivez le problème et si vous souhaitez avoir un retour de notre part, laissez votre e-mail à la fin.",
-        "send-feedback": "Envoyer des commentaires"
-    },
-    "publications": {
-        "title": "Publications de Recherche",
-        "journal1": "Un cadre pour quantifier le bon sens individuel et collectif",
-        "type1": "Article de Journal",
-        "author1": "Whiting, Mark et Watts, Duncan",
-        "publication1": "In: Proceedings of the National Academy of Sciences, vol. 121, no. 4, 2024.",
-        "journal2": "Le bon sens et les explications sociologiques",
-        "author2": "Watts, Duncan",
-        "publication2": "In: American Journal of Sociology, vol. 120, no. 2, pp. 313-351, 2014.",
-        "journal3": "Tout est évident",
-        "type2": "Livre"
-    },
-    "signin": {
-        "welcome": "Bienvenue",
-        "subtitle1": "Connectez-vous pour vérifier votre score de bon sens ou répondre à plus de questions sur des déclarations pour obtenir une lecture plus précise de votre score.",
-        "subtitle2": " Ou si vous n'avez pas de compte, vous pouvez vous inscrire en entrant votre e-mail ci-dessous.",
-        "email": "Email",
-        "placeholder": "Entrez votre adresse e-mail",
-        "signIn": "Se connecter"
-    }
+  "app": {
+    "title": "Mesurez votre bon sens"
+  },
+  "banner": {
+    "button": "Mesurez votre bon sens",
+    "logo": "Logo du Bon Sens",
+    "paper": "Un cadre pour quantifier le bon sens individuel et collectif",
+    "paragraph1": "Le bon sens est souvent défini comme \"ce que toutes les personnes sensées savent\", mais cette définition est circulaire: comment savons-nous que quelqu'un est sensé à part qu'il possède le bon sens? En conséquence, la plupart des gens croient qu'ils possèdent eux-mêmes le bon sens, mais ne peuvent pas articuler quelles sont leurs croyances de bon sens ou à quel point leurs croyances sont communes aux autres.",
+    "paragraph2": "Ce projet cherche à quantifier le bon sens empiriquement via une expérience de sondage en ligne massive. Les participants liront une série de \"déclarations\" sur le monde physique et social (par exemple, \"Les cailloux lâchés tombent au sol\" ou \"Les fusils d'assaut entièrement automatiques devraient être interdits\"), indiqueront s'ils sont d'accord avec chaque déclaration, et indiqueront également ce qu'ils pensent que la plupart des autres pensent.",
+    "paragraph3": "Nous avons développé des méthodes novatrices pour extraire des déclarations de plusieurs sources diverses, y compris des apparitions dans les médias de masse, des livres de non-fiction et des courriels de campagne politique, ainsi que des déclarations obtenues auprès de répondants humains et générées par des systèmes d'IA. Nos résultats éclaireront la nature et les limites du bon sens, aidant ainsi les communautés de recherche (par exemple, IA et ML) qui souhaitent explorer et simuler ce concept omniprésent mais frustrant et insaisissable.",
+    "paragraph4-1": "Pour plus de détails sur ce travail, consultez notre récent article",
+    "paragraph4-2": ", publié",
+    "paragraph4-3": "dans The Proceedings of the National Academy of Sciences.",
+    "subtitle": "Rejoignez-nous pour le découvrir!",
+    "title": "À quel point le bon sens est-il vraiment commun?"
+  },
+  "consent-modal": {
+    "acknowledgement": "En continuant, vous consentez à participer à ce projet de recherche.",
+    "button": "Vérifiez Votre Bon Sens",
+    "cancel": "Annuler",
+    "subtitle": "Vous êtes sur le point de compléter une enquête pour mesurer votre bon sens. Cela prend moins de 15 minutes pour la plupart des gens.",
+    "title": "Plateforme de Bon Sens"
+  },
+  "consent": {
+    "answer1": "Notre étude nécessite des adultes avec accès à Internet. On vous demande de participer parce que vous remplissez cette condition.",
+    "answer10": "Nous ferons de notre mieux pour nous assurer que les informations personnelles obtenues au cours de cette étude de recherche resteront privées. Cependant, nous ne pouvons pas garantir une confidentialité totale. Vos informations personnelles peuvent être divulguées si la loi l'exige. Si des informations de cette étude sont publiées ou présentées lors de réunions scientifiques, votre nom et d'autres informations personnelles ne seront pas utilisés. Le Conseil d'examen institutionnel (IRB) de l'Université de Pennsylvanie aura accès à vos dossiers. Les dossiers seront non identifiés et conservés de manière privée dans un stockage sécurisé. Une exception à la confidentialité est si vous signalez des abus ou des négligences envers des enfants ou des personnes âgées, ou si vous signalez des pensées ou des intentions suicidaires ou homicides à l'équipe de recherche. Toute information sur les abus envers des enfants ou des personnes âgées ou l'intention de se faire du mal ou de faire du mal à autrui sera signalée aux autorités, comme l'exige la loi.",
+    "answer11": "Les dossiers seront non identifiés et conservés de manière privée dans un stockage sécurisé. Dans certains cas, les informations des participants seront totalement anonymes.",
+    "answer12": "Il n'y a aucun coût associé à la participation à l'étude.",
+    "answer13": "La participation sera directement compensée via la plateforme de recrutement après votre participation ou la fin de l'étude ou en tant qu'information sur votre participation si vous vous portez volontaire pour participer à cette étude.",
+    "answer14": "Si vous avez des questions, des préoccupations ou des plaintes concernant votre participation à cette étude de recherche ou si vous avez des questions sur vos droits en tant que sujet de recherche, vous devez parler à Mark Whiting au 352-226-9212. Si un membre de l'équipe de recherche ne peut être joint ou si vous souhaitez parler à quelqu'un d'autre que ceux travaillant sur l'étude, vous pouvez contacter l'IRB au (215) 898 2614.",
+    "answer2": "L'étude se déroulera sur ce site Web.",
+    "answer3": "Il vous sera demandé de répondre à une série de questions sur des déclarations ainsi qu'à d'autres questions standard de l'enquête.",
+    "answer4": "Il existe des risques potentiels de désintérêt pour l'activité de l'étude, elle a donc été conçue pour être divertissante afin de la rendre plus attrayante. Il existe également des risques potentiels de sécurité des données, l'étude est donc conçue pour collecter le moins d'informations possible et pour stocker les informations sur les participants de manière sécurisée, anonyme et non identifiée en utilisant des serveurs protégés par mot de passe.",
+    "answer5": "Vous serez dédommagé pour avoir complété ce sondage et vous pourrez avoir accès à un rapport de vos résultats après avoir complété le sondage, ce qui fournira des aperçus intéressants de votre participation. Ce travail sera également précieux pour la société en général, donc la participation peut aussi être précieuse dans ce contexte.",
+    "answer6": "Les résultats complets seront rendus publics lorsque la recherche sera partagée ouvertement lors de sa publication éventuelle.",
+    "answer7": "Votre alternative à être dans l'étude est de ne pas être dans l'étude. Si vous ne voulez pas être dans l'étude, ne continuez pas ce sondage et retournez le HIT.",
+    "answer8": "Vous pouvez choisir de rejoindre l'étude ou de ne pas rejoindre l'étude. Votre participation est volontaire.",
+    "answer9-1": "On s'attend à ce que l'étude se termine après que tous les participants aient complété le sondage et que toutes les informations aient été collectées. L'étude peut être arrêtée sans votre consentement pour les raisons suivantes: Le PI estime que c'est mieux pour votre sécurité et/ou santé - vous serez informé des raisons. Vous n'avez pas suivi les instructions de l'étude. Le PI, le sponsor ou le Conseil d'examen institutionnel (IRB) de l'Université de Pennsylvanie peuvent arrêter l'étude à tout moment.",
+    "answer9-2": "Vous avez le droit de vous retirer de l'étude de recherche à tout moment pendant votre participation. Il n'y a aucune pénalité ou perte de bénéfices auxquels vous avez autrement droit si vous décidez de le faire. Le retrait n'interférera pas avec vos soins futurs. Si vous ne souhaitez plus participer à l'étude de recherche, veuillez contacter Mark Whiting au 352-226-9212 et leur indiquer que vous souhaitez être retiré de l'étude.",
+    "description-p1": "Nous étudions le bon sens dans la société. Participer à cette étude impliquera de répondre à des questions de base pendant 10-20 minutes.",
+    "description-p2": "Vous êtes invité à participer à une étude de recherche. Votre participation est volontaire et vous ne devez participer que si vous comprenez complètement ce que l'étude exige et quels sont les risques de participation. Vous devez poser au groupe de recherche toutes les questions que vous avez concernant la participation avant d'accepter de participer à l'étude. Si vous avez des questions sur vos droits en tant que participant à une recherche humaine à tout moment avant, pendant ou après la participation, veuillez contacter le Conseil d'examen institutionnel (IRB) au (215) 898-2614 pour obtenir de l'aide.",
+    "description-p3": "L'étude de recherche est menée pour comprendre la nature du bon sens dans la société.",
+    "description-p4": "Si vous acceptez de rejoindre l'étude, il vous sera demandé de compléter un court sondage. Votre participation à cet aspect de l'étude durera 10-20 minutes au total.",
+    "description-p5": "Nous vous dédommagerons pour votre participation à cette expérience et, surtout, participer peut nous aider à comprendre et à soutenir les équipes dans un contexte scientifique. Les risques les plus courants de participation sont que certaines parties de l'étude peuvent ne pas être intéressantes pour vous. Nous n'anticipons pas d'autres risques.",
+    "description-p6": "Veuillez noter qu'il y a d'autres facteurs à prendre en compte avant d'accepter de participer, tels que des procédures supplémentaires, l'utilisation de vos informations personnelles, les coûts et d'autres risques possibles non mentionnés ici. Vous êtes libre de refuser ou d'arrêter de participer à tout moment pendant ou après le processus de consentement initial.",
+    "future-data": "Utilisation future des données",
+    "future-data-answer": "Vos informations seront non identifiées. Non identifiées signifie que tous les identifiants ont été supprimés. Les informations pourraient être stockées et partagées pour des recherches futures de cette manière non identifiée. Il ne serait pas possible pour les chercheurs futurs de vous identifier car nous ne partagerions aucune information identifiable vous concernant avec les chercheurs futurs. Cela peut être fait sans demander à nouveau votre consentement à l'avenir, comme le permet la loi. L'utilisation future de vos informations ne s'applique qu'aux informations collectées dans cette étude.",
+    "question1": "Pourquoi m'a-t-on demandé de participer à l'étude?",
+    "question10": "Comment mes informations personnelles seront-elles protégées pendant l'étude?",
+    "question11": "Que peut-il arriver à mes informations collectées dans cette étude?",
+    "question12": "Est-ce que je devrai payer quelque chose?",
+    "question13": "Est-ce que je serai payé pour participer à cette étude?",
+    "question14": "À qui puis-je téléphoner si j'ai des questions, des plaintes ou si je suis préoccupé par mes droits en tant que sujet de recherche?",
+    "question2": "Où se déroulera l'étude?",
+    "question3": "Que me demandera-t-on de faire?",
+    "question4": "Quels sont les risques?",
+    "question5": "Comment vais-je bénéficier de l'étude?",
+    "question6": "Recevrai-je les résultats des tests de recherche?",
+    "question7": "Quelles autres options ai-je?",
+    "question8": "Que se passe-t-il si je choisis de ne pas rejoindre l'étude de recherche?",
+    "question9": "Quand l'étude est-elle terminée? Puis-je quitter l'étude avant qu'elle ne se termine?",
+    "title": "Résumé de l'Étude de Recherche pour les Sujets Potentiels"
+  },
+  "dashboard": {
+    "add-statements": "Ajouter des déclarations",
+    "answers": "Réponses",
+    "browse-list": "Parcourez la liste des déclarations auxquelles vous avez répondu jusqu'à présent",
+    "delete-accout": "Supprimer le compte",
+    "insight": "Aperçu",
+    "is-it-common-sense": "Est-ce du bon sens?",
+    "no": "non",
+    "others-think": "Les autres pensent-ils que c'est du bon sens?",
+    "settings": "Paramètres",
+    "statement": "Déclaration",
+    "yes": "oui",
+    "your-answers": "Vos réponses"
+  },
+  "footer": {
+    "copyright": "Droits d'auteur © 2023 - 2024 - Tous droits réservés par CSSLab à UPenn",
+    "csslab-logo": "Logo de CSSLab",
+    "upenn-logo": "Logo de UPenn"
+  },
+  "landing": {
+    "acknowledgement": "En continuant, vous consentez à participer à ce projet de recherche.",
+    "button": "Vérifiez Votre Bon Sens",
+    "subtitle": "Vous êtes sur le point de compléter une enquête pour mesurer votre bon sens. Cela prend moins de 15 minutes pour la plupart des gens.",
+    "title": "Plateforme de Bon Sens"
+  },
+  "navbar": {
+    "commonsense": "Le projet du bon sens",
+    "dashboard": "Tableau de bord",
+    "people": "Personnes",
+    "research": "Recherche",
+    "signin": "Se connecter"
+  },
+  "navbar.participate →": "Participer →",
+  "publications": {
+    "author1": "Whiting, Mark et Watts, Duncan",
+    "author2": "Watts, Duncan",
+    "journal1": "Un cadre pour quantifier le bon sens individuel et collectif",
+    "journal2": "Le bon sens et les explications sociologiques",
+    "journal3": "Tout est évident",
+    "publication1": "In: Proceedings of the National Academy of Sciences, vol. 121, no. 4, 2024.",
+    "publication2": "In: American Journal of Sociology, vol. 120, no. 2, pp. 313-351, 2014.",
+    "title": "Publications de Recherche",
+    "type1": "Article de Journal",
+    "type2": "Livre"
+  },
+  "report": {
+    "button": "envoyer",
+    "description": "Faites-nous savoir ce qui s'est mal passé.",
+    "placeholder": "Décrivez le problème et si vous souhaitez avoir un retour de notre part, laissez votre e-mail à la fin.",
+    "send-feedback": "Envoyer des commentaires",
+    "title": "Signaler un problème",
+    "trigger": "Signaler un problème"
+  },
+  "signin": {
+    "email": "Email",
+    "placeholder": "Entrez votre adresse e-mail",
+    "signIn": "Se connecter",
+    "subtitle1": "Connectez-vous pour vérifier votre score de bon sens ou répondre à plus de questions sur des déclarations pour obtenir une lecture plus précise de votre score.",
+    "subtitle2": " Ou si vous n'avez pas de compte, vous pouvez vous inscrire en entrant votre e-mail ci-dessous.",
+    "welcome": "Bienvenue"
+  },
+  "welcome": {
+    "subtitle": "Vous pouvez cliquer sur le lien envoyé pour vérifier votre adresse e-mail.",
+    "title": "Bienvenue sur la Plateforme de Bon Sens"
+  }
 }
