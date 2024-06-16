@@ -1,18 +1,24 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import * as Plot from "@observablehq/plot";
-import { useSelector } from "react-redux";
-
 import "./style.css";
-
 import Backend from "../apis/backend";
 import TwitterText from "../utils/TwitterText";
 import NotificationBox from "../utils/NotificationBox";
-
 import useStickyState from "../hooks/useStickyState";
+import { useAppSelector } from "../redux/hooks";
 
-function Result(props) {
-  const [statementsData, setStatementsData] = useStickyState(
+type ResultProps = {
+  sessionId?: string;
+  showSignUpBox: boolean;
+};
+
+function Result(props: ResultProps) {
+  const [sessionId, setSessionId] = useState<string | null>(
+    props.sessionId ??
+      JSON.parse(localStorage.getItem("surveySession") ?? "null")
+  );
+  const [_statementsData, setStatementsData] = useStickyState(
     [],
     "statementsData"
   );
@@ -22,61 +28,48 @@ function Result(props) {
     awareness: 0,
     consensus: 0,
   });
-
   const [userEmail, setUserEmail] = useState("");
   const [notifBox, setNotifBox] = useState(false);
-
-  const surveySession = useSelector((state) => state.login.surveySession);
-  const urlParams = useSelector((state) => state.urlslice.urlParams);
-
-  const navigateTo = useNavigate();
-
+  const urlParams = useAppSelector((state) => state.urlslice.urlParams);
   const [aTurkBox, setATurkBox] = useState(false);
-
-  function handleRedirect() {
-    navigateTo("/welcome");
-  }
-
-  function isUserDone(statementsData) {
-    for (let i = 0; i < statementsData.length; i++) {
-      if (!statementsData[i].answereSaved) {
-        return false;
-      }
-    }
-    return true;
-  }
 
   useEffect(() => {
     setStatementsData([]);
 
-    Backend.post("/results", {
-      withCredentials: true,
-      sessionId: props.sessionId,
-    }).then((response) => {
-      setCommonSenseScore({
-        commonsense: Math.round(
-          Number(response.data.commonsensicality).toFixed(2) * 100
-        ),
-        awareness: Math.round(Number(response.data.awareness).toFixed(2) * 100),
-        consensus: Math.round(Number(response.data.consensus).toFixed(2) * 100),
+    if (sessionId) {
+      Backend.post("/results", {
+        withCredentials: true,
+        sessionId: sessionId,
+      }).then((response) => {
+        setCommonSenseScore({
+          commonsense: Math.round(
+            Number(response.data.commonsensicality).toFixed(2) * 100
+          ),
+          awareness: Math.round(
+            Number(response.data.awareness).toFixed(2) * 100
+          ),
+          consensus: Math.round(
+            Number(response.data.consensus).toFixed(2) * 100
+          ),
+        });
       });
-    });
 
-    urlParams.forEach((obj) => {
-      if (obj.key === "source" && obj.value === "mturk") {
-        setATurkBox(true);
-      }
-    });
+      urlParams.forEach((obj) => {
+        if (obj.key === "source" && obj.value === "mturk") {
+          setATurkBox(true);
+        }
+      });
 
-    Backend.get("/treatments/update", {
-      withCredentials: true,
-      params: { sessionId: props.sessionId },
-    }).then((response) => {
-      console.log(response.data);
-    });
-  }, []);
+      Backend.get("/treatments/update", {
+        withCredentials: true,
+        params: { sessionId: sessionId },
+      }).then((response) => {
+        console.log(response.data);
+      });
+    }
+  }, [sessionId]);
 
-  const signUp = async (email, sessionId) => {
+  const signUp = async (email: string, sessionId: string) => {
     try {
       let res = await Backend.post(`/users/enter`, { email, sessionId });
       if (res.data.token) {
@@ -95,7 +88,7 @@ function Result(props) {
 
   const emailSubmit = (e) => {
     e.preventDefault();
-    signUp(userEmail, props.sessionId);
+    signUp(userEmail, sessionId);
     setNotifBox(true);
   };
 
@@ -105,31 +98,32 @@ function Result(props) {
     useState([]);
 
   useEffect(() => {
-    Backend.get("/results/all", {
-      withCredentials: true,
-      params: {
-        sessionId: props.sessionId,
-      },
-    })
-      .then((response) => {
-        setData(
-          response.data.sort(
-            (a, b) => a.commonsensicality - b.commonsensicality
-          )
-        );
-
-        return response.data;
+    if (sessionId) {
+      Backend.get("/results/all", {
+        withCredentials: true,
+        params: {
+          sessionId: sessionId,
+        },
       })
-      .then((data) => {
-        setIndividualCommonsensicality(
-          data.map((value, index) => ({
-            sessionId: value.sessionId,
-            commonsensicality: value.commonsensicality,
-            count: 1,
-          }))
-        );
-      });
-  }, []);
+        .then((response) => {
+          setData(
+            response.data.sort(
+              (a, b) => a.commonsensicality - b.commonsensicality
+            )
+          );
+          return response.data;
+        })
+        .then((data) => {
+          setIndividualCommonsensicality(
+            data.map((value, index) => ({
+              sessionId: value.sessionId,
+              commonsensicality: value.commonsensicality,
+              count: 1,
+            }))
+          );
+        });
+    }
+  }, [sessionId]);
 
   useEffect(() => {
     const plot = Plot.plot({
@@ -163,7 +157,7 @@ function Result(props) {
 
   async function handleCopy() {
     try {
-      await navigator.clipboard.writeText(props.sessionId);
+      await navigator.clipboard.writeText(sessionId ?? "");
     } catch (error) {
       console.error("Failed to copy text:", error);
     }
@@ -180,7 +174,7 @@ function Result(props) {
               verification:
             </p>
             <p className="pb-2 mb-3 font-semibold border-2 rounded py-1 px-3">
-              {props.sessionId}
+              {sessionId}
             </p>
             <button
               onClick={handleCopy}
@@ -188,16 +182,13 @@ function Result(props) {
             >
               Copy code
             </button>
-
-            <p className="text-2xl mt-3  pt-2 px-3">
+            <p className="text-2xl mt-3 pt-2 px-3">
               Scroll down to see your results — not required.
             </p>
           </div>
-
           <hr />
         </>
       ) : null}
-
       <p className="py-4">
         You've completed the common sense trial. At any point you can answer
         more questions by logging in.
@@ -221,27 +212,23 @@ function Result(props) {
         accurately you rated what others think (you were{" "}
         {commonSenseScore.consensus}% accurate).
       </p>
-
       <p className="pb-4">
         This is calculated by comparing your answers to others answers, so it
         will become more accurate if you answer more questions and it will
         become more accurate as others answer more questions. If you log in
         below you can continue to see this score as it updates over time.
       </p>
-
       <div className="flex justify-center" ref={containerRef} />
       <TwitterText
         percentage={commonSenseScore.commonsense}
-        sessionId={props.sessionId}
+        sessionId={sessionId ?? ""}
       />
-
       <div className="flex flex-col items-center pt-7">
         <div className="w-full bg-white md:mt-0 sm:max-w-lg xl:p-0 dark:bg-gray-800 dark:border-gray-700">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
               Create an account (optional)
             </h1>
-
             {notifBox ? (
               <NotificationBox userEmail={userEmail} />
             ) : (
@@ -264,7 +251,6 @@ function Result(props) {
                     required
                   />
                 </div>
-
                 <button
                   onSubmit={emailSubmit}
                   type="submit"
