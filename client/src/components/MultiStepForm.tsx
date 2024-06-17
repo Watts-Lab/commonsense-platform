@@ -1,26 +1,25 @@
 import React, { useEffect, useState } from "react";
 import Backend from "../apis/backend";
 import useStickyState from "../hooks/useStickyState";
-import surveyData from '../data/surveyData.json';
 import { IQuestionData, questionData } from '../data/questions';
 import "./style.css";
 
-//defining a bunch of types so it doesn't throw error
-interface Step {
-  id: number;
-  answers: string[];
-  answereSaved: boolean;
-}
-
-interface Props {
-  steps: Step[];
-  pushResultComponent: () => void;
-  getNextStatement: (sessionId: string) => Promise<{ value: { id: number; statement: string } }>;
-  pushNewStatement: (id: number, statement: string) => void;
-  handleAnswerSaving: (id: number, saved: boolean) => void;
-  setUnansweredQuestionIndex: (index: number) => void;
-  sessionId: string;
-}
+//defining types so it doesn't throw error
+// interface Step {
+//   id: number;
+//   answers: string[];
+//   answereSaved: boolean;
+// }
+//defined an interface for props but not sure if it is correct
+// interface Props {
+//   steps: Step[];
+//   pushResultComponent: () => void;
+//   getNextStatement: (sessionId: string) => Promise<{ value: { id: number; statement: string } }>;
+//   pushNewStatement: (id: number, statement: string) => void;
+//   handleAnswerSaving: (id: number, saved: boolean) => void;
+//   setUnansweredQuestionIndex: (index: number) => void;
+//   sessionId: string;
+// }
 
 function MultiStepForm(props) {
   // const [currentStepIndex, setCurrentStepIndex] = useStickyState(
@@ -32,11 +31,10 @@ function MultiStepForm(props) {
   const [questions, setQuestions] = useState<IQuestionData[]>([]);
 
   useEffect(() => {
-    const data: SurveyData = surveyData as SurveyData;
-    setQuestions(data.questions);
+    setQuestions(questionData);
   }, []);
 
-  function checkAnswers(answerList) {
+  function checkAnswers(answerList: string[]) {
     if (answerList.includes("")) {
       return false;
     } else {
@@ -44,7 +42,7 @@ function MultiStepForm(props) {
     }
   }
 
-  function whichQuestion(answerList) {
+  function whichQuestion(answerList: string[] ) {
     if (answerList.includes("")) {
       return answerList.indexOf("");
     } else {
@@ -77,25 +75,17 @@ function MultiStepForm(props) {
       if (!props.steps[currentStepIndex].answereSaved) {
         const currentQuestion = questions[currentStepIndex];
 
-        const payload = {
+        const payload: Record<string, any> = {
           statementId: props.steps[currentStepIndex].id,
           sessionId: props.sessionId,
           withCredentials: true,
         };
 
-        Object.keys(currentQuestion.fields).forEach((field, index) => {
-          const fieldData = currentQuestion.fields[field];
-          if (fieldData.type === "boolean") {
-            payload[field] =
-              props.steps[currentStepIndex].answers[index].split("-")[1] === "Yes"
-                ? 1
-                : 0;
-          } else {
-            payload[field] = props.steps[currentStepIndex].answers[index].split("-")[1];
-          }
+        //maps from possibleAnswers in questions.ts file
+        payload[currentQuestion.id] = currentQuestion.possibleAnswers.map((answer, index) => {
+          return props.steps[currentStepIndex].answers[index].split("-")[1];
         });
 
- 
         Backend.post("/answers", payload).then((response) => {
           props.handleAnswerSaving(props.steps[currentStepIndex].id, true);
           props.steps[currentStepIndex].answereSaved = true;
