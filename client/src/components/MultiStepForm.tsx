@@ -4,23 +4,6 @@ import useStickyState from "../hooks/useStickyState";
 import { IQuestionData, questionData } from '../data/questions';
 import "./style.css";
 
-//defining types so it doesn't throw error
-// interface Step {
-//   id: number;
-//   answers: string[];
-//   answereSaved: boolean;
-// }
-//defined an interface for props but not sure if it is correct
-// interface Props {
-//   steps: Step[];
-//   pushResultComponent: () => void;
-//   getNextStatement: (sessionId: string) => Promise<{ value: { id: number; statement: string } }>;
-//   pushNewStatement: (id: number, statement: string) => void;
-//   handleAnswerSaving: (id: number, saved: boolean) => void;
-//   setUnansweredQuestionIndex: (index: number) => void;
-//   sessionId: string;
-// }
-
 function MultiStepForm(props) {
   // const [currentStepIndex, setCurrentStepIndex] = useStickyState(
   //   0,
