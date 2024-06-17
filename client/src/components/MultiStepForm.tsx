@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Backend from "../apis/backend";
 import useStickyState from "../hooks/useStickyState";
-
+import { IQuestionData, questionData } from '../data/questions';
 import "./style.css";
 
 function MultiStepForm(props) {
@@ -11,8 +11,13 @@ function MultiStepForm(props) {
   // );
 
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
+  const [questions, setQuestions] = useState<IQuestionData[]>([]);
 
-  function checkAnswers(answerList) {
+  useEffect(() => {
+    setQuestions(questionData);
+  }, []);
+
+  function checkAnswers(answerList: string[]) {
     if (answerList.includes("")) {
       return false;
     } else {
@@ -20,7 +25,7 @@ function MultiStepForm(props) {
     }
   }
 
-  function whichQuestion(answerList) {
+  function whichQuestion(answerList: string[] ) {
     if (answerList.includes("")) {
       return answerList.indexOf("");
     } else {
@@ -51,29 +56,20 @@ function MultiStepForm(props) {
 
       // if the user answered the statement, then save the answer and set the answerSaved flag to true
       if (!props.steps[currentStepIndex].answereSaved) {
-        Backend.post("/answers", {
+        const currentQuestion = questions[currentStepIndex];
+
+        const payload: Record<string, any> = {
           statementId: props.steps[currentStepIndex].id,
-          I_agree:
-            props.steps[currentStepIndex].answers[0].split("-")[1] === "Yes"
-              ? 1
-              : 0,
-          I_agree_reason:
-            props.steps[currentStepIndex].answers[1].split("-")[1],
-          others_agree:
-            props.steps[currentStepIndex].answers[2].split("-")[1] === "Yes"
-              ? 1
-              : 0,
-          others_agree_reason:
-            props.steps[currentStepIndex].answers[3].split("-")[1],
-          perceived_commonsense:
-            props.steps[currentStepIndex].answers[4].split("-")[1] === "Yes"
-              ? 1
-              : 0,
-          clarity: 'removed',
-          origLanguage: "en",
           sessionId: props.sessionId,
           withCredentials: true,
-        }).then((response) => {
+        };
+
+        //maps from possibleAnswers in questions.ts file
+        payload[currentQuestion.id] = currentQuestion.possibleAnswers.map((answer, index) => {
+          return props.steps[currentStepIndex].answers[index].split("-")[1];
+        });
+
+        Backend.post("/answers", payload).then((response) => {
           props.handleAnswerSaving(props.steps[currentStepIndex].id, true);
           props.steps[currentStepIndex].answereSaved = true;
         });
