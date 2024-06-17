@@ -39,8 +39,8 @@ app.get("/api/images/*", (req, res) => {
 });
 
 
-const { getAllTreatments } = require("./controllers/treatments");
-getAllTreatments();
+// const { getAllTreatments } = require("./controllers/treatments");
+// getAllTreatments();
 
 
 app.get("/api", (req, res) => {
