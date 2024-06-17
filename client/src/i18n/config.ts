@@ -1,7 +1,7 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
-//import Backend from 'i18next-http-backend';
-import Backend from 'i18next-locize-backend';
+import Backend from 'i18next-http-backend';
+//import Backend from 'i18next-locize-backend';
 import LanguageDetector from 'i18next-browser-languagedetector';
 
 export const supportedLngs = {
@@ -32,9 +32,9 @@ i18n
     fallbackLng: 'en', // fallback language when a translation is missing in the locale
     interpolation: {
       escapeValue: false, 
-    },
-    backend: locizeOptions,
-    saveMissing: true // only use this in development and not in production
+    }
+    // backend: locizeOptions,
+    // saveMissing: true // only use this in development and not in production
   });
 
 export default i18n;
