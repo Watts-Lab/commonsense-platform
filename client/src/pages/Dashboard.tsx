@@ -36,6 +36,8 @@ const Dashboard: React.FC = () => {
   const [answerList, setAnswerList] = useState<Answer[]>([]);
   const [activeTab, setActiveTab] = useState<string>("dashboard");
 
+  const [editing, setEditing] = useState<boolean>(true);
+
   const containerRef = useRef();
   const navigate = useNavigate();
 
@@ -245,6 +247,13 @@ const Dashboard: React.FC = () => {
                                   )}
                                 </td>
                                 <td className="px-6 py-4">
+                                  {editing && (
+                                    <input
+                                      type="checkbox"
+                                      className="toggle toggle-sm"
+                                      checked
+                                    />
+                                  )}
                                   {answer.others_agree === true ? (
                                     <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
                                       Yes
