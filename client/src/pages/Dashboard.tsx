@@ -84,6 +84,23 @@ const Dashboard: React.FC = () => {
     getAnswers();
   }, []);
 
+  function useEditAnswer(
+    id: number
+  ): React.MouseEventHandler<HTMLAnchorElement> | undefined {
+    Backend.defaults.headers.common["Authorization"] = token;
+    const response = Backend.post("/answers/changeanswers", {
+      i_agree: true,
+      others_agree: true,
+      statement_number: id,
+    })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   return (
     <div className="flex flex-col min-h-screen overflow-hidden">
       {/*  Site header */}
@@ -236,6 +253,16 @@ const Dashboard: React.FC = () => {
                                     <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
                                       No
                                     </span>
+                                  )}
+                                </td>
+                                <td className="px-6 py-4">
+                                  {answer.others_agree === true && (
+                                    <a
+                                      onClick={useEditAnswer(answer.id)}
+                                      className="px-2 inline-flex text-xs leading-5 "
+                                    >
+                                      Edit
+                                    </a>
                                   )}
                                 </td>
                               </tr>
