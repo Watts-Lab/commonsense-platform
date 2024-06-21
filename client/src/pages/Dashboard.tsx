@@ -36,7 +36,7 @@ const Dashboard: React.FC = () => {
   const [answerList, setAnswerList] = useState<Answer[]>([]);
   const [activeTab, setActiveTab] = useState<string>("dashboard");
 
-  const [editing, setEditing] = useState<boolean>(true);
+  const [editing, setEditing] = useState<boolean>(false);
   const [checkboxStates, setCheckboxStates] = useState<{ [key: number]: boolean }>({});
   const [agreeCheckboxStates, setAgreeCheckboxStates] = useState<{ [key: number]: boolean }>({});
 
@@ -171,26 +171,26 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  const useEditAnswer = (id: number) => async () => {
-    try {
-      Backend.defaults.headers.common["Authorization"] = token;
-      await Backend.post("/answers/changeanswers", {
-        i_agree: true,
-        others_agree: checkboxStates[id],
-        statement_number: id,
-      });
-      console.log("Answer updated");
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const useEditAnswer = () => {
+    if (editing) {
+      // Save changes
+      Object.keys(checkboxStates).forEach(async (id) => {
+        const currentAnswer = answerList.find(answer => answer.id === parseInt(id));
+        if (!currentAnswer) return;
 
-  const useEditAnswer1 = () => async () => {
-    try {
-      console.log("Answer updated");
-    } catch (error) {
-      console.log(error);
+        try {
+          Backend.defaults.headers.common["Authorization"] = token;
+          await Backend.post("/api/answers/changeanswers", {
+            statementId: parseInt(id),
+            others_agree: checkboxStates[id] ? 1 : 0,
+            I_agree: agreeCheckboxStates[id] ? 1 : 0,
+          });
+        } catch (error) {
+          console.log("Error updating answer", error);
+        }
+      });
     }
+    setEditing(!editing);
   };
 
   return (
@@ -308,10 +308,10 @@ const Dashboard: React.FC = () => {
                             <tr>
                               <th className="px-6 py-3 text-right">
                                 <button
-                                  onClick={() => useEditAnswer1()}
-                                  className="px-4 py-2 text-white bg-blue-500 hover:bg-blue-700 rounded"
+                                  onClick={useEditAnswer}
+                                  className="px-2 py-2 text-white bg-blue-500 hover:bg-blue-700 rounded w-[100px] h-[50px] text-center"
                                 >
-                                  Edit your Answers
+                                  {editing ? "Done" : "Edit your Answers"}
                                 </button>
                               </th>
                             </tr>
