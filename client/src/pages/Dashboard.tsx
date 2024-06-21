@@ -12,6 +12,11 @@ interface Statement {
   statement: string;
 }
 
+type Agreement = {
+  I_agree: number;
+  others_agree: number;
+};
+
 interface Answer {
   id: number;
   I_agree: boolean;
@@ -29,6 +34,7 @@ interface Answer {
   statement_number: number;
   statementId: number;
   statement: Statement;
+  agreement?: Agreement;
 }
 
 const Dashboard: React.FC = () => {
@@ -40,7 +46,6 @@ const Dashboard: React.FC = () => {
   const [editing, setEditing] = useState<boolean>(false);
   const [checkboxStates, setCheckboxStates] = useState<{ [key: number]: boolean }>({});
   const [agreeCheckboxStates, setAgreeCheckboxStates] = useState<{ [key: number]: boolean }>({});
-
 
   const containerRef = useRef();
   const navigate = useNavigate();
@@ -86,6 +91,8 @@ const Dashboard: React.FC = () => {
         const statementIds = response.data.map(answer => answer.statementId);
         const commonsensicalityResponse = await Backend.post("/results/commonsensicality", { statementIds });
         const commonsensicalityScores = commonsensicalityResponse.data;
+        const agreementResponse = await Backend.post("/results/agreementPercentage", { statementIds });
+        const agreementPercentages = agreementResponse.data;
 
         const initialCheckboxStates = response.data.reduce((acc, answer) => {
           acc[answer.id] = answer.others_agree;
@@ -101,7 +108,8 @@ const Dashboard: React.FC = () => {
 
         const updatedAnswerList = response.data.map(answer => ({
           ...answer,
-          commonsensicality: commonsensicalityScores[answer.statementId] || 0
+          commonsensicality: commonsensicalityScores[answer.statementId] || 0,
+          agreement: agreementPercentages[answer.statementId] || { I_agree: 0, others_agree: 0 },
         }));
         setAnswerList(updatedAnswerList);
 
@@ -193,7 +201,7 @@ const Dashboard: React.FC = () => {
 
         try {
           Backend.defaults.headers.common["Authorization"] = token;
-          await Backend.post("/api/answers/changeanswers", {
+          await Backend.post("/answers/changeanswers", {
             statementId: parseInt(id),
             others_agree: checkboxStates[id] ? 1 : 0,
             I_agree: agreeCheckboxStates[id] ? 1 : 0,
@@ -305,7 +313,6 @@ const Dashboard: React.FC = () => {
                             Browse the list of statements you have answered so
                             far
                           </p>
-
                         </caption>
                         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                           <tr>
@@ -319,8 +326,11 @@ const Dashboard: React.FC = () => {
                               Others think it is common sense?
                             </th>
                             <th scope="col" className="px-6 py-3">
-                              Commonsensicality
+                              You answered the same as...
                             </th>
+                            {/* <th scope="col" className="px-6 py-3">
+                              Commonsensicality
+                            </th> */}
                             <tr>
                               <th className="px-6 py-3 text-right">
                                 <button
@@ -329,11 +339,9 @@ const Dashboard: React.FC = () => {
                                 >
                                   {editing ? "Done" : "Edit your Answers"}
                                 </button>
-
                               </th>
                             </tr>
                           </tr>
-
                         </thead>
                         <tbody>
                           {answerList.length > 0 &&
@@ -387,17 +395,15 @@ const Dashboard: React.FC = () => {
                                   )}
                                 </td>
                                 <td className="px-6 py-4">
-                                  {(answer.commonsensicality ?? 0).toFixed(2)}
-
-                                  {/* {answer.others_agree === true && (
-                                    <a
-                                      onClick={useEditAnswer(answer.id)}
-                                      className="px-2 inline-flex text-xs leading-5"
-                                    >
-                                      Edit
-                                    </a>
-                                  )} */}
+                                  {answer.agreement ?
+                                    `${((answer.agreement.I_agree + answer.agreement.others_agree) / 2).toFixed(0)}% of people`
+                                    :
+                                    "N/A"
+                                  }
                                 </td>
+                                {/* <td className="px-6 py-4"> 
+                                {(answer.commonsensicality ?? 0).toFixed(2)}
+                               </td> */}
                               </tr>
                             ))}
                         </tbody>

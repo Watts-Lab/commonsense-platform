@@ -202,7 +202,7 @@ const calculateCommonsensicality = async (statementIds) => {
   return result;
 };
 
-// New endpoint to get commonsensicality scores
+//endpoint to get commonsensicality scores for each question
 router.post(
   "/commonsensicality",
   [body("statementIds").isArray().withMessage("statementIds must be an array")],
@@ -225,4 +225,58 @@ router.post(
     }
   }
 );
+
+
+// Helper function to calculate agreement percentages
+const calculateAgreementPercentage = async (statementIds) => {
+  const result = {};
+  for (const statementId of statementIds) {
+    const answersForStatement = await answers.findAll({
+      where: { statementId },
+      attributes: ["I_agree", "others_agree"],
+      raw: true,
+    });
+
+    if (answersForStatement.length === 0) {
+      result[statementId] = { I_agree: 0, others_agree: 0 };
+      continue;
+    }
+
+    const totalAnswers = answersForStatement.length;
+    const sameIAgree = answersForStatement.reduce((acc, answer) => acc + (answer.I_agree ? 1 : 0), 0);
+    const sameOthersAgree = answersForStatement.reduce((acc, answer) => acc + (answer.others_agree ? 1 : 0), 0);
+
+    result[statementId] = {
+      I_agree: (sameIAgree / totalAnswers) * 100,
+      others_agree: (sameOthersAgree / totalAnswers) * 100,
+    };
+  }
+  return result;
+};
+
+
+//endpoint to get agreement percentages (ex. 60% of people agreed with you)
+router.post(
+  "/agreementPercentage",
+  [body("statementIds").isArray().withMessage("statementIds must be an array")],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { statementIds } = req.body;
+    console.log("Received statementIds:", statementIds);
+
+    try {
+      const agreementPercentages = await calculateAgreementPercentage(statementIds);
+      console.log("Calculated agreementPercentages:", agreementPercentages);
+      res.json(agreementPercentages);
+    } catch (error) {
+      console.error("Error calculating agreement percentages:", error);
+      res.status(500).json({ error: error.message });
+    }
+  }
+);
+
 module.exports = router;
