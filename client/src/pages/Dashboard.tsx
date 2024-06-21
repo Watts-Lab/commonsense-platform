@@ -19,6 +19,7 @@ interface Answer {
   others_agree: boolean;
   others_agree_reason: string;
   perceived_commonsense: boolean;
+  commonsensicality?: number;
   clarity: string;
   origLanguage: string;
   clientVersion: string;
@@ -80,7 +81,12 @@ const Dashboard: React.FC = () => {
         const response = await Backend.post("/answers/getanswers", {
           email: "user@test.com",
         });
-        setAnswerList(response.data)
+        setAnswerList(response.data);
+
+        const statementIds = response.data.map(answer => answer.statementId);
+        const commonsensicalityResponse = await Backend.post("/results/commonsensicality", { statementIds });
+        const commonsensicalityScores = commonsensicalityResponse.data;
+
         const initialCheckboxStates = response.data.reduce((acc, answer) => {
           acc[answer.id] = answer.others_agree;
           return acc;
@@ -92,7 +98,14 @@ const Dashboard: React.FC = () => {
           return acc;
         }, {});
         setAgreeCheckboxStates(initialAgreeCheckboxStates);
-        //return response.data.ok;
+
+        const updatedAnswerList = response.data.map(answer => ({
+          ...answer,
+          commonsensicality: commonsensicalityScores[answer.statementId] || 0
+        }));
+        setAnswerList(updatedAnswerList);
+
+        return response.data.ok;
       } catch (error) {
         console.log(error);
       }
@@ -305,6 +318,9 @@ const Dashboard: React.FC = () => {
                             <th scope="col" className="px-6 py-3">
                               Others think it is common sense?
                             </th>
+                            <th scope="col" className="px-6 py-3">
+                              Commonsensicality
+                            </th>
                             <tr>
                               <th className="px-6 py-3 text-right">
                                 <button
@@ -371,6 +387,7 @@ const Dashboard: React.FC = () => {
                                   )}
                                 </td>
                                 <td className="px-6 py-4">
+                                  {(answer.commonsensicality ?? 0).toFixed(2)}
 
                                   {/* {answer.others_agree === true && (
                                     <a

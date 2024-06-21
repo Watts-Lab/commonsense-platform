@@ -153,4 +153,70 @@ router.get("/all", async (req, res) => {
     });
 });
 
+// Helper function to calculate commonsensicality
+const calculateCommonsensicality = async (statementIds) => {
+  const result = {};
+  for (const statementId of statementIds) {
+    const answersForStatement = await answers.findAll({
+      where: { statementId },
+      include: [
+        {
+          model: statements,
+          as: "statement",
+          attributes: [],
+        },
+      ],
+      attributes: [
+        "I_agree",
+        "perceived_commonsense",
+        [Sequelize.col("statement.statementMedian"), "statementMedian"],
+      ],
+      raw: true,
+    });
+
+    const total = answersForStatement.length;
+    if (total === 0) {
+      result[statementId] = 0;
+      continue;
+    }
+
+    const awareness = answersForStatement.reduce(
+      (acc, answer) => acc + (answer.perceived_commonsense === answer.statementMedian ? 1 : 0),
+      0
+    ) / total;
+
+    const consensus = answersForStatement.reduce(
+      (acc, answer) => acc + (answer.I_agree === answer.statementMedian ? 1 : 0),
+      0
+    ) / total;
+
+    result[statementId] = Math.sqrt(awareness * consensus);
+  }
+  return result;
+};
+
+// New endpoint to get commonsensicality scores for each question
+router.post(
+  "/commonsensicality",
+  [body("statementIds").isArray().withMessage("statementIds must be an array")],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { statementIds } = req.body;
+    console.log("Received statementIds:", statementIds);
+
+    try {
+      const commonsensicalityScores = await calculateCommonsensicality(statementIds);
+      console.log("Calculated commonsensicalityScores:", commonsensicalityScores);
+      res.json(commonsensicalityScores);
+    } catch (error) {
+      console.error("Error calculating commonsensicality:", error);
+      res.status(500).json({ error: error.message });
+    }
+  }
+);
+
 module.exports = router;
