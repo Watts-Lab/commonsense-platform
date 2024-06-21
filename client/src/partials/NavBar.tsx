@@ -58,6 +58,9 @@ const Navbar: React.FC = () => {
                 <a href="/research">Research</a>
               </li>
               <li>
+                <a href="/research">Dashboard Dummy</a>
+              </li>
+              <li>
                 {!loggedIn ? (
                   <a href="/signin">Signin</a>
                 ) : (

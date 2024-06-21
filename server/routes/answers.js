@@ -130,62 +130,58 @@ router.post(
   }
 );
 
-
 // rount for updating user answers
-// router.post(
-//   "/changeanswers",
-//   body("statementId").not().isEmpty().isInt({ min: 1 }),
-//   body("I_agree").not().isEmpty().isInt({ min: 0, max: 1 }),
-//   body("others_agree").not().isEmpty().isInt({ min: 0, max: 1 }),
-//   (req, res) => {
-//     const errors = validationResult(req);
-//     if (!errors.isEmpty()) {
-//       return res.status(400).json({ errors: errors.array() });
-//     } else {
-//       const token = req.headers.authorization;
-//       jwt.verify(token, jwt_secret, (err, succ) => {
-//         if (err) {
-//           res.json({ ok: false, message: "something went wrong" });
-//         } else {
-//           getSessionId(succ.email)
-//             .then((sessionID) => {
-//               if (sessionID) {
-//                 const answers = await answers.findAll({
-//                   where: {
-//                     sessionId: sessionID,
-//                     statementId: req.headers.statementId,
-//                   },
-//                   include: [
-//                     {
-//                       model: statements,
-//                       as: "statement",
-//                       attributes: ["statement"],
-//                     },
-//                   ],
-//                   order: [["createdAt", "DESC"]],
-//                 });
 
-//                 if (answers.length > 0) {
-//                   answers[0].I_agree = req.body.I_agree;
-//                   answers[0].others_agree = req.body.others_agree;
-//                   answers[0].save();
-//                   res.json({ ok: true, message: "Answer updated" });
-//                 } else {
-//                   res.json({ ok: false, message: "No answer found" });
-//                 }
+router.post(
+  "/changeanswers",
+  body("statementId").not().isEmpty().isInt({ min: 1 }),
+  body("I_agree").not().isEmpty().isInt({ min: 0, max: 1 }),
+  body("others_agree").not().isEmpty().isInt({ min: 0, max: 1 }),
+  header("Authorization")
+    .exists()
+    .withMessage("Authorization header is missing")
+    .isString()
+    .withMessage("Authorization header must be a string")
+    .notEmpty()
+    .withMessage("Authorization header cannot be empty"),
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
 
+    const token = req.headers.authorization;
+    jwt.verify(token, jwt_secret, async (err, succ) => {
+      if (err) {
+        res.json({ ok: false, message: "something went wrong" });
+      } else {
+        try {
+          const sessionID = await getSessionId(succ.email);
+          if (sessionID) {
+            const answer = await answers.findOne({
+              where: {
+                sessionId: sessionID,
+                statementId: req.body.statementId,
+              },
+            });
 
-//               } else {
-//                 res.json({ ok: false, message: "No session ID found" });
-//               }
-//             })
-//             .catch((error) => {
-//               res.json({ ok: false, message: error.message });
-//             });
-//         }
-//       });
-//     }
-//   }
-// );
+            if (answer) {
+              answer.I_agree = req.body.I_agree;
+              answer.others_agree = req.body.others_agree;
+              await answer.save();
+              res.json({ ok: true, message: "Answer updated" });
+            } else {
+              res.json({ ok: false, message: "No answer found" });
+            }
+          } else {
+            res.json({ ok: false, message: "No session ID found" });
+          }
+        } catch (error) {
+          res.json({ ok: false, message: error.message });
+        }
+      }
+    });
+  }
+);
 
 module.exports = router;

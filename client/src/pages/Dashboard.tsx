@@ -37,6 +37,9 @@ const Dashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>("dashboard");
 
   const [editing, setEditing] = useState<boolean>(true);
+  const [checkboxStates, setCheckboxStates] = useState<{ [key: number]: boolean }>({});
+  const [agreeCheckboxStates, setAgreeCheckboxStates] = useState<{ [key: number]: boolean }>({});
+
 
   const containerRef = useRef();
   const navigate = useNavigate();
@@ -77,8 +80,19 @@ const Dashboard: React.FC = () => {
         const response = await Backend.post("/answers/getanswers", {
           email: "user@test.com",
         });
-        setAnswerList(response.data);
-        return response.data.ok;
+        setAnswerList(response.data)
+        const initialCheckboxStates = response.data.reduce((acc, answer) => {
+          acc[answer.id] = answer.others_agree;
+          return acc;
+        }, {});
+        setCheckboxStates(initialCheckboxStates);
+
+        const initialAgreeCheckboxStates = response.data.reduce((acc, answer) => {
+          acc[answer.id] = answer.I_agree;
+          return acc;
+        }, {});
+        setAgreeCheckboxStates(initialAgreeCheckboxStates);
+        //return response.data.ok;
       } catch (error) {
         console.log(error);
       }
@@ -86,22 +100,98 @@ const Dashboard: React.FC = () => {
     getAnswers();
   }, []);
 
-  function useEditAnswer(
-    id: number
-  ): React.MouseEventHandler<HTMLAnchorElement> | undefined {
-    Backend.defaults.headers.common["Authorization"] = token;
-    const response = Backend.post("/answers/changeanswers", {
-      i_agree: true,
-      others_agree: true,
-      statement_number: id,
-    })
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log(error);
+  //OTHERS THINK IT IS COMMON SENSE? change others_agree variable
+  const handleCheckboxChange = async (id: number) => {
+    const newCheckedState = !checkboxStates[id];
+    const currentAnswer = answerList.find(answer => answer.id === id);
+
+    // Check if currentAnswer is undefined
+    if (!currentAnswer) {
+      console.error("Answer not found");
+      return;
+    }
+
+
+    setCheckboxStates((prevStates) => ({
+      ...prevStates,
+      [id]: newCheckedState,
+    }));
+
+    try {
+      Backend.defaults.headers.common["Authorization"] = token;
+      const response = await Backend.post("/answers/changeanswers", {
+        statementId: id,
+        others_agree: newCheckedState ? 1 : 0,
+        I_agree: currentAnswer.I_agree ? 1 : 0,
       });
-  }
+      console.log("Answer updated");
+      return response.data.ok;
+    } catch (error) {
+      console.log(error);
+      // Revert the state change in case of an error
+      setCheckboxStates((prevStates) => ({
+        ...prevStates,
+        [id]: !newCheckedState,
+      }));
+    }
+  };
+
+
+  //IS IT COMMON SENSE? change I_agree variable
+  const handleAgreeCheckboxChange = async (id: number) => {
+    const newCheckedState = !agreeCheckboxStates[id];
+    const currentAnswer = answerList.find(answer => answer.id === id);
+
+    // Check if currentAnswer is undefined
+    if (!currentAnswer) {
+      console.error("Answer not found");
+      return;
+    }
+
+    setAgreeCheckboxStates((prevStates) => ({
+      ...prevStates,
+      [id]: newCheckedState,
+    }));
+
+    try {
+      Backend.defaults.headers.common["Authorization"] = token;
+      const response = await Backend.post("/answers/changeanswers", {
+        statementId: id,
+        others_agree: currentAnswer.others_agree ? 1 : 0,
+        I_agree: newCheckedState ? 1 : 0,
+      });
+      console.log("Answer updated", response.data);
+    } catch (error) {
+      console.log("Error updating answer", error);
+      // Revert the state change in case of an error
+      setAgreeCheckboxStates((prevStates) => ({
+        ...prevStates,
+        [id]: !newCheckedState,
+      }));
+    }
+  };
+
+  const useEditAnswer = (id: number) => async () => {
+    try {
+      Backend.defaults.headers.common["Authorization"] = token;
+      await Backend.post("/answers/changeanswers", {
+        i_agree: true,
+        others_agree: checkboxStates[id],
+        statement_number: id,
+      });
+      console.log("Answer updated");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const useEditAnswer1 = () => async () => {
+    try {
+      console.log("Answer updated");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="flex flex-col min-h-screen overflow-hidden">
@@ -120,11 +210,10 @@ const Dashboard: React.FC = () => {
                 >
                   <li className="mr-2" role="presentation">
                     <button
-                      className={`inline-block p-4 border-b-2 rounded-t-lg ${
-                        activeTab === "dashboard"
-                          ? "border-brand-500"
-                          : "border-transparent"
-                      } hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300`}
+                      className={`inline-block p-4 border-b-2 rounded-t-lg ${activeTab === "dashboard"
+                        ? "border-brand-500"
+                        : "border-transparent"
+                        } hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300`}
                       onClick={() => handleTabClick("dashboard")}
                       role="tab"
                       aria-controls="dashboard"
@@ -135,11 +224,10 @@ const Dashboard: React.FC = () => {
                   </li>
                   <li className="mr-2" role="presentation">
                     <button
-                      className={`inline-block p-4 border-b-2 rounded-t-lg ${
-                        activeTab === "profile"
-                          ? "border-brand-500"
-                          : "border-transparent"
-                      }`}
+                      className={`inline-block p-4 border-b-2 rounded-t-lg ${activeTab === "profile"
+                        ? "border-brand-500"
+                        : "border-transparent"
+                        }`}
                       onClick={() => handleTabClick("profile")}
                       role="tab"
                       aria-controls="profile"
@@ -151,11 +239,10 @@ const Dashboard: React.FC = () => {
 
                   <li className="mr-2" role="presentation">
                     <button
-                      className={`inline-block p-4 border-b-2 rounded-t-lg ${
-                        activeTab === "statement"
-                          ? "border-brand-500"
-                          : "border-transparent"
-                      }`}
+                      className={`inline-block p-4 border-b-2 rounded-t-lg ${activeTab === "statement"
+                        ? "border-brand-500"
+                        : "border-transparent"
+                        }`}
                       onClick={() => handleTabClick("statement")}
                       role="tab"
                       aria-controls="statement"
@@ -167,11 +254,10 @@ const Dashboard: React.FC = () => {
 
                   <li className="mr-2" role="presentation">
                     <button
-                      className={`inline-block p-4 border-b-2 rounded-t-lg ${
-                        activeTab === "settings"
-                          ? "border-brand-500"
-                          : "border-transparent"
-                      } hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300`}
+                      className={`inline-block p-4 border-b-2 rounded-t-lg ${activeTab === "settings"
+                        ? "border-brand-500"
+                        : "border-transparent"
+                        } hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300`}
                       onClick={() => handleTabClick("settings")}
                       role="tab"
                       aria-controls="settings"
@@ -183,9 +269,8 @@ const Dashboard: React.FC = () => {
                 </ul>
                 <div id="myTabContent">
                   <div
-                    className={`p-4 rounded-lg bg-gray-50 dark:bg-gray-800 ${
-                      activeTab === "dashboard" ? "block" : "hidden"
-                    }`}
+                    className={`p-4 rounded-lg bg-gray-50 dark:bg-gray-800 ${activeTab === "dashboard" ? "block" : "hidden"
+                      }`}
                     id="dashboard"
                     role="tabpanel"
                     aria-labelledby="dashboard-tab"
@@ -193,9 +278,8 @@ const Dashboard: React.FC = () => {
                     <DashboardChart sessionId={surveySession} />
                   </div>
                   <div
-                    className={`p-4 rounded-lg bg-gray-50 dark:bg-gray-800 ${
-                      activeTab === "profile" ? "block" : "hidden"
-                    }`}
+                    className={`p-4 rounded-lg bg-gray-50 dark:bg-gray-800 ${activeTab === "profile" ? "block" : "hidden"
+                      }`}
                     id="profile"
                     role="tabpanel"
                     aria-labelledby="profile-tab"
@@ -208,6 +292,7 @@ const Dashboard: React.FC = () => {
                             Browse the list of statements you have answered so
                             far
                           </p>
+
                         </caption>
                         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                           <tr>
@@ -220,7 +305,18 @@ const Dashboard: React.FC = () => {
                             <th scope="col" className="px-6 py-3">
                               Others think it is common sense?
                             </th>
+                            <tr>
+                              <th className="px-6 py-3 text-right">
+                                <button
+                                  onClick={() => useEditAnswer1()}
+                                  className="px-4 py-2 text-white bg-blue-500 hover:bg-blue-700 rounded"
+                                >
+                                  Edit your Answers
+                                </button>
+                              </th>
+                            </tr>
                           </tr>
+
                         </thead>
                         <tbody>
                           {answerList.length > 0 &&
@@ -236,7 +332,15 @@ const Dashboard: React.FC = () => {
                                   {answer.statement.statement}
                                 </td>
                                 <td className="px-6 py-4">
-                                  {answer.I_agree === true ? (
+                                  {editing && (
+                                    <input
+                                      type="checkbox"
+                                      className="toggle toggle-sm"
+                                      checked={agreeCheckboxStates[answer.id]}
+                                      onChange={() => handleAgreeCheckboxChange(answer.id)}
+                                    />
+                                  )}
+                                  {agreeCheckboxStates[answer.id] ? (
                                     <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
                                       Yes
                                     </span>
@@ -251,10 +355,11 @@ const Dashboard: React.FC = () => {
                                     <input
                                       type="checkbox"
                                       className="toggle toggle-sm"
-                                      checked
+                                      checked={checkboxStates[answer.id]}
+                                      onChange={() => handleCheckboxChange(answer.id)}
                                     />
                                   )}
-                                  {answer.others_agree === true ? (
+                                  {checkboxStates[answer.id] ? (
                                     <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
                                       Yes
                                     </span>
@@ -265,14 +370,15 @@ const Dashboard: React.FC = () => {
                                   )}
                                 </td>
                                 <td className="px-6 py-4">
-                                  {answer.others_agree === true && (
+
+                                  {/* {answer.others_agree === true && (
                                     <a
                                       onClick={useEditAnswer(answer.id)}
-                                      className="px-2 inline-flex text-xs leading-5 "
+                                      className="px-2 inline-flex text-xs leading-5"
                                     >
                                       Edit
                                     </a>
-                                  )}
+                                  )} */}
                                 </td>
                               </tr>
                             ))}
@@ -282,9 +388,8 @@ const Dashboard: React.FC = () => {
                   </div>
 
                   <div
-                    className={`p-4 rounded-lg bg-gray-50 dark:bg-gray-800 ${
-                      activeTab === "statement" ? "block" : "hidden"
-                    }`}
+                    className={`p-4 rounded-lg bg-gray-50 dark:bg-gray-800 ${activeTab === "statement" ? "block" : "hidden"
+                      }`}
                     id="statement"
                     role="tabpanel"
                     aria-labelledby="statement-tab"
@@ -293,9 +398,8 @@ const Dashboard: React.FC = () => {
                   </div>
 
                   <div
-                    className={`p-4 rounded-lg bg-gray-50 dark:bg-gray-800 ${
-                      activeTab === "settings" ? "block" : "hidden"
-                    }`}
+                    className={`p-4 rounded-lg bg-gray-50 dark:bg-gray-800 ${activeTab === "settings" ? "block" : "hidden"
+                      }`}
                     id="settings"
                     role="tabpanel"
                     aria-labelledby="settings-tab"
