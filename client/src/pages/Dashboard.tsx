@@ -309,10 +309,11 @@ const Dashboard: React.FC = () => {
                               <th className="px-6 py-3 text-right">
                                 <button
                                   onClick={useEditAnswer}
-                                  className="px-2 py-2 text-white bg-blue-500 hover:bg-blue-700 rounded w-[100px] h-[50px] text-center"
+                                  className="px-2 py-2 text-white bg-[#2d374a] hover:bg-[#1a202c] rounded-md w-[90px] h-[50px] text-center shadow-md transition duration-300 ease-in-out transform hover:scale-105"
                                 >
                                   {editing ? "Done" : "Edit your Answers"}
                                 </button>
+
                               </th>
                             </tr>
                           </tr>
@@ -335,7 +336,7 @@ const Dashboard: React.FC = () => {
                                   {editing && (
                                     <input
                                       type="checkbox"
-                                      className="toggle toggle-sm"
+                                      className="toggle toggle-sm mr-3 align-middle relative"
                                       checked={agreeCheckboxStates[answer.id]}
                                       onChange={() => handleAgreeCheckboxChange(answer.id)}
                                     />
@@ -354,7 +355,7 @@ const Dashboard: React.FC = () => {
                                   {editing && (
                                     <input
                                       type="checkbox"
-                                      className="toggle toggle-sm"
+                                      className="toggle toggle-sm mr-3 align-middle relative"
                                       checked={checkboxStates[answer.id]}
                                       onChange={() => handleCheckboxChange(answer.id)}
                                     />
