@@ -180,22 +180,29 @@ const calculateCommonsensicality = async (statementIds) => {
       continue;
     }
 
+    // Calculate consensus (ci)
+    const consensusSum = answersForStatement.reduce(
+      (acc, answer) => acc + answer.I_agree,
+      0
+    );
+    const consensus = 2 * Math.abs((consensusSum / total) - 0.5);
+
+    // Calculate majority
+    const majority = consensusSum / total >= 0.5 ? 1 : 0;
+
+    // Calculate awareness (ai)
     const awareness = answersForStatement.reduce(
-      (acc, answer) => acc + (answer.perceived_commonsense === answer.statementMedian ? 1 : 0),
+      (acc, answer) => acc + (answer.perceived_commonsense === majority ? 1 : 0),
       0
     ) / total;
 
-    const consensus = answersForStatement.reduce(
-      (acc, answer) => acc + (answer.I_agree === answer.statementMedian ? 1 : 0),
-      0
-    ) / total;
-
-    result[statementId] = Math.sqrt(awareness * consensus);
+    // Calculate commonsensicality (mi)
+    result[statementId] = Math.sqrt(consensus * awareness);
   }
   return result;
 };
 
-// New endpoint to get commonsensicality scores for each question
+// New endpoint to get commonsensicality scores
 router.post(
   "/commonsensicality",
   [body("statementIds").isArray().withMessage("statementIds must be an array")],
@@ -218,5 +225,4 @@ router.post(
     }
   }
 );
-
 module.exports = router;
