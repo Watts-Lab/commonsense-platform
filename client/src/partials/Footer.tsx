@@ -2,6 +2,7 @@ import ReportIssue from "../components/Feedback/ReportIssue";
 
 import cssLabLogo from "../images/logo_css_white.png";
 import uPenn from "../images/logo_penn_white.png";
+import { useTranslation } from 'react-i18next';
 
 function Footer() {
   const updateDate = () => {
@@ -10,6 +11,8 @@ function Footer() {
     return year;
   };
 
+  const { t } = useTranslation();
+
   return (
     <footer className="footer footer-center p-10 bg-neutral-500 dark:bg-neutral-700 text-base-content rounded">
       <nav>
@@ -17,12 +20,12 @@ function Footer() {
           <a href="https://css.seas.upenn.edu">
             <img
               src={cssLabLogo}
-              alt="CSSLab Logo"
+              alt={t('footer.css-lab')}
               className="h-12 object-cover"
             />
           </a>
           <a href="https://www.upenn.edu/">
-            <img src={uPenn} alt="UPenn Logo" className="h-12 object-cover" />
+            <img src={uPenn} alt={t('footer.upenn-logo')} className="h-12 object-cover" />
           </a>
         </div>
       </nav>
@@ -73,7 +76,8 @@ function Footer() {
 
         <div className="flex items-center space-x-2 text-gray-300">
           <span>
-            Copyright © 2023 - 2024 - All right reserved by CSSLab at UPenn
+            {/* Copyright © 2023 - 2024 - All right reserved by CSSLab at UPenn */}
+            {t("footer.copyright")}
           </span>
           <span>|</span>
           <ReportIssue />
