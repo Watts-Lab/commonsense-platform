@@ -1,4 +1,9 @@
 import React, { useEffect, useState } from "react";
+
+// i18n
+import { useTranslation } from "react-i18next";
+import useLocalizeDocumentAttributes from "./i18n/useLocalizeDocumentAttributes";
+
 import {
   BrowserRouter,
   Routes,
@@ -157,6 +162,9 @@ const App = () => {
       setSearchParamsNew("");
     }
   }, [location.pathname]);
+
+  const { t } = useTranslation();
+  useLocalizeDocumentAttributes();
 
   return (
     <div className="App">

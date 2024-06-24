@@ -6,6 +6,7 @@ import { setConsent } from "../redux/slices/consentSlice";
 
 import Consent from "./Consent";
 import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 interface ConsentModalProps {
   buttonText: string;
@@ -13,6 +14,8 @@ interface ConsentModalProps {
 }
 
 const ConsentModal = ({ buttonText, buttonClass }: ConsentModalProps) => {
+  const { t } = useTranslation();
+
   const [open, setOpen] = useState(false);
 
   const consent = useAppSelector((state) => state.consent.consent);
@@ -80,13 +83,15 @@ const ConsentModal = ({ buttonText, buttonClass }: ConsentModalProps) => {
                           as="h3"
                           className="text-base font-semibold leading-6 text-gray-900"
                         >
-                          Common Sense Platform
+                          {/* Common Sense Platform */}
+                          {t("consent-modal.title")}
                         </Dialog.Title>
                         <div className="mt-2">
                           <p className="pb-4">
-                            You are about to complete a survey to measure your
+                            {/* You are about to complete a survey to measure your
                             common sense. It takes less than 15 minutes for most
-                            people.
+                            people. */}
+                            {t("consent-modal.subtitle")}
                           </p>
 
                           <div className="overflow-y-auto h-44 rounded-md border-2 p-2 px-3">
@@ -99,8 +104,9 @@ const ConsentModal = ({ buttonText, buttonClass }: ConsentModalProps) => {
                                 htmlFor="terms"
                                 className="font-light text-gray-500 dark:text-gray-300"
                               >
-                                By moving forward you consent to participate in
-                                this research project.
+                                {/* By moving forward you consent to participate in
+                                this research project. */}
+                                {t("consent-modal.acknowledgement")}
                               </label>
                             </div>
                           </div>
@@ -118,7 +124,8 @@ const ConsentModal = ({ buttonText, buttonClass }: ConsentModalProps) => {
                           dispatch(setConsent());
                         }}
                       >
-                        Check Your Common Sense
+                        {/* Check Your Common Sense */}
+                        {t("consent-modal.button")}
                       </button>
                     </Link>
                     <button
@@ -127,7 +134,8 @@ const ConsentModal = ({ buttonText, buttonClass }: ConsentModalProps) => {
                       onClick={() => setOpen(false)}
                       ref={cancelButtonRef}
                     >
-                      Cancel
+                      {/* Cancel */}
+                      {t("consent-modal.cancel")}
                     </button>
                   </div>
                 </Dialog.Panel>
