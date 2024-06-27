@@ -12,6 +12,8 @@ const {
 const { stringy } = require("../survey/treatments/utils/id-generator");
 
 const returnStatements = async (req, res) => {
+  const language = req.query.language || "en"; // default to English if no language is able to be specified
+
   const oursobject = experiments
     .flatMap((experiment) =>
       experiment.treatments.map((treatment) => {
@@ -20,6 +22,7 @@ const returnStatements = async (req, res) => {
           req: { ...req.body },
           ...experiment,
           ...treatment,
+          params: { ...treatment.params, language }, // add language to params
         };
       })
     )
@@ -44,7 +47,12 @@ const returnStatements = async (req, res) => {
     return stringy(treatment.params) === selectedTreatment;
   });
 
-  const result = await treatmentObject.function(treatmentObject.params);
+  const result = await treatmentObject.function({
+    ...treatmentObject.params,
+    ...treatmentObject.req,
+  });
+
+  console.log('Fetched statements:', result.answer);
 
   const experimentData = {
     userSessionId: req.sessionID,
