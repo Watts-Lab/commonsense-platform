@@ -126,5 +126,87 @@
   "welcome": {
     "subtitle": "Você pode clicar no link enviado para verificar seu endereço de e-mail.",
     "title": "Bem-vindo à Plataforma de Senso Comum"
+  },
+  "statement": {
+    "required-fields": "Os campos obrigatórios estão marcados com um asterisco *"
+  },
+  "enter": {
+    "enter-verifying-magic-link": "Verificando seu link mágico"
+  },
+  "feedback": {
+    "feedback": "feedback"
+  },
+  "result": {
+    "thanks": "Obrigado por completar nossa pesquisa!",
+    "copy-code-text": "Copie o código abaixo e cole-o no HIT como verificação de conclusão:",
+    "copy-code-button": "Copiar código",
+    "scroll-down": "Desça para ver seus resultados — não é necessário.",
+    "completed-trial": "Você completou o teste de bom senso. A qualquer momento, você pode responder a mais perguntas fazendo login.",
+    "your-score": "sua pontuação",
+    "of-100": "de 100",
+    "score-description": "Esta pontuação é baseada em um cálculo de quão semelhantes são suas crenças às dos outros (as suas são {{awareness}}% semelhantes), e quão precisamente você avaliou o que os outros pensam (você foi {{consensus}}% preciso).",
+    "score-calculation": "Isso é calculado comparando suas respostas com as respostas dos outros, por isso se tornará mais preciso se você responder a mais perguntas e se tornará mais preciso à medida que outros responderem a mais perguntas. Se você fizer login abaixo, poderá continuar vendo essa pontuação conforme ela é atualizada ao longo do tempo.",
+    "create-account-1": "Criar uma conta (opcional)",
+    "your-email": "Seu email",
+    "placeholder": "name@company.com",
+    "create-account-2": "Criar uma conta"
+  },
+  "twitter-text": {
+    "share-button": "Copiar e Compartilhar!",
+    "percentage": "Meu bom senso é de {{percentage}}%",
+    "check-yours": "Verifique o seu: commonsensicality.org/{{sessionId}}"
+  },
+  "notification": {
+    "welcome": "Bem-vindo",
+    "text": "Um e-mail com seu link de verificação foi enviado para {{email}}. Por favor, clique no link para verificar seu e-mail."
+  },
+  "social-survey": {
+    "answer-questions": "Responda às perguntas abaixo sobre a seguinte declaração:",
+    "required-fields": "Os campos obrigatórios estão marcados com um asterisco *"
+  },
+  "layout": {
+    "start": "Iniciar",
+    "previous": "← Anterior",
+    "continue": "Continuar",
+    "next": "Próximo →"
+  },
+  "questions": {
+    "1": {
+      "question": "Você concorda com esta declaração? *",
+      "description": "(se a resposta for depende, responda com a sua resposta mais comum ou mais provável)",
+      "possibleAnswers": ["Sim", "Não"],
+      "tooltip": "Se você acha que a declaração é verdadeira ou falsa."
+    },
+    "2": {
+      "question": "Por que você respondeu da maneira que respondeu sobre <b>você mesmo?</b> *",
+      "possibleAnswers": [
+        "É óbvio",
+        "É algo que aprendi",
+        "É a minha opinião",
+        "Eu não sei"
+      ],
+      "tooltip": "Por que você escolheu a resposta específica, nós buscamos entender os fatores que influenciaram sua decisão. Por favor, forneça uma explicação ou justificativa para sua resposta."
+    },
+    "3": {
+      "question": "Você acha que a maioria das outras pessoas concordaria com esta declaração? *",
+      "description": "(se a resposta for depende, responda com a sua resposta mais comum ou mais provável)",
+      "possibleAnswers": ["Sim", "Não"],
+      "tooltip": "Esta pergunta busca coletar percepções sobre o consenso percebido entre os indivíduos em relação à declaração dada. Estamos interessados em entender sua opinião sobre se você acredita que a maioria das outras pessoas concordaria com a declaração apresentada."
+    },
+    "4": {
+      "question": "Por que você respondeu da maneira que respondeu sobre a maioria das <b>outras pessoas?</b> *",
+      "possibleAnswers": [
+        "Eu acho que a maioria das pessoas tem bom julgamento em relação a este tópico",
+        "Eu acho que a maioria das pessoas não tem bom julgamento em relação a este tópico",
+        "Eu acho que é principalmente uma questão de opinião",
+        "Eu não sei"
+      ],
+      "tooltip": "Esta pergunta visa explorar o raciocínio por trás de sua resposta em relação ao acordo percebido da maioria das outras pessoas com a declaração dada. Estamos interessados em entender os fatores que influenciaram sua decisão e sua perspectiva sobre como outros podem interpretar ou responder à declaração."
+    },
+    "5": {
+      "question": "No geral, você acha que esta declaração é um exemplo de senso comum?",
+      "possibleAnswers": ["Sim", "Não"],
+      "tooltip": "Esta pergunta busca coletar percepções sobre o consenso percebido entre os indivíduos em relação à declaração dada. Estamos interessados em entender sua opinião sobre se você acredita que a maioria das outras pessoas concordaria com a declaração apresentada."
+    }
   }
 }

@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 import Navbar from "../partials/NavBar";
 import Footer from "../partials/Footer";
@@ -7,6 +8,7 @@ import Footer from "../partials/Footer";
 const Enter = ({ signIn }) => {
   let params = useParams();
   let navigate = useNavigate();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (params.email && params.link) {
@@ -27,7 +29,10 @@ const Enter = ({ signIn }) => {
       <main className="flex-grow bg-gray-100">
         {/*  Page sections */}
         <div>
-          <p>Verifying your magic link</p>
+          <p>
+            {/* Verifying your magic link */}
+            {t("enter.verifying-magic-link")}
+          </p>
         </div>
       </main>
 
