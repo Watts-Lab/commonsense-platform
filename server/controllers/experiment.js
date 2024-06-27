@@ -10,6 +10,10 @@ const {
 } = require("../survey/experiments/utils/reverse-weight-selector");
 
 const { stringy } = require("../survey/treatments/utils/id-generator");
+const { statements_subset, Sequelize } = require("../models");
+const {
+  GetStatementByLanguage,
+} = require("../survey/treatments/statement-by-language.treatment");
 
 const returnStatements = async (req, res) => {
   const language = req.query.language || "en"; // default to English if no language is able to be specified
@@ -52,8 +56,6 @@ const returnStatements = async (req, res) => {
     ...treatmentObject.req,
   });
 
-  console.log('Fetched statements:', result.answer);
-
   const experimentData = {
     userSessionId: req.sessionID,
     experimentId: stringy(treatmentObject.params),
@@ -95,7 +97,31 @@ const saveIndividual = async (req, res) => {
   res.json({ ok: true });
 };
 
+const getStatementsForTest = async (language) => {
+  try {
+    const params = { language };
+    const result = await GetStatementByLanguage(params);
+    return result.answer;
+  } catch (error) {
+    console.error("Error fetching statements:", error);
+    throw error;
+  }
+};
+
+const testStatements = async (req, res) => {
+  try {
+    const language = req.query.language || "en";
+    const statements = await getStatementsForTest(language);
+    res.json({ statements });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "an error occurred while fetching test statements" });
+  }
+};
+
 module.exports = {
   returnStatements,
   saveIndividual,
+  testStatements,
 };

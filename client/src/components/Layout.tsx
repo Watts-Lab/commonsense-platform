@@ -139,23 +139,88 @@ function Layout() {
     );
   };
 
+  // useEffect(() => {
+  //   Backend.get("/experiments", {
+  //     params: urlParams.reduce(
+  //       (acc, param) => {
+  //         acc[param.key] = param.value;
+  //         return acc;
+  //       },
+  //       {
+  //         language: language, // request for statements in current language
+  //       }
+  //     ),
+  //   })
+  //     .then((response) => {
+  //       const initialAnswers = response.data.statements.map((statement) => ({
+  //         id: statement.id,
+  //         answers: new Array(questionData.length).fill(""),
+  //         answereSaved: false,
+  //       }));
+
+  //       setStatementsData(initialAnswers);
+  //       return response;
+  //     })
+  //     .then((response) => {
+  //       localStorage.setItem("statementsData", JSON.stringify(statementsData));
+
+  //       setSurveyLength(response.data.statements.length + 3);
+
+  //       setStatementArray(
+  //         response.data.statements.map(
+  //           (
+  //             statement: { statement: string; image?: string; id: number },
+  //             index: number
+  //           ) => {
+  //             return (
+  //               <Statement
+  //                 key={index}
+  //                 next={next}
+  //                 back={back}
+  //                 currentStep={index + 1}
+  //                 totalSteps={response.data.statements.length}
+  //                 statementText={statement.statement}
+  //                 imageUrl={statement.image}
+  //                 statementId={statement.id}
+  //                 onChange={handleStatementChange}
+  //                 onSaveStatement={handleAnswerSaving}
+  //                 data={
+  //                   statementsData[index] || {
+  //                     id: statement.id,
+  //                     answers: ["", "", "", "", "", ""],
+  //                     answereSaved: false,
+  //                   }
+  //                 }
+  //                 unansweredQuestionIndex={unansweredQuestionIndex}
+  //               />
+  //             );
+  //           }
+  //         )
+  //       );
+  //     })
+  //     .then(() => {
+  //       pushResultComponent();
+  //     });
+
+  //   Backend.get("/", { withCredentials: true }).then((response) => {
+  //     setSessionId(response.data);
+  //     if (!surveySession) {
+  //       setSession({
+  //         surveySession: "jjjj",
+  //       });
+  //     }
+  //   });
+  // }, [language]); 
+
   useEffect(() => {
-    Backend.get("/experiments", {
-      params: urlParams.reduce(
-        (acc, param) => {
-          acc[param.key] = param.value;
-          return acc;
-        },
-        {
-          language: language, // request for statements in current language
-        }
-      ),
+    Backend.get("/experiments/test", {
+      params: { language }
     })
       .then((response) => {
         const initialAnswers = response.data.statements.map((statement) => ({
           id: statement.id,
           answers: new Array(questionData.length).fill(""),
-          answereSaved: false,
+          answerSaved: false,
         }));
 
         setStatementsData(initialAnswers);
@@ -168,33 +233,22 @@ function Layout() {
 
         setStatementArray(
           response.data.statements.map(
-            (
-              statement: { statement: string; image?: string; id: number },
-              index: number
-            ) => {
-              return (
-                <Statement
-                  key={index}
-                  next={next}
-                  back={back}
-                  currentStep={index + 1}
-                  totalSteps={response.data.statements.length}
-                  statementText={statement.statement}
-                  imageUrl={statement.image}
-                  statementId={statement.id}
-                  onChange={handleStatementChange}
-                  onSaveStatement={handleAnswerSaving}
-                  data={
-                    statementsData[index] || {
-                      id: statement.id,
-                      answers: ["", "", "", "", "", ""],
-                      answereSaved: false,
-                    }
-                  }
-                  unansweredQuestionIndex={unansweredQuestionIndex}
-                />
-              );
-            }
+            (statement, index) => (
+              <Statement
+                key={index}
+                next={next}
+                back={back}
+                currentStep={index + 1}
+                totalSteps={response.data.statements.length}
+                statementText={statement.statement}
+                imageUrl={statement.image}
+                statementId={statement.id}
+                onChange={handleStatementChange}
+                onSaveStatement={handleAnswerSaving}
+                data={statementsData[index] || { id: statement.id, answers: ["", "", "", "", "", ""], answerSaved: false }}
+                unansweredQuestionIndex={unansweredQuestionIndex}
+              />
+            )
           )
         );
       })
@@ -205,12 +259,10 @@ function Layout() {
     Backend.get("/", { withCredentials: true }).then((response) => {
       setSessionId(response.data);
       if (!surveySession) {
-        setSession({
-          surveySession: "jjjj",
-        });
+        setSession({ surveySession: "jjjj" });
       }
     });
-  }, [language]); 
+  }, [language]);
 
   const submitHandler = (event) => {
     event.preventDefault();
