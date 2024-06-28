@@ -80,20 +80,20 @@ const Navbar: React.FC = () => {
           </Link>
         </div>
         <div className="navbar-center hidden lg:flex justify-center flex-1">
-          <ul className="flex space-x-10 lg:space-x-10">
-            <li className="mb-2">
+          <ul className="flex space-x-4 lg:space-x-6 xl:space-x-8">
+            <li>
               <a href="/people" className="button-long-text">
                 {/* People */}
                 {t('navbar.people')}
               </a>
             </li>
-            <li className="mb-2">
+            <li>
               <a href="/research" className="button-long-text">
                 {/* Research */}
                 {t('navbar.research')}
               </a>
             </li>
-            <li className="mb-2">
+            <li>
               {!loggedIn ? (
                 <a href="/signin" className="button-long-text">
                   {/* Signin */}
@@ -101,9 +101,9 @@ const Navbar: React.FC = () => {
                 </a>
               ) : (
                 <>
-                  <a
-                    href="/dashboard"
-                    className="text-base hover:underline"
+                  <a 
+                    href="/dashboard" 
+                    className="button-long-text"
                     onClick={() => setMenuOpen(false)}
                   >
                     {/* Dashboard */}
