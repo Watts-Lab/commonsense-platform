@@ -208,5 +208,64 @@
       "possibleAnswers": ["はい", "いいえ"],
       "tooltip": "この質問は、与えられた声明に関して個人間の合意についての洞察を収集することを目的としています。私たちは、提示された声明にほとんどの他の人々が同意するかどうかについてのあなたの意見を理解することに関心があります。"
     }
+  },
+  "dashboard-chart": {
+    "your-score": "あなたのスコア",
+    "thanks": "アンケートにご協力いただきありがとうございます！",
+    "copy-code-text": "下のコードをコピーして、完了確認としてHITに貼り付けてください：",
+    "calculated": "これは、あなたの回答を他の回答と比較して計算されます。したがって、より多くの質問に回答すればするほど、他の人がより多くの質問に回答すればするほど、より正確になります。",
+    "score-description": "このスコアは、あなたの信念が他の人とどれだけ似ているか（あなたの信念は{{awareness}}%似ています）と、他の人が何を考えているかをどれだけ正確に評価したか（あなたは{{consensus}}%正確でした）に基づいて計算されます。"
+  },
+  "statement-form": {
+    "success-message": "正常に送信されました！",
+    "submit-another": "別のものを送信",
+    "enter-statement": "常識の声明を入力してください：",
+    "placeholder": "ここに入力",
+    "required-message": "声明が必要です。",
+    "optional": "オプション",
+    "knowledge-category": "知識カテゴリー：",
+    "select-category": "選択してください...",
+    "submit-button": "声明を送信"
+  },
+  "knowledge-categories": {
+    "general-reference": "一般的な参考文献",
+    "culture-and-arts": "文化と芸術",
+    "geography-and-places": "地理と場所",
+    "health-and-fitness": "健康とフィットネス",
+    "history-and-events": "歴史と出来事",
+    "human-activities": "人間の活動",
+    "mathematics-and-logic": "数学と論理",
+    "natural-and-physical-sciences": "自然科学と物理科学",
+    "people-and-self": "人と自己",
+    "philosophy-and-thinking": "哲学と考え",
+    "religion-and-belief-systems": "宗教と信念システム",
+    "society-and-social-sciences": "社会と社会科学",
+    "technology-and-applied-sciences": "技術と応用科学"
+  },
+  "features": {
+    "behavior": {
+      "text": "行動",
+      "description": "声明は主に信念、認識、好み、および人間の経験を支配する社会的に構築されたルールに関係していますか（それが「現実」または意見である場合でも）？"
+    },
+    "everyday": {
+      "text": "日常",
+      "description": "声明は、人々が日常の経験の過程で遭遇する、または遭遇する可能性のある状況を説明していますか？"
+    },
+    "figure-of-speech": {
+      "text": "比喩表現",
+      "description": "声明には格言、メタファー、または誇張が含まれていますか、それともそれが言っていることを正確に意味する平易で普通の言語で表現されていますか？"
+    },
+    "judgment": {
+      "text": "判断",
+      "description": "声明は主に判断、信念、価値、社会規範、または慣習に関係していますか？"
+    },
+    "opinion": {
+      "text": "意見",
+      "description": "声明は、誰かがそれが真実であると思うか、他の人がそれが真実であると思ってほしいと思うが、客観的に正しいか間違っているかを示すことができないものであり、元々主観的ですか？"
+    },
+    "reasoning": {
+      "text": "推論",
+      "description": "その主張は、知識と論理を組み合わせることで得られた結論を提示していますか？"
+    }
   }
 }

@@ -208,5 +208,64 @@
       "possibleAnswers": ["Sim", "Não"],
       "tooltip": "Esta pergunta busca coletar percepções sobre o consenso percebido entre os indivíduos em relação à declaração dada. Estamos interessados em entender sua opinião sobre se você acredita que a maioria das outras pessoas concordaria com a declaração apresentada."
     }
+  },
+  "dashboard-chart": {
+    "your-score": "Seu score",
+    "thanks": "Obrigado por completar nossa pesquisa!",
+    "copy-code-text": "Copie o código abaixo e cole-o no HIT como verificação de conclusão:",
+    "calculated": "Isso é calculado comparando suas respostas com as respostas dos outros, então se tornará mais preciso se você responder mais perguntas e se tornará mais preciso à medida que outros responderem mais perguntas.",
+    "score-description": "Esta pontuação é baseada em um cálculo de quão semelhantes suas crenças são às dos outros (as suas são {{awareness}}% semelhantes), e quão precisamente você avaliou o que os outros pensam (você foi {{consensus}}% preciso)."
+  },
+  "statement-form": {
+    "success-message": "Enviado com sucesso!",
+    "submit-another": "Enviar outro",
+    "enter-statement": "Digite sua declaração de senso comum:",
+    "placeholder": "Digite aqui",
+    "required-message": "A declaração é obrigatória.",
+    "optional": "opcional",
+    "knowledge-category": "Categoria de conhecimento:",
+    "select-category": "Por favor selecione...",
+    "submit-button": "Enviar declaração"
+  },
+  "knowledge-categories": {
+    "general-reference": "Referência geral",
+    "culture-and-arts": "Cultura e artes",
+    "geography-and-places": "Geografia e lugares",
+    "health-and-fitness": "Saúde e fitness",
+    "history-and-events": "História e eventos",
+    "human-activities": "Atividades humanas",
+    "mathematics-and-logic": "Matemática e lógica",
+    "natural-and-physical-sciences": "Ciências naturais e físicas",
+    "people-and-self": "Pessoas e auto",
+    "philosophy-and-thinking": "Filosofia e pensamento",
+    "religion-and-belief-systems": "Religião e sistemas de crença",
+    "society-and-social-sciences": "Sociedade e ciências sociais",
+    "technology-and-applied-sciences": "Tecnologia e ciências aplicadas"
+  },
+  "features": {
+    "behavior": {
+      "text": "Comportamento",
+      "description": "A declaração está principalmente preocupada com crenças, percepções, preferências e regras socialmente construídas que governam a experiência humana (mesmo que possa ser 'real' ou opinião)?"
+    },
+    "everyday": {
+      "text": "Cotidiano",
+      "description": "A declaração descreve situações que as pessoas encontram ou podem encontrar no decorrer de suas experiências cotidianas comuns?"
+    },
+    "figure-of-speech": {
+      "text": "Figura de linguagem",
+      "description": "A declaração contém um aforismo, metáfora ou hipérbole, ou é expressa em uma linguagem simples e comum que significa exatamente o que diz?"
+    },
+    "judgment": {
+      "text": "Julgamento",
+      "description": "A declaração está principalmente preocupada com um julgamento, crença, valor, norma social ou convenção?"
+    },
+    "opinion": {
+      "text": "Opinião",
+      "description": "A declaração é algo que alguém pode pensar que é verdade ou quer que outros pensem que é verdade, mas não pode ser demonstrado como objetivamente correto ou incorreto; é inerentemente subjetiva?"
+    },
+    "reasoning": {
+      "text": "Raciocínio",
+      "description": "A declaração apresenta uma conclusão que é alcançada combinando conhecimento e lógica?"
+    }
   }
 }

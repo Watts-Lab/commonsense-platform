@@ -22,7 +22,6 @@ function Layout() {
   // get the current language
   const { t, i18n } = useTranslation();
   const language = i18n.language;
-  console.log(language);
 
   const [statementArray, setStatementArray] = useState([]);
   const [statementsData, setStatementsData] = useStickyState(
