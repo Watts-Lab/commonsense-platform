@@ -226,7 +226,6 @@ router.post(
   }
 );
 
-
 // Helper function to calculate agreement percentages
 const calculateAgreementPercentage = async (statementIds) => {
   const result = {};
@@ -243,16 +242,25 @@ const calculateAgreementPercentage = async (statementIds) => {
     }
 
     const totalAnswers = answersForStatement.length;
-    const sameIAgree = answersForStatement.reduce((acc, answer) => acc + (answer.I_agree ? 1 : 0), 0);
-    const sameOthersAgree = answersForStatement.reduce((acc, answer) => acc + (answer.others_agree ? 1 : 0), 0);
+    const actualIAgree = answersForStatement.reduce((acc, answer) => acc + (answer.I_agree ? 1 : 0), 0);
+    const actualIAgreePercentage = (actualIAgree / totalAnswers) * 100;
+
+    const perceptionAccuracy = answersForStatement.reduce((acc, answer) => {
+      if (answer.others_agree === 1) { // if others_agree is yes
+        return acc + actualIAgreePercentage;
+      } else { // if others_agree is no
+        return acc + (100 - actualIAgreePercentage);
+      }
+    }, 0) / totalAnswers;
 
     result[statementId] = {
-      I_agree: (sameIAgree / totalAnswers) * 100,
-      others_agree: (sameOthersAgree / totalAnswers) * 100,
+      I_agree: actualIAgreePercentage,
+      others_agree: perceptionAccuracy,
     };
   }
   return result;
 };
+
 
 
 //endpoint to get agreement percentages (ex. 60% of people agreed with you)

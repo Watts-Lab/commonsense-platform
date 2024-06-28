@@ -158,7 +158,7 @@ const Dashboard: React.FC = () => {
   };
 
 
-  //IS IT COMMON SENSE? change I_agree variable
+  //change I_agree variable
   const handleAgreeCheckboxChange = async (id: number) => {
     const newCheckedState = !agreeCheckboxStates[id];
     const currentAnswer = answerList.find(answer => answer.id === id);
@@ -191,8 +191,7 @@ const Dashboard: React.FC = () => {
       }));
     }
   };
-
-  const useEditAnswer = () => {
+  const useEditAnswer = async () => {
     if (editing) {
       // Save changes
       Object.keys(checkboxStates).forEach(async (id) => {
@@ -210,9 +209,29 @@ const Dashboard: React.FC = () => {
           console.log("Error updating answer", error);
         }
       });
+
+      // fetch updated agreement percentages
+      const statementIds = answerList.map(answer => answer.statementId);
+      try {
+        const agreementResponse = await Backend.post("/results/agreementPercentage", { statementIds });
+        const agreementPercentages = agreementResponse.data;
+
+        // update answerList w/ new agreement percentages
+        const updatedAnswerList = answerList.map(answer => ({
+          ...answer,
+          agreement: agreementPercentages[answer.statementId] || { I_agree: 0, others_agree: 0 },
+        }));
+        setAnswerList(updatedAnswerList);
+        console.log("ok done!");
+      } catch (error) {
+        console.log("Error updating agreement percentages:", error);
+      }
     }
+
+    // Toggle editing state
     setEditing(!editing);
   };
+
 
   return (
     <div className="flex flex-col min-h-screen overflow-hidden">
@@ -320,13 +339,13 @@ const Dashboard: React.FC = () => {
                               Statement
                             </th>
                             <th scope="col" className="px-6 py-3">
-                              Is it common sense?
+                              I agree with this statement
                             </th>
                             <th scope="col" className="px-6 py-3">
-                              Others think it is common sense?
+                              I think most others agree
                             </th>
                             <th scope="col" className="px-6 py-3">
-                              You answered the same as...
+                              People who think what you think most people think
                             </th>
                             {/* <th scope="col" className="px-6 py-3">
                               Commonsensicality
@@ -396,7 +415,7 @@ const Dashboard: React.FC = () => {
                                 </td>
                                 <td className="px-6 py-4">
                                   {answer.agreement ?
-                                    `${((answer.agreement.I_agree + answer.agreement.others_agree) / 2).toFixed(0)}% of people`
+                                    `${((answer.agreement.others_agree) / 2).toFixed(0)}%`
                                     :
                                     "N/A"
                                   }

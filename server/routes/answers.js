@@ -130,7 +130,7 @@ router.post(
   }
 );
 
-// rount for updating user answers
+// route for updating user answers
 
 router.post(
   "/changeanswers",
@@ -158,21 +158,20 @@ router.post(
         try {
           const sessionID = await getSessionId(succ.email);
           if (sessionID) {
-            const answer = await answers.findOne({
-              where: {
-                sessionId: sessionID,
-                statementId: req.body.statementId,
-              },
+            await answers.create({
+              sessionId: sessionID,
+              statementId: req.body.statementId,
+              I_agree: req.body.I_agree,
+              others_agree: req.body.others_agree,
+              createdAt: new Date(),
+              updatedAt: new Date(),
             });
-
-            if (answer) {
-              answer.I_agree = req.body.I_agree;
-              answer.others_agree = req.body.others_agree;
-              await answer.save();
-              res.json({ ok: true, message: "Answer updated" });
-            } else {
-              res.json({ ok: false, message: "No answer found" });
-            }
+            // if (answer) {
+            //   answer.I_agree = req.body.I_agree;
+            //   answer.others_agree = req.body.others_agree;
+            //   await answer.save();
+            //   res.json({ ok: true, message: "Answer updated" });
+            res.json({ ok: true, message: "Answer added successfully" });
           } else {
             res.json({ ok: false, message: "No session ID found" });
           }
