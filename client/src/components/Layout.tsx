@@ -22,6 +22,7 @@ function Layout() {
   // get the current language
   const { t, i18n } = useTranslation();
   const language = i18n.language;
+  console.log(language);
 
   const [statementArray, setStatementArray] = useState([]);
   const [statementsData, setStatementsData] = useStickyState(
@@ -73,9 +74,9 @@ function Layout() {
     let finalSessionId = surveySession ? surveySession : sessionId;
     setStatementArray((oldArray) => [
       ...oldArray,
-      <CRT onComplete={onCompleteCallback} />,
-      <RmeTen onComplete={onCompleteCallback} />,
-      <Demographics onComplete={onCompleteCallback} />,
+      <CRT onComplete={onCompleteCallback} language={language} />,
+      <RmeTen onComplete={onCompleteCallback} language={language} />,
+      <Demographics onComplete={onCompleteCallback} language={language} />,
       <Result
         key={oldArray.length}
         sessionId={finalSessionId}
