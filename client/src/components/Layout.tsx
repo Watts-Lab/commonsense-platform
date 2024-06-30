@@ -220,7 +220,7 @@ function Layout() {
         const initialAnswers = response.data.statements.map((statement) => ({
           id: statement.id,
           answers: new Array(questionData.length).fill(""),
-          answerSaved: false,
+          answereSaved: false,
         }));
 
         setStatementsData(initialAnswers);
