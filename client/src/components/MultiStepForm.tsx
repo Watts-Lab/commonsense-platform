@@ -25,7 +25,7 @@ function MultiStepForm(props) {
     }
   }
 
-  function whichQuestion(answerList: string[] ) {
+  function whichQuestion(answerList: string[]) {
     if (answerList.includes("")) {
       return answerList.indexOf("");
     } else {
@@ -55,31 +55,42 @@ function MultiStepForm(props) {
       }
 
       // if the user answered the statement, then save the answer and set the answerSaved flag to true
+
       if (!props.steps[currentStepIndex].answereSaved) {
-        const currentQuestion = questions[currentStepIndex];
+        const answers = props.steps[currentStepIndex].answers;
+        const currentQuestion = questions.find(q => q.id === props.steps[currentStepIndex].id);
 
-        const payload: Record<string, any> = {
-          statementId: props.steps[currentStepIndex].id,
-          sessionId: props.sessionId,
-          withCredentials: true,
-        };
+        if (currentQuestion) {
+          const payload: Record<string, any> = {
+            statementId: props.steps[currentStepIndex].id,
+            sessionId: props.sessionId,
+            origLanguage: "en",
+            clientVersion: process.env.GITHUB_HASH || 'default_version', // Ensure this is set in your environment
+          };
 
-        //maps from possibleAnswers in questions.ts file
-        payload[currentQuestion.id] = currentQuestion.possibleAnswers.map((answer, index) => {
-          return props.steps[currentStepIndex].answers[index].split("-")[1];
-        });
+          // Construct payload dynamically based on possible answers
+          currentQuestion.possibleAnswers.forEach((_, index) => {
+            const [id, value] = answers[index].split("-");
+            if (index === 0) payload["I_agree"] = value === "Yes" ? 1 : 0;
+            if (index === 1) payload["I_agree_reason"] = value;
+            if (index === 2) payload["others_agree"] = value === "Yes" ? 1 : 0;
+            if (index === 3) payload["others_agree_reason"] = value;
+            if (index === 4) payload["perceived_commonsense"] = value === "Yes" ? 1 : 0;
+            if (index === 5 && value !== "") payload["clarity"] = value;
+          });
 
-        Backend.post("/answers", payload).then((response) => {
-          props.handleAnswerSaving(props.steps[currentStepIndex].id, true);
-          props.steps[currentStepIndex].answereSaved = true;
-        });
+          Backend.post("/answers", payload).then((response) => {
+            props.handleAnswerSaving(props.steps[currentStepIndex].id, true);
+            props.steps[currentStepIndex].answereSaved = true;
+          });
+        }
+      } else {
+        // TODO: invoke error on the button
+        props.setUnansweredQuestionIndex(
+          whichQuestion(props.steps[currentStepIndex].answers.slice(0, 5))
+        );
+        return whichQuestion(props.steps[currentStepIndex].answers.slice(0, 5));
       }
-    } else {
-      // TODO: invoke error on the button
-      props.setUnansweredQuestionIndex(
-        whichQuestion(props.steps[currentStepIndex].answers.slice(0, 5))
-      );
-      return whichQuestion(props.steps[currentStepIndex].answers.slice(0, 5));
     }
 
     window.scrollTo({
