@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-
 import Navbar from "../partials/NavBar";
 import Footer from "../partials/Footer";
 import DashboardChart from "../partials/DashboardChart";
 import StatementForm from "../components/StatementForm";
 import Backend from "../apis/backend";
 
-import { useAppSelector, useAppDispatch } from "../redux/hooks";
+import { useAppSelector } from "../redux/hooks";
 interface Statement {
   statement: string;
 }
@@ -52,7 +51,6 @@ const Dashboard: React.FC = () => {
 
   const surveySession = useAppSelector((state) => state.login.surveySession);
 
-  // const token = JSON.parse(localStorage.getItem("token"));
   const tokenString = localStorage.getItem("token");
   const token = tokenString !== null ? JSON.parse(tokenString) : null;
 
@@ -78,46 +76,55 @@ const Dashboard: React.FC = () => {
     }
   }, [loggedIn, navigate]);
 
-  useEffect(() => {
-    const getAnswers = async () => {
-      if (token === null) return null;
-      try {
-        Backend.defaults.headers.common["Authorization"] = token;
-        const response = await Backend.post("/answers/getanswers", {
-          email: "user@test.com",
-        });
-        setAnswerList(response.data);
+  const getAnswers = async () => {
+    if (token === null) return;
+    try {
+      Backend.defaults.headers.common["Authorization"] = token;
+      const response = await Backend.post("/answers/getanswers", {
+        email: "user@test.com",
+      });
 
-        const statementIds = response.data.map(answer => answer.statementId);
-        const commonsensicalityResponse = await Backend.post("/results/commonsensicality", { statementIds });
-        const commonsensicalityScores = commonsensicalityResponse.data;
-        const agreementResponse = await Backend.post("/results/agreementPercentage", { statementIds });
-        const agreementPercentages = agreementResponse.data;
+      console.log("Response from getanswers:", response.data);
 
-        const initialCheckboxStates = response.data.reduce((acc, answer) => {
-          acc[answer.id] = answer.others_agree;
-          return acc;
-        }, {});
-        setCheckboxStates(initialCheckboxStates);
-
-        const initialAgreeCheckboxStates = response.data.reduce((acc, answer) => {
-          acc[answer.id] = answer.I_agree;
-          return acc;
-        }, {});
-        setAgreeCheckboxStates(initialAgreeCheckboxStates);
-
-        const updatedAnswerList = response.data.map(answer => ({
-          ...answer,
-          commonsensicality: commonsensicalityScores[answer.statementId] || 0,
-          agreement: agreementPercentages[answer.statementId] || { I_agree: 0, others_agree: 0 },
-        }));
-        setAnswerList(updatedAnswerList);
-
-        return response.data.ok;
-      } catch (error) {
-        console.log(error);
+      if (!Array.isArray(response.data)) {
+        console.error("Expected an array but got:", response.data);
+        return;
       }
-    };
+
+      const updatedAnswers = response.data;
+
+      const statementIds = updatedAnswers.map(answer => answer.statementId);
+      const commonsensicalityResponse = await Backend.post("/results/commonsensicality", { statementIds });
+      const commonsensicalityScores = commonsensicalityResponse.data;
+
+      const agreementResponse = await Backend.post("/results/agreementPercentage", { statementIds });
+      const agreementPercentages = agreementResponse.data;
+
+      const initialCheckboxStates = updatedAnswers.reduce((acc, answer) => {
+        acc[answer.id] = answer.others_agree;
+        return acc;
+      }, {});
+      setCheckboxStates(initialCheckboxStates);
+
+      const initialAgreeCheckboxStates = updatedAnswers.reduce((acc, answer) => {
+        acc[answer.id] = answer.I_agree;
+        return acc;
+      }, {});
+      setAgreeCheckboxStates(initialAgreeCheckboxStates);
+
+      const updatedAnswerList = updatedAnswers.map(answer => ({
+        ...answer,
+        commonsensicality: commonsensicalityScores[answer.statementId] || 0,
+        agreement: agreementPercentages[answer.statementId] || { I_agree: 0, others_agree: 0 },
+      }));
+      setAnswerList(updatedAnswerList);
+
+    } catch (error) {
+      console.log("Error fetching answers:", error);
+    }
+  };
+
+  useEffect(() => {
     getAnswers();
   }, []);
 
@@ -131,7 +138,6 @@ const Dashboard: React.FC = () => {
       console.error("Answer not found");
       return;
     }
-
 
     setCheckboxStates((prevStates) => ({
       ...prevStates,
@@ -193,42 +199,41 @@ const Dashboard: React.FC = () => {
   };
   const useEditAnswer = async () => {
     if (editing) {
-      // Save changes
-      Object.keys(checkboxStates).forEach(async (id) => {
-        const currentAnswer = answerList.find(answer => answer.id === parseInt(id));
-        if (!currentAnswer) return;
+      if (!token) return;
 
-        try {
-          Backend.defaults.headers.common["Authorization"] = token;
-          await Backend.post("/answers/changeanswers", {
-            statementId: parseInt(id),
-            others_agree: checkboxStates[id] ? 1 : 0,
-            I_agree: agreeCheckboxStates[id] ? 1 : 0,
-          });
-        } catch (error) {
-          console.log("Error updating answer", error);
-        }
-      });
+      const saveChanges = async () => {
+        const promises = Object.keys(checkboxStates).map(async (id) => {
+          const currentAnswer = answerList.find(answer => answer.id === parseInt(id));
+          if (!currentAnswer) return;
 
-      // fetch updated agreement percentages
-      const statementIds = answerList.map(answer => answer.statementId);
-      try {
-        const agreementResponse = await Backend.post("/results/agreementPercentage", { statementIds });
-        const agreementPercentages = agreementResponse.data;
+          try {
+            Backend.defaults.headers.common["Authorization"] = token;
+            const response = await Backend.post("/answers/changeanswers", {
+              statementId: parseInt(id),
+              others_agree: checkboxStates[id] ? 1 : 0,
+              I_agree: agreeCheckboxStates[id] ? 1 : 0,
+            });
+            console.log("Answer updated");
 
-        // update answerList w/ new agreement percentages
-        const updatedAnswerList = answerList.map(answer => ({
-          ...answer,
-          agreement: agreementPercentages[answer.statementId] || { I_agree: 0, others_agree: 0 },
-        }));
-        setAnswerList(updatedAnswerList);
-        console.log("ok done!");
-      } catch (error) {
-        console.log("Error updating agreement percentages:", error);
-      }
+            // Update local state based on response
+            setCheckboxStates((prevStates) => ({
+              ...prevStates,
+              [id]: checkboxStates[id]
+            }));
+            setAgreeCheckboxStates((prevStates) => ({
+              ...prevStates,
+              [id]: agreeCheckboxStates[id]
+            }));
+          } catch (error) {
+            console.log("Error updating answer", error);
+          }
+        });
+        await Promise.all(promises);
+      };
+
+      await saveChanges();
     }
 
-    // Toggle editing state
     setEditing(!editing);
   };
 
@@ -347,9 +352,6 @@ const Dashboard: React.FC = () => {
                             <th scope="col" className="px-6 py-3">
                               People who think what you think most people think
                             </th>
-                            {/* <th scope="col" className="px-6 py-3">
-                              Commonsensicality
-                            </th> */}
                             <tr>
                               <th className="px-6 py-3 text-right">
                                 <button
@@ -420,9 +422,6 @@ const Dashboard: React.FC = () => {
                                     "N/A"
                                   }
                                 </td>
-                                {/* <td className="px-6 py-4"> 
-                                {(answer.commonsensicality ?? 0).toFixed(2)}
-                               </td> */}
                               </tr>
                             ))}
                         </tbody>
