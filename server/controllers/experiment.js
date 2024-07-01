@@ -52,7 +52,7 @@ const returnStatements = async (req, res) => {
     experimentType: treatmentObject.experimentName,
     experimentInfo: treatmentObject,
     statementList: result.answer,
-    urlParams: req.query.source ? req.query.source : null,
+    urlParams: stringy(req.query) ? stringy(req.query) : null,
     finished: false,
   };
 

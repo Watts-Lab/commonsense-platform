@@ -1,0 +1,77 @@
+name: Run Tests (End-to-End)
+
+on: [push]
+
+jobs:
+  cypress-test:
+    name: Run Cypress tests
+    env:
+      MYSQL_USER: "root"
+      MYSQL_PWD: "password"
+      MYSQL_DB: "CommonsenseDB"
+      MYSQL_HOST: "127.0.0.1"
+      MYSQL_PORT: "33306"
+      SESSION_SECRET: "secret"
+      CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+      COMMIT_INFO_BRANCH: ${{ github.ref_name }}
+
+    runs-on: ubuntu-latest
+
+    services:
+      db:
+        image: mysql:8
+        ports:
+          - 33306:3306
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: CommonsenseDB
+        options: >-
+          --health-cmd "mysqladmin ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Create database
+        run: |
+          mysql --protocol=tcp -h ${{ env.MYSQL_HOST }} --port ${{ env.MYSQL_PORT }} -u${{ env.MYSQL_USER }} -p${{ env.MYSQL_PWD }} -e "CREATE DATABASE IF NOT EXISTS ${{ env.MYSQL_DB }};"
+
+      - name: Seed the database
+        run: |
+          mysql --protocol=tcp -h ${{ env.MYSQL_HOST }} --port ${{ env.MYSQL_PORT }} -u${{ env.MYSQL_USER }} -p${{ env.MYSQL_PWD }} ${{ env.MYSQL_DB }} < test/init.sql
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18.x"
+
+      - name: Install server dependencies
+        working-directory: server
+        run: npm install
+
+      - name: Start backend server
+        working-directory: server
+        run: node server.js &
+        env:
+          DB_USER: ${{ env.MYSQL_USER }}
+          DB_PASSWORD: ${{ env.MYSQL_PWD }}
+          DB_NAME: ${{ env.MYSQL_DB }}
+          DB_HOST: ${{ env.MYSQL_HOST }}
+          DB_PORT: ${{ env.MYSQL_PORT }}
+          DB_DRIVER: "mysql"
+          SESSION_SECRET: ${{ env.SESSION_SECRET }}
+
+      - name: Wait for backend server to be ready
+        run: sleep 10
+
+      - name: Run Cypress tests
+        uses: cypress-io/github-action@v6
+        with:
+          start: npm run dev
+          working-directory: client
+          record: true
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
