@@ -1,0 +1,136 @@
+{
+  "app": {
+    "title": "Mide tu sentido común"
+  },
+  "banner": {
+    "button": "Mide tu sentido común",
+    "logo": "logotipo de sentido común",
+    "paper": "Un marco para cuantificar el sentido común individual y colectivo",
+    "paragraph1": "El sentido común se define a menudo como “lo que todas las personas sensatas saben”, pero esta definición es circular: ¿cómo sabemos que alguien es sensato si no es porque posee sentido común? Como resultado, la mayoría de las personas creen que poseen sentido común, pero no pueden articular cuáles de sus creencias son de sentido común o cuán comunes son sus creencias para los demás.",
+    "paragraph2": "Este proyecto busca cuantificar empíricamente el sentido común a través de un experimento de encuesta en línea masiva. Los participantes leerán una serie de \"afirmaciones\" sobre el mundo físico y social (por ejemplo, \"Las piedras caídas caen al suelo\" o \"Se deberían prohibir los rifles de asalto totalmente automáticos\"), indicarán si están de acuerdo con cada afirmación y también indicarán lo que creen que piensa la mayoría de las demás personas.",
+    "paragraph3": "Hemos desarrollado métodos novedosos para extraer declaraciones de varias fuentes diversas, incluyendo apariciones en medios de comunicación masivos, libros de no ficción y correos electrónicos de campañas políticas, así como declaraciones obtenidas de encuestados humanos y generadas por sistemas de IA. Nuestros hallazgos arrojarán luz sobre la naturaleza y los límites del sentido común, ayudando así a las comunidades de investigación (por ejemplo, IA y ML) que desean explorar y simular este concepto omnipresente pero frustrantemente esquivo.",
+    "paragraph4-1": "Para obtener más detalles sobre este trabajo, consulte nuestro reciente artículo",
+    "paragraph4-2": ", publicado",
+    "paragraph4-3": "en Las Actas de la Academia Nacional de Ciencias.",
+    "subtitle": "¡Únete a nosotros para descubrirlo!",
+    "title": "¿Qué tan común es realmente el sentido común?"
+  },
+  "consent-modal": {
+    "acknowledgement": "Al avanzar, das tu consentimiento para participar en este proyecto de investigación.",
+    "button": "Verifica Tu Sentido Común",
+    "cancel": "Cancelar",
+    "subtitle": "Estás a punto de completar una encuesta para medir tu sentido común. A la mayoría de las personas les toma menos de 15 minutos.",
+    "title": "Plataforma de Sentido Común"
+  },
+  "consent": {
+    "answer1": "Nuestro estudio requiere adultos con acceso a internet. Se le pide que participe porque cumple con este requisito.",
+    "answer10": "Haremos todo lo posible para asegurarnos de que la información personal obtenida durante el transcurso de este estudio de investigación se mantenga privada. Sin embargo, no podemos garantizar la privacidad total. Su información personal puede ser divulgada si así lo exige la ley. Si la información de este estudio se publica o presenta en reuniones científicas, no se utilizarán su nombre y otra información personal. La Junta de Revisión Institucional (IRB) de la Universidad de Pensilvania tendrá acceso a sus registros. Los registros serán desidentificados y se mantendrán de forma privada en almacenamiento seguro. Una excepción a la confidencialidad es si informa abuso o negligencia de niños o ancianos, o si informa ideación o intención suicida u homicida al equipo de investigación. Cualquier información sobre abuso de niños o ancianos o intención de hacerse daño a usted mismo o a otros será informada a las autoridades, según lo exija la ley.",
+    "answer11": "Los registros serán desidentificados y se mantendrán de forma privada en almacenamiento seguro. En algunos casos, la información de los participantes será completamente anónima.",
+    "answer12": "No hay costos asociados con la participación en el estudio.",
+    "answer13": "La participación será compensada directamente a través de la plataforma de reclutamiento después de su participación o la finalización del estudio o como información sobre su participación si se ofrece como voluntario para participar en este estudio.",
+    "answer14": "Si tiene preguntas, inquietudes o quejas sobre su participación en este estudio de investigación o si tiene alguna pregunta sobre sus derechos como sujeto de investigación, debe hablar con Mark Whiting al 352-226-9212. Si no se puede contactar a un miembro del equipo de investigación o desea hablar con alguien que no esté trabajando en el estudio, puede comunicarse con la IRB al (215) 898 2614.",
+    "answer2": "El estudio se llevará a cabo en este sitio web.",
+    "answer3": "Se le pedirá que responda a una serie de preguntas sobre afirmaciones y algunas otras preguntas estándar de la encuesta.",
+    "answer4": "Existen posibles riesgos de desinterés en la actividad del estudio, por lo que se ha diseñado para ser entretenido y hacerlo más atractivo. También existen posibles riesgos de seguridad de los datos, por lo que el estudio está diseñado para recopilar la menor cantidad de información posible y almacenar la información sobre los participantes de manera segura, anónima y desidentificada usando servidores protegidos con contraseña.",
+    "answer5": "Será compensado por completar esta encuesta y puede tener acceso a un informe de sus resultados después de completar la encuesta, lo cual proporcionará información interesante de su participación. Este trabajo también será valioso para la sociedad en general, por lo que participar también puede ser valioso en ese contexto.",
+    "answer6": "Los resultados completos se harán públicos cuando la investigación se comparta abiertamente al momento de su eventual publicación.",
+    "answer7": "Su alternativa a estar en el estudio es no estar en el estudio. Si no desea participar en el estudio, no continúe con esta encuesta y devuelva el HIT.",
+    "answer8": "Puede elegir unirse al estudio o puede elegir no unirse al estudio. Su participación es voluntaria.",
+    "answer9-1": "Se espera que el estudio termine después de que todos los participantes hayan completado la encuesta y se haya recopilado toda la información. El estudio puede detenerse sin su consentimiento por las siguientes razones: El PI considera que es lo mejor para su seguridad y/o salud; se le informará de las razones. No ha seguido las instrucciones del estudio. El PI, el patrocinador o la Junta de Revisión Institucional (IRB) de la Universidad de Pensilvania pueden detener el estudio en cualquier momento.",
+    "answer9-2": "Tiene derecho a abandonar el estudio de investigación en cualquier momento durante su participación. No hay penalización ni pérdida de beneficios a los que de otro modo tendría derecho si decide hacerlo. La retirada no interferirá con su atención futura. Si ya no desea participar en el estudio de investigación, comuníquese con Mark Whiting al 352-226-9212 e infórmele que desea ser retirado del estudio.",
+    "description-p1": "Estamos estudiando el sentido común en la sociedad. Participar en este estudio implicará responder preguntas básicas durante 10-20 minutos.",
+    "description-p2": "Se le invita a participar en un estudio de investigación. Su participación es voluntaria, y solo debe participar si entiende completamente lo que requiere el estudio y cuáles son los riesgos de participación. Debe hacerle cualquier pregunta al equipo del estudio relacionada con la participación antes de aceptar unirse al estudio. Si tiene alguna pregunta sobre sus derechos como participante de investigación en cualquier momento antes, durante o después de la participación, comuníquese con la Junta de Revisión Institucional (IRB) al (215) 898-2614 para obtener ayuda.",
+    "description-p3": "El estudio de investigación se está llevando a cabo para comprender la naturaleza del sentido común en la sociedad.",
+    "description-p4": "Si acepta unirse al estudio, se le pedirá que complete una breve encuesta. Su participación en este aspecto del estudio durará un total de 10-20 minutos.",
+    "description-p5": "Le compensaremos por participar en este experimento y, lo que es más importante, participar puede ayudarnos a comprender y apoyar a los equipos en un contexto científico. Los riesgos más comunes de participación son que algunas partes del estudio pueden no ser interesantes para usted. No anticipamos otros riesgos.",
+    "description-p6": "Tenga en cuenta que hay otros factores a considerar antes de aceptar participar, como procedimientos adicionales, uso de su información personal, costos y otros posibles riesgos no discutidos aquí. Es libre de rechazar o detener la participación en cualquier momento durante o después del proceso de consentimiento inicial.",
+    "future-data": "Uso Futuro de Datos",
+    "future-data-answer": "Su información será desidentificada. Desidentificada significa que se han eliminado todos los identificadores. La información podría almacenarse y compartirse para futuras investigaciones de esta manera desidentificada. No sería posible que los futuros investigadores lo identifiquen ya que no compartiríamos ninguna información identificable sobre usted con futuros investigadores. Esto se puede hacer sin volver a solicitar su consentimiento en el futuro, según lo permita la ley. El uso futuro de su información solo se aplica a la información recopilada en este estudio.",
+    "question1": "¿Por qué se me pidió que participara en el estudio?",
+    "question10": "¿Cómo se protegerá mi información personal durante el estudio?",
+    "question11": "¿Qué puede pasar con mi información recopilada en este estudio?",
+    "question12": "¿Tendré que pagar algo?",
+    "question13": "¿Se me pagará por participar en este estudio?",
+    "question14": "¿A quién puedo llamar con preguntas, quejas o si me preocupa mis derechos como sujeto de investigación?",
+    "question2": "¿Dónde tendrá lugar el estudio?",
+    "question3": "¿Qué se me pedirá que haga?",
+    "question4": "¿Cuáles son los riesgos?",
+    "question5": "¿Cómo me beneficiaré del estudio?",
+    "question6": "¿Recibiré los resultados de las pruebas de investigación?",
+    "question7": "¿Qué otras opciones tengo?",
+    "question8": "¿Qué pasa si no elijo unirme al estudio de investigación?",
+    "question9": "¿Cuándo termina el estudio? ¿Puedo dejar el estudio antes de que termine?",
+    "title": "Resumen del Estudio de Investigación para Sujetos Potenciales"
+  },
+  "dashboard": {
+    "add-statements": "Agregar declaraciones",
+    "answers": "Respuestas",
+    "browse-list": "Navega por la lista de declaraciones que has respondido hasta ahora",
+    "delete-accout": "Eliminar cuenta",
+    "insight": "Perspectiva",
+    "is-it-common-sense": "¿Es sentido común?",
+    "no": "no",
+    "others-think": "¿Otros piensan que es sentido común?",
+    "settings": "Configuración",
+    "statement": "Declaración",
+    "yes": "sí",
+    "your-answers": "Tus respuestas"
+  },
+  "footer": {
+    "copyright": "Derechos de autor © 2023 - 2024 - Todos los derechos reservados por CSSLab en UPenn",
+    "csslab-logo": "Logo de CSSLab",
+    "upenn-logo": "Logo de UPenn"
+  },
+  "landing": {
+    "acknowledgement": "Al avanzar, das tu consentimiento para participar en este proyecto de investigación.",
+    "button": "Verifica Tu Sentido Común",
+    "subtitle": "Estás a punto de completar una encuesta para medir tu sentido común. A la mayoría de las personas les toma menos de 15 minutos.",
+    "title": "Plataforma de Sentido Común"
+  },
+  "navbar": {
+    "commonsense": "El proyecto de sentido común",
+    "dashboard": "Tablero",
+    "people": "Gente",
+    "research": "Investigación",
+    "signin": "Iniciar sesión"
+  },
+  "navbar.participate →": "Participar →",
+  "publications": {
+    "author1": "Whiting, Mark y Watts, Duncan",
+    "author2": "Watts, Duncan",
+    "journal1": "Un marco para cuantificar el sentido común individual y colectivo",
+    "journal2": "Sentido común y explicaciones sociológicas",
+    "journal3": "Todo es obvio",
+    "publication1": "En: Actas de la Academia Nacional de Ciencias, vol. 121, no. 4, 2024.",
+    "publication2": "En: Revista Americana de Sociología, vol. 120, no. 2, pp. 313-351, 2014.",
+    "title": "Publicaciones de Investigación",
+    "type1": "Artículo de Revista",
+    "type2": "Libro"
+  },
+  "report-issue": {
+    "button": "enviando",
+    "description": "Háganos saber qué salió mal.",
+    "title": "Reportar un problema",
+    "trigger": "Informar problema"
+  },
+  "report": {
+    "button": "enviando",
+    "description": "Háganos saber qué salió mal.",
+    "placeholder": "Describa el problema y si desea recibir noticias nuestras, deje su correo electrónico al final.",
+    "send-feedback": "Enviar comentarios",
+    "title": "Informar un problema",
+    "trigger": "Informar problema"
+  },
+  "signin": {
+    "email": "Correo electrónico",
+    "placeholder": "Ingresa tu dirección de correo electrónico",
+    "signIn": "Iniciar sesión",
+    "subtitle1": "Inicia sesión para que puedas verificar tu puntuación de sentido común o responder más preguntas sobre declaraciones para obtener una lectura más precisa de tu puntuación.",
+    "subtitle2": "O si no tienes una cuenta, puedes registrarte ingresando tu correo electrónico a continuación.",
+    "welcome": "Bienvenido"
+  },
+  "welcome": {
+    "subtitle": "Puedes hacer clic en el enlace enviado para verificar tu dirección de correo electrónico.",
+    "title": "Bienvenido a la Plataforma de Sentido Común"
+  }
+}

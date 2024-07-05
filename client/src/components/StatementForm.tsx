@@ -21,7 +21,7 @@ type FeatureState = {
 };
 
 const knowledgeCategories: KnowledgeCategories = {
-  generalReference: "General reference",
+  generalReference: "General Reference",
   cultureAndArts: "Culture and the arts",
   geographyAndPlaces: "Geography and places",
   healthAndFitness: "Health and fitness",
@@ -33,7 +33,7 @@ const knowledgeCategories: KnowledgeCategories = {
   philosophyAndThinking: "Philosophy and thinking",
   religionAndBeliefSystems: "Religion and belief systems",
   societyAndSocialSciences: "Society and social sciences",
-  technologyAndAppliedSciences: "Technology and applied sciences",
+  technologyAndAppliedSciences: "Technology and applied sciences"
 };
 
 const initialState: FeatureState = {
@@ -107,7 +107,7 @@ const StatementForm = () => {
     setIsStatementValid(statement.trim().length > 0);
   };
 
-  const submitUserStatement = async (statementData) => {
+  const submitUserStatement = async (statementData) => { 
     try {
       Backend.defaults.headers.common["Authorization"] = token;
       const response = await Backend.post(
@@ -166,7 +166,9 @@ const StatementForm = () => {
     <div className="flex flex-col items-center justify-center p-4">
       {isSubmitted ? (
         <div className="my-4">
-          <p>Successfully submitted!</p>
+          <p>
+            Successfully submitted!
+          </p>
           <button onClick={handleReset} className="btn">
             Submit another one
           </button>
@@ -181,7 +183,7 @@ const StatementForm = () => {
             </label>
             <textarea
               className="textarea textarea-bordered h-24 p-3 bg-white dark:bg-gray-300 w-full rounded-md"
-              placeholder="Type here"
+              placeholder='Type here'
               value={statement}
               onChange={(e) => setStatement(e.target.value)}
               onBlur={validateStatement}
@@ -190,10 +192,14 @@ const StatementForm = () => {
           </div>
 
           {!isStatementValid && (
-            <p className="text-red-500">Statement is required.</p>
+            <p className="text-red-500">
+              Statement is required.
+            </p>
           )}
 
-          <div className="divider text-md">optional</div>
+          <div className="divider text-md">
+            optional
+          </div>
 
           {Object.entries(features).map(
             ([key, { checked, text, description }]) => (
@@ -218,14 +224,19 @@ const StatementForm = () => {
 
           <div className="form-control my-4">
             <label className="label">
-              <span className="label-text">Knowledge Category:</span>
+              <span className="label-text">
+                Knowledge Category:
+              </span>
             </label>
             <select
               className="select select-bordered w-full rounded-md"
               value={knowledgeCategory}
               onChange={handleCategoryChange}
             >
-              <option value="">Please select...</option>
+              <option value="">
+                Please select...
+                {/* {t('statement-form.please-select')} */}
+              </option>
               {Object.entries(knowledgeCategories).map(([key, value]) => (
                 <option key={key} value={key}>
                   {value}
