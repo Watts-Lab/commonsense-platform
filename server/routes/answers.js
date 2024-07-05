@@ -158,22 +158,25 @@ router.post(
         try {
           const sessionID = await getSessionId(succ.email);
           if (sessionID) {
-            await answers.create({
-              sessionId: sessionID,
+            const answerData = {
               statementId: req.body.statementId,
+              statement_number: req.body.statementId,
               I_agree: req.body.I_agree,
+              I_agree_reason: req.body.I_agree_reason,
               others_agree: req.body.others_agree,
-              createdAt: new Date(),
-              updatedAt: new Date(),
+              others_agree_reason: req.body.others_agree_reason,
+              perceived_commonsense: req.body.perceived_commonsense,
+              origLanguage: "en",
+              sessionId: req.body.sessionId,
+              clientVersion: process.env.GITHUB_HASH,
+            };
+            answers
+            .create(answerData)
+            .then((answer) => res.json({ ok: true, message: "Answer added successfully" }))
+            .catch((error) => {
+              console.error(error);
+              res.status(500).json({ ok: false, message: "An error occurred" });
             });
-            // if (answer) {
-            //   answer.I_agree = req.body.I_agree;
-            //   answer.others_agree = req.body.others_agree;
-            //   await answer.save();
-            //   res.json({ ok: true, message: "Answer updated" });
-            res.json({ ok: true, message: "Answer added successfully" });
-          } else {
-            res.json({ ok: false, message: "No session ID found" });
           }
         } catch (error) {
           res.json({ ok: false, message: error.message });

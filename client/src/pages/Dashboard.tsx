@@ -128,7 +128,7 @@ const Dashboard: React.FC = () => {
     getAnswers();
   }, []);
 
-  //OTHERS THINK IT IS COMMON SENSE? change others_agree variable
+  //change others_agree variable
   const handleCheckboxChange = async (id: number) => {
     const newCheckedState = !checkboxStates[id];
     const currentAnswer = answerList.find(answer => answer.id === id);
@@ -148,8 +148,12 @@ const Dashboard: React.FC = () => {
       Backend.defaults.headers.common["Authorization"] = token;
       const response = await Backend.post("/answers/changeanswers", {
         statementId: id,
-        others_agree: newCheckedState ? 1 : 0,
         I_agree: currentAnswer.I_agree ? 1 : 0,
+        I_agree_reason: "n/a - answer changed",
+        others_agree: newCheckedState ? 1 : 0,
+        others_agree_reason: "n/a - answer changed",
+        perceived_commonsense: 0,
+        sessionId: surveySession,
       });
       console.log("Answer updated");
       return response.data.ok;
@@ -184,8 +188,12 @@ const Dashboard: React.FC = () => {
       Backend.defaults.headers.common["Authorization"] = token;
       const response = await Backend.post("/answers/changeanswers", {
         statementId: id,
-        others_agree: currentAnswer.others_agree ? 1 : 0,
         I_agree: newCheckedState ? 1 : 0,
+        I_agree_reason: "n/a - answer changed",
+        others_agree: currentAnswer.others_agree ? 1 : 0,
+        others_agree_reason: "n/a - answer changed",
+        perceived_commonsense: 0,
+        sessionId: surveySession,
       });
       console.log("Answer updated", response.data);
     } catch (error) {
@@ -197,43 +205,19 @@ const Dashboard: React.FC = () => {
       }));
     }
   };
+
   const useEditAnswer = async () => {
     if (editing) {
       if (!token) return;
-
-      const saveChanges = async () => {
-        const promises = Object.keys(checkboxStates).map(async (id) => {
-          const currentAnswer = answerList.find(answer => answer.id === parseInt(id));
-          if (!currentAnswer) return;
-
-          try {
-            Backend.defaults.headers.common["Authorization"] = token;
-            const response = await Backend.post("/answers/changeanswers", {
-              statementId: parseInt(id),
-              others_agree: checkboxStates[id] ? 1 : 0,
-              I_agree: agreeCheckboxStates[id] ? 1 : 0,
-            });
-            console.log("Answer updated");
-
-            // Update local state based on response
-            setCheckboxStates((prevStates) => ({
-              ...prevStates,
-              [id]: checkboxStates[id]
-            }));
-            setAgreeCheckboxStates((prevStates) => ({
-              ...prevStates,
-              [id]: agreeCheckboxStates[id]
-            }));
-          } catch (error) {
-            console.log("Error updating answer", error);
-          }
-        });
-        await Promise.all(promises);
-      };
-
-      await saveChanges();
+      //   const saveChanges = async () => {
+      //     const promises = Object.keys(checkboxStates).map(async (id) => {
+      //       const currentAnswer = answerList.find(answer => answer.id === parseInt(id));
+      //       if (!currentAnswer) return;
+      //     });
+      //     await Promise.all(promises);
+      //   };
+      //   await saveChanges();
     }
-
     setEditing(!editing);
   };
 
