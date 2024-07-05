@@ -22,7 +22,7 @@ function Publications() {
       venue:
         t("publications.publication2"),
       year: "2014",
-      link: "https://arxiv.org/abs/2101.00100",
+      link: "https://www.jstor.org/stable/10.1086/678271",
     },
     {
       title: t("publications.journal3"),
@@ -30,7 +30,7 @@ function Publications() {
       authors: "Watts, Duncan",
       venue: "Crown, 2011, ISBN: 9780385531696, 0385531699.",
       year: "2011",
-      link: "https://arxiv.org/abs/2101.00100",
+      link: "https://www.google.com/books/edition/Everything_Is_Obvious/kT_4AAAAQBAJ?hl=en&gbpv=0",
     },
   ];
 

@@ -30,7 +30,7 @@ export default function LocaleSwitcher() {
 
         <ul
           tabIndex={0}
-          className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-200 rounded-box w-52 text-gray-900"
+          className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-200 rounded-box w-52 text-white-900"
         >
           {Object.entries(supportedLngs).map(([code, name]) => (
             <>
