@@ -229,21 +229,55 @@ router.post(
 // Helper function to calculate agreement percentages
 const calculateAgreementPercentage = async (statementIds) => {
   const result = {};
+  console.log("statementIds: " + statementIds.length);
   for (const statementId of statementIds) {
-    const answersForStatement = await answers.findAll({
-      where: { statementId },
-      attributes: ["I_agree", "others_agree"],
+    const answersForStatementAll = await answers
+    .findAll({
+      include: [
+        {
+          model: statements,
+          as: "statement",
+          attributes: [],
+        },
+      ],
+      attributes: [
+        "sessionId",
+        "id",
+        "statementId",
+        "I_agree",
+        "others_agree",   
+      ],
       raw: true,
+      where: {
+        statementId: statementId
+      }
     });
 
-    if (answersForStatement.length === 0) {
+    if (answersForStatementAll.length === 0) {
       result[statementId] = { I_agree: 0, others_agree: 0 };
       continue;
-    }
+    };
+    const answersForStatement = answersForStatementAll.filter((item, index, self) => {
+        i = 0;
+        while (i < answersForStatementAll.length) {
+          if (item.sessionId == answersForStatementAll[i].sessionId) {
+            if (item.id < answersForStatementAll[i].id) {
+              return false;
+            }
+          }
+          i++;
+      }
+        return true;
+      });
+    
+    console.log("Answers test", answersForStatement[0]);
 
     const totalAnswers = answersForStatement.length;
     const actualIAgree = answersForStatement.reduce((acc, answer) => acc + (answer.I_agree ? 1 : 0), 0);
     const actualIAgreePercentage = (actualIAgree / totalAnswers) * 100;
+
+    console.log("total answers" + totalAnswers);
+    console.log("original" + answersForStatementAll.length);
 
     const perceptionAccuracy = answersForStatement.reduce((acc, answer) => {
       if (answer.others_agree === 1) { // if others_agree is yes
