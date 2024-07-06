@@ -112,7 +112,22 @@ router.post(
                     order: [["createdAt", "DESC"]],
                   })
                   .then((result) => {
-                    res.json(result);
+                    // Filter results to get unique sessionId entries
+                    const uniqueResults = result.filter((item, index, self) => {
+                      i = 0;
+                      while (i < result.length) {
+                        if (item.statementId == result[i].statementId) {
+                          if (item.id < result[i].id) {
+                            return false;
+                          }
+                        }
+                        i++;
+                      }
+                      return true;
+                    }
+                    );
+                    res.json(uniqueResults);
+                    console.log("results successfully filtered");
                   })
                   .catch((error) => {
                     res.json({ ok: false, message: error.message });

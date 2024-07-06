@@ -147,10 +147,12 @@ const Dashboard: React.FC = () => {
       [id]: newCheckedState,
     }));
 
+    console.log(id);
+
     try {
       Backend.defaults.headers.common["Authorization"] = token;
       const response = await Backend.post("/answers/changeanswers", {
-        statementId: id,
+        statementId: currentAnswer.statementId,
         I_agree: currentAnswer.I_agree ? 1 : 0,
         I_agree_reason: "n/a - answer changed",
         others_agree: newCheckedState ? 1 : 0,
@@ -175,7 +177,7 @@ const Dashboard: React.FC = () => {
   const handleAgreeCheckboxChange = async (id: number) => {
     const newCheckedState = !agreeCheckboxStates[id];
     const currentAnswer = answerList.find(answer => answer.id === id);
-
+    console.log(currentAnswer);
     // Check if currentAnswer is undefined
     if (!currentAnswer) {
       console.error("Answer not found");
@@ -187,10 +189,13 @@ const Dashboard: React.FC = () => {
       [id]: newCheckedState,
     }));
 
+    console.log(id);
+
+
     try {
       Backend.defaults.headers.common["Authorization"] = token;
       const response = await Backend.post("/answers/changeanswers", {
-        statementId: id,
+        statementId: currentAnswer.statementId,
         I_agree: newCheckedState ? 1 : 0,
         I_agree_reason: "n/a - answer changed",
         others_agree: currentAnswer.others_agree ? 1 : 0,
