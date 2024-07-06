@@ -423,9 +423,12 @@ const Dashboard: React.FC = () => {
                                 </td>
                                 <td className="px-6 py-4">
                                   {answer.agreement ?
-                                    `${((answer.agreement.others_agree) / 2).toFixed(0)}%`
+                                    (answer.others_agree ?
+                                      `${((answer.agreement.others_agree)).toFixed(0)}%` :
+                                      `${((100 - answer.agreement.others_agree)).toFixed(0)}%`)
                                     :
                                     "N/A"
+
                                   }
                                 </td>
                               </tr>

@@ -274,19 +274,17 @@ const calculateAgreementPercentage = async (statementIds) => {
 
     const totalAnswers = answersForStatement.length;
     const actualIAgree = answersForStatement.reduce((acc, answer) => acc + (answer.I_agree ? 1 : 0), 0);
-    const actualIAgreePercentage = (actualIAgree / totalAnswers) * 100;
+    const actualIAgreePercentage = totalAnswers === 1 ? (actualIAgree ? 100 : 0) : (actualIAgree / totalAnswers) * 100;
 
     console.log("total answers" + totalAnswers);
     console.log("original" + answersForStatementAll.length);
-
-    const perceptionAccuracy = answersForStatement.reduce((acc, answer) => {
-      if (answer.others_agree === 1) { // if others_agree is yes
-        return acc + actualIAgreePercentage;
-      } else { // if others_agree is no
-        return acc + (100 - actualIAgreePercentage);
+    let count = 0;
+    for (let i = 0; i < totalAnswers; i++) {
+      if (answersForStatement[i].I_agree === 1) {
+        count++;
       }
-    }, 0) / totalAnswers;
-
+    }
+    const perceptionAccuracy = totalAnswers === 1 ? 100 : (count / totalAnswers) * 100;
     result[statementId] = {
       I_agree: actualIAgreePercentage,
       others_agree: perceptionAccuracy,
