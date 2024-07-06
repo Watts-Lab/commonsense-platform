@@ -217,17 +217,17 @@ const Dashboard: React.FC = () => {
   const useEditAnswer = async () => {
     if (editing) {
       if (!token) return;
-      //   const saveChanges = async () => {
-      //     const promises = Object.keys(checkboxStates).map(async (id) => {
-      //       const currentAnswer = answerList.find(answer => answer.id === parseInt(id));
-      //       if (!currentAnswer) return;
-      //     });
-      //     await Promise.all(promises);
-      //   };
-      //   await saveChanges();
+
+      try {
+        await getAnswers(); // Call getAnswers to refresh the data
+      } catch (error) {
+        console.log("Error refreshing data in useEditAnswer:", error);
+      }
     }
+
     setEditing(!editing);
   };
+
 
 
   return (
@@ -348,11 +348,12 @@ const Dashboard: React.FC = () => {
                             <th scope="col" className="px-6 py-3">
                               I think most others agree
                               {/* Is it common sense? */}
-                              {t("dashboard.is-it-common-sense")}
+                              {/* {t("dashboard.is-it-common-sense")} */}
                             </th>
                             <th scope="col" className="px-6 py-3">
+                              Your accuracy on what others think
                               {/* People who think what you think most people think */}
-                              {t("dashboard.others-think")}
+                              {/* {t("dashboard.others-think")} */}
                             </th>
                             <tr>
                               <th className="px-6 py-3 text-right">
