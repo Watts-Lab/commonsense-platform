@@ -39,21 +39,15 @@ interface Answer {
 
 const Dashboard: React.FC = () => {
   const { t } = useTranslation();
-
   const loggedIn = useAppSelector((state) => state.login.loggedIn);
-
   const [answerList, setAnswerList] = useState<Answer[]>([]);
   const [activeTab, setActiveTab] = useState<string>("dashboard");
-
   const [editing, setEditing] = useState<boolean>(false);
   const [checkboxStates, setCheckboxStates] = useState<{ [key: number]: boolean }>({});
   const [agreeCheckboxStates, setAgreeCheckboxStates] = useState<{ [key: number]: boolean }>({});
-
   const containerRef = useRef();
   const navigate = useNavigate();
-
   const surveySession = useAppSelector((state) => state.login.surveySession);
-
   const tokenString = localStorage.getItem("token");
   const token = tokenString !== null ? JSON.parse(tokenString) : null;
 
@@ -86,20 +80,15 @@ const Dashboard: React.FC = () => {
       const response = await Backend.post("/answers/getanswers", {
         email: "user@test.com",
       });
-
-      console.log("Response from getanswers:", response.data);
-
       if (!Array.isArray(response.data)) {
         console.error("Expected an array but got:", response.data);
         return;
       }
 
       const updatedAnswers = response.data;
-
       const statementIds = updatedAnswers.map(answer => answer.statementId);
       // const commonsensicalityResponse = await Backend.post("/results/commonsensicality", { statementIds });
       // const commonsensicalityScores = commonsensicalityResponse.data;
-
       const agreementResponse = await Backend.post("/results/agreementPercentage", { statementIds });
       const agreementPercentages = agreementResponse.data;
 
@@ -131,7 +120,9 @@ const Dashboard: React.FC = () => {
     getAnswers();
   }, []);
 
-  // Change I_agree or others_agree variable
+  //  Change I_agree or others_agree variable -- Usage:
+  // For I_agree: handleCheckboxChange(id, 'I_agree')
+  // For others_agree: handleCheckboxChange(id, 'others_agree')
   const handleCheckboxChange = async (id: number, type: 'I_agree' | 'others_agree') => {
     const stateKey = type === 'I_agree' ? 'agreeCheckboxStates' : 'checkboxStates';
     const setState = type === 'I_agree' ? setAgreeCheckboxStates : setCheckboxStates;
@@ -147,8 +138,6 @@ const Dashboard: React.FC = () => {
       ...prevStates,
       [id]: newCheckedState,
     }));
-
-    console.log(id);
 
     try {
       Backend.defaults.headers.common["Authorization"] = token;
@@ -172,10 +161,6 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  // Usage:
-  // For I_agree: handleCheckboxChange(id, 'I_agree')
-  // For others_agree: handleCheckboxChange(id, 'others_agree')
-
   const useEditAnswer = async () => {
     if (editing) {
       if (!token) return;
@@ -190,13 +175,10 @@ const Dashboard: React.FC = () => {
     setEditing(!editing);
   };
 
-
-
   return (
     <div className="flex flex-col min-h-screen overflow-hidden">
       {/*  Site header */}
       <Navbar />
-
       {/*  Page content */}
       <main className="flex-grow">
         <section className="bg-gray-200 dark:bg-gray-800">
@@ -222,6 +204,7 @@ const Dashboard: React.FC = () => {
                       {t("dashboard.insight")}
                     </button>
                   </li>
+
                   <li className="mr-2" role="presentation">
                     <button
                       className={`inline-block p-4 border-b-2 rounded-t-lg ${activeTab === "profile"
@@ -309,12 +292,10 @@ const Dashboard: React.FC = () => {
                             </th>
                             <th scope="col" className="px-6 py-3">
                               I think most others agree
-                              {/* Is it common sense? */}
                               {/* {t("dashboard.is-it-common-sense")} */}
                             </th>
                             <th scope="col" className="px-6 py-3">
                               Your accuracy on what others think
-                              {/* People who think what you think most people think */}
                               {/* {t("dashboard.others-think")} */}
                             </th>
                             <tr>
@@ -429,7 +410,6 @@ const Dashboard: React.FC = () => {
           </div>
         </section>
       </main>
-
       <Footer />
     </div>
   );
