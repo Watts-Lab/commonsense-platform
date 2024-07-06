@@ -97,8 +97,8 @@ const Dashboard: React.FC = () => {
       const updatedAnswers = response.data;
 
       const statementIds = updatedAnswers.map(answer => answer.statementId);
-      const commonsensicalityResponse = await Backend.post("/results/commonsensicality", { statementIds });
-      const commonsensicalityScores = commonsensicalityResponse.data;
+      // const commonsensicalityResponse = await Backend.post("/results/commonsensicality", { statementIds });
+      // const commonsensicalityScores = commonsensicalityResponse.data;
 
       const agreementResponse = await Backend.post("/results/agreementPercentage", { statementIds });
       const agreementPercentages = agreementResponse.data;
@@ -117,7 +117,7 @@ const Dashboard: React.FC = () => {
 
       const updatedAnswerList = updatedAnswers.map(answer => ({
         ...answer,
-        commonsensicality: commonsensicalityScores[answer.statementId] || 0,
+        // commonsensicality: commonsensicalityScores[answer.statementId] || 0,
         agreement: agreementPercentages[answer.statementId] || { I_agree: 0, others_agree: 0 },
       }));
       setAnswerList(updatedAnswerList);

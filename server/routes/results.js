@@ -154,82 +154,81 @@ router.get("/all", async (req, res) => {
 });
 
 // Helper function to calculate commonsensicality
-const calculateCommonsensicality = async (statementIds) => {
-  const result = {};
-  for (const statementId of statementIds) {
-    const answersForStatement = await answers.findAll({
-      where: { statementId },
-      include: [
-        {
-          model: statements,
-          as: "statement",
-          attributes: [],
-        },
-      ],
-      attributes: [
-        "I_agree",
-        "perceived_commonsense",
-        [Sequelize.col("statement.statementMedian"), "statementMedian"],
-      ],
-      raw: true,
-    });
+// const calculateCommonsensicality = async (statementIds) => {
+//   const result = {};
+//   for (const statementId of statementIds) {
+//     const answersForStatement = await answers.findAll({
+//       where: { statementId },
+//       include: [
+//         {
+//           model: statements,
+//           as: "statement",
+//           attributes: [],
+//         },
+//       ],
+//       attributes: [
+//         "I_agree",
+//         "perceived_commonsense",
+//         [Sequelize.col("statement.statementMedian"), "statementMedian"],
+//       ],
+//       raw: true,
+//     });
 
-    const total = answersForStatement.length;
-    if (total === 0) {
-      result[statementId] = 0;
-      continue;
-    }
+//     const total = answersForStatement.length;
+//     if (total === 0) {
+//       result[statementId] = 0;
+//       continue;
+//     }
 
-    // Calculate consensus (ci)
-    const consensusSum = answersForStatement.reduce(
-      (acc, answer) => acc + answer.I_agree,
-      0
-    );
-    const consensus = 2 * Math.abs((consensusSum / total) - 0.5);
+//     // Calculate consensus (ci)
+//     const consensusSum = answersForStatement.reduce(
+//       (acc, answer) => acc + answer.I_agree,
+//       0
+//     );
+//     const consensus = 2 * Math.abs((consensusSum / total) - 0.5);
 
-    // Calculate majority
-    const majority = consensusSum / total >= 0.5 ? 1 : 0;
+//     // Calculate majority
+//     const majority = consensusSum / total >= 0.5 ? 1 : 0;
 
-    // Calculate awareness (ai)
-    const awareness = answersForStatement.reduce(
-      (acc, answer) => acc + (answer.perceived_commonsense === majority ? 1 : 0),
-      0
-    ) / total;
+//     // Calculate awareness (ai)
+//     const awareness = answersForStatement.reduce(
+//       (acc, answer) => acc + (answer.perceived_commonsense === majority ? 1 : 0),
+//       0
+//     ) / total;
 
-    // Calculate commonsensicality (mi)
-    result[statementId] = Math.sqrt(consensus * awareness);
-  }
-  return result;
-};
+//     // Calculate commonsensicality (mi)
+//     result[statementId] = Math.sqrt(consensus * awareness);
+//   }
+//   return result;
+// };
 
-//endpoint to get commonsensicality scores for each question
-router.post(
-  "/commonsensicality",
-  [body("statementIds").isArray().withMessage("statementIds must be an array")],
-  async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
+// //endpoint to get commonsensicality scores for each question
+// router.post(
+//   "/commonsensicality",
+//   [body("statementIds").isArray().withMessage("statementIds must be an array")],
+//   async (req, res) => {
+//     const errors = validationResult(req);
+//     if (!errors.isEmpty()) {
+//       return res.status(400).json({ errors: errors.array() });
+//     }
 
-    const { statementIds } = req.body;
-    console.log("Received statementIds:", statementIds);
+//     const { statementIds } = req.body;
+//     console.log("Received statementIds:", statementIds);
 
-    try {
-      const commonsensicalityScores = await calculateCommonsensicality(statementIds);
-      console.log("Calculated commonsensicalityScores:", commonsensicalityScores);
-      res.json(commonsensicalityScores);
-    } catch (error) {
-      console.error("Error calculating commonsensicality:", error);
-      res.status(500).json({ error: error.message });
-    }
-  }
-);
+//     try {
+//       const commonsensicalityScores = await calculateCommonsensicality(statementIds);
+//       console.log("Calculated commonsensicalityScores:", commonsensicalityScores);
+//       res.json(commonsensicalityScores);
+//     } catch (error) {
+//       console.error("Error calculating commonsensicality:", error);
+//       res.status(500).json({ error: error.message });
+//     }
+//   }
+// );
 
 // Helper function to calculate agreement percentages
 const calculateAgreementPercentage = async (statementIds) => {
   const result = {};
-  console.log("statementIds: " + statementIds.length);
   for (const statementId of statementIds) {
     const answersForStatementAll = await answers
     .findAll({
@@ -269,15 +268,11 @@ const calculateAgreementPercentage = async (statementIds) => {
       }
         return true;
       });
-    
-    console.log("Answers test", answersForStatement[0]);
-
+   
     const totalAnswers = answersForStatement.length;
     const actualIAgree = answersForStatement.reduce((acc, answer) => acc + (answer.I_agree ? 1 : 0), 0);
     const actualIAgreePercentage = totalAnswers === 1 ? (actualIAgree ? 100 : 0) : (actualIAgree / totalAnswers) * 100;
 
-    console.log("total answers" + totalAnswers);
-    console.log("original" + answersForStatementAll.length);
     let count = 0;
     for (let i = 0; i < totalAnswers; i++) {
       if (answersForStatement[i].I_agree === 1) {
