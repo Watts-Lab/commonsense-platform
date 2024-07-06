@@ -131,18 +131,19 @@ const Dashboard: React.FC = () => {
     getAnswers();
   }, []);
 
-  //change others_agree variable
-  const handleCheckboxChange = async (id: number) => {
-    const newCheckedState = !checkboxStates[id];
+  // Change I_agree or others_agree variable
+  const handleCheckboxChange = async (id: number, type: 'I_agree' | 'others_agree') => {
+    const stateKey = type === 'I_agree' ? 'agreeCheckboxStates' : 'checkboxStates';
+    const setState = type === 'I_agree' ? setAgreeCheckboxStates : setCheckboxStates;
+    const newCheckedState = !((type === 'I_agree' ? agreeCheckboxStates : checkboxStates)[id]);
     const currentAnswer = answerList.find(answer => answer.id === id);
 
-    // Check if currentAnswer is undefined
     if (!currentAnswer) {
       console.error("Answer not found");
       return;
     }
 
-    setCheckboxStates((prevStates) => ({
+    setState((prevStates) => ({
       ...prevStates,
       [id]: newCheckedState,
     }));
@@ -153,73 +154,34 @@ const Dashboard: React.FC = () => {
       Backend.defaults.headers.common["Authorization"] = token;
       const response = await Backend.post("/answers/changeanswers", {
         statementId: currentAnswer.statementId,
-        I_agree: currentAnswer.I_agree ? 1 : 0,
+        I_agree: type === 'I_agree' ? (newCheckedState ? 1 : 0) : (currentAnswer.I_agree ? 1 : 0),
         I_agree_reason: "n/a - answer changed",
-        others_agree: newCheckedState ? 1 : 0,
+        others_agree: type === 'others_agree' ? (newCheckedState ? 1 : 0) : (currentAnswer.others_agree ? 1 : 0),
         others_agree_reason: "n/a - answer changed",
         perceived_commonsense: 0,
         sessionId: surveySession,
       });
-      console.log("Answer updated");
-      return response.data.ok;
+      console.log(`${type} updated`, response.data);
     } catch (error) {
-      console.log(error);
+      console.log(`Error updating ${type}`, error);
       // Revert the state change in case of an error
-      setCheckboxStates((prevStates) => ({
+      setState((prevStates) => ({
         ...prevStates,
         [id]: !newCheckedState,
       }));
     }
   };
 
-
-  //change I_agree variable
-  const handleAgreeCheckboxChange = async (id: number) => {
-    const newCheckedState = !agreeCheckboxStates[id];
-    const currentAnswer = answerList.find(answer => answer.id === id);
-    console.log(currentAnswer);
-    // Check if currentAnswer is undefined
-    if (!currentAnswer) {
-      console.error("Answer not found");
-      return;
-    }
-
-    setAgreeCheckboxStates((prevStates) => ({
-      ...prevStates,
-      [id]: newCheckedState,
-    }));
-
-    console.log(id);
-
-
-    try {
-      Backend.defaults.headers.common["Authorization"] = token;
-      const response = await Backend.post("/answers/changeanswers", {
-        statementId: currentAnswer.statementId,
-        I_agree: newCheckedState ? 1 : 0,
-        I_agree_reason: "n/a - answer changed",
-        others_agree: currentAnswer.others_agree ? 1 : 0,
-        others_agree_reason: "n/a - answer changed",
-        perceived_commonsense: 0,
-        sessionId: surveySession,
-      });
-      console.log("Answer updated", response.data);
-    } catch (error) {
-      console.log("Error updating answer", error);
-      // Revert the state change in case of an error
-      setAgreeCheckboxStates((prevStates) => ({
-        ...prevStates,
-        [id]: !newCheckedState,
-      }));
-    }
-  };
+  // Usage:
+  // For I_agree: handleCheckboxChange(id, 'I_agree')
+  // For others_agree: handleCheckboxChange(id, 'others_agree')
 
   const useEditAnswer = async () => {
     if (editing) {
       if (!token) return;
 
       try {
-        await getAnswers(); // Call getAnswers to refresh the data
+        await getAnswers(); // call getAnswers to refresh the data and get new percentage
       } catch (error) {
         console.log("Error refreshing data in useEditAnswer:", error);
       }
@@ -386,7 +348,7 @@ const Dashboard: React.FC = () => {
                                       type="checkbox"
                                       className="toggle toggle-sm mr-3 align-middle relative"
                                       checked={agreeCheckboxStates[answer.id]}
-                                      onChange={() => handleAgreeCheckboxChange(answer.id)}
+                                      onChange={() => handleCheckboxChange(answer.id, "I_agree")}
                                     />
                                   )}
                                   {agreeCheckboxStates[answer.id] ? (
@@ -407,7 +369,7 @@ const Dashboard: React.FC = () => {
                                       type="checkbox"
                                       className="toggle toggle-sm mr-3 align-middle relative"
                                       checked={checkboxStates[answer.id]}
-                                      onChange={() => handleCheckboxChange(answer.id)}
+                                      onChange={() => handleCheckboxChange(answer.id, "others_agree")}
                                     />
                                   )}
                                   {checkboxStates[answer.id] ? (
