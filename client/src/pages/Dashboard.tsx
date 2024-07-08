@@ -285,15 +285,13 @@ const Dashboard: React.FC = () => {
                               {t("dashboard.statement")}
                             </th>
                             <th scope="col" className="px-6 py-3">
-                              I agree with this statement
+                              {t("dashboard.i-agree")}
                             </th>
                             <th scope="col" className="px-6 py-3">
-                              I think most others agree
-                              {/* {t("dashboard.is-it-common-sense")} */}
+                              {t("dashboard.others-agree")}
                             </th>
                             <th scope="col" className="px-6 py-3">
-                              Your accuracy on what others think
-                              {/* {t("dashboard.others-think")} */}
+                              {t("dashboard.your-accuracy")}
                             </th>
                             <tr>
                               <th className="px-6 py-3 text-right">
