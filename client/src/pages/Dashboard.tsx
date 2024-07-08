@@ -104,11 +104,10 @@ const Dashboard: React.FC = () => {
                 >
                   <li className="mr-2" role="presentation">
                     <button
-                      className={`inline-block p-4 border-b-2 rounded-t-lg ${
-                        activeTab === "dashboard"
-                          ? "border-brand-500"
-                          : "border-transparent"
-                      } hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300`}
+                      className={`inline-block p-4 border-b-2 rounded-t-lg ${activeTab === "dashboard"
+                        ? "border-brand-500"
+                        : "border-transparent"
+                        } hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300`}
                       onClick={() => handleTabClick("dashboard")}
                       role="tab"
                       aria-controls="dashboard"
@@ -120,11 +119,10 @@ const Dashboard: React.FC = () => {
                   </li>
                   <li className="mr-2" role="presentation">
                     <button
-                      className={`inline-block p-4 border-b-2 rounded-t-lg ${
-                        activeTab === "profile"
-                          ? "border-brand-500"
-                          : "border-transparent"
-                      }`}
+                      className={`inline-block p-4 border-b-2 rounded-t-lg ${activeTab === "profile"
+                        ? "border-brand-500"
+                        : "border-transparent"
+                        }`}
                       onClick={() => handleTabClick("profile")}
                       role="tab"
                       aria-controls="profile"
@@ -137,11 +135,10 @@ const Dashboard: React.FC = () => {
 
                   <li className="mr-2" role="presentation">
                     <button
-                      className={`inline-block p-4 border-b-2 rounded-t-lg ${
-                        activeTab === "statement"
-                          ? "border-brand-500"
-                          : "border-transparent"
-                      }`}
+                      className={`inline-block p-4 border-b-2 rounded-t-lg ${activeTab === "statement"
+                        ? "border-brand-500"
+                        : "border-transparent"
+                        }`}
                       onClick={() => handleTabClick("statement")}
                       role="tab"
                       aria-controls="statement"
@@ -154,11 +151,10 @@ const Dashboard: React.FC = () => {
 
                   <li className="mr-2" role="presentation">
                     <button
-                      className={`inline-block p-4 border-b-2 rounded-t-lg ${
-                        activeTab === "settings"
-                          ? "border-brand-500"
-                          : "border-transparent"
-                      } hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300`}
+                      className={`inline-block p-4 border-b-2 rounded-t-lg ${activeTab === "settings"
+                        ? "border-brand-500"
+                        : "border-transparent"
+                        } hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300`}
                       onClick={() => handleTabClick("settings")}
                       role="tab"
                       aria-controls="settings"
@@ -171,9 +167,8 @@ const Dashboard: React.FC = () => {
                 </ul>
                 <div id="myTabContent">
                   <div
-                    className={`p-4 rounded-lg bg-gray-50 dark:bg-gray-800 ${
-                      activeTab === "dashboard" ? "block" : "hidden"
-                    }`}
+                    className={`p-4 rounded-lg bg-gray-50 dark:bg-gray-800 ${activeTab === "dashboard" ? "block" : "hidden"
+                      }`}
                     id="dashboard"
                     role="tabpanel"
                     aria-labelledby="dashboard-tab"
@@ -181,9 +176,8 @@ const Dashboard: React.FC = () => {
                     <DashboardChart sessionId={surveySession} />
                   </div>
                   <div
-                    className={`p-4 rounded-lg bg-gray-50 dark:bg-gray-800 ${
-                      activeTab === "profile" ? "block" : "hidden"
-                    }`}
+                    className={`p-4 rounded-lg bg-gray-50 dark:bg-gray-800 ${activeTab === "profile" ? "block" : "hidden"
+                      }`}
                     id="profile"
                     role="tabpanel"
                     aria-labelledby="profile-tab"
@@ -262,9 +256,8 @@ const Dashboard: React.FC = () => {
                   </div>
 
                   <div
-                    className={`p-4 rounded-lg bg-gray-50 dark:bg-gray-800 ${
-                      activeTab === "statement" ? "block" : "hidden"
-                    }`}
+                    className={`p-4 rounded-lg bg-gray-50 dark:bg-gray-800 ${activeTab === "statement" ? "block" : "hidden"
+                      }`}
                     id="statement"
                     role="tabpanel"
                     aria-labelledby="statement-tab"
@@ -273,14 +266,16 @@ const Dashboard: React.FC = () => {
                   </div>
 
                   <div
-                    className={`p-4 rounded-lg bg-gray-50 dark:bg-gray-800 ${
-                      activeTab === "settings" ? "block" : "hidden"
-                    }`}
+                    className={`p-4 rounded-lg bg-gray-50 dark:bg-gray-800 ${activeTab === "settings" ? "block" : "hidden"
+                      }`}
                     id="settings"
                     role="tabpanel"
                     aria-labelledby="settings-tab"
                   >
-                    <button onClick={deleteAccount}>
+                    <button
+                      onClick={deleteAccount}
+                      className="bg-white text-black font-bold py-2 px-4 rounded shadow transition duration-300 ease-in-out hover:shadow-lg"
+                    >
                       {/* Delete account */}
                       {t("dashboard.delete-account")}
                     </button>
