@@ -127,7 +127,6 @@ router.post(
                     }
                     );
                     res.json(uniqueResults);
-                    console.log("results successfully filtered");
                   })
                   .catch((error) => {
                     res.json({ ok: false, message: error.message });
