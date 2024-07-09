@@ -156,49 +156,56 @@ router.get("/all", async (req, res) => {
 // Helper function to calculate agreement percentages
 const calculateAgreementPercentage = async (statementIds) => {
   const result = {};
-  for (const statementId of statementIds) {
-    const answersForStatementAll = await answers
-    .findAll({
-      include: [
-        {
-          model: statements,
-          as: "statement",
-          attributes: [],
-        },
-      ],
-      attributes: [
-        "sessionId",
-        "id",
-        "statementId",
-        "I_agree",
-        "others_agree",   
-      ],
-      raw: true,
-      where: {
-        statementId: statementId
-      }
-    });
+  //for (const statementId of statementIds) {
+  const answersForStatementAll = await answers.findAll({
+    include: [
+      {
+        model: statements,
+        as: "statement",
+        attributes: [],
+      },
+    ],
+    attributes: ["sessionId", "id", "statementId", "I_agree", "others_agree"],
+    raw: true,
+    where: {
+      statementId: statementIds,
+    },
+  });
 
+  for (const statementId of statementIds) {
     if (answersForStatementAll.length === 0) {
       result[statementId] = { I_agree: 0, others_agree: 0 };
       continue;
-    };
-    const answersForStatement = answersForStatementAll.filter((item, index, self) => {
-        i = 0;
-        while (i < answersForStatementAll.length) {
-          if (item.sessionId == answersForStatementAll[i].sessionId) {
-            if (item.id < answersForStatementAll[i].id) {
-              return false;
-            }
+    }
+
+    const answersForOneStatement = answersForStatementAll.filter(
+      (answer) => answer.statementId === statementId
+    );
+
+    const answersForStatement = answersForOneStatement.filter((item) => {
+      i = 0;
+      while (i < answersForOneStatement.length) {
+        if (item.sessionId == answersForOneStatement[i].sessionId) {
+          if (item.id < answersForOneStatement[i].id) {
+            return false;
           }
-          i++;
+        }
+        i++;
       }
-        return true;
-      });
-   
+      return true;
+    });
+
     const totalAnswers = answersForStatement.length;
-    const actualIAgree = answersForStatement.reduce((acc, answer) => acc + (answer.I_agree ? 1 : 0), 0);
-    const actualIAgreePercentage = totalAnswers === 1 ? (actualIAgree ? 100 : 0) : (actualIAgree / totalAnswers) * 100;
+    const actualIAgree = answersForStatement.reduce(
+      (acc, answer) => acc + (answer.I_agree ? 1 : 0),
+      0
+    );
+    const actualIAgreePercentage =
+      totalAnswers === 1
+        ? actualIAgree
+          ? 100
+          : 0
+        : (actualIAgree / totalAnswers) * 100;
 
     let count = 0;
     for (let i = 0; i < totalAnswers; i++) {
@@ -206,7 +213,8 @@ const calculateAgreementPercentage = async (statementIds) => {
         count++;
       }
     }
-    const perceptionAccuracy = totalAnswers === 1 ? 100 : (count / totalAnswers) * 100;
+    const perceptionAccuracy =
+      totalAnswers === 1 ? 100 : (count / totalAnswers) * 100;
     result[statementId] = {
       I_agree: actualIAgreePercentage,
       others_agree: perceptionAccuracy,
@@ -214,8 +222,6 @@ const calculateAgreementPercentage = async (statementIds) => {
   }
   return result;
 };
-
-
 
 //endpoint to get agreement percentages (ex. 60% of people agreed with you)
 router.post(
@@ -231,7 +237,9 @@ router.post(
     console.log("Received statementIds:", statementIds);
 
     try {
-      const agreementPercentages = await calculateAgreementPercentage(statementIds);
+      const agreementPercentages = await calculateAgreementPercentage(
+        statementIds
+      );
       console.log("Calculated agreementPercentages:", agreementPercentages);
       res.json(agreementPercentages);
     } catch (error) {
