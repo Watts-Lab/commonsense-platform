@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { FeedbackTypeStep } from "./Steps/FeedbackTypeStep";
 import { FeedbackContentStep } from "./Steps/FeedbackContentStep";
 import { FeedbackSuccessStep } from "./Steps/FeedbackSuccessStep";
-import useDarkMode from "../../hooks/useDarkMode";
 
 const feedbackTypes = {
   BUG: {
@@ -50,7 +49,6 @@ export const feedbackType = Object.keys(feedbackTypes);
 function WidgetForm(props: any) {
   const [feedbackType, setFeedbackType] = useState<string | null>(null);
   const [feedbackSent, setFeedbackSent] = useState(false);
-  const [isDarkMode] = useDarkMode();
 
   function handleRestartFeedback() {
     setFeedbackSent(false);
@@ -58,7 +56,7 @@ function WidgetForm(props: any) {
   }
 
   return (
-    <div className={`${isDarkMode ? 'bg-slate-600' : 'bg-slate-100'} p-4 relative rounded-2xl flex flex-col items-center shadow-lg w-[calc(100vw-2rem)] md:w-auto`}>
+    <div className="bg-slate-100 p-4 relative rounded-2xl flex flex-col items-center shadow-lg w-[calc(100vw-2rem)] md:w-auto">
       {feedbackSent ? (
         <FeedbackSuccessStep onFeedbackRestartRequest={handleRestartFeedback} />
       ) : (
