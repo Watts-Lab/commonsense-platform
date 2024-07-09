@@ -15,9 +15,9 @@ const ses = new aws.SES({
 });
 
 //create Nodemailer SES transporter
-let transporter = nodemailer.createTransport({
-  SES: { ses, aws },
-});
+// let transporter = nodemailer.createTransport({
+//   SES: { ses, aws },
+// });
 
 const transporter = nodemailer.createTransport({
   service: "Gmail",
