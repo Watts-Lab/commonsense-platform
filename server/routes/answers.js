@@ -112,7 +112,20 @@ router.post(
                     order: [["createdAt", "DESC"]],
                   })
                   .then((result) => {
-                    res.json(result);
+                    // Filter results to get unique sessionId entries
+                    const uniqueResults = result.filter((item) => {
+                      i = 0;
+                      while (i < result.length) {
+                        if (item.statementId == result[i].statementId) {
+                          if (item.id < result[i].id) {
+                            return false;
+                          }
+                        }
+                        i++;
+                      }
+                      return true;
+                    });
+                    res.json(uniqueResults);
                   })
                   .catch((error) => {
                     res.json({ ok: false, message: error.message });
@@ -127,6 +140,66 @@ router.post(
         }
       });
     }
+  }
+);
+
+// route for updating user answers
+
+router.post(
+  "/changeanswers",
+  body("statementId").not().isEmpty().isInt({ min: 1 }),
+  body("I_agree").not().isEmpty().isInt({ min: 0, max: 1 }),
+  body("others_agree").not().isEmpty().isInt({ min: 0, max: 1 }),
+  header("Authorization")
+    .exists()
+    .withMessage("Authorization header is missing")
+    .isString()
+    .withMessage("Authorization header must be a string")
+    .notEmpty()
+    .withMessage("Authorization header cannot be empty"),
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const token = req.headers.authorization;
+    jwt.verify(token, jwt_secret, async (err, succ) => {
+      if (err) {
+        res.json({ ok: false, message: "something went wrong" });
+      } else {
+        try {
+          const sessionID = await getSessionId(succ.email);
+          if (sessionID) {
+            const answerData = {
+              statementId: req.body.statementId,
+              statement_number: req.body.statementId,
+              I_agree: req.body.I_agree,
+              I_agree_reason: req.body.I_agree_reason,
+              others_agree: req.body.others_agree,
+              others_agree_reason: req.body.others_agree_reason,
+              perceived_commonsense: req.body.perceived_commonsense,
+              origLanguage: "en",
+              sessionId: req.body.sessionId,
+              clientVersion: process.env.GITHUB_HASH,
+            };
+            answers
+              .create(answerData)
+              .then((answer) =>
+                res.json({ ok: true, message: "Answer added successfully" })
+              )
+              .catch((error) => {
+                console.error(error);
+                res
+                  .status(500)
+                  .json({ ok: false, message: "An error occurred" });
+              });
+          }
+        } catch (error) {
+          res.json({ ok: false, message: error.message });
+        }
+      }
+    });
   }
 );
 
