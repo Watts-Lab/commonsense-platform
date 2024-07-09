@@ -153,4 +153,99 @@ router.get("/all", async (req, res) => {
     });
 });
 
+// Helper function to calculate agreement percentages
+const calculateAgreementPercentage = async (statementIds) => {
+  const result = {};
+  const answersForStatementAll = await answers.findAll({
+    include: [
+      {
+        model: statements,
+        as: "statement",
+        attributes: [],
+      },
+    ],
+    attributes: ["sessionId", "id", "statementId", "I_agree", "others_agree"],
+    raw: true,
+    where: {
+      statementId: statementIds,
+    },
+  });
+
+  for (const statementId of statementIds) {
+    if (answersForStatementAll.length === 0) {
+      result[statementId] = { I_agree: 0, others_agree: 0 };
+      continue;
+    }
+    //first filter to get all answers for current statementId
+    const answersForOneStatement = answersForStatementAll.filter(
+      (answer) => answer.statementId === statementId
+    );
+
+    //second filter to get latest answer from each user/sessionId
+    const answersForStatement = answersForOneStatement.filter((item) => {
+      i = 0;
+      while (i < answersForOneStatement.length) {
+        if (item.sessionId == answersForOneStatement[i].sessionId) {
+          if (item.id < answersForOneStatement[i].id) {
+            return false;
+          }
+        }
+        i++;
+      }
+      return true;
+    });
+
+    const totalAnswers = answersForStatement.length;
+    const actualIAgree = answersForStatement.reduce(
+      (acc, answer) => acc + (answer.I_agree ? 1 : 0),
+      0
+    );
+    const actualIAgreePercentage =
+      totalAnswers === 1
+        ? actualIAgree
+          ? 100
+          : 0
+        : (actualIAgree / totalAnswers) * 100;
+
+    let count = 0;
+    for (let i = 0; i < totalAnswers; i++) {
+      if (answersForStatement[i].I_agree === 1) {
+        count++;
+      }
+    }
+    const perceptionAccuracy =
+      totalAnswers === 1 ? 100 : (count / totalAnswers) * 100;
+    result[statementId] = {
+      I_agree: actualIAgreePercentage,
+      others_agree: perceptionAccuracy,
+    };
+  }
+  return result;
+};
+
+//endpoint to get agreement percentages (ex. 60% of people agreed with you)
+router.post(
+  "/agreementPercentage",
+  [body("statementIds").isArray().withMessage("statementIds must be an array")],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { statementIds } = req.body;
+    console.log("Received statementIds:", statementIds);
+
+    try {
+      const agreementPercentages = await calculateAgreementPercentage(
+        statementIds
+      );
+      res.json(agreementPercentages);
+    } catch (error) {
+      console.error("Error calculating agreement percentages:", error);
+      res.status(500).json({ error: error.message });
+    }
+  }
+);
+
 module.exports = router;
