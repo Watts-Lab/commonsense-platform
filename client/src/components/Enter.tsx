@@ -4,7 +4,11 @@ import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "../partials/NavBar";
 import Footer from "../partials/Footer";
 
-const Enter = ({ signIn }) => {
+interface EnterProps {
+  signIn: (email: string, link: string) => void;
+}
+
+const Enter: React.FC<EnterProps> = ({ signIn }) => {
   let params = useParams();
   let navigate = useNavigate();
 
