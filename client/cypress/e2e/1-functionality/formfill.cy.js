@@ -91,7 +91,9 @@ describe("fill out the survay", () => {
       .check({ force: true })
       .should("be.checked");
 
-    cy.get("input[type='text'][id*='sq_173i_0']").type("English\n");
+    cy.get("input[type='text'][id*='sq_173i_0']")
+      .invoke("removeAttr", "readonly") // needed to change because i was getting a read only error
+      .type("English\n");
 
     cy.get("input[type='radio'][id*='sq_175i_0']")
       .check({ force: true })
@@ -101,7 +103,9 @@ describe("fill out the survay", () => {
       .check({ force: true })
       .should("be.checked");
 
-    cy.get("input[type='text'][id*='sq_178i_0']").type("Algeria\n");
+    cy.get("input[type='text'][id*='sq_178i_0']")
+      .invoke("removeAttr", "readonly")
+      .type("Algeria\n");
     cy.get("input[type='button'][value='Complete']").click();
   });
 });
