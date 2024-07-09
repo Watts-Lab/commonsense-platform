@@ -156,7 +156,6 @@ router.get("/all", async (req, res) => {
 // Helper function to calculate agreement percentages
 const calculateAgreementPercentage = async (statementIds) => {
   const result = {};
-  //for (const statementId of statementIds) {
   const answersForStatementAll = await answers.findAll({
     include: [
       {
@@ -177,11 +176,12 @@ const calculateAgreementPercentage = async (statementIds) => {
       result[statementId] = { I_agree: 0, others_agree: 0 };
       continue;
     }
-
+    //first filter to get all answers for current statementId
     const answersForOneStatement = answersForStatementAll.filter(
       (answer) => answer.statementId === statementId
     );
 
+    //second filter to get latest answer from each user/sessionId
     const answersForStatement = answersForOneStatement.filter((item) => {
       i = 0;
       while (i < answersForOneStatement.length) {
@@ -240,7 +240,6 @@ router.post(
       const agreementPercentages = await calculateAgreementPercentage(
         statementIds
       );
-      console.log("Calculated agreementPercentages:", agreementPercentages);
       res.json(agreementPercentages);
     } catch (error) {
       console.error("Error calculating agreement percentages:", error);

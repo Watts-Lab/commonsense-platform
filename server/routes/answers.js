@@ -113,7 +113,7 @@ router.post(
                   })
                   .then((result) => {
                     // Filter results to get unique sessionId entries
-                    const uniqueResults = result.filter((item, index, self) => {
+                    const uniqueResults = result.filter((item) => {
                       i = 0;
                       while (i < result.length) {
                         if (item.statementId == result[i].statementId) {
@@ -124,8 +124,7 @@ router.post(
                         i++;
                       }
                       return true;
-                    }
-                    );
+                    });
                     res.json(uniqueResults);
                   })
                   .catch((error) => {
@@ -185,12 +184,16 @@ router.post(
               clientVersion: process.env.GITHUB_HASH,
             };
             answers
-            .create(answerData)
-            .then((answer) => res.json({ ok: true, message: "Answer added successfully" }))
-            .catch((error) => {
-              console.error(error);
-              res.status(500).json({ ok: false, message: "An error occurred" });
-            });
+              .create(answerData)
+              .then((answer) =>
+                res.json({ ok: true, message: "Answer added successfully" })
+              )
+              .catch((error) => {
+                console.error(error);
+                res
+                  .status(500)
+                  .json({ ok: false, message: "An error occurred" });
+              });
           }
         } catch (error) {
           res.json({ ok: false, message: error.message });

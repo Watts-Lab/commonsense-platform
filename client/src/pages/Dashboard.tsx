@@ -43,7 +43,7 @@ const Dashboard: React.FC = () => {
   const [answerList, setAnswerList] = useState<Answer[]>([]);
   const [activeTab, setActiveTab] = useState<string>("dashboard");
   const [editing, setEditing] = useState<boolean>(false);
-  const [checkboxStates, setCheckboxStates] = useState<{ [key: number]: boolean }>({});
+  const [othersAgreeCheckboxStates, setOthersAgreeCheckboxStates] = useState<{ [key: number]: boolean }>({});
   const [agreeCheckboxStates, setAgreeCheckboxStates] = useState<{ [key: number]: boolean }>({});
   const containerRef = useRef();
   const navigate = useNavigate();
@@ -94,7 +94,7 @@ const Dashboard: React.FC = () => {
         acc[answer.id] = answer.others_agree;
         return acc;
       }, {});
-      setCheckboxStates(initialCheckboxStates);
+      setOthersAgreeCheckboxStates(initialCheckboxStates);
 
       const initialAgreeCheckboxStates = updatedAnswers.reduce((acc, answer) => {
         acc[answer.id] = answer.I_agree;
@@ -122,8 +122,8 @@ const Dashboard: React.FC = () => {
   // For others_agree: handleCheckboxChange(id, 'others_agree')
   const handleCheckboxChange = async (id: number, type: 'I_agree' | 'others_agree') => {
     const stateKey = type === 'I_agree' ? 'agreeCheckboxStates' : 'checkboxStates';
-    const setState = type === 'I_agree' ? setAgreeCheckboxStates : setCheckboxStates;
-    const newCheckedState = !((type === 'I_agree' ? agreeCheckboxStates : checkboxStates)[id]);
+    const setState = type === 'I_agree' ? setAgreeCheckboxStates : setOthersAgreeCheckboxStates;
+    const newCheckedState = !((type === 'I_agree' ? agreeCheckboxStates : othersAgreeCheckboxStates)[id]);
     const currentAnswer = answerList.find(answer => answer.id === id);
 
     if (!currentAnswer) {
@@ -344,11 +344,11 @@ const Dashboard: React.FC = () => {
                                     <input
                                       type="checkbox"
                                       className="toggle toggle-sm mr-3 align-middle relative"
-                                      checked={checkboxStates[answer.id]}
+                                      checked={othersAgreeCheckboxStates[answer.id]}
                                       onChange={() => handleCheckboxChange(answer.id, "others_agree")}
                                     />
                                   )}
-                                  {checkboxStates[answer.id] ? (
+                                  {othersAgreeCheckboxStates[answer.id] ? (
                                     <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
                                       {/* Yes */}
                                       {t('dashboard.yes')}
