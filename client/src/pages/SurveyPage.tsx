@@ -6,8 +6,8 @@ import DarkModeSwitcher from "../components/DarkModeSwitch";
 
 const SurveyPage: React.FC = () => {
   return (
-    <div className="flex flex-col min-h-screen">
-      <main className="mx-auto p-3 max-w-3xl pb-14">
+    <div className="flex flex-col items-center jsutify-center min-h-screen">
+      <main className="p-3 max-w-3xl w-full pb-14">
         <Layout />
         <Feedback />
         <DarkModeSwitcher />
