@@ -15,19 +15,8 @@ const ses = new aws.SES({
 });
 
 // create Nodemailer SES transporter
-// let transporter = nodemailer.createTransport({
-//   SES: { ses, aws },
-// });
-
-const transporter = nodemailer.createTransport({
-  service: "Gmail",
-  host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
-  auth: {
-    user: process.env.NODEMAILER_EMAIL,
-    pass: process.env.NODEMAILER_PASSWORD,
-  },
+let transporter = nodemailer.createTransport({
+  SES: { ses, aws },
 });
 
 const URL =
