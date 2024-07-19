@@ -164,7 +164,13 @@ const calculateAgreementPercentage = async (statementIds) => {
         attributes: [],
       },
     ],
-    attributes: ["sessionId", "id", "statementId", "I_agree", "others_agree"],
+    attributes: [
+      "sessionId",
+      "createdAt",
+      "statementId",
+      "I_agree",
+      "others_agree",
+    ],
     raw: true,
     where: {
       statementId: statementIds,
@@ -186,15 +192,15 @@ const calculateAgreementPercentage = async (statementIds) => {
       i = 0;
       while (i < answersForOneStatement.length) {
         if (item.sessionId == answersForOneStatement[i].sessionId) {
-          if (item.id < answersForOneStatement[i].id) {
-            return false;
-          }
-          // if (
-          //   new Date(item.createdAt).getTime() <
-          //   new Date(answersForOneStatement[i].createdAt).getTime()
-          // ) {
+          // if (item.id < answersForOneStatement[i].id) {
           //   return false;
           // }
+          if (
+            new Date(item.createdAt).getTime() <
+            new Date(answersForOneStatement[i].createdAt).getTime()
+          ) {
+            return false;
+          }
         }
         i++;
       }
@@ -202,29 +208,63 @@ const calculateAgreementPercentage = async (statementIds) => {
     });
 
     const totalAnswers = answersForStatement.length;
-    const actualIAgree = answersForStatement.reduce(
-      (acc, answer) => acc + (answer.I_agree ? 1 : 0),
-      0
-    );
-    const actualIAgreePercentage =
-      totalAnswers === 1
-        ? actualIAgree
-          ? 100
-          : 0
-        : (actualIAgree / totalAnswers) * 100;
-
-    let count = 0;
-    for (let i = 0; i < totalAnswers; i++) {
-      if (answersForStatement[i].I_agree === 1) {
-        count++;
+    //hardcoded values for if the user is the only one that has answered this statement
+    if (totalAnswers == 1) {
+      if (
+        answersForStatement[0].I_agree == 1 &&
+        answersForStatement[0].others_agree == 1
+      ) {
+        result[statementId] = {
+          I_agree: 100,
+          others_agree: 100,
+        };
       }
+      if (
+        answersForStatement[0].I_agree == 0 &&
+        answersForStatement[0].others_agree == 1
+      ) {
+        result[statementId] = {
+          I_agree: 0,
+          others_agree: 0,
+        };
+      }
+      if (
+        answersForStatement[0].I_agree == 1 &&
+        answersForStatement[0].others_agree == 0
+      ) {
+        result[statementId] = {
+          I_agree: 100,
+          others_agree: 100,
+        };
+      }
+      if (
+        answersForStatement[0].I_agree == 0 &&
+        answersForStatement[0].others_agree == 0
+      ) {
+        result[statementId] = {
+          I_agree: 0,
+          others_agree: 0,
+        };
+      }
+      //if the there is more than one user who has answered the statement -- more likely case
+    } else {
+      const actualIAgree = answersForStatement.reduce(
+        (acc, answer) => acc + (answer.I_agree ? 1 : 0),
+        0
+      );
+      const actualIAgreePercentage = (actualIAgree / totalAnswers) * 100;
+      let count = 0;
+      for (let i = 0; i < totalAnswers; i++) {
+        if (answersForStatement[i].I_agree === 1) {
+          count++;
+        }
+      }
+      const perceptionAccuracy = (count / totalAnswers) * 100;
+      result[statementId] = {
+        I_agree: actualIAgreePercentage,
+        others_agree: perceptionAccuracy,
+      };
     }
-    const perceptionAccuracy =
-      totalAnswers === 1 ? 100 : (count / totalAnswers) * 100;
-    result[statementId] = {
-      I_agree: actualIAgreePercentage,
-      others_agree: perceptionAccuracy,
-    };
   }
   return result;
 };
