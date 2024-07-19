@@ -67,6 +67,18 @@ const Dashboard: React.FC = () => {
     }
   };
 
+  const signOut = async () => {
+    try {
+      Backend.defaults.headers.common["Authorization"] = token;
+      const response = await Backend.post("/users/deleteaccount", {
+        email: "",
+      });
+      return response.data.ok;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     if (!loggedIn) {
       navigate("/signin");
@@ -397,6 +409,10 @@ const Dashboard: React.FC = () => {
                     <button onClick={deleteAccount}>
                       {/* Delete account */}
                       {t("dashboard.delete-account")}
+                    </button>
+                    <button onClick={signOut}>
+                      {/* Delete account */}
+                      {t("dashboard.signout")}
                     </button>
                   </div>
                 </div>

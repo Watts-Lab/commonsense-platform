@@ -19,6 +19,7 @@ const Enter: React.FC<EnterProps> = ({ signIn }) => {
     } else {
       // Handle the case where either params.email or params.link is undefined
       console.error("Email or link is missing");
+      navigate("/dashboard");
     }
   }, [params.email, params.link, navigate, signIn]);
 

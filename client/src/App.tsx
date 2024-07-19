@@ -66,15 +66,15 @@ const App = () => {
         const response = await Backend.post(`/users/verify`);
         return response.data.ok
           ? dispatch(
-              setUserData({
-                loggedIn: true,
-                email: response.data.email,
-                token: token,
-                surveySession: response.data.sessionId,
-              })
-            )
+            setUserData({
+              loggedIn: true,
+              email: response.data.email,
+              token: token,
+              surveySession: response.data.sessionId,
+            })
+          )
           : dispatch(clearUserData());
-      } catch (error) {}
+      } catch (error) { }
     };
     verify_token();
   }, [token]);
