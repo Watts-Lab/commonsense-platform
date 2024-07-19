@@ -192,9 +192,6 @@ const calculateAgreementPercentage = async (statementIds) => {
       i = 0;
       while (i < answersForOneStatement.length) {
         if (item.sessionId == answersForOneStatement[i].sessionId) {
-          // if (item.id < answersForOneStatement[i].id) {
-          //   return false;
-          // }
           if (
             new Date(item.createdAt).getTime() <
             new Date(answersForOneStatement[i].createdAt).getTime()
