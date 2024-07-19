@@ -3,12 +3,10 @@ import { Dialog } from "@headlessui/react";
 import Backend from "../../apis/backend";
 import feedbackTypes from "./feedbackTypes";
 import { useTranslation } from 'react-i18next';
-import useDarkMode from "../../hooks/useDarkMode";
 
 function ReportIssue() {
   const [isOpen, setIsOpen] = useState(false);
   const { t } = useTranslation();
-  const [isDarkMode] = useDarkMode(); // Destructure correctly
 
   function openModal() {
     setIsOpen(true);
@@ -46,7 +44,7 @@ function ReportIssue() {
       {/* Modal dialog */}
       <Dialog open={isOpen} onClose={closeModal} className="relative z-50">
         <div className="fixed inset-0 flex items-center justify-center">
-          <Dialog.Panel className={`mx-auto w-full max-w-md rounded bg-white p-5 border-solid border-2 ${isDarkMode ? 'text-black' : ''}`}>
+          <Dialog.Panel className="mx-auto w-full max-w-md rounded bg-white p-5 border-solid border-2">
             <Dialog.Title className="text-lg font-medium">
               {t('report.title')}
             </Dialog.Title>
@@ -57,7 +55,7 @@ function ReportIssue() {
             {/* Your custom form or content here */}
             <form onSubmit={handleSubmitFeedback} className="mt-4 w-full">
               <textarea
-                className={`min-w-[384px] w-full min-h-[112px] text-sm p-1 placeholder-zinc-400 border-zinc-600 bg-transparent focus:border-brand-500 focus:ring-brand-500 focus:ring-1 resize-none focus:outline-none scrollbar-thumb-zinc-700 scrollbar-track-transparent scrollbar-thin ${isDarkMode ? 'text-black' : ''}`}
+                className="min-w-[384px] w-full min-h-[112px] text-sm p-1 placeholder-zinc-400 border-zinc-600 bg-transparent focus:border-brand-500 focus:ring-brand-500 focus:ring-1 resize-none focus:outline-none scrollbar-thumb-zinc-700 scrollbar-track-transparent scrollbar-thin"
                 placeholder={t('report.placeholder')}
                 onChange={(e) => setComment(e.target.value)}
               />

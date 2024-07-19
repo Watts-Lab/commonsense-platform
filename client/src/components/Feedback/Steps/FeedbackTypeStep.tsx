@@ -2,11 +2,15 @@ import CloseButton from "../CloseButton";
 
 import feedbackTypes from "../feedbackTypes";
 
-export function FeedbackTypeStep({ onFeedbackTypeChanged }) {
+export function FeedbackTypeStep({ onFeedbackTypeChanged }: { onFeedbackTypeChanged: (type: string) => void }) {
+  const isDarkMode = true; // to keep text black even in DarkMode
+
   return (
     <>
       <header>
-        <span className="text-xl leading-6 pr-6">Please give us your feedback! </span>
+        <span className={`text-xl leading-6 pr-6 ${isDarkMode ? 'text-black' : ''}`}>
+          Please give us your feedback!
+        </span>
         <CloseButton />
       </header>
       <div className="flex py-8 gap-2 w-full">
