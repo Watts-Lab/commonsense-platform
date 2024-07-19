@@ -10,6 +10,7 @@ import {
   Route,
   useLocation,
   useSearchParams,
+  useNavigate
 } from "react-router-dom";
 
 import { useAppSelector, useAppDispatch } from "./redux/hooks";
@@ -57,6 +58,7 @@ const App = () => {
   const urlParams = useAppSelector((state) => state.urlslice.urlParams);
 
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const verify_token = async () => {
@@ -108,6 +110,7 @@ const App = () => {
             surveySession: res.data.sessionId,
           })
         );
+        navigate("/dashboard");
       } else {
         alert(res.data.message);
       }
