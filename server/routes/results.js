@@ -189,6 +189,12 @@ const calculateAgreementPercentage = async (statementIds) => {
           if (item.id < answersForOneStatement[i].id) {
             return false;
           }
+          // if (
+          //   new Date(item.createdAt).getTime() <
+          //   new Date(answersForOneStatement[i].createdAt).getTime()
+          // ) {
+          //   return false;
+          // }
         }
         i++;
       }

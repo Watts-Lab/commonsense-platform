@@ -121,7 +121,7 @@ const Dashboard: React.FC = () => {
   // For I_agree: handleCheckboxChange(id, 'I_agree')
   // For others_agree: handleCheckboxChange(id, 'others_agree')
   const handleCheckboxChange = async (id: number, type: 'I_agree' | 'others_agree') => {
-    const stateKey = type === 'I_agree' ? 'agreeCheckboxStates' : 'checkboxStates';
+    const stateKey = type === 'I_agree' ? 'agreeCheckboxStates' : 'othersAgreeCheckboxStates';
     const setState = type === 'I_agree' ? setAgreeCheckboxStates : setOthersAgreeCheckboxStates;
     const newCheckedState = !((type === 'I_agree' ? agreeCheckboxStates : othersAgreeCheckboxStates)[id]);
     const currentAnswer = answerList.find(answer => answer.id === id);
@@ -147,7 +147,12 @@ const Dashboard: React.FC = () => {
         perceived_commonsense: 0,
         sessionId: surveySession,
       });
-      console.error(`${type} updated`, response.data);
+      console.log(`${type} updated`, response.data);
+      if (type == 'I_agree') {
+        currentAnswer.I_agree = newCheckedState;
+      } else {
+        currentAnswer.others_agree = newCheckedState;
+      }
     } catch (error) {
       console.error(`Error updating ${type}`, error);
       // Revert the state change in case of an error
