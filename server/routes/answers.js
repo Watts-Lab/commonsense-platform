@@ -117,7 +117,10 @@ router.post(
                       i = 0;
                       while (i < result.length) {
                         if (item.statementId == result[i].statementId) {
-                          if (item.id < result[i].id) {
+                          if (
+                            new Date(item.createdAt).getTime() <
+                            new Date(result[i].createdAt).getTime()
+                          ) {
                             return false;
                           }
                         }
