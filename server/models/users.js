@@ -1,4 +1,5 @@
 'use strict';
+const { ENUM } = require('sequelize');
 const {
   Model
 } = require('sequelize');
