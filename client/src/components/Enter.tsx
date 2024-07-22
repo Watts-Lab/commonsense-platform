@@ -4,9 +4,9 @@ import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "../partials/NavBar";
 import Footer from "../partials/Footer";
 
-interface EnterProps {
+type EnterProps = {
   signIn: (email: string, link: string) => void;
-}
+};
 
 const Enter: React.FC<EnterProps> = ({ signIn }) => {
   let params = useParams();
