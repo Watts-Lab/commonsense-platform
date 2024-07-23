@@ -6,6 +6,8 @@ import Footer from "../partials/Footer";
 import DashboardChart from "../partials/DashboardChart";
 import StatementForm from "../components/StatementForm";
 import Backend from "../apis/backend";
+import { useAppDispatch } from '../redux/hooks';
+import { clearUserData } from '../redux/slices/loginSlice';
 
 import { useAppSelector } from "../redux/hooks";
 interface Statement {
@@ -50,6 +52,7 @@ const Dashboard: React.FC = () => {
   const surveySession = useAppSelector((state) => state.login.surveySession);
   const tokenString = localStorage.getItem("token");
   const token = tokenString !== null ? JSON.parse(tokenString) : null;
+  const dispatch = useAppDispatch();
 
   const handleTabClick = (tabId: string) => {
     setActiveTab(tabId);
@@ -65,6 +68,11 @@ const Dashboard: React.FC = () => {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const signOut = () => {
+    dispatch(clearUserData());
+    navigate('/');
   };
 
   useEffect(() => {
@@ -399,10 +407,24 @@ const Dashboard: React.FC = () => {
                     role="tabpanel"
                     aria-labelledby="settings-tab"
                   >
-                    <button onClick={deleteAccount}>
-                      {/* Delete account */}
-                      {t("dashboard.delete-account")}
-                    </button>
+                    <div className="mb-4">
+                      <button
+                        onClick={deleteAccount}
+                        className="bg-white text-black font-bold py-2 px-4 rounded shadow transition duration-300 ease-in-out hover:shadow-lg"
+                      >
+                        {/* Delete account */}
+                        {t("dashboard.delete-account")}
+                      </button>
+                    </div>
+                    <div>
+                      <button
+                        onClick={signOut}
+                        className="bg-white text-black font-bold py-2 px-4 rounded shadow transition duration-300 ease-in-out hover:shadow-lg"
+                      >
+                        {/* Sign out*/}
+                        {t("dashboard.signout")}
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>

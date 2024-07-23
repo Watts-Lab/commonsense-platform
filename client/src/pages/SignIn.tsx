@@ -31,6 +31,7 @@ const SignIn: React.FC = () => {
     } catch (error) {
       console.log(error);
     }
+
   };
 
   const enterEmail = (e: ChangeEvent<HTMLInputElement>) => {

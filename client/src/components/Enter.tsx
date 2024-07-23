@@ -4,7 +4,11 @@ import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "../partials/NavBar";
 import Footer from "../partials/Footer";
 
-const Enter = ({ signIn }) => {
+type EnterProps = {
+  signIn: (email: string, link: string) => void;
+};
+
+const Enter: React.FC<EnterProps> = ({ signIn }) => {
   let params = useParams();
   let navigate = useNavigate();
 
@@ -15,6 +19,7 @@ const Enter = ({ signIn }) => {
     } else {
       // Handle the case where either params.email or params.link is undefined
       console.error("Email or link is missing");
+      navigate("/dashboard");
     }
   }, [params.email, params.link, navigate, signIn]);
 
