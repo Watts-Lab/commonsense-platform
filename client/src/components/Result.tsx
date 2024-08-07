@@ -198,7 +198,7 @@ function Result(props: ResultProps) {
           <div className="flex flex-col justify-center items-center h-full text-white">
             <div className="text-pale-blue pb-4 text-2xl">Your Result</div>
             <div className="rounded-full pt-3 h-24 w-24 justify-center text-center items-center bg-gradient-to-b from-sky-600 to-indigo-500">
-              <div className="text-4xl font-bold">
+              <div data-cy="commonsense-score" className="text-4xl font-bold">
                 {commonSenseScore.commonsense}
               </div>
               <span className="text-pale-blue text-sm">of 100</span>

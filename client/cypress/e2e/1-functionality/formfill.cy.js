@@ -14,7 +14,7 @@ describe("fill out the survay", () => {
 
       cy.wait(1000); // Wait for 1 second before selecting the radio button
 
-      cy.get("input[type='radio'][id*='question1-No']")
+      cy.get("input[type='radio'][id*='question1-Yes']")
         .check({ force: true })
         .should("be.checked");
       cy.get("input[type='radio'][id*=\"question2-It's obvious\"]")
@@ -86,12 +86,21 @@ describe("fill out the survay", () => {
     cy.get("input[type='button'][value='Complete']").click();
 
     // Fill the demographic form
+    // Birth year
     cy.get("input[type='text'][id*='sq_169i']").type("1990");
-    cy.get("input[type='radio'][id*='sq_170i_2']")
+
+    // Gender
+    cy.get("input[type='radio'][id*='sq_170i_0']")
       .check({ force: true })
       .should("be.checked");
 
-    cy.get("input[type='text'][id*='sq_173i_0']").type("English\n");
+    cy.get("input[type='text'][id*='sq_172i_0']").type("Other\n", {
+      force: true,
+    });
+
+    cy.get("input[type='text'][id*='sq_173i_0']").type("English\n", {
+      force: true,
+    });
 
     cy.get("input[type='radio'][id*='sq_175i_0']")
       .check({ force: true })
@@ -101,7 +110,22 @@ describe("fill out the survay", () => {
       .check({ force: true })
       .should("be.checked");
 
-    cy.get("input[type='text'][id*='sq_178i_0']").type("Algeria\n");
+    cy.get("input[type='text'][id*='sq_178i_0']").type("Algeria\n", {
+      force: true,
+    });
+
+    // Check if the form is submitted
+    cy.intercept("http://localhost:4000/api/results").as("resultData");
+
     cy.get("input[type='button'][value='Complete']").click();
+
+    cy.wait("@resultData").its("response.statusCode").should("equal", 200);
+
+    cy.wait(1000); // Wait for 1 second before selecting the radio button
+    
+    cy.get('[data-cy="commonsense-score"]')
+      .invoke("text")
+      .then(parseFloat)
+      .should("be.gt", 0);
   });
 });
