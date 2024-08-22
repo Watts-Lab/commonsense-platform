@@ -4,6 +4,7 @@ import SurveyImage from "./SurveyImage";
 import "./style.css";
 import Question from "./Question";
 import { questionData, IQuestionData } from "../data/questions"; // Import here
+import { useTranslation } from "react-i18next";
 
 interface StatementProps {
   statementText: string;
@@ -29,6 +30,7 @@ function Statement({
   unansweredQuestionIndex,
 }: StatementProps) {
   const [answers, setAnswers] = useState<string[]>(data.answers);
+  const { t } = useTranslation();
 
   useEffect(() => {
     onChange(statementId, answers);
@@ -53,7 +55,8 @@ function Statement({
         </h3>
       </div>
       <p className="px-3 pt-3 tracking-tighter text-gray-500 md:text-sm dark:text-gray-400">
-        Required fields are marked with an asterisk *
+        {/* Required fields are marked with an asterisk * */}
+        {t("statement.required-fields")}
       </p>
       {questionData.map((question, index) => {
         const isUnanswered = unansweredQuestionIndex === index + 1;

@@ -1,6 +1,7 @@
 import React from "react";
 import Option from "./Option";
 import Tooltip from "./Tooltip";
+import { useTranslation } from "react-i18next";
 
 import "./style.css";
 
@@ -22,6 +23,7 @@ function Question({
   setAnswer,
   unanswered,
 }: QuestionProps) {
+  const { t } = useTranslation();
   const questionIdentifier = `${statementId}question${question.id}`;
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,15 +37,15 @@ function Question({
       <div className="flex flex-row justify-between">
         <h4
           className="order-1 font-bold required-field"
-          dangerouslySetInnerHTML={{ __html: question.question }}
+          dangerouslySetInnerHTML={{ __html: t(`questions.${question.id}.question`) }}
         />
-        <Tooltip className="order-last" text={question.tooltip} />
+        <Tooltip className="order-last" text={t(`questions.${question.id}.tooltip`)} />
       </div>
 
       {question.description && (
         <p
           className="text-gray-600"
-          dangerouslySetInnerHTML={{ __html: question.description }}
+          dangerouslySetInnerHTML={{ __html: t(`questions.${question.id}.description`) }}
         ></p>
       )}
 
@@ -54,7 +56,7 @@ function Question({
           return (
             <Option
               key={optionIdentifier}
-              text={optionText}
+              text={t(`questions.${question.id}.possibleAnswers.${index}`)}
               id_v={optionIdentifier}
               statementClass={questionIdentifier}
               checked={answerValue === optionIdentifier}
