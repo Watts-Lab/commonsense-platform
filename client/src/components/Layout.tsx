@@ -208,7 +208,7 @@ function Layout() {
         });
       }
     });
-  }, [language]); // re-render whenever language changes
+  }, [language]); // retrieve new statements when language changes
 
   const submitHandler = (event) => {
     event.preventDefault();

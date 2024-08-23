@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Backend from "../apis/backend";
 import { useTranslation } from "react-i18next";
 
@@ -22,7 +22,8 @@ type FeatureState = {
 };
 
 const StatementForm = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const language = i18n.language; 
 
   const getTranslatedCategories = (): KnowledgeCategories => ({
     generalReference: t("knowledge-categories.general-reference"),
@@ -76,7 +77,7 @@ const StatementForm = () => {
   const [statement, setStatement] = useState<string>("");
   const [features, setFeatures] = useState<FeatureState>(getTranslatedInitialState);
   const [knowledgeCategory, setKnowledgeCategory] = useState<string>("");
-  const [knowledgeCategories] = useState<KnowledgeCategories>(getTranslatedCategories);
+  const [knowledgeCategories, setKnowledgeCategories] = useState<KnowledgeCategories>(getTranslatedCategories);
 
   // for submission status
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -160,16 +161,19 @@ const StatementForm = () => {
     setSubmissionError("");
   };
 
+  useEffect(() => {
+    setFeatures(getTranslatedInitialState());
+    setKnowledgeCategories(getTranslatedCategories());
+  }, [language, t]); // update translated categories and features when the language changes
+
   return (
     <div className="flex flex-col items-center justify-center p-4">
       {isSubmitted ? (
         <div className="my-4">
           <p>
-            {/* Successfully submitted! */}
             {t('statement-form.success-message')}
           </p>
           <button onClick={handleReset} className="btn">
-            {/* Submit another one */}
             {t('statement-form.submit-another')}
           </button>
         </div>
@@ -178,7 +182,6 @@ const StatementForm = () => {
           <div className="form-control my-4">
             <label className="label">
               <span className="label-text font-semibold">
-                {/* Enter your common sense statement: */}
                 {t('statement-form.enter-statement')}
               </span>
             </label>
@@ -194,13 +197,11 @@ const StatementForm = () => {
 
           {!isStatementValid && (
             <p className="text-red-500">
-              {/* Statement is required. */}
               {t('statement-form.required-message')}
             </p>
           )}
 
           <div className="divider text-md">
-            {/* optional */}
             {t('statement-form.optional')}
           </div>
 
@@ -228,7 +229,6 @@ const StatementForm = () => {
           <div className="form-control my-4">
             <label className="label">
               <span className="label-text">
-                {/* Knowledge Category: */}
                 {t('statement-form.knowledge-category')}
               </span>
             </label>
@@ -238,7 +238,6 @@ const StatementForm = () => {
               onChange={handleCategoryChange}
             >
               <option value="">
-                {/* Please select... */}
                 {t('statement-form.select-category')}
               </option>
               {Object.entries(knowledgeCategories).map(([key, value]) => (
@@ -255,7 +254,6 @@ const StatementForm = () => {
               type="submit"
               className="btn text-white p-3 bg-gray-600 hover:bg-gray-700 w-full mb-4 rounded-md sm:w-auto sm:mb-0"
             >
-              {/* Submit Statement */}
               {t('statement-form.submit-button')}
             </button>
           </div>
