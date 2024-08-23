@@ -35,7 +35,7 @@ router.post(
         others_agree: req.body.others_agree,
         others_agree_reason: req.body.others_agree_reason,
         perceived_commonsense: req.body.perceived_commonsense,
-        origLanguage: "en",
+        origLanguage: req.body.origLanguage,
         sessionId: req.body.sessionId,
         clientVersion: process.env.GITHUB_HASH,
       };

@@ -11,7 +11,6 @@ const { stringy } = require("./utils/id-generator");
  * @returns {Promise<Array>} - A promise that resolves to an array of statements.
  */
 const GetStatementById = async (params, language) => {
-  console.log('Language: ', language);
   const languageMap = {
     en: "statement",
     zh: "statement_zh",
@@ -26,7 +25,6 @@ const GetStatementById = async (params, language) => {
   };
 
   const selectedColumn = languageMap[language] || "statement"; // default to 'statement' if column is not supported
-  console.log("Selected column: ", selectedColumn);
 
   const statementsText = await statements.findAll({
     where: {
@@ -35,8 +33,6 @@ const GetStatementById = async (params, language) => {
     attributes: ["id", selectedColumn],
     order: Sequelize.literal("rand()"),
   });
-
-  console.log("Statements: ", statementsText);
 
   return {
     id: stringy({

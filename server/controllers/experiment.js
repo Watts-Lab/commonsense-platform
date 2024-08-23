@@ -13,7 +13,6 @@ const { stringy } = require("../survey/treatments/utils/id-generator");
 
 const returnStatements = async (req, res) => {
   const language = req.query.language || "en"; // default to English if no language is provided
-  console.log('Language: ', language);
 
   const oursobject = experiments
     .flatMap((experiment) =>
@@ -51,7 +50,7 @@ const returnStatements = async (req, res) => {
     {
       ...treatmentObject.params, 
     },
-    language // pass the language as the second argument to the treatment function
+    language 
   );
 
   const experimentData = {
