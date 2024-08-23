@@ -79,7 +79,9 @@
     "settings": "Settings",
     "statement": "Statement",
     "yes": "yes",
-    "your-answers": "Your answers"
+    "your-answers": "Your answers",
+    "done": "Done",
+    "edit-answers": "Edit your Answers"
   },
   "footer": {
     "copyright": "Copyright © 2023 - 2024 - All right reserved by CSSLab at UPenn",

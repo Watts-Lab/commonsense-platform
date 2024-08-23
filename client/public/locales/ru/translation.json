@@ -78,7 +78,9 @@
     "settings": "Настройки",
     "statement": "Заявление",
     "yes": "да",
-    "your-answers": "Ваши ответы"
+    "your-answers": "Ваши ответы",
+    "done": "Законченный",
+    "edit-answers": "Редактируйте свои ответы"
   },
   "footer": {
     "copyright": "Авторские права © 2023 - 2024 - Все права защищены CSSLab при UPenn",

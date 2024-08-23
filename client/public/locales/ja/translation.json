@@ -78,7 +78,9 @@
     "settings": "設定",
     "statement": "声明",
     "yes": "はい",
-    "your-answers": "あなたの回答"
+    "your-answers": "あなたの回答",
+    "done": "終了した",
+    "edit-answers": "回答を編集する"
   },
   "footer": {
     "copyright": "著作権 © 2023 - 2024 - CSSLab by UPenn によって全著作権所有",

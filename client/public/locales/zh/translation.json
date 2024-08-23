@@ -78,7 +78,9 @@
     "settings": "设置",
     "statement": "声明",
     "yes": "是",
-    "your-answers": "你的答案"
+    "your-answers": "你的答案",
+    "done": "完全的",
+    "edit-answers": "编辑您的答案"
   },
   "footer": {
     "copyright": "版权所有 © 2023 - 2024 - CSSLab在宾夕法尼亚大学保留所有权利",

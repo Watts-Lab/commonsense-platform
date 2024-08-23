@@ -78,7 +78,9 @@
     "settings": "Configurações",
     "statement": "Declaração",
     "yes": "sim",
-    "your-answers": "Suas respostas"
+    "your-answers": "Suas respostas",
+    "done": "Finalizada",
+    "edit-answers": "Edite suas respostas"
   },
   "footer": {
     "copyright": "Copyright © 2023 - 2024 - Todos os direitos reservados pelo CSSLab na UPenn",
