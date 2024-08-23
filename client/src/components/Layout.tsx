@@ -22,7 +22,6 @@ function Layout() {
   // get the current language
   const { t, i18n } = useTranslation();
   const language = i18n.language;
-  console.log(language);
 
   const [statementArray, setStatementArray] = useState([]);
   const [statementsData, setStatementsData] = useStickyState(
@@ -141,15 +140,13 @@ function Layout() {
 
   useEffect(() => {
     Backend.get("/experiments", {
-      params: urlParams.reduce(
-        (acc, param) => {
+      params: {
+        ...urlParams.reduce((acc, param) => {
           acc[param.key] = param.value;
           return acc;
-        },
-        {
-          language: language, // request for statements in current language
-        }
-      ),
+        }, {}),
+        language: language, // add language parameter
+      },
     })
       .then((response) => {
         const initialAnswers = response.data.statements.map((statement) => ({
@@ -172,6 +169,7 @@ function Layout() {
               statement: { statement: string; image?: string; id: number },
               index: number
             ) => {
+              const statementText = (statement as any)[`statement_${language}`] || statement.statement; // define the statement in the current language
               return (
                 <Statement
                   key={index}
@@ -179,11 +177,11 @@ function Layout() {
                   back={back}
                   currentStep={index + 1}
                   totalSteps={response.data.statements.length}
-                  statementText={statement.statement}
+                  statementText={statementText}
                   imageUrl={statement.image}
                   statementId={statement.id}
                   onChange={handleStatementChange}
-                  onSaveStatement={handleAnswerSaving}
+                  onSaveStatement={handleAnswerSaving}i
                   data={
                     statementsData[index] || {
                       id: statement.id,
