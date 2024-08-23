@@ -67,14 +67,20 @@
     "answers": "答案",
     "browse-list": "浏览您迄今为止回答的声明列表",
     "delete-account": "删除账户",
+    "signout": "登出",
     "insight": "洞察",
     "is-it-common-sense": "这是常识吗？",
+    "i-agree": "我同意这个说法",
+    "others-agree": "我认为大多数人都同意",
+    "your-accuracy": "你对其他人想法的准确性",
     "no": "否",
     "others-think": "别人认为这是常识吗？",
     "settings": "设置",
     "statement": "声明",
     "yes": "是",
-    "your-answers": "你的答案"
+    "your-answers": "你的答案",
+    "done": "完全的",
+    "edit-answers": "编辑您的答案"
   },
   "footer": {
     "copyright": "版权所有 © 2023 - 2024 - CSSLab在宾夕法尼亚大学保留所有权利",
@@ -126,5 +132,146 @@
   "welcome": {
     "subtitle": "您可以点击发送的链接来验证您的电子邮件地址。",
     "title": "欢迎来到常识平台"
+  },
+  "statement": {
+    "required-fields": "必填字段标有星号 *"
+  },
+  "enter": {
+    "enter-verifying-magic-link": "正在验证您的魔法链接"
+  },
+  "feedback": {
+    "feedback": "反馈"
+  },
+  "result": {
+    "thanks": "感谢您完成我们的调查！",
+    "copy-code-text": "复制下面的代码并将其粘贴到HIT中以进行完成验证：",
+    "copy-code-button": "复制代码",
+    "scroll-down": "向下滚动查看您的结果 — 不需要。",
+    "completed-trial": "您已完成常识试验。您可以随时通过登录回答更多问题。",
+    "your-score": "你的分数",
+    "of-100": "满分100",
+    "score-description": "此分数基于您的信仰与他人的相似程度（您的相似度为{{awareness}}%），以及您对他人想法的评估准确度（您的准确度为{{consensus}}%）。",
+    "score-calculation": "这是通过将您的答案与他人的答案进行比较来计算的，因此如果您回答更多问题，它会变得更准确，并且随着他人回答更多问题，它会变得更准确。如果您在下方登录，您可以继续查看此分数随时间更新。",
+    "create-account-1": "创建账户（可选）",
+    "your-email": "你的电子邮件",
+    "placeholder": "name@company.com",
+    "create-account-2": "创建账户"
+  },
+  "twitter-text": {
+    "share-button": "复制并分享！",
+    "percentage": "我的常识是{{percentage}}%",
+    "check-yours": "检查你的：commonsensicality.org/{{sessionId}}"
+  },
+  "notification": {
+    "welcome": "欢迎",
+    "text": "已发送包含验证链接的电子邮件到{{email}}。请点击链接验证您的电子邮件。"
+  },
+  "social-survey": {
+    "answer-questions": "回答以下关于以下陈述的问题:",
+    "required-fields": "必填字段标有星号 *"
+  },
+  "layout": {
+    "start": "开始",
+    "previous": "← 上一步",
+    "continue": "继续",
+    "next": "下一步 →"
+  },
+  "questions": {
+    "1": {
+      "question": "您同意这项声明吗？ *",
+      "description": "(如果答案是，它取决于，请用您最常见或最可能的答案作答)",
+      "possibleAnswers": ["是", "否"],
+      "tooltip": "如果您认为该声明是真的或是假的。"
+    },
+    "2": {
+      "question": "为什么您对<b>自己</b>的回答是这样的？ *",
+      "possibleAnswers": [
+        "很明显",
+        "这是我学到的东西",
+        "这是我的意见",
+        "我不知道"
+      ],
+      "tooltip": "为什么您选择了特定的答案，我们旨在了解影响您决定的因素。请提供您的回答的解释或理由。"
+    },
+    "3": {
+      "question": "您认为大多数其他人会同意这项声明吗？ *",
+      "description": "(如果答案是，它取决于，请用您最常见或最可能的答案作答)",
+      "possibleAnswers": ["是", "否"],
+      "tooltip": "这个问题旨在收集关于个人之间对给定声明的共识的见解。我们希望了解您的意见，即您是否认为大多数其他人会同意所提出的声明。"
+    },
+    "4": {
+      "question": "为什么您对大多数<b>其他人</b>的回答是这样的？ *",
+      "possibleAnswers": [
+        "我认为大多数人在这个话题上有良好的判断力",
+        "我认为大多数人在这个话题上缺乏良好的判断力",
+        "我认为这主要是一个意见问题",
+        "我不知道"
+      ],
+      "tooltip": "这个问题旨在探讨您对给定声明的大多数其他人的共识的原因。我们希望了解影响您决定的因素以及您对其他人如何解释或回应该声明的看法。"
+    },
+    "5": {
+      "question": "总体而言，您认为这项声明是常识的一个例子吗？",
+      "possibleAnswers": ["是", "否"],
+      "tooltip": "这个问题旨在收集关于个人之间对给定声明的共识的见解。我们希望了解您的意见，即您是否认为大多数其他人会同意所提出的声明。"
+    }
+  },
+  "dashboard-chart": {
+    "your-score": "你的分数",
+    "thanks": "感谢您完成我们的调查！",
+    "copy-code-text": "复制下面的代码并将其粘贴到HIT中以验证完成情况：",
+    "calculated": "这是通过比较您的答案与其他人的答案来计算的，因此如果您回答更多的问题，它将变得更准确，并且随着其他人回答更多的问题，它将变得更准确。",
+    "score-description": "这个分数基于您与他人的信念有多相似（您的信念有{{awareness}}%的相似性）以及您对他人想法的准确评估（您{{consensus}}%准确）。"
+  },
+  "statement-form": {
+    "success-message": "提交成功！",
+    "submit-another": "再提交一个",
+    "enter-statement": "输入你的常识声明：",
+    "placeholder": "在这里输入",
+    "required-message": "声明是必需的。",
+    "optional": "可选",
+    "knowledge-category": "知识类别：",
+    "select-category": "请选择...",
+    "submit-button": "提交声明"
+  },
+  "knowledge-categories": {
+    "general-reference": "一般参考",
+    "culture-and-arts": "文化与艺术",
+    "geography-and-places": "地理与地方",
+    "health-and-fitness": "健康与健身",
+    "history-and-events": "历史与事件",
+    "human-activities": "人类活动",
+    "mathematics-and-logic": "数学与逻辑",
+    "natural-and-physical-sciences": "自然与物理科学",
+    "people-and-self": "人们与自我",
+    "philosophy-and-thinking": "哲学与思考",
+    "religion-and-belief-systems": "宗教与信仰体系",
+    "society-and-social-sciences": "社会与社会科学",
+    "technology-and-applied-sciences": "技术与应用科学"
+  },
+  "features": {
+    "behavior": {
+      "text": "行为",
+      "description": "声明主要关注信仰、认知、偏好和社会建构的规则，这些规则支配着人类的体验（即使它可以是“真实”或意见）吗？"
+    },
+    "everyday": {
+      "text": "日常",
+      "description": "声明是否描述了人们在日常经历中遇到或可能遇到的情况？"
+    },
+    "figure-of-speech": {
+      "text": "比喻",
+      "description": "声明中是否包含格言、隐喻或夸张，或者它是否以简单且普通的语言表达，意思正是它所说的？"
+    },
+    "judgment": {
+      "text": "判断",
+      "description": "声明主要关注的是判断、信仰、价值、社会规范或惯例吗？"
+    },
+    "opinion": {
+      "text": "意见",
+      "description": "声明是某人可能认为是真的或希望他人认为是真的，但无法证明其客观正确或错误的内容吗；它本质上是主观的吗？"
+    },
+    "reasoning": {
+      "text": "推理",
+      "description": "声明是否提出了通过结合知识和逻辑得出的结论？"
+    }
   }
 }
