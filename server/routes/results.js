@@ -72,6 +72,7 @@ router.post(
 );
 
 router.get("/all", async (req, res) => {
+  console.log("req.sessionID", req.query.sessionId);
   await answers
     .findAll({
       include: [
@@ -122,22 +123,31 @@ router.get("/all", async (req, res) => {
 
         output[sessionId] = sessionResult;
       }
+
       return output;
     })
     .then(
       (data) => {
-        // console.log(req.sessionID);
         const output = [];
         Object.keys(data).forEach(function (key, index) {
           data[key]["commonsensicality"] = Math.sqrt(
             data[key]["awareness"] * data[key]["consensus"]
           );
-          output.push({
-            sessionId: key === req.sessionID ? "You" : "user" + index,
-            commonsensicality: Math.sqrt(
-              data[key]["awareness"] * data[key]["consensus"]
-            ),
-          });
+
+          const commonsensicality = Math.sqrt(
+            data[key]["awareness"] * data[key]["consensus"]
+          );
+          if (key === req.query.sessionId) {
+            output.push({
+              sessionId: "You",
+              commonsensicality,
+            });
+          } else {
+            output.push({
+              sessionId: "user" + index,
+              commonsensicality,
+            });
+          }
         });
         return output;
       }
