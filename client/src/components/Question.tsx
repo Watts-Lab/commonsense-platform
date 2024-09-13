@@ -20,7 +20,6 @@ function Question({
   question,
   answerValue,
   setAnswer,
-  unanswered,
 }: QuestionProps) {
   const questionIdentifier = `${statementId}question${question.id}`;
 
@@ -31,7 +30,7 @@ function Question({
   const errorStyle = "p-3 rounded-md border-2 border-rose-600";
 
   return (
-    <div className={unanswered ? errorStyle : "p-3"} onChange={onChange}>
+    <div className="py-3" onChange={onChange}>
       <div className="flex flex-row justify-between">
         <h4
           className="order-1 font-bold required-field"

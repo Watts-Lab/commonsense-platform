@@ -78,3 +78,26 @@ export const questionData: IQuestionData[] = [
   //   required: false,
   // },
 ];
+
+export const demoQuestionData: IQuestionData[] = [
+  {
+    id: 1,
+    question: "Do you agree with this statement? *",
+    description:
+      "(if the answer is, it depends, respond with your most common or most likely answer)",
+    possibleAnswers: ["Yes", "No"],
+    tooltip: "If you think the statement is true or false.",
+    required: true,
+  },
+  {
+    id: 3,
+    question:
+      "Do you think most other people would agree with this statement? *",
+    description:
+      "(if the answer is, it depends, respond with your most common or most likely answer)",
+    possibleAnswers: ["Yes", "No"],
+    tooltip:
+      "This question seeks to gather insights on the perceived consensus among individuals regarding the given statement. We are interested in understanding your opinion about whether you believe that the majority of other people would agree with the statement presented.",
+    required: true,
+  },
+];
