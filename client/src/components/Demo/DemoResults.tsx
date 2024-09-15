@@ -93,7 +93,7 @@ function DemoResult({ sessionId }: ResultProps) {
   }, [data, individualCommonsensicality]);
 
   return (
-    <div className="text-justify leading-relaxed">
+    <div className="text-justify leading-relaxed dark:from-neutral-100">
       <p className="py-4">You've completed the common sense trial.</p>
       <div className="flex justify-center pb-4">
         <span className="font-bold text-3xl">
@@ -117,6 +117,7 @@ function DemoResult({ sessionId }: ResultProps) {
             <a
               className="text-blue-700 dark:text-blue-400 pb-4"
               href="https://commonsense.seas.upenn.edu/?utm_source=newscientist&utm_id=sessionId"
+              target="_blank"
             >
               commonsense.seas.upenn.edu
             </a>

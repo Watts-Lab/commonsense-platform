@@ -5,6 +5,8 @@ import { questionData } from "../../data/questions";
 import Backend from "../../apis/backend";
 
 import "../style.css";
+import "./demo.css";
+
 import DemoStatement from "./DemoStatements";
 import DemoResult from "./DemoResults";
 
@@ -198,7 +200,7 @@ function Demo() {
 
   return (
     <>
-      <form id="main-survey" onSubmit={submitHandler}>
+      <form id="main-survey" onSubmit={submitHandler} className="merriweather-light">
         {statementArray[currentStepIndex]}
 
         {currentStepIndex < surveyLength && (
