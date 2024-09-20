@@ -48,13 +48,10 @@ const DemoStatement = ({
       <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
       <SurveyImage imageName={imageUrl} />
       <div className="!sticky !top-0 !z-10 bg-white  dark:bg-slate-400">
-        <h3 className="mt-3.5 text-xl font-medium text-gray-900 dark:text-white text-center py-4 bg-gray-300">
+        <h3 className="mt-3.5 text-xl font-medium text-gray-900 dark:text-white text-center py-4 bg-gray-300 dark:font-light dark:bg-slate-400 px-3">
           {statementText}
         </h3>
       </div>
-      <p className="px-3 pt-3 tracking-tighter text-gray-500 md:text-sm dark:text-gray-400">
-        Required fields are marked with an asterisk *
-      </p>
       {demoQuestionData.map((question, index) => {
         const isUnanswered = unansweredQuestionIndex === index + 1;
         return (

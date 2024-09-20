@@ -90,10 +90,10 @@ function DemoResult({ sessionId }: ResultProps) {
     });
     containerRef.current.append(plot);
     return () => plot.remove();
-  }, [data]);
+  }, [data, individualCommonsensicality]);
 
   return (
-    <div className="text-justify leading-relaxed">
+    <div className="text-justify leading-relaxed dark:from-neutral-100">
       <p className="py-4">You've completed the common sense trial.</p>
       <div className="flex justify-center pb-4">
         <span className="font-bold text-3xl">
@@ -102,9 +102,9 @@ function DemoResult({ sessionId }: ResultProps) {
       </div>
       <p className="pb-4">
         This score is based on a calculation of how similar your beliefs are to
-        others (yours are {commonSenseScore.awareness}% similar), and how
-        accurately you rated what others think (you were{" "}
-        {commonSenseScore.consensus}% accurate). This is calculated by comparing
+        others — yours are {commonSenseScore.awareness}% similar, and how
+        accurately you rated what others think — you were{" "}
+        {commonSenseScore.consensus}% accurate. This is calculated by comparing
         your answers to others answers, so it will become more accurate if you
         answer more questions and it will become more accurate as others answer
         more questions.
@@ -113,10 +113,11 @@ function DemoResult({ sessionId }: ResultProps) {
       <div className="flex flex-col items-center pt-7">
         <div className="w-full bg-white md:mt-0 sm:max-w-lg xl:p-0 dark:bg-gray-800 dark:border-gray-700">
           <h1 className="text-md text-gray-900 dark:text-white">
-            To take the full survey you can visit{" "}
+            To take the full survey, visit{" "}
             <a
               className="text-blue-700 dark:text-blue-400 pb-4"
-              href="https://commonsense.seas.upenn.edu/"
+              href="https://commonsense.seas.upenn.edu/?utm_source=newscientist&utm_id=sessionId"
+              target="_blank"
             >
               commonsense.seas.upenn.edu
             </a>
