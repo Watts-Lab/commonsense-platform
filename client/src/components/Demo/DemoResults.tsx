@@ -116,7 +116,7 @@ function DemoResult({ sessionId }: ResultProps) {
             To take the full survey, visit{" "}
             <a
               className="text-blue-700 dark:text-blue-400 pb-4"
-              href="https://commonsense.seas.upenn.edu/?utm_source=newscientist&utm_id=sessionId"
+              href={`https://commonsense.seas.upenn.edu/?utm_source=newscientist&utm_id=${sessionId}`}
               target="_blank"
             >
               commonsense.seas.upenn.edu
