@@ -48,6 +48,7 @@ import HumanNetwork from "./components/HumanNetwork";
 
 // apis
 import Backend from "./apis/backend";
+import Demo from "./components/Demo/Demo";
 
 const App = () => {
   const loggedIn = useAppSelector((state) => state.login.loggedIn);
@@ -188,6 +189,8 @@ const App = () => {
           <Route path="/finish" element={<Finish />} />
           <Route path="/welcome" element={<Welcome />} />
           <Route path="/dashboard" element={<Dashboard />} />
+
+          <Route path="/demo" element={<Demo />} />
 
           <Route
             path="/social"

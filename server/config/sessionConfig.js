@@ -8,8 +8,9 @@ module.exports = (session, sessionStore) => {
     cookie: {
       path: "/",
       maxAge: 1000 * 60 * 60 * 1, // 1 hour
-      sameSite: true,
-      secure: false, // remove in production
+      httpOnly: true,
+      sameSite: 'None',
+      secure: true, // remove in production
     },
   });
 };
