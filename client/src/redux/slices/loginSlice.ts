@@ -9,7 +9,7 @@ const parsedEmail = email !== null ? JSON.parse(email) : "";
 const token = localStorage.getItem("token");
 const parsedToken = token !== null ? JSON.parse(token) : "";
 
-const surveySession = localStorage.getItem("surveySession");
+const surveySession = localStorage.getItem("surveySessionId");
 const parsedSurveySession = surveySession !== null ? JSON.parse(surveySession) : "";
 
 const setLoginFunction = (
@@ -21,11 +21,11 @@ const setLoginFunction = (
   localStorage.setItem("loggedIn", JSON.stringify(loggedIn));
   localStorage.setItem("email", JSON.stringify(email));
   localStorage.setItem("token", JSON.stringify(token));
-  localStorage.setItem("surveySession", JSON.stringify(surveySession));
+  localStorage.setItem("surveySessionId", JSON.stringify(surveySession));
 };
 
 const setSessionFunction = (surveySession: string) => {
-  localStorage.setItem("surveySession", JSON.stringify(surveySession));
+  localStorage.setItem("surveySessionId", JSON.stringify(surveySession));
 };
 
 interface LoginState {
