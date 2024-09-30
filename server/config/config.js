@@ -31,7 +31,7 @@ module.exports = {
     database: process.env.DB_NAME,
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
-    connectionLimit: 10,
+    connectionLimit: 25,
     createDatabaseTable: true,
     clearExpired: false,
     endConnectionOnClose: true,
