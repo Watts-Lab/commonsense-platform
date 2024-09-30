@@ -8,10 +8,13 @@ module.exports = {
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     dialect: process.env.DB_DRIVER,
+    dialectOptions: {
+      connectTimeout: 10000,
+    },
     pool: {
       max: 5,
       min: 0,
-      idle: 1000,
+      idle: 10000,
     },
   },
   test: {
@@ -21,10 +24,13 @@ module.exports = {
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     dialect: process.env.DB_DRIVER,
+    dialectOptions: {
+      connectTimeout: 10000,
+    },
     pool: {
       max: 5,
       min: 0,
-      idle: 1000,
+      idle: 10000,
     },
   },
   production: {
@@ -34,10 +40,13 @@ module.exports = {
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     dialect: process.env.DB_DRIVER,
+    dialectOptions: {
+      connectTimeout: 10000,
+    },
     pool: {
       max: 5,
       min: 0,
-      idle: 1000,
+      idle: 10000,
     },
   },
   dboptions: {
@@ -46,6 +55,10 @@ module.exports = {
     database: process.env.DB_NAME,
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
+    dialect: process.env.DB_DRIVER,
+    dialectOptions: {
+      connectTimeout: 10000,
+    },
     schema: {
       tableName: "sessions",
       columnNames: {
@@ -57,7 +70,7 @@ module.exports = {
     pool: {
       max: 5,
       min: 0,
-      idle: 1000,
+      idle: 10000,
     },
   },
 };
