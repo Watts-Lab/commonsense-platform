@@ -8,6 +8,11 @@ module.exports = {
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     dialect: process.env.DB_DRIVER,
+    pool: {
+      max: 15,
+      min: 0,
+      idle: 5000,
+    },
   },
   test: {
     username: process.env.DB_USER,
@@ -16,6 +21,11 @@ module.exports = {
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     dialect: process.env.DB_DRIVER,
+    pool: {
+      max: 15,
+      min: 0,
+      idle: 5000,
+    },
   },
   production: {
     username: process.env.DB_USER,
@@ -24,6 +34,11 @@ module.exports = {
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     dialect: process.env.DB_DRIVER,
+    pool: {
+      max: 15,
+      min: 0,
+      idle: 5000,
+    },
   },
   dboptions: {
     user: process.env.DB_USER,
@@ -31,7 +46,7 @@ module.exports = {
     database: process.env.DB_NAME,
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
-    connectionLimit: 25,
+    connectionLimit: 5,
     createDatabaseTable: true,
     clearExpired: false,
     endConnectionOnClose: true,
@@ -42,6 +57,11 @@ module.exports = {
         expires: "expires",
         data: "data",
       },
+    },
+    pool: {
+      max: 15,
+      min: 0,
+      idle: 5000,
     },
   },
 };
