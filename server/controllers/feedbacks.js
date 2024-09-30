@@ -23,6 +23,7 @@ async function saveFeedBack(req, res) {
       });
 
     send_report("markew@seas.upenn.edu", comment, type);
+    send_report("amirhossein.nakhaei@rwth-aachen.de", comment, type);
   }
 }
 
