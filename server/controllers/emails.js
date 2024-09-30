@@ -69,4 +69,41 @@ const send_magic_link = async (email, link, which) => {
   }
 };
 
-module.exports = { send_magic_link };
+const send_report = async (email, comment, type) => {
+  var subj = "Commonsense platfrom feedback",
+    body =
+      "<p>Here is the comment report from the Common Sense Platform:</p><p>" +
+      type +
+      " : " +
+      comment +
+      "</p>";
+
+  const mailOptions = {
+    from: "no-reply@commonsensicality.org",
+    to: email,
+    subject: subj,
+    html: body,
+    ses: {
+      // optional extra arguments for SendRawEmail
+      Tags: [
+        {
+          Name: "Project",
+          Value: "commonsense",
+        },
+      ],
+    },
+  };
+
+  try {
+    const response = await transporter.sendMail(mailOptions, (err, info) => {
+      console.log(info.envelope);
+      console.log(info.messageId);
+    });
+    return { ok: true, message: "email sent" };
+  } catch (err) {
+    console.log("Something didn't work out", err);
+    return { ok: false, message: err };
+  }
+};
+
+module.exports = { send_magic_link, send_report };
