@@ -9,9 +9,9 @@ module.exports = {
     port: process.env.DB_PORT,
     dialect: process.env.DB_DRIVER,
     pool: {
-      max: 15,
+      max: 5,
       min: 0,
-      idle: 5000,
+      idle: 1000,
     },
   },
   test: {
@@ -22,9 +22,9 @@ module.exports = {
     port: process.env.DB_PORT,
     dialect: process.env.DB_DRIVER,
     pool: {
-      max: 15,
+      max: 5,
       min: 0,
-      idle: 5000,
+      idle: 1000,
     },
   },
   production: {
@@ -35,9 +35,9 @@ module.exports = {
     port: process.env.DB_PORT,
     dialect: process.env.DB_DRIVER,
     pool: {
-      max: 15,
+      max: 5,
       min: 0,
-      idle: 5000,
+      idle: 1000,
     },
   },
   dboptions: {
@@ -46,10 +46,6 @@ module.exports = {
     database: process.env.DB_NAME,
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
-    connectionLimit: 5,
-    createDatabaseTable: true,
-    clearExpired: false,
-    endConnectionOnClose: true,
     schema: {
       tableName: "sessions",
       columnNames: {
@@ -59,9 +55,9 @@ module.exports = {
       },
     },
     pool: {
-      max: 15,
+      max: 5,
       min: 0,
-      idle: 5000,
+      idle: 1000,
     },
   },
 };
