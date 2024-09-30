@@ -72,10 +72,10 @@ const TwitterText = (props: TwitterTextProps) => {
       props.sessionId === null
         ? `${percentage}\n${blocks.join(
             ""
-          )}\nCheck yours: commonsensicality.org`
+          )}\nCheck yours: https://commonsense.seas.upenn.edu/`
         : `${percentage}\n${blocks.join(
             ""
-          )}\nCheck yours: commonsensicality.org/${props.sessionId.slice(
+          )}\nCheck yours: https://commonsense.seas.upenn.edu/${props.sessionId.slice(
             0,
             7
           )}`;

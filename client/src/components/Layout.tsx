@@ -64,8 +64,7 @@ function Layout() {
     }
   };
 
-  const pushResultComponent = (statementId, statementText) => {
-    let finalSessionId = surveySession ? surveySession : sessionId;
+  const pushResultComponent = (sessionIdResult) => {
     setStatementArray((oldArray) => [
       ...oldArray,
       <CRT onComplete={onCompleteCallback} />,
@@ -73,7 +72,7 @@ function Layout() {
       <Demographics onComplete={onCompleteCallback} />,
       <Result
         key={oldArray.length}
-        sessionId={finalSessionId}
+        sessionId={sessionIdResult}
         showSignUpBox={true}
       />,
     ]);
@@ -134,29 +133,39 @@ function Layout() {
   };
 
   useEffect(() => {
-    Backend.get("/experiments", {
-      params: urlParams.reduce((acc, param) => {
-        acc[param.key] = param.value;
-        return acc;
-      }, {}),
-    })
-      .then((response) => {
-        const initialAnswers = response.data.statements.map((statement) => ({
-          id: statement.id,
-          answers: new Array(questionData.length).fill(""),
-          answereSaved: false,
-        }));
+    (async () => {
+      try {
+        // First, get the sessionId
+        const sessionResponse = await Backend.get("/", {
+          withCredentials: true,
+        });
+        const incommingSessionId = sessionResponse.data;
+        setSessionId(incommingSessionId);
 
+        // Then, get the experiments data
+        const experimentsResponse = await Backend.get("/experiments", {
+          params: urlParams.reduce((acc: any, param: any) => {
+            acc[param.key] = param.value;
+            return acc;
+          }, {}),
+        });
+
+        // Process the experiments data
+        const initialAnswers = experimentsResponse.data.statements.map(
+          (statement) => ({
+            id: statement.id,
+            answers: new Array(questionData.length).fill(""),
+            answereSaved: false,
+          })
+        );
         setStatementsData(initialAnswers);
-        return response;
-      })
-      .then((response) => {
+
         localStorage.setItem("statementsData", JSON.stringify(statementsData));
 
-        setSurveyLength(response.data.statements.length + 3);
+        setSurveyLength(experimentsResponse.data.statements.length + 3);
 
         setStatementArray(
-          response.data.statements.map(
+          experimentsResponse.data.statements.map(
             (
               statement: { statement: string; image?: string; id: number },
               index: number
@@ -167,7 +176,7 @@ function Layout() {
                   next={next}
                   back={back}
                   currentStep={index + 1}
-                  totalSteps={response.data.statements.length}
+                  totalSteps={experimentsResponse.data.statements.length}
                   statementText={statement.statement}
                   imageUrl={statement.image}
                   statementId={statement.id}
@@ -180,25 +189,19 @@ function Layout() {
                       answereSaved: false,
                     }
                   }
-                  unansweredQuestionIndex={unansweredQuestionIndex}
                 />
               );
             }
           )
         );
-      })
-      .then(() => {
-        pushResultComponent();
-      });
 
-    Backend.get("/", { withCredentials: true }).then((response) => {
-      setSessionId(response.data);
-      if (!surveySession) {
-        setSession({
-          surveySession: "jjjj",
-        });
+        // Finally, push the result component
+        pushResultComponent(incommingSessionId);
+      } catch (error) {
+        // Handle errors if any of the above operations fail
+        console.error("An error occurred:", error);
       }
-    });
+    })();
   }, []);
 
   const submitHandler = (event) => {

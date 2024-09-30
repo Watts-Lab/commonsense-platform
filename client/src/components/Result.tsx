@@ -9,15 +9,11 @@ import useStickyState from "../hooks/useStickyState";
 import { useAppSelector } from "../redux/hooks";
 
 type ResultProps = {
-  sessionId?: string;
+  sessionId: string;
   showSignUpBox: boolean;
 };
 
-function Result(props: ResultProps) {
-  const [sessionId, setSessionId] = useState<string | null>(
-    props.sessionId ??
-      JSON.parse(localStorage.getItem("surveySession") ?? "null")
-  );
+function Result({ sessionId, showSignUpBox }: ResultProps) {
   const [_statementsData, setStatementsData] = useStickyState(
     [],
     "statementsData"
@@ -28,46 +24,43 @@ function Result(props: ResultProps) {
     awareness: 0,
     consensus: 0,
   });
+
   const [userEmail, setUserEmail] = useState("");
   const [notifBox, setNotifBox] = useState(false);
   const urlParams = useAppSelector((state) => state.urlslice.urlParams);
   const [aTurkBox, setATurkBox] = useState(false);
 
   useEffect(() => {
+    Backend.post("/results", {
+      withCredentials: true,
+      sessionId: sessionId,
+    }).then((response) => {
+      setCommonSenseScore({
+        commonsense: Math.round(
+          Number(response.data.commonsensicality).toFixed(2) * 100
+        ),
+        awareness: Math.round(Number(response.data.awareness).toFixed(2) * 100),
+        consensus: Math.round(Number(response.data.consensus).toFixed(2) * 100),
+      });
+    });
+  }, []);
+
+  useEffect(() => {
     setStatementsData([]);
 
-    if (sessionId) {
-      Backend.post("/results", {
-        withCredentials: true,
-        sessionId: sessionId,
-      }).then((response) => {
-        setCommonSenseScore({
-          commonsense: Math.round(
-            Number(response.data.commonsensicality).toFixed(2) * 100
-          ),
-          awareness: Math.round(
-            Number(response.data.awareness).toFixed(2) * 100
-          ),
-          consensus: Math.round(
-            Number(response.data.consensus).toFixed(2) * 100
-          ),
-        });
-      });
+    urlParams.forEach((obj) => {
+      if (obj.key === "source" && obj.value === "mturk") {
+        setATurkBox(true);
+      }
+    });
 
-      urlParams.forEach((obj) => {
-        if (obj.key === "source" && obj.value === "mturk") {
-          setATurkBox(true);
-        }
-      });
-
-      Backend.get("/treatments/update", {
-        withCredentials: true,
-        params: { sessionId: sessionId },
-      }).then((response) => {
-        console.log(response.data);
-      });
-    }
-  }, [sessionId]);
+    Backend.get("/treatments/update", {
+      withCredentials: true,
+      params: { sessionId: sessionId },
+    }).then((response) => {
+      console.log(response.data);
+    });
+  }, []);
 
   const signUp = async (email: string, sessionId: string) => {
     try {
@@ -97,33 +90,33 @@ function Result(props: ResultProps) {
   const [individualCommonsensicality, setIndividualCommonsensicality] =
     useState([]);
 
-  useEffect(() => {
-    if (sessionId) {
-      Backend.get("/results/all", {
-        withCredentials: true,
-        params: {
-          sessionId: sessionId,
-        },
-      })
-        .then((response) => {
-          setData(
-            response.data.sort(
-              (a, b) => a.commonsensicality - b.commonsensicality
-            )
-          );
-          return response.data;
-        })
-        .then((data) => {
-          setIndividualCommonsensicality(
-            data.map((value, index) => ({
-              sessionId: value.sessionId,
-              commonsensicality: value.commonsensicality,
-              count: 1,
-            }))
-          );
-        });
-    }
-  }, [sessionId]);
+  // useEffect(() => {
+  //   if (sessionId) {
+  //     Backend.get("/results/all", {
+  //       withCredentials: true,
+  //       params: {
+  //         sessionId: sessionId,
+  //       },
+  //     })
+  //       .then((response) => {
+  //         setData(
+  //           response.data.sort(
+  //             (a, b) => a.commonsensicality - b.commonsensicality
+  //           )
+  //         );
+  //         return response.data;
+  //       })
+  //       .then((data) => {
+  //         setIndividualCommonsensicality(
+  //           data.map((value, index) => ({
+  //             sessionId: value.sessionId,
+  //             commonsensicality: value.commonsensicality,
+  //             count: 1,
+  //           }))
+  //         );
+  //       });
+  //   }
+  // }, [sessionId]);
 
   useEffect(() => {
     const plot = Plot.plot({
@@ -153,7 +146,7 @@ function Result(props: ResultProps) {
     });
     containerRef.current.append(plot);
     return () => plot.remove();
-  }, [data]);
+  }, [data, individualCommonsensicality]);
 
   async function handleCopy() {
     try {
@@ -221,7 +214,7 @@ function Result(props: ResultProps) {
       <div className="flex justify-center" ref={containerRef} />
       <TwitterText
         percentage={commonSenseScore.commonsense}
-        sessionId={sessionId ?? ""}
+        sessionId={sessionId}
       />
       <div className="flex flex-col items-center pt-7">
         <div className="w-full bg-white md:mt-0 sm:max-w-lg xl:p-0 dark:bg-gray-800 dark:border-gray-700">
