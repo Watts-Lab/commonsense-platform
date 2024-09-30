@@ -19,6 +19,11 @@ function Result({ sessionId, showSignUpBox }: ResultProps) {
     "statementsData"
   );
 
+  const [trueSessionId, setTrueSessionId] = useStickyState(
+    sessionId,
+    "surveySessionId"
+  );
+
   const [commonSenseScore, setCommonSenseScore] = useState({
     commonsense: 0,
     awareness: 0,
@@ -38,6 +43,31 @@ function Result({ sessionId, showSignUpBox }: ResultProps) {
       sessionId: sessionId,
     })
       .then((response) => {
+        if (response.data.commonsensicality !== 0) {
+          setCommonSenseScore({
+            commonsense: Math.round(
+              Number(response.data.commonsensicality).toFixed(2) * 100
+            ),
+            awareness: Math.round(
+              Number(response.data.awareness).toFixed(2) * 100
+            ),
+            consensus: Math.round(
+              Number(response.data.consensus).toFixed(2) * 100
+            ),
+          });
+        }
+      })
+      .finally(() => {
+        setLoadingResults(false);
+      });
+  }, []);
+
+  useEffect(() => {
+    Backend.post("/results", {
+      withCredentials: true,
+      sessionId: trueSessionId,
+    }).then((response) => {
+      if (response.data.commonsensicality !== 0) {
         setCommonSenseScore({
           commonsense: Math.round(
             Number(response.data.commonsensicality).toFixed(2) * 100
@@ -49,10 +79,8 @@ function Result({ sessionId, showSignUpBox }: ResultProps) {
             Number(response.data.consensus).toFixed(2) * 100
           ),
         });
-      })
-      .finally(() => {
-        setLoadingResults(false);
-      });
+      }
+    });
   }, []);
 
   useEffect(() => {

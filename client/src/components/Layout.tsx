@@ -26,15 +26,15 @@ function Layout() {
 
   const [surveyLength, setSurveyLength] = useState(0);
 
-  const surveySession = useSelector((state) => state.login.surveySession);
+  // const surveySession = useSelector((state) => state.login.surveySession);
   const urlParams = useSelector((state) => state.urlslice.urlParams);
 
-  const [sessionId, setSessionId] = useStickyState(null, "surveySessionId");
+  const [sessionId, setSessionId] = useStickyState("", "surveySessionId");
   const [unansweredQuestionIndex, setUnansweredQuestionIndex] = useState(null);
 
   const onCompleteCallback = (record: any) => {
     Backend.post("/experiments/individual", {
-      sessionId: surveySession,
+      sessionId: sessionId,
       informationType: record.surveyName,
       experimentInfo: record,
     }).finally(() => {
@@ -114,7 +114,7 @@ function Layout() {
   const { steps, setCurrentStepIndex, currentStepIndex, back, next } =
     MultiStepForm({
       steps: statementsData,
-      sessionId: surveySession ? surveySession : sessionId,
+      sessionId: sessionId,
       handleAnswerSaving: handleAnswerSaving,
       getNextStatement: getNextStatement,
       pushNewStatement: pushNewStatement,
