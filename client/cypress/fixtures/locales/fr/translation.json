@@ -67,14 +67,20 @@
     "answers": "Réponses",
     "browse-list": "Parcourez la liste des déclarations auxquelles vous avez répondu jusqu'à présent",
     "delete-account": "Supprimer le compte",
+    "signout": "Se déconnecter",
     "insight": "Aperçu",
     "is-it-common-sense": "Est-ce du bon sens?",
+    "i-agree": "Je suis d'accord avec cette affirmation",
+    "others-agree": "Je pense que la plupart des autres sont d'accord",
+    "your-accuracy": "Votre précision sur ce que pensent les autres",
     "no": "non",
     "others-think": "Les autres pensent-ils que c'est du bon sens?",
     "settings": "Paramètres",
     "statement": "Déclaration",
     "yes": "oui",
-    "your-answers": "Vos réponses"
+    "your-answers": "Vos réponses",
+    "done": "finie",
+    "edit-answers": "Modifiez vos réponses"
   },
   "footer": {
     "copyright": "Droits d'auteur © 2023 - 2024 - Tous droits réservés par CSSLab à UPenn",
@@ -126,5 +132,146 @@
   "welcome": {
     "subtitle": "Vous pouvez cliquer sur le lien envoyé pour vérifier votre adresse e-mail.",
     "title": "Bienvenue sur la Plateforme de Bon Sens"
+  },
+  "statement": {
+    "required-fields": "Les champs obligatoires sont marqués d'un astérisque *"
+  },
+  "enter": {
+    "enter-verifying-magic-link": "Vérification de votre lien magique"
+  },
+  "feedback": {
+    "feedback": "retour d'information"
+  },
+  "result": {
+    "thanks": "Merci d'avoir complété notre enquête !",
+    "copy-code-text": "Copiez le code ci-dessous et collez-le dans le HIT comme vérification de la complétion :",
+    "copy-code-button": "Copier le code",
+    "scroll-down": "Faites défiler vers le bas pour voir vos résultats — non requis.",
+    "completed-trial": "Vous avez terminé l'essai de bon sens. Vous pouvez répondre à plus de questions à tout moment en vous connectant.",
+    "your-score": "votre score",
+    "of-100": "sur 100",
+    "score-description": "Ce score est basé sur un calcul de la similarité de vos croyances avec celles des autres (les vôtres sont similaires à {{awareness}}%), et de la précision de votre évaluation de ce que pensent les autres (vous avez été précis à {{consensus}}%).",
+    "score-calculation": "Ceci est calculé en comparant vos réponses à celles des autres, donc cela deviendra plus précis si vous répondez à plus de questions et cela deviendra plus précis au fur et à mesure que les autres répondront à plus de questions. Si vous vous connectez ci-dessous, vous pourrez continuer à voir ce score se mettre à jour au fil du temps.",
+    "create-account-1": "Créer un compte (optionnel)",
+    "your-email": "Votre email",
+    "placeholder": "name@company.com",
+    "create-account-2": "Créer un compte"
+  },
+  "twitter-text": {
+    "share-button": "Copier et partager !",
+    "percentage": "Mon bon sens est de {{percentage}}%",
+    "check-yours": "Vérifiez le vôtre : commonsensicality.org/{{sessionId}}"
+  },
+  "notification": {
+    "welcome": "Bienvenue",
+    "text": "Un email avec votre lien de vérification a été envoyé à {{email}}. Veuillez cliquer sur le lien pour vérifier votre email."
+  },
+  "social-survey": {
+    "answer-questions": "Répondez aux questions ci-dessous concernant la déclaration suivante :",
+    "required-fields": "Les champs obligatoires sont marqués d'un astérisque *"
+  },
+  "layout": {
+    "start": "Commencer",
+    "previous": "← Précédent",
+    "continue": "Continuer",
+    "next": "Suivant →"
+  },
+  "questions": {
+    "1": {
+      "question": "Êtes-vous d'accord avec cette déclaration ? *",
+      "description": "(si la réponse dépend des circonstances, répondez avec votre réponse la plus courante ou la plus probable)",
+      "possibleAnswers": ["Oui", "Non"],
+      "tooltip": "Si vous pensez que la déclaration est vraie ou fausse."
+    },
+    "2": {
+      "question": "Pourquoi avez-vous répondu de cette manière à propos de <b>vous-même ?</b> *",
+      "possibleAnswers": [
+        "C'est évident",
+        "C'est quelque chose que j'ai appris",
+        "C'est mon avis",
+        "Je ne sais pas"
+      ],
+      "tooltip": "Pourquoi vous avez choisi la réponse spécifique, nous visons à comprendre les facteurs qui ont influencé votre décision. Veuillez fournir une explication ou une justification de votre réponse."
+    },
+    "3": {
+      "question": "Pensez-vous que la plupart des autres personnes seraient d'accord avec cette déclaration ? *",
+      "description": "(si la réponse dépend des circonstances, répondez avec votre réponse la plus courante ou la plus probable)",
+      "possibleAnswers": ["Oui", "Non"],
+      "tooltip": "Cette question cherche à recueillir des informations sur le consensus perçu parmi les individus concernant la déclaration donnée. Nous nous intéressons à comprendre votre opinion sur le fait que vous pensez que la majorité des autres personnes seraient d'accord avec la déclaration présentée."
+    },
+    "4": {
+      "question": "Pourquoi avez-vous répondu de cette manière à propos de la majorité des <b>autres personnes ?</b> *",
+      "possibleAnswers": [
+        "Je pense que la plupart des gens ont un bon jugement à ce sujet",
+        "Je pense que la plupart des gens manquent de bon jugement à ce sujet",
+        "Je pense que c'est principalement une question d'opinion",
+        "Je ne sais pas"
+      ],
+      "tooltip": "Cette question vise à explorer les raisons derrière votre réponse concernant l'accord perçu de la majorité des autres personnes avec la déclaration donnée. Nous nous intéressons à comprendre les facteurs qui ont influencé votre décision et votre perspective sur la manière dont les autres pourraient interpréter ou répondre à la déclaration."
+    },
+    "5": {
+      "question": "Dans l'ensemble, pensez-vous que cette déclaration est un exemple de bon sens ?",
+      "possibleAnswers": ["Oui", "Non"],
+      "tooltip": "Cette question cherche à recueillir des informations sur le consensus perçu parmi les individus concernant la déclaration donnée. Nous nous intéressons à comprendre votre opinion sur le fait que vous pensez que la majorité des autres personnes seraient d'accord avec la déclaration présentée."
+    }
+  },
+  "dashboard-chart": {
+    "your-score": "Votre score",
+    "thanks": "Merci d'avoir complété notre sondage!",
+    "copy-code-text": "Copiez le code ci-dessous et collez-le dans le HIT comme vérification de l'achèvement :",
+    "calculated": "Ceci est calculé en comparant vos réponses à celles des autres, donc cela deviendra plus précis si vous répondez à plus de questions et cela deviendra plus précis au fur et à mesure que les autres répondent à plus de questions.",
+    "score-description": "Ce score est basé sur un calcul de la similarité de vos croyances avec celles des autres (les vôtres sont similaires à {{awareness}}%) et de la précision avec laquelle vous avez évalué ce que les autres pensent (vous étiez précis à {{consensus}}%)."
+  },
+  "statement-form": {
+    "success-message": "Soumis avec succès!",
+    "submit-another": "Soumettre un autre",
+    "enter-statement": "Entrez votre déclaration de bon sens:",
+    "placeholder": "Tapez ici",
+    "required-message": "La déclaration est requise.",
+    "optional": "optionnel",
+    "knowledge-category": "Catégorie de connaissance:",
+    "select-category": "Veuillez sélectionner...",
+    "submit-button": "Soumettre la déclaration"
+  },
+  "knowledge-categories": {
+    "general-reference": "Référence générale",
+    "culture-and-arts": "Culture et arts",
+    "geography-and-places": "Géographie et lieux",
+    "health-and-fitness": "Santé et forme physique",
+    "history-and-events": "Histoire et événements",
+    "human-activities": "Activités humaines",
+    "mathematics-and-logic": "Mathématiques et logique",
+    "natural-and-physical-sciences": "Sciences naturelles et physiques",
+    "people-and-self": "Personnes et soi",
+    "philosophy-and-thinking": "Philosophie et pensée",
+    "religion-and-belief-systems": "Religion et systèmes de croyance",
+    "society-and-social-sciences": "Société et sciences sociales",
+    "technology-and-applied-sciences": "Technologie et sciences appliquées"
+  },
+  "features": {
+    "behavior": {
+      "text": "Comportement",
+      "description": "La déclaration concerne-t-elle principalement des croyances, des perceptions, des préférences et des règles socialement construites régissant l'expérience humaine (même si elle peut être 'réelle' ou une opinion)?"
+    },
+    "everyday": {
+      "text": "Quotidien",
+      "description": "La déclaration décrit-elle des situations que les gens rencontrent ou pourraient rencontrer dans le cadre de leurs expériences quotidiennes ordinaires?"
+    },
+    "figure-of-speech": {
+      "text": "Figure de style",
+      "description": "La déclaration contient-elle une aphorisme, une métaphore ou une hyperbole, ou est-elle exprimée en langage simple et ordinaire qui signifie exactement ce qu'elle dit?"
+    },
+    "judgment": {
+      "text": "Jugement",
+      "description": "La déclaration concerne-t-elle principalement un jugement, une croyance, une valeur, une norme sociale ou une convention?"
+    },
+    "opinion": {
+      "text": "Opinion",
+      "description": "La déclaration est-elle quelque chose que quelqu'un pourrait penser être vrai ou veut que d'autres pensent être vrai mais ne peut être démontré comme objectivement correct ou incorrect; est-elle intrinsèquement subjective?"
+    },
+    "reasoning": {
+      "text": "Raisonnement",
+      "description": "La déclaration présente-t-elle une conclusion obtenue en combinant connaissances et logique?"
+    }
   }
 }

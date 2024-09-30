@@ -1,6 +1,9 @@
 import React, { Fragment, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 function NotificationBox(props) {
+  const { t } = useTranslation();
+
   return (
     <a
       href="/"
@@ -8,12 +11,14 @@ function NotificationBox(props) {
     >
       <div className="space-x-3">
         <h3 className="text-white group-hover:text-white text-sm font-semibold">
-          Welcome
+          {/* Welcome */}
+          {t("notification.welcome")}
         </h3>
       </div>
       <p className="text-white group-hover:text-white text-sm">
-        An email with your verification link has been sent to {props.userEmail}.
-        Please click on the link to verify your email.
+         {/* An email with your verification link has been sent to {props.userEmail}.
+        Please click on the link to verify your email. */}
+        {t("notification.text", { email: props.userEmail })}
       </p>
     </a>
   );

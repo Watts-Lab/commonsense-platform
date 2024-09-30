@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Backend from "../apis/backend";
 import useStickyState from "../hooks/useStickyState";
+import { useTranslation } from "react-i18next";
 
 import "./style.css";
 
@@ -9,6 +10,9 @@ function MultiStepForm(props) {
   //   0,
   //   "currentStepIndex"
   // );
+
+  const { t, i18n } = useTranslation();
+  const language = i18n.language;
 
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
 
@@ -70,7 +74,7 @@ function MultiStepForm(props) {
               ? 1
               : 0,
           clarity: "removed",
-          origLanguage: "en",
+          origLanguage: language || "en",
           sessionId: props.sessionId,
           withCredentials: true,
         }).then((response) => {

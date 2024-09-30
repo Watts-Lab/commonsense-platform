@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Popover } from "@headlessui/react";
 import ChatIcon from "./ChatIcon";
+import { useTranslation } from "react-i18next";
 
 import WidgetForm from "./WidgetForm";
 
 function Feedback() {
+  const { t } = useTranslation();
+
   return (
     <>
       <Popover className="fixed bottom-4 right-4 md:bottom-8 md:right-8 flex flex-col items-end">
@@ -18,7 +21,8 @@ function Feedback() {
             {/* on hover increase width */}
             {/* any element that overflows the max-width will be hidden */}
             <span className="pl-2"></span>
-            Feedback
+            {/* Feedback */}
+            {t("feedback.feedback")}
           </span>
         </Popover.Button>
       </Popover>

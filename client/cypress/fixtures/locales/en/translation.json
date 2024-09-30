@@ -68,14 +68,20 @@
     "answers": "Answers",
     "browse-list": "Browse the list of statements you have answered so far",
     "delete-account": "Delete account",
+    "signout": "Sign out",
     "insight": "Insight",
     "is-it-common-sense": "Is it common sense?",
+    "i-agree": "I agree with this statement",
+    "others-agree": "I think most others agree",
+    "your-accuracy": "Your accuracy on what others think",
     "no": "no",
     "others-think": "Others think it is common sense?",
     "settings": "Settings",
     "statement": "Statement",
     "yes": "yes",
-    "your-answers": "Your answers"
+    "your-answers": "Your answers",
+    "done": "Done",
+    "edit-answers": "Edit your Answers"
   },
   "footer": {
     "copyright": "Copyright © 2023 - 2024 - All right reserved by CSSLab at UPenn",
@@ -128,5 +134,146 @@
   "welcome": {
     "subtitle": "You can click on the link sent to verify your email address.",
     "title": "Welcome to the Common Sense Platform"
+  },
+  "statement": {
+    "required-fields": "Required fields are marked with an asterisk *"
+  }, 
+  "enter": {
+    "enter-verifying-magic-link": "Verifying your magic link"
+  },
+  "feedback": {
+    "feedback": "feedback"
+  },
+  "result": {
+    "thanks": "Thanks for completing our survey!",
+    "copy-code-text": "Copy the code below and paste it in the HIT as a completion verification:",
+    "copy-code-button": "Copy code",
+    "scroll-down": "Scroll down to see your results — not required.",
+    "completed-trial": "You've completed the common sense trial. At any point you can answer more questions by logging in.",
+    "your-result": "Your Result",
+    "of-100": "of 100",
+    "score-description": "This score is based on a calculation of how similar your beliefs are to others (yours are {{awareness}}% similar), and how accurately you rated what others think (you were {{consensus}}% accurate).",
+    "score-calculation": "This is calculated by comparing your answers to others' answers, so it will become more accurate if you answer more questions and it will become more accurate as others answer more questions. If you log in below you can continue to see this score as it updates over time.",
+    "create-account-1": "Create an account (optional)",
+    "your-email": "Your email",
+    "placeholder": "name@company.com",
+    "create-account-2": "Create an account"
+  },
+  "twitter-text": {
+    "share-button": "Copy & Share!",
+    "percentage": "My common sense is {{percentage}}%",
+    "check-yours": "Check yours: commonsensicality.org/{{sessionId}}"
+  },
+  "notification": {
+    "welcome": "Welcome",
+    "text": "An email with your verification link has been sent to {{email}}. Please click on the link to verify your email."
+  },
+  "social-survey": {
+    "answer-questions": "Answer questions below about the following statement:",
+    "required-fields": "Required fields are marked with an asterisk *"
+  },
+  "layout": {
+    "start": "Start",
+    "previous": "← Previous",
+    "continue": "Continue",
+    "next": "Next →"
+  },
+  "questions": {
+    "1": {
+      "question": "Do you agree with this statement? *",
+      "description": "(if the answer is, it depends, respond with your most common or most likely answer)",
+      "possibleAnswers": ["Yes", "No"],
+      "tooltip": "If you think the statement is true or false."
+    },
+    "2": {
+      "question": "Why did you answer the way you did about <b>yourself?</b> *",
+      "possibleAnswers": [
+        "It's obvious",
+        "It's something I learned",
+        "It's my opinion",
+        "I don't know"
+      ],
+      "tooltip": "Why you chose the specific answer, we aim to understand the factors that influenced your decision. Please provide an explanation or rationale for your response."
+    },
+    "3": {
+      "question": "Do you think most other people would agree with this statement? *",
+      "description": "(if the answer is, it depends, respond with your most common or most likely answer)",
+      "possibleAnswers": ["Yes", "No"],
+      "tooltip": "This question seeks to gather insights on the perceived consensus among individuals regarding the given statement. We are interested in understanding your opinion about whether you believe that the majority of other people would agree with the statement presented."
+    },
+    "4": {
+      "question": "Why did you answer the way you did about most <b>other people?</b> *",
+      "possibleAnswers": [
+        "I think most people have good judgement with regard to this topic",
+        "I think most people lack good judgment with regard to this topic",
+        "I think it's mostly a matter of opinion",
+        "I don't know"
+      ],
+      "tooltip": "This question aims to explore the reasoning behind your response regarding the perceived agreement of most other people with the given statement. We are interested in understanding the factors that influenced your decision and your perspective on how others might interpret or respond to the statement."
+    },
+    "5": {
+      "question": "Overall, do you think this statement is an example of common sense?",
+      "possibleAnswers": ["Yes", "No"],
+      "tooltip": "This question seeks to gather insights on the perceived consensus among individuals regarding the given statement. We are interested in understanding your opinion about whether you believe that the majority of other people would agree with the statement presented."
+    }
+  },
+  "dashboard-chart": {
+    "your-score": "Your score",
+    "thanks": "Thanks for completing our survey!",
+    "copy-code-text": "Copy the code below and paste it in the HIT as a completion verification:",
+    "calculated": "This is calculated by comparing your answers to others answers, so it will become more accurate if you answer more questions and it will become more accurate as others answer more questions.",
+    "score-description": "This score is based on a calculation of how similar your beliefs are to others (yours are {{awareness}}% similar), and how accurately you rated what others think (you were {{consensus}}% accurate)."
+  },
+  "statement-form": {
+    "success-message": "Successfully submitted!",
+    "submit-another": "Submit another one",
+    "enter-statement": "Enter your common sense statement:",
+    "placeholder": "Type here",
+    "required-message": "Statement is required.",
+    "optional": "optional",
+    "knowledge-category": "Knowledge Category:",
+    "select-category": "Please select...",
+    "submit-button": "Submit Statement"
+  },
+  "knowledge-categories": {
+    "general-reference": "General Reference",
+    "culture-and-arts": "Culture and the arts",
+    "geography-and-places": "Geography and places",
+    "health-and-fitness": "Health and fitness",
+    "history-and-events": "History and events",
+    "human-activities": "Human activities",
+    "mathematics-and-logic": "Mathematics and logic",
+    "natural-and-physical-sciences": "Natural and physical sciences",
+    "people-and-self": "People and self",
+    "philosophy-and-thinking": "Philosophy and thinking",
+    "religion-and-belief-systems": "Religion and belief systems",
+    "society-and-social-sciences": "Society and social sciences",
+    "technology-and-applied-sciences": "Technology and applied sciences"
+  },
+  "features": {
+    "behavior": {
+      "text": "Behavior",
+      "description": "Is the statement primarily concerned with beliefs, perceptions, preferences, and socially constructed rules governing human experience (even if it can be either 'real' or opinion)?"
+    },
+    "everyday": {
+      "text": "Everyday",
+      "description": "Does the statement describe situations that people encounter or could encounter in the course of their ordinary, everyday experiences?"
+    },
+    "figure-of-speech": {
+      "text": "Figure of speech",
+      "description": "Does the statement contain an aphorism, metaphor, or hyperbole, or is it expressed in plain and ordinary language that means exactly what it says?"
+    },
+    "judgment": {
+      "text": "Judgment",
+      "description": "Is the statement primarily concerned with a judgment, belief, value, social norm, or convention?"
+    },
+    "opinion": {
+      "text": "Opinion",
+      "description": "Is the statement something that someone might think is true or wants others to think is true but can't be demonstrated to be objectively correct or incorrect; is it inherently subjective?"
+    },
+    "reasoning": {
+      "text": "Reasoning",
+      "description": "Does the claim present a conclusion that is arrived at by combining knowledge and logic?"
+    }
   }
 }

@@ -67,14 +67,20 @@
     "answers": "Respuestas",
     "browse-list": "Navega por la lista de declaraciones que has respondido hasta ahora",
     "delete-account": "Eliminar cuenta",
+    "signout": "Desconectar",
     "insight": "Perspectiva",
     "is-it-common-sense": "¿Es sentido común?",
+    "i-agree": "Concuerdo con esta declaración",
+    "others-agree": "Creo que la mayoría de los demás están de acuerdo",
+    "your-accuracy": "Tu precisión sobre lo que piensan los demás",
     "no": "no",
     "others-think": "¿Otros piensan que es sentido común?",
     "settings": "Configuración",
     "statement": "Declaración",
     "yes": "sí",
-    "your-answers": "Tus respuestas"
+    "your-answers": "Tus respuestas",
+    "done": "Terminado",
+    "edit-answers": "Edita tus respuestas"
   },
   "footer": {
     "copyright": "Derechos de autor © 2023 - 2024 - Todos los derechos reservados por CSSLab en UPenn",
@@ -132,5 +138,146 @@
   "welcome": {
     "subtitle": "Puedes hacer clic en el enlace enviado para verificar tu dirección de correo electrónico.",
     "title": "Bienvenido a la Plataforma de Sentido Común"
+  },
+  "statement": {
+    "required-fields": "Los campos obligatorios están marcados con un asterisco *"
+  },
+  "enter": {
+    "enter-verifying-magic-link": "Verificando tu enlace mágico"
+  },
+  "feedback": {
+    "feedback": "retroalimentación"
+  },
+  "result": {
+    "thanks": "¡Gracias por completar nuestra encuesta!",
+    "copy-code-text": "Copia el código a continuación y pégalo en el HIT como verificación de finalización:",
+    "copy-code-button": "Copiar código",
+    "scroll-down": "Desplázate hacia abajo para ver tus resultados — no es obligatorio.",
+    "completed-trial": "Has completado la prueba de sentido común. En cualquier momento puedes responder más preguntas iniciando sesión.",
+    "your-result": "Tu resultado",
+    "of-100": "de 100",
+    "score-description": "Esta puntuación se basa en un cálculo de cuán similares son tus creencias a las de otros (las tuyas son {{awareness}}% similares), y cuán acertadamente calificaste lo que piensan los demás (fuiste {{consensus}}% preciso).",
+    "score-calculation": "Esto se calcula comparando tus respuestas con las respuestas de otros, por lo que se volverá más preciso si respondes más preguntas y se volverá más preciso a medida que otros respondan más preguntas. Si inicias sesión a continuación, podrás continuar viendo esta puntuación a medida que se actualiza con el tiempo.",
+    "create-account-1": "Crear una cuenta (opcional)",
+    "your-email": "Tu correo electrónico",
+    "placeholder": "nombre@empresa.com",
+    "create-account-2": "Crear una cuenta"
+  },
+  "twitter-text": {
+    "share-button": "¡Copiar y Compartir!",
+    "percentage": "Mi sentido común es del {{percentage}}%",
+    "check-yours": "Comprueba el tuyo: commonsensicality.org/{{sessionId}}"
+  },
+  "notification": {
+    "welcome": "Bienvenido",
+    "text": "Se ha enviado un correo electrónico con tu enlace de verificación a {{email}}. Por favor, haz clic en el enlace para verificar tu correo electrónico."
+  },
+  "social-survey": {
+    "answer-questions": "Responda las siguientes preguntas sobre la siguiente afirmación:",
+    "required-fields": "Los campos obligatorios están marcados con un asterisco *"
+  },
+  "layout": {
+    "start": "Inicio",
+    "previous": "← Anterior",
+    "continue": "Continuar",
+    "next": "Siguiente →"
+  },
+  "questions": {
+    "1": {
+      "question": "¿Está de acuerdo con esta afirmación? *",
+      "description": "(si la respuesta es, depende, responda con su respuesta más común o más probable)",
+      "possibleAnswers": ["Sí", "No"],
+      "tooltip": "Si cree que la afirmación es verdadera o falsa."
+    },
+    "2": {
+      "question": "¿Por qué respondió de la manera que lo hizo sobre <b>usted mismo?</b> *",
+      "possibleAnswers": [
+        "Es obvio",
+        "Es algo que aprendí",
+        "Es mi opinión",
+        "No lo sé"
+      ],
+      "tooltip": "Por qué eligió la respuesta específica, buscamos entender los factores que influyeron en su decisión. Por favor, proporcione una explicación o justificación para su respuesta."
+    },
+    "3": {
+      "question": "¿Cree que la mayoría de las demás personas estarían de acuerdo con esta afirmación? *",
+      "description": "(si la respuesta es, depende, responda con su respuesta más común o más probable)",
+      "possibleAnswers": ["Sí", "No"],
+      "tooltip": "Esta pregunta busca recopilar información sobre el consenso percibido entre las personas respecto a la afirmación dada. Nos interesa entender su opinión sobre si cree que la mayoría de las demás personas estarían de acuerdo con la afirmación presentada."
+    },
+    "4": {
+      "question": "¿Por qué respondió de la manera que lo hizo sobre la mayoría de <b>las demás personas?</b> *",
+      "possibleAnswers": [
+        "Creo que la mayoría de las personas tienen buen juicio respecto a este tema",
+        "Creo que la mayoría de las personas carecen de buen juicio respecto a este tema",
+        "Creo que es mayormente una cuestión de opinión",
+        "No lo sé"
+      ],
+      "tooltip": "Esta pregunta tiene como objetivo explorar el razonamiento detrás de su respuesta respecto al acuerdo percibido de la mayoría de las personas con la afirmación dada. Nos interesa entender los factores que influyeron en su decisión y su perspectiva sobre cómo otras personas podrían interpretar o responder a la afirmación."
+    },
+    "5": {
+      "question": "En general, ¿cree que esta afirmación es un ejemplo de sentido común?",
+      "possibleAnswers": ["Sí", "No"],
+      "tooltip": "Esta pregunta busca recopilar información sobre el consenso percibido entre las personas respecto a la afirmación dada. Nos interesa entender su opinión sobre si cree que la mayoría de las demás personas estarían de acuerdo con la afirmación presentada."
+    }
+  },
+  "dashboard-chart": {
+    "your-score": "Tu puntuación",
+    "thanks": "¡Gracias por completar nuestra encuesta!",
+    "copy-code-text": "Copia el código de abajo y pégalo en el HIT como verificación de finalización:",
+    "calculated": "Esto se calcula comparando tus respuestas con las respuestas de los demás, por lo que será más preciso si respondes más preguntas y será más preciso a medida que otros respondan más preguntas.",
+    "score-description": "Esta puntuación se basa en un cálculo de cuán similares son tus creencias a las de los demás (las tuyas son {{awareness}}% similares), y cuán precisamente evaluaste lo que otros piensan (fuiste {{consensus}}% preciso)."
+  },
+  "statement-form": {
+    "success-message": "¡Enviado con éxito!",
+    "submit-another": "Enviar otro",
+    "enter-statement": "Introduce tu declaración de sentido común:",
+    "placeholder": "Escribe aquí",
+    "required-message": "La declaración es obligatoria.",
+    "optional": "opcional",
+    "knowledge-category": "Categoría de conocimiento:",
+    "select-category": "Por favor selecciona...",
+    "submit-button": "Enviar declaración"
+  },
+  "knowledge-categories": {
+    "general-reference": "Referencia general",
+    "culture-and-arts": "Cultura y las artes",
+    "geography-and-places": "Geografía y lugares",
+    "health-and-fitness": "Salud y fitness",
+    "history-and-events": "Historia y eventos",
+    "human-activities": "Actividades humanas",
+    "mathematics-and-logic": "Matemáticas y lógica",
+    "natural-and-physical-sciences": "Ciencias naturales y físicas",
+    "people-and-self": "Personas y uno mismo",
+    "philosophy-and-thinking": "Filosofía y pensamiento",
+    "religion-and-belief-systems": "Religión y sistemas de creencias",
+    "society-and-social-sciences": "Sociedad y ciencias sociales",
+    "technology-and-applied-sciences": "Tecnología y ciencias aplicadas"
+  },
+  "features": {
+    "behavior": {
+      "text": "Comportamiento",
+      "description": "¿La declaración se refiere principalmente a creencias, percepciones, preferencias y normas sociales que rigen la experiencia humana (incluso si puede ser 'real' o una opinión)?"
+    },
+    "everyday": {
+      "text": "Cotidiano",
+      "description": "¿La declaración describe situaciones que las personas encuentran o podrían encontrar en el curso de sus experiencias cotidianas y ordinarias?"
+    },
+    "figure-of-speech": {
+      "text": "Figura retórica",
+      "description": "¿La declaración contiene un aforismo, metáfora o hipérbole, o está expresada en un lenguaje simple y ordinario que significa exactamente lo que dice?"
+    },
+    "judgment": {
+      "text": "Juicio",
+      "description": "¿La declaración se refiere principalmente a un juicio, creencia, valor, norma social o convención?"
+    },
+    "opinion": {
+      "text": "Opinión",
+      "description": "¿Es la declaración algo que alguien podría pensar que es verdad o quiere que otros piensen que es verdad pero no puede demostrarse objetivamente como correcto o incorrecto; es inherentemente subjetiva?"
+    },
+    "reasoning": {
+      "text": "Razonamiento",
+      "description": "¿La declaración presenta una conclusión que se obtiene combinando conocimiento y lógica?"
+    }
   }
 }

@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import * as Plot from "@observablehq/plot";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 import Backend from "../apis/backend";
 import TwitterText from "../utils/TwitterText";
@@ -137,13 +138,18 @@ function DashboardChart(props) {
     name: "mercedes",
   };
 
+  const { t } = useTranslation();
+
   return (
     <div className="text-justify leading-relaxed px-4">
       <div className="flex justify-center items-start pb-4 gap-x-8">
         <div className="max-w-lg">
           <div className="h-52 rounded-2xl mx-auto">
             <div className="flex flex-col justify-center items-center h-full text-white">
-              <div className="text-gray-600 pb-4 text-2xl">Your score</div>
+              <div className="text-gray-600 pb-4 text-2xl">
+                {/* Your score */}
+                {t('dashboard-chart.your-score')}
+              </div>
               <div
                 className="radial-progress bg-gray-600 text-gray-300 border-4 border-gray-600"
                 style={{ "--value": commonSenseScore.commonsense }}
@@ -154,16 +160,21 @@ function DashboardChart(props) {
             </div>
           </div>
           <p className="pb-4">
-            This score is based on a calculation of how similar your beliefs are
+            {/* This score is based on a calculation of how similar your beliefs are
             to others (yours are {commonSenseScore.awareness}% similar), and how
             accurately you rated what others think (you were{" "}
-            {commonSenseScore.consensus}% accurate).
+            {commonSenseScore.consensus}% accurate). */}
+            {t('dashboard-chart.score-description', {
+              awareness: commonSenseScore.awareness,
+              consensus: commonSenseScore.consensus,
+            })}
           </p>
 
           <p className="pb-4">
-            This is calculated by comparing your answers to others answers, so
+            {/* This is calculated by comparing your answers to others answers, so
             it will become more accurate if you answer more questions and it
-            will become more accurate as others answer more questions.
+            will become more accurate as others answer more questions. */}
+            {t('dashboard-chart.calculated')}
           </p>
         </div>
 
@@ -192,10 +203,14 @@ function DashboardChart(props) {
       />
       {aTurkBox && (
         <div className="flex flex-col items-center pt-7">
-          <p className="pb-2">Thanks for completing our survey!</p>
           <p className="pb-2">
-            Copy the code below and paste it in the HIT as a completion
-            verification:
+            {/* Thanks for completing our survey! */}
+            {t('dashboard-chart.thanks')}
+          </p>
+          <p className="pb-2">
+            {/* Copy the code below and paste it in the HIT as a completion
+            verification: */}
+            {t('dashboard-chart.copy-code-text')}
           </p>
           <p className="pb-2 font-semibold border-2 rounded py-1 px-3">
             {props.sessionId}

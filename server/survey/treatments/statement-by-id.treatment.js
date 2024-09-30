@@ -10,12 +10,27 @@ const { stringy } = require("./utils/id-generator");
  * @param {number} [params.limit] - The maximum number of statements to return.
  * @returns {Promise<Array>} - A promise that resolves to an array of statements.
  */
-const GetStatementById = async (params) => {
+const GetStatementById = async (params, language) => {
+  const languageMap = {
+    en: "statement",
+    zh: "statement_zh",
+    ru: "statement_ru",
+    pt: "statement_pt",
+    ja: "statement_ja",
+    hi: "statement_hi",
+    fr: "statement_fr",
+    es: "statement_es",
+    bn: "statement_bn",
+    ar: "statement_ar",
+  };
+
+  const selectedColumn = languageMap[language] || "statement"; // default to 'statement' if column is not supported
+
   const statementsText = await statements.findAll({
     where: {
       id: params.ids,
     },
-    attributes: ["id", "statement"],
+    attributes: ["id", selectedColumn],
     order: Sequelize.literal("rand()"),
   });
 

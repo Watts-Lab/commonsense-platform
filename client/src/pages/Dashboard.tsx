@@ -40,7 +40,8 @@ interface Answer {
 }
 
 const Dashboard: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const language = i18n.language; // get the current language
   const loggedIn = useAppSelector((state) => state.login.loggedIn);
   const [answerList, setAnswerList] = useState<Answer[]>([]);
   const [activeTab, setActiveTab] = useState<string>("dashboard");
@@ -81,18 +82,19 @@ const Dashboard: React.FC = () => {
     }
   }, [loggedIn, navigate]);
 
-  const getAnswers = async () => {
+  const getAnswers = async () => { 
     if (token === null) return;
     try {
       Backend.defaults.headers.common["Authorization"] = token;
       const response = await Backend.post("/answers/getanswers", {
         email: "user@test.com",
+        language: language, // get answers based on the current UI language 
       });
       if (!Array.isArray(response.data)) {
         console.error("Expected an array but got:", response.data);
         return;
       }
-
+      
       const updatedAnswers = response.data;
       const statementIds = updatedAnswers.map(answer => answer.statementId);
       const agreementResponse = await Backend.post("/results/agreementPercentage", { statementIds });
@@ -123,7 +125,7 @@ const Dashboard: React.FC = () => {
 
   useEffect(() => {
     getAnswers();
-  }, []);
+  }, [language]); // re-fetch answers when the language changes
 
   //  Change I_agree or others_agree variable -- Usage:
   // For I_agree: handleCheckboxChange(id, 'I_agree')
@@ -312,7 +314,7 @@ const Dashboard: React.FC = () => {
                                   onClick={useEditAnswer}
                                   className="px-2 py-2 text-white bg-[#2d374a] hover:bg-[#1a202c] rounded-md w-[90px] h-[50px] text-center shadow-md transition duration-300 ease-in-out transform hover:scale-105"
                                 >
-                                  {editing ? "Done" : "Edit your Answers"}
+                                  {editing ? t('dashboard.done') : t('dashboard.edit-answers')}
                                 </button>
                               </th>
                             </tr>
@@ -329,7 +331,7 @@ const Dashboard: React.FC = () => {
                                   scope="row"
                                   className="min-w-[18rem] max-w-[60rem] px-6 py-4 font-medium text-gray-900 whitespace-normal dark:text-white"
                                 >
-                                  {answer.statement.statement}
+                                  {(answer.statement as any)[`statement_${language}`] || answer.statement.statement}
                                 </td>
                                 <td className="px-6 py-4">
                                   {editing && (

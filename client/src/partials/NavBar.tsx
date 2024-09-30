@@ -103,7 +103,7 @@ const Navbar: React.FC = () => {
                 <>
                   <a
                     href="/dashboard"
-                    className="text-base hover:underline"
+                    className="button-long-text"
                     onClick={() => setMenuOpen(false)}
                   >
                     {/* Dashboard */}

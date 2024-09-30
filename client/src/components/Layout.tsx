@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { setSession } from "../redux/slices/loginSlice";
+import { useTranslation } from "react-i18next";
 
 import { CRT, RmeTen, Demographics } from "@watts-lab/surveys";
 
@@ -18,6 +19,10 @@ import Backend from "../apis/backend";
 import "./style.css";
 
 function Layout() {
+  // get the current language
+  const { t, i18n } = useTranslation();
+  const language = i18n.language;
+
   const [statementArray, setStatementArray] = useState([]);
   const [statementsData, setStatementsData] = useStickyState(
     [],
@@ -68,9 +73,9 @@ function Layout() {
     let finalSessionId = surveySession ? surveySession : sessionId;
     setStatementArray((oldArray) => [
       ...oldArray,
-      <CRT onComplete={onCompleteCallback} />,
-      <RmeTen onComplete={onCompleteCallback} />,
-      <Demographics onComplete={onCompleteCallback} />,
+      <CRT onComplete={onCompleteCallback} language={language} />,
+      <RmeTen onComplete={onCompleteCallback} language={language} />,
+      <Demographics onComplete={onCompleteCallback} language={language} />,
       <Result
         key={oldArray.length}
         sessionId={finalSessionId}
@@ -135,10 +140,13 @@ function Layout() {
 
   useEffect(() => {
     Backend.get("/experiments", {
-      params: urlParams.reduce((acc, param) => {
-        acc[param.key] = param.value;
-        return acc;
-      }, {}),
+      params: {
+        ...urlParams.reduce((acc, param) => {
+          acc[param.key] = param.value;
+          return acc;
+        }, {}),
+        language: language, // add language parameter
+      },
     })
       .then((response) => {
         const initialAnswers = response.data.statements.map((statement) => ({
@@ -161,6 +169,7 @@ function Layout() {
               statement: { statement: string; image?: string; id: number },
               index: number
             ) => {
+              const statementText = (statement as any)[`statement_${language}`] || statement.statement; // define the statement in the current language
               return (
                 <Statement
                   key={index}
@@ -168,11 +177,11 @@ function Layout() {
                   back={back}
                   currentStep={index + 1}
                   totalSteps={response.data.statements.length}
-                  statementText={statement.statement}
+                  statementText={statementText}
                   imageUrl={statement.image}
                   statementId={statement.id}
                   onChange={handleStatementChange}
-                  onSaveStatement={handleAnswerSaving}
+                  onSaveStatement={handleAnswerSaving}i
                   data={
                     statementsData[index] || {
                       id: statement.id,
@@ -199,7 +208,7 @@ function Layout() {
         });
       }
     });
-  }, []);
+  }, [language]); // retrieve new statements when language changes
 
   const submitHandler = (event) => {
     event.preventDefault();
@@ -220,9 +229,12 @@ function Layout() {
             >
               {(() => {
                 if (currentStepIndex === 0) {
-                  return <Link to="/consent">Start</Link>;
+                  return <Link to="/consent">
+                    {/* Start */}
+                    {t("layout.start")}
+                  </Link>;
                 } else {
-                  return "← Previous";
+                  return t("layout.previous");
                 }
               })()}
             </button>
@@ -234,9 +246,9 @@ function Layout() {
               {(() => {
                 if (currentStepIndex === surveyLength - 3) {
                   // return <Link to="/finish">Finish</Link>;
-                  return "Continue";
+                  return t('layout.continue');
                 } else {
-                  return "Next →";
+                  return t('layout.next');
                 }
               })()}
             </button>

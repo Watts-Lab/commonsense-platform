@@ -1,5 +1,6 @@
 import React, { Fragment, useEffect, useState } from "react";
 import adler32 from "./hashing";
+import { useTranslation } from "react-i18next";
 
 interface TwitterTextProps {
   percentage: number;
@@ -7,6 +8,7 @@ interface TwitterTextProps {
 }
 
 const TwitterText = (props: TwitterTextProps) => {
+  const { t } = useTranslation();
   const [isShared, setIsShared] = useState(false);
   const [textareaValue, setTextareaValue] = useState("");
 
@@ -67,7 +69,8 @@ const TwitterText = (props: TwitterTextProps) => {
   useEffect(() => {
     // Call the function to generate blocks array
     const blocks = generateBlocksArray();
-    const percentage = `My common sense is ${props.percentage}%`;
+    const percentage = t("twitter-text.percentage", { percentage: props.percentage });
+    const checkYoursText = t('twitter-text.check-yours', { sessionId: props.sessionId ? props.sessionId.slice(0, 7) : '' });
     const newValue =
       props.sessionId === null
         ? `${percentage}\n${blocks.join(
@@ -89,7 +92,8 @@ const TwitterText = (props: TwitterTextProps) => {
         onClick={handleShare}
         className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
       >
-        Copy & Share!
+        {/* Copy & Share! */}
+        {t("twitter-text.share-button")}
       </button>
 
       {isShared && (
