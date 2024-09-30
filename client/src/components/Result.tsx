@@ -25,24 +25,34 @@ function Result({ sessionId, showSignUpBox }: ResultProps) {
     consensus: 0,
   });
 
+  const [loadingResults, setLoadingResults] = useState(true);
   const [userEmail, setUserEmail] = useState("");
   const [notifBox, setNotifBox] = useState(false);
   const urlParams = useAppSelector((state) => state.urlslice.urlParams);
   const [aTurkBox, setATurkBox] = useState(false);
 
   useEffect(() => {
+    setLoadingResults(true);
     Backend.post("/results", {
       withCredentials: true,
       sessionId: sessionId,
-    }).then((response) => {
-      setCommonSenseScore({
-        commonsense: Math.round(
-          Number(response.data.commonsensicality).toFixed(2) * 100
-        ),
-        awareness: Math.round(Number(response.data.awareness).toFixed(2) * 100),
-        consensus: Math.round(Number(response.data.consensus).toFixed(2) * 100),
+    })
+      .then((response) => {
+        setCommonSenseScore({
+          commonsense: Math.round(
+            Number(response.data.commonsensicality).toFixed(2) * 100
+          ),
+          awareness: Math.round(
+            Number(response.data.awareness).toFixed(2) * 100
+          ),
+          consensus: Math.round(
+            Number(response.data.consensus).toFixed(2) * 100
+          ),
+        });
+      })
+      .finally(() => {
+        setLoadingResults(false);
       });
-    });
   }, []);
 
   useEffect(() => {
@@ -52,13 +62,6 @@ function Result({ sessionId, showSignUpBox }: ResultProps) {
       if (obj.key === "source" && obj.value === "mturk") {
         setATurkBox(true);
       }
-    });
-
-    Backend.get("/treatments/update", {
-      withCredentials: true,
-      params: { sessionId: sessionId },
-    }).then((response) => {
-      console.log(response.data);
     });
   }, []);
 
@@ -85,7 +88,7 @@ function Result({ sessionId, showSignUpBox }: ResultProps) {
     setNotifBox(true);
   };
 
-  const containerRef = useRef();
+  // const containerRef = useRef();
   const [data, setData] = useState([]);
   const [individualCommonsensicality, setIndividualCommonsensicality] =
     useState([]);
@@ -118,35 +121,35 @@ function Result({ sessionId, showSignUpBox }: ResultProps) {
   //   }
   // }, [sessionId]);
 
-  useEffect(() => {
-    const plot = Plot.plot({
-      x: { percent: true, domain: [0, 100], clamp: true },
-      y: { axis: false },
-      color: { scheme: "Magma" },
-      marks: [
-        Plot.rectY(
-          individualCommonsensicality,
-          Plot.binX(
-            {
-              y: "count",
-              fill: "x",
-              fillOpacity: (bin) =>
-                bin.some((r) => r.sessionId === "You") ? 1 : 0.3,
-            },
-            {
-              thresholds: 20,
-              // stroke: "black",
-              strokeOpacity: 0.2,
-              x: "commonsensicality",
-            }
-          )
-        ),
-        Plot.ruleY([0]),
-      ],
-    });
-    containerRef.current.append(plot);
-    return () => plot.remove();
-  }, [data, individualCommonsensicality]);
+  // useEffect(() => {
+  //   const plot = Plot.plot({
+  //     x: { percent: true, domain: [0, 100], clamp: true },
+  //     y: { axis: false },
+  //     color: { scheme: "Magma" },
+  //     marks: [
+  //       Plot.rectY(
+  //         individualCommonsensicality,
+  //         Plot.binX(
+  //           {
+  //             y: "count",
+  //             fill: "x",
+  //             fillOpacity: (bin) =>
+  //               bin.some((r) => r.sessionId === "You") ? 1 : 0.3,
+  //           },
+  //           {
+  //             thresholds: 20,
+  //             // stroke: "black",
+  //             strokeOpacity: 0.2,
+  //             x: "commonsensicality",
+  //           }
+  //         )
+  //       ),
+  //       Plot.ruleY([0]),
+  //     ],
+  //   });
+  //   containerRef.current.append(plot);
+  //   return () => plot.remove();
+  // }, [data, individualCommonsensicality]);
 
   async function handleCopy() {
     try {
@@ -186,19 +189,47 @@ function Result({ sessionId, showSignUpBox }: ResultProps) {
         You've completed the common sense trial. At any point you can answer
         more questions by logging in.
       </p>
-      <div className="flex justify-center pb-4">
-        <div className="h-52 w-44 bg-gradient-to-t from-indigo-500 to-sky-500 rounded-2xl">
-          <div className="flex flex-col justify-center items-center h-full text-white">
-            <div className="text-pale-blue pb-4 text-2xl">Your Result</div>
-            <div className="rounded-full pt-3 h-24 w-24 justify-center text-center items-center bg-gradient-to-b from-sky-600 to-indigo-500">
-              <div data-cy="commonsense-score" className="text-4xl font-bold">
-                {commonSenseScore.commonsense}
+      {loadingResults ? (
+        <div className="flex justify-center pb-4">
+          <div className="h-52 w-44 bg-gradient-to-t from-indigo-500 to-sky-500 rounded-2xl">
+            <div className="flex flex-col justify-center items-center h-full text-white">
+              <div className="text-pale-blue pb-4 text-2xl">Your Result</div>
+              <div className="relative pt-3 h-24 w-24 flex justify-center items-center">
+                <div className="animate-ping absolute inset-0 rounded-full bg-gradient-to-b from-sky-600 to-indigo-500"></div>
+                <div className="z-10 text-center">
+                  <div
+                    data-cy="commonsense-score"
+                    className="text-xs font-bold"
+                  >
+                    Calculating your score
+                  </div>
+                </div>
               </div>
-              <span className="text-pale-blue text-sm">of 100</span>
             </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <div className="flex justify-center pb-4">
+          <div className="h-52 w-44 bg-gradient-to-t from-indigo-500 to-sky-500 rounded-2xl">
+            <div className="flex flex-col justify-center items-center h-full text-white">
+              <div className="text-pale-blue pb-4 text-2xl">Your Result</div>
+              <div className="relative pt-3 h-24 w-24 flex justify-center items-center">
+                <div className="absolute inset-0 rounded-full bg-gradient-to-b from-sky-600 to-indigo-500"></div>
+                <div className="z-10 text-center">
+                  <div
+                    data-cy="commonsense-score"
+                    className="text-4xl font-bold"
+                  >
+                    {commonSenseScore.commonsense}
+                  </div>
+                  <span className="text-pale-blue text-sm">of 100</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       <p className="pb-4">
         This score is based on a calculation of how similar your beliefs are to
         others (yours are {commonSenseScore.awareness}% similar), and how
@@ -211,7 +242,7 @@ function Result({ sessionId, showSignUpBox }: ResultProps) {
         become more accurate as others answer more questions. If you log in
         below you can continue to see this score as it updates over time.
       </p>
-      <div className="flex justify-center" ref={containerRef} />
+      {/* <div className="flex justify-center" ref={containerRef} /> */}
       <TwitterText
         percentage={commonSenseScore.commonsense}
         sessionId={sessionId}
