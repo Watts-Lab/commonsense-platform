@@ -116,7 +116,7 @@ const Navbar: React.FC = () => {
         </div>
 
         <div className="navbar-end flex items-center px-2 lg:px-4">
-          <ConsentModal buttonText={t('navbar.participate →')} buttonClass="btn" />
+          {/* <ConsentModal buttonText={t('navbar.participate →')} buttonClass="btn" /> */}
           <div className="ml-4">
             <LocaleSwitcher />
           </div>

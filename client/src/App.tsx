@@ -49,6 +49,7 @@ import HumanNetwork from "./components/HumanNetwork";
 // apis
 import Backend from "./apis/backend";
 import Demo from "./components/Demo/Demo";
+import HomeTemp from "./pages/HomeTemp";
 
 const App = () => {
   const loggedIn = useAppSelector((state) => state.login.loggedIn);
@@ -174,7 +175,7 @@ const App = () => {
     <div className="App">
       <div className="mx-auto">
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<HomeTemp />} />
           <Route path="/:shareLink" element={<Home />} />
           <Route path="/people" element={<People />} />
           <Route path="/research" element={<Research />} />
@@ -185,7 +186,7 @@ const App = () => {
           <Route path="/signin" element={<SignIn />} />
           <Route path="/survey" element={<ConsentPage />} />
           <Route path="/consent" element={<Consent />} />
-          <Route path="/statements" element={<SurveyPage />} />
+          {/* <Route path="/statements" element={<SurveyPage />} /> */}
           <Route path="/finish" element={<Finish />} />
           <Route path="/welcome" element={<Welcome />} />
           <Route path="/dashboard" element={<Dashboard />} />
