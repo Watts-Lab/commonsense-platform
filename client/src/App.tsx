@@ -10,7 +10,7 @@ import {
   Route,
   useLocation,
   useSearchParams,
-  useNavigate
+  useNavigate,
 } from "react-router-dom";
 
 import { useAppSelector, useAppDispatch } from "./redux/hooks";
@@ -70,15 +70,15 @@ const App = () => {
         const response = await Backend.post(`/users/verify`);
         return response.data.ok
           ? dispatch(
-            setUserData({
-              loggedIn: true,
-              email: response.data.email,
-              token: token,
-              surveySession: response.data.sessionId,
-            })
-          )
+              setUserData({
+                loggedIn: true,
+                email: response.data.email,
+                token: token,
+                surveySession: response.data.sessionId,
+              })
+            )
           : dispatch(clearUserData());
-      } catch (error) { }
+      } catch (error) {}
     };
     verify_token();
   }, [token]);
@@ -175,7 +175,7 @@ const App = () => {
     <div className="App">
       <div className="mx-auto">
         <Routes>
-          <Route path="/" element={<HomeTemp />} />
+          <Route path="/" element={<Home />} />
           <Route path="/:shareLink" element={<Home />} />
           <Route path="/people" element={<People />} />
           <Route path="/research" element={<Research />} />
@@ -186,7 +186,7 @@ const App = () => {
           <Route path="/signin" element={<SignIn />} />
           <Route path="/survey" element={<ConsentPage />} />
           <Route path="/consent" element={<Consent />} />
-          {/* <Route path="/statements" element={<SurveyPage />} /> */}
+          <Route path="/statements" element={<SurveyPage />} />
           <Route path="/finish" element={<Finish />} />
           <Route path="/welcome" element={<Welcome />} />
           <Route path="/dashboard" element={<Dashboard />} />
