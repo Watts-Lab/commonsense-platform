@@ -18,8 +18,7 @@ const register = async (email, sessionId) => {
     let user = await users.create(newUser);
 
     // send magic link to email
-    // TODO: enable again when back up again
-    // let sendEmail = send_magic_link(email, user.magicLink, "signup");
+    let sendEmail = send_magic_link(email, user.magicLink, "signup");
 
     return { ok: true, message: "User created" };
   } catch (error) {
@@ -50,7 +49,7 @@ const login = async (req, res) => {
           magicLinkExpired: false,
         });
         // send email with magic link
-        // send_magic_link(email, user.magicLink);
+        send_magic_link(email, user.magicLink);
         res.send({
           ok: true,
           message: "Click the link in the email to sign in",
