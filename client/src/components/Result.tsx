@@ -14,6 +14,8 @@ type ResultProps = {
 };
 
 function Result({ sessionId, showSignUpBox }: ResultProps) {
+  const navigate = useNavigate();
+
   const [_statementsData, setStatementsData] = useStickyState(
     [],
     "statementsData"
@@ -31,7 +33,10 @@ function Result({ sessionId, showSignUpBox }: ResultProps) {
   });
 
   const [loadingResults, setLoadingResults] = useState(true);
+
   const [userEmail, setUserEmail] = useState("");
+  const [emailError, setEmailError] = useState("");
+
   const [notifBox, setNotifBox] = useState(false);
   const urlParams = useAppSelector((state) => state.urlslice.urlParams);
   const [aTurkBox, setATurkBox] = useState(false);
@@ -108,13 +113,40 @@ function Result({ sessionId, showSignUpBox }: ResultProps) {
 
   const enterEmail = (e) => {
     setUserEmail(e.target.value);
+    if (emailError) {
+      setEmailError("");
+    }
   };
 
-  const emailSubmit = (e) => {
-    e.preventDefault();
+  const isValidEmail = (email: string) => {
+    // Simple regex for email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const emailSubmit = () => {
+    if (!userEmail) {
+      setEmailError("Email is required.");
+      return;
+    }
+    if (!isValidEmail(userEmail)) {
+      setEmailError("Please enter a valid email address.");
+      return;
+    }
+
+    // Proceed with the signup process
     signUp(userEmail, trueSessionId);
     setNotifBox(true);
   };
+
+  useEffect(() => {
+    if (notifBox) {
+      const timer = setTimeout(() => {
+        navigate("/");
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [notifBox, navigate]);
 
   // const containerRef = useRef();
   const [data, setData] = useState([]);
@@ -284,7 +316,7 @@ function Result({ sessionId, showSignUpBox }: ResultProps) {
             {notifBox ? (
               <NotificationBox userEmail={userEmail} />
             ) : (
-              <form onSubmit={emailSubmit} className="space-y-4 md:space-y-6">
+              <div className="space-y-4 md:space-y-6">
                 <div>
                   <label
                     htmlFor="email"
@@ -302,15 +334,18 @@ function Result({ sessionId, showSignUpBox }: ResultProps) {
                     placeholder="name@company.com"
                     required
                   />
+                  {emailError && (
+                    <span className="text-red-500 text-sm">{emailError}</span>
+                  )}
                 </div>
                 <button
-                  onSubmit={emailSubmit}
-                  type="submit"
+                  type="button"
+                  onClick={emailSubmit}
                   className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
                 >
                   Create an account
                 </button>
-              </form>
+              </div>
             )}
           </div>
         </div>

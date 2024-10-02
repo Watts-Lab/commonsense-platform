@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from "react";
 
-function NotificationBox(props) {
+function NotificationBox({ userEmail }: { userEmail: string }) {
   return (
     <a
       href="/"
@@ -12,7 +12,7 @@ function NotificationBox(props) {
         </h3>
       </div>
       <p className="text-white group-hover:text-white text-sm">
-        An email with your verification link has been sent to {props.userEmail}.
+        An email with your verification link has been sent to {userEmail}.
         Please click on the link to verify your email.
       </p>
     </a>
