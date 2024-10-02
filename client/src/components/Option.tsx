@@ -28,11 +28,19 @@ function Option(props: OptionProps) {
       />
       <label
         htmlFor={props.id_v}
-        className="h-20 text-s peer-focus:ring inline-flex w-full cursor-pointer items-center justify-between rounded-md border border-gray-200 bg-gray-200 p-5 text-gray-800 hover:bg-gray-300 hover:text-gray-600 peer-checked:border-blue-600 peer-checked:bg-blue-600 peer-checked:text-white dark:border-gray-700 dark:bg-gray-400 dark:text-black dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:peer-checked:text-blue-800 dark:peer-checked:bg-blue-100"
+        className="
+      inline-flex items-center justify-between w-full h-20 p-5 cursor-pointer rounded-md
+      text-sm text-gray-800 bg-gray-200 border border-gray-200
+      hover:bg-gray-300 hover:text-gray-600
+      peer-checked:bg-blue-600 peer-checked:border-blue-600 peer-checked:text-white
+      peer-focus:ring-2 peer-focus:ring-blue-300
+      dark:text-gray-100 dark:bg-gray-800 dark:border-gray-600
+      dark:hover:bg-gray-700 dark:hover:text-white
+      dark:peer-checked:bg-blue-500 dark:peer-checked:border-blue-500 dark:peer-checked:text-white
+      dark:peer-focus:ring-2 dark:peer-focus:ring-blue-800
+    "
       >
-        <div className="block">
-          <div className="text-md w-full">{props.text}</div>
-        </div>
+        <div className="block w-full text-md">{props.text}</div>
       </label>
     </li>
   );

@@ -53,7 +53,7 @@ const Banner: React.FC = () => {
                     <ConsentModal
                       // Measure your common sense
                       buttonText={t("banner.button")} 
-                      buttonClass="text-white p-3 bg-gray-600 hover:bg-gray-700 w-full my-4 rounded-md sm:w-auto sm:mb-0"
+                      buttonClass="text-white p-3 bg-gray-600 hover:bg-gray-700 w-full my-4 rounded-md sm:w-auto sm:mb-0 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
                     />
                   </div>
                 </div>

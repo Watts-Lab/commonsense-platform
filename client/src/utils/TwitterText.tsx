@@ -9,6 +9,7 @@ interface TwitterTextProps {
 const TwitterText = (props: TwitterTextProps) => {
   const [isShared, setIsShared] = useState(false);
   const [textareaValue, setTextareaValue] = useState("");
+  const [coppied, setCoppied] = useState(false);
 
   function handleShare() {
     setIsShared(true);
@@ -17,7 +18,12 @@ const TwitterText = (props: TwitterTextProps) => {
 
   async function handleCopy() {
     try {
-      await navigator.clipboard.writeText(textareaValue);
+      await navigator.clipboard.writeText(textareaValue).finally(() => {
+        setCoppied(true);
+        setTimeout(() => {
+          setCoppied(false);
+        }, 2000);
+      });
     } catch (error) {
       console.error("Failed to copy text:", error);
     }
@@ -86,17 +92,18 @@ const TwitterText = (props: TwitterTextProps) => {
   return (
     <div className="flex flex-col items-center pt-3">
       <button
+        type="button"
         onClick={handleShare}
         className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
       >
-        Copy & Share!
+        {coppied ? "Coppied!" : "Copy & Share!"}
       </button>
 
       {isShared && (
-        <div className="mt-4 p-4 bg-gray-100 rounded-md w-96">
+        <div className="mt-4 p-4 bg-gray-100 rounded-md w-96 dark:bg-gray-500">
           <textarea
             id="tweetText"
-            className="mt-2 p-2 text-gray-800 bg-white border border-gray-300 rounded-md resize-none w-full"
+            className="mt-2 p-2 text-gray-800 bg-white border border-gray-300 rounded-md resize-none w-full dark:bg-gray-600 dark:text-gray-200 dark:border-gray"
             value={textareaValue}
             rows={5}
             readOnly

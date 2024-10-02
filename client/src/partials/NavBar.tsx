@@ -31,7 +31,7 @@ const Navbar: React.FC = () => {
   }, []);
 
   return (
-    <div className="navbar bg-neutral text-neutral-content">
+    <div className="navbar bg-neutral text-neutral-content dark:text-gray-50">
       <div className="mx-auto max-w-screen-xl w-full flex justify-between items-center px-2 lg:px-4">
         <div className="navbar-start flex items-center">
           <div className="dropdown">
@@ -118,7 +118,7 @@ const Navbar: React.FC = () => {
         <div className="navbar-end flex items-center px-2 lg:px-4">
           <ConsentModal
             buttonText={t("navbar.participate →")}
-            buttonClass="btn"
+            buttonClass="btn dark:text-gray-50"
           />
           <div className="ml-4">
             <LocaleSwitcher />

@@ -14,7 +14,7 @@ const feedbackTypes = {
         viewBox="0 0 24 24"
         strokeWidth={1.5}
         stroke="currentColor"
-        className="w-4 h-4"
+        className="w-4 h-4 dark:stroke-black"
       >
         <path
           strokeLinecap="round"
@@ -33,7 +33,7 @@ const feedbackTypes = {
         viewBox="0 0 24 24"
         strokeWidth={1.5}
         stroke="currentColor"
-        className="w-4 h-4"
+        className="w-4 h-4 dark:stroke-black"
       >
         <path
           strokeLinecap="round"
@@ -58,7 +58,7 @@ function WidgetForm(props: any) {
   }
 
   return (
-    <div className={`${isDarkMode ? 'bg-slate-600' : 'bg-slate-100'} p-4 relative rounded-2xl flex flex-col items-center shadow-lg w-[calc(100vw-2rem)] md:w-auto`}>
+    <div className="dark:bg-slate-600 bg-slate-100 p-4 relative rounded-2xl flex flex-col items-center shadow-lg w-[calc(100vw-2rem)] md:w-auto">
       {feedbackSent ? (
         <FeedbackSuccessStep onFeedbackRestartRequest={handleRestartFeedback} />
       ) : (

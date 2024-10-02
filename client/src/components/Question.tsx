@@ -33,7 +33,7 @@ function Question({
     <div className="py-3" onChange={onChange}>
       <div className="flex flex-row justify-between">
         <h4
-          className="order-1 font-bold required-field"
+          className="order-1 font-bold required-field dark:text-gray-200"
           dangerouslySetInnerHTML={{ __html: question.question }}
         />
         <Tooltip className="order-last" text={question.tooltip} />
@@ -41,7 +41,7 @@ function Question({
 
       {question.description && (
         <p
-          className="text-gray-600"
+          className="text-gray-600 dark:text-gray-200"
           dangerouslySetInnerHTML={{ __html: question.description }}
         ></p>
       )}

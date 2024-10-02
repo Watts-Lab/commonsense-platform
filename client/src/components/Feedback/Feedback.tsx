@@ -12,7 +12,7 @@ function Feedback() {
         </Popover.Panel>
         <Popover.Button className="bg-brand-500 rounded-full px-3 h-12 text-slate-600 flex items-center group mb-4 md:mb-0">
           <ChatIcon />
-          <span className="max-w-0 md:overflow-hidden md:group-hover:max-w-xs md:transition-all duration-500 ease-linear">
+          <span className="max-w-0 md:overflow-hidden md:group-hover:max-w-xs md:transition-all duration-500 ease-linear dark:text-white">
             <span className="pl-2"></span>
             Feedback
           </span>
