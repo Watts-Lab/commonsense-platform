@@ -1,18 +1,19 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
-import { useSelector, useDispatch } from "react-redux";
+
 import Backend from "../apis/backend";
 
 import Navbar from "../partials/NavBar";
 import NotificationBox from "../utils/NotificationBox";
 import Footer from "../partials/Footer";
 import { useTranslation } from "react-i18next";
+import useStickyState from "../hooks/useStickyState";
 
 const SignIn: React.FC = () => {
   const [userEmail, setUserEmail] = useState("");
 
   const [notifBox, setNotifBox] = useState(false);
 
-  const surveySession = useSelector((state: any) => state.login.surveySession);
+  const [sessionId, setSessionId] = useStickyState("", "surveySessionId");
 
   const { t } = useTranslation();
 
@@ -21,7 +22,7 @@ const SignIn: React.FC = () => {
       let res = await Backend.post(`/users/enter`, {
         email,
         magicLink,
-        surveySession,
+        sessionId,
       });
       if (res.data.token) {
         setNotifBox(false);
@@ -31,7 +32,6 @@ const SignIn: React.FC = () => {
     } catch (error) {
       console.log(error);
     }
-
   };
 
   const enterEmail = (e: ChangeEvent<HTMLInputElement>) => {
@@ -56,17 +56,17 @@ const SignIn: React.FC = () => {
               {/* Page header */}
               {!notifBox ? (
                 <div className="max-w-3xl mx-auto pb-12 md:pb-20">
-                  <p className="h4">{t('signin.welcome')}</p>
+                  <p className="h4">{t("signin.welcome")}</p>
                   <p>
                     {/* Sign in so you can check on your common sense score or
                     answer more questions about statements to get a more
                     accurate reading of your score. */}
-                    {t('signin.subtitle1')}
+                    {t("signin.subtitle1")}
                   </p>
                   <p>
                     {/* Or if you don't have an account, you can sign up by entering
                     your email below. */}
-                    {t('signin.subtitle2')}
+                    {t("signin.subtitle2")}
                   </p>
                 </div>
               ) : null}
@@ -83,7 +83,7 @@ const SignIn: React.FC = () => {
                           className="block text-gray-800 dark:text-gray-300 text-sm font-medium mb-1"
                           htmlFor="email"
                         >
-                          {t('signin.email')}
+                          {t("signin.email")}
                         </label>
                         <input
                           onChange={enterEmail}
@@ -91,7 +91,7 @@ const SignIn: React.FC = () => {
                           id="email"
                           type="email"
                           className="form-input w-full text-gray-800"
-                          placeholder={t('signin.placeholder')}
+                          placeholder={t("signin.placeholder")}
                           required
                         />
                       </div>
@@ -100,7 +100,7 @@ const SignIn: React.FC = () => {
                     <div className="flex flex-wrap -mx-3 mt-6">
                       <div className="w-full px-3">
                         <button className="btn text-white bg-gray-600 hover:bg-gray-700 w-full dark:bg-gray-800">
-                          {t('signin.signIn')}
+                          {t("signin.signIn")}
                         </button>
                       </div>
                     </div>

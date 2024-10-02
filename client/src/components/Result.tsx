@@ -112,7 +112,7 @@ function Result({ sessionId, showSignUpBox }: ResultProps) {
 
   const emailSubmit = (e) => {
     e.preventDefault();
-    signUp(userEmail, sessionId);
+    signUp(userEmail, trueSessionId);
     setNotifBox(true);
   };
 
@@ -273,7 +273,7 @@ function Result({ sessionId, showSignUpBox }: ResultProps) {
       {/* <div className="flex justify-center" ref={containerRef} /> */}
       <TwitterText
         percentage={commonSenseScore.commonsense}
-        sessionId={sessionId}
+        sessionId={trueSessionId}
       />
       <div className="flex flex-col items-center pt-7">
         <div className="w-full bg-white md:mt-0 sm:max-w-lg xl:p-0 dark:bg-gray-800 dark:border-gray-700">

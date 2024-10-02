@@ -1,12 +1,15 @@
-import React from "react";
+import { useEffect, useState } from "react";
 
 export default function useStickyState(defaultValue: any, key: string) {
-  const [value, setValue] = React.useState(() => {
+  const [value, setValue] = useState(() => {
     const stickyValue = localStorage.getItem(key);
-    return stickyValue !== null ? JSON.parse(stickyValue) : defaultValue;
+    if (stickyValue) {
+      return JSON.parse(stickyValue);
+    }
+    return defaultValue;
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     localStorage.setItem(key, JSON.stringify(value));
   }, [key, value]);
 
