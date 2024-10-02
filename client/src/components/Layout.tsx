@@ -1,24 +1,19 @@
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { setSession } from "../redux/slices/loginSlice";
-
 import { CRT, RmeTen, Demographics } from "@watts-lab/surveys";
-
 import Statement from "./Statement";
 import MultiStepForm from "./MultiStepForm";
 import Result from "./Result";
-
 import { questionData } from "../data/questions";
-
 import useStickyState from "../hooks/useStickyState";
-
 import Backend from "../apis/backend";
+import { useAppSelector } from "../redux/hooks";
 
 import "./style.css";
+import ProgressBar from "./ProgressBar";
 
 function Layout() {
-  const [statementArray, setStatementArray] = useState([]);
+  const [statementArray, setStatementArray] = useState<ReactNode[]>([]);
   const [statementsData, setStatementsData] = useStickyState(
     [],
     "statementsData"
@@ -27,7 +22,7 @@ function Layout() {
   const [surveyLength, setSurveyLength] = useState(0);
 
   // const surveySession = useSelector((state) => state.login.surveySession);
-  const urlParams = useSelector((state) => state.urlslice.urlParams);
+  const urlParams = useAppSelector((state) => state.urlslice.urlParams);
 
   const [sessionId, setSessionId] = useStickyState("", "surveySessionId");
   const [unansweredQuestionIndex, setUnansweredQuestionIndex] = useState(null);
@@ -64,7 +59,7 @@ function Layout() {
     }
   };
 
-  const pushResultComponent = (sessionIdResult) => {
+  const pushResultComponent = (sessionIdResult: string) => {
     setStatementArray((oldArray) => [
       ...oldArray,
       <CRT onComplete={onCompleteCallback} />,
@@ -212,6 +207,12 @@ function Layout() {
   return (
     <>
       <form id="main-survey" onSubmit={submitHandler}>
+        {currentStepIndex !== surveyLength ? (
+          <ProgressBar
+            currentStep={currentStepIndex}
+            totalSteps={surveyLength}
+          />
+        ) : null}
         {statementArray[currentStepIndex]}
 
         {currentStepIndex < surveyLength - 3 && (

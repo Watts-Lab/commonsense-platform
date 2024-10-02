@@ -8,12 +8,16 @@ export function FeedbackContentStep({
   feedbackType,
   onFeedbackRestartRequest,
   onFeedbackSent,
+}: {
+  feedbackType: string;
+  onFeedbackRestartRequest: () => void;
+  onFeedbackSent: () => void;
 }) {
   const feedbackTypeData = feedbackTypes[feedbackType];
   const [comment, setComment] = useState("");
   const [isSendingFeedback, setIsSendingFeedback] = useState(false);
 
-  async function handleSubmitFeedback(e) {
+  async function handleSubmitFeedback(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsSendingFeedback(true);
     await Backend.post("/feedbacks", {

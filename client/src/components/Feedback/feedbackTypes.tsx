@@ -1,4 +1,10 @@
-const feedbackTypes = {
+type FeedbackType = {
+  title: string;
+  text: string;
+  image: JSX.Element;
+};
+
+const feedbackTypes: { [key: string]: FeedbackType } = {
   BUG: {
     title: "Bug",
     text: "Tell in detail what is happening. \n\nIf you want to hear back from us, leave your email.",

@@ -1,5 +1,4 @@
 import CloseButton from "../CloseButton";
-
 import feedbackTypes from "../feedbackTypes";
 
 export function FeedbackTypeStep({

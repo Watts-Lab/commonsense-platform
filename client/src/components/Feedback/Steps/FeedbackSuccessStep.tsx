@@ -1,6 +1,10 @@
 import CloseButton from "../CloseButton";
 
-export function FeedbackSuccessStep({ onFeedbackRestartRequest }) {
+export function FeedbackSuccessStep({
+  onFeedbackRestartRequest,
+}: {
+  onFeedbackRestartRequest: () => void;
+}) {
   return (
     <>
       <header>
@@ -25,7 +29,9 @@ export function FeedbackSuccessStep({ onFeedbackRestartRequest }) {
           />
         </svg>
 
-        <span className="text-xl mt-2 dark:text-white">We appreciate the feedback</span>
+        <span className="text-xl mt-2 dark:text-white">
+          We appreciate the feedback
+        </span>
 
         <button
           type="button"
