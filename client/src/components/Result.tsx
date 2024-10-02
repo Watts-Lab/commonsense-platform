@@ -100,14 +100,9 @@ function Result({ sessionId, showSignUpBox }: ResultProps) {
 
   const signUp = async (email: string, sessionId: string) => {
     try {
-      let res = await Backend.post(`/users/enter`, { email, sessionId });
-      if (res.data.token) {
-        login(res.data.token);
-      } else {
-        setNotifBox(true);
-      }
+      await Backend.post(`/users/enter`, { email, sessionId });
     } catch (error) {
-      // alert(error);
+      console.error(error);
     }
   };
 
