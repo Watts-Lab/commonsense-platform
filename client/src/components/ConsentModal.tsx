@@ -1,9 +1,6 @@
 import { Fragment, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 
-import { useAppSelector, useAppDispatch } from "../redux/hooks";
-import { setConsent } from "../redux/slices/consentSlice";
-
 import Consent from "./Consent";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -17,15 +14,21 @@ const ConsentModal = ({ buttonText, buttonClass }: ConsentModalProps) => {
   const { t } = useTranslation();
 
   const [open, setOpen] = useState(false);
-
-  const consent = useAppSelector((state) => state.consent.consent);
-  const dispatch = useAppDispatch();
+  const [consent, setConsent] = useState<boolean>(
+    localStorage.getItem("consent") === "true"
+  );
 
   const navigateTo = useNavigate();
 
   const cancelButtonRef = useRef(null);
 
   function closeModal() {
+    setOpen(false);
+  }
+
+  function giveConsent() {
+    setConsent(true);
+    localStorage.setItem("consent", "true");
     setOpen(false);
   }
 
@@ -119,10 +122,7 @@ const ConsentModal = ({ buttonText, buttonClass }: ConsentModalProps) => {
                       <button
                         type="button"
                         className="inline-flex w-full justify-center rounded-md bg-gray-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-700 sm:ml-3 sm:w-auto dark:bg-slate-100 dark:text-gray-800 dark:hover:bg-gray-400"
-                        onClick={() => {
-                          setOpen(false);
-                          dispatch(setConsent());
-                        }}
+                        onClick={giveConsent}
                       >
                         {/* Check Your Common Sense */}
                         {t("consent-modal.button")}

@@ -3,25 +3,23 @@ import { useParams, useNavigate } from "react-router-dom";
 
 import Navbar from "../partials/NavBar";
 import Footer from "../partials/Footer";
+import { useSession } from "../context/SessionContext";
 
-type EnterProps = {
-  signIn: (email: string, link: string) => void;
-};
+const Enter: React.FC = () => {
+  const params = useParams();
+  const navigate = useNavigate();
 
-const Enter: React.FC<EnterProps> = ({ signIn }) => {
-  let params = useParams();
-  let navigate = useNavigate();
+  const {
+    actions: { signIn },
+  } = useSession();
 
   useEffect(() => {
     if (params.email && params.link) {
       signIn(params.email, params.link);
-      navigate("/dashboard");
     } else {
-      // Handle the case where either params.email or params.link is undefined
-      console.error("Email or link is missing");
-      navigate("/dashboard");
+      navigate("/signin");
     }
-  }, [params.email, params.link, navigate, signIn]);
+  }, [params.email, params.link]);
 
   return (
     <div className="flex flex-col min-h-screen overflow-hidden">

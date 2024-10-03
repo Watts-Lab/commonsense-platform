@@ -1,5 +1,6 @@
 import { ReactNode, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+// @ts-ignore
 import { CRT, RmeTen, Demographics } from "@watts-lab/surveys";
 import Statement from "./Statement";
 import MultiStepForm from "./MultiStepForm";
@@ -7,25 +8,32 @@ import Result from "./Result";
 import { questionData } from "../data/questions";
 import useStickyState from "../hooks/useStickyState";
 import Backend from "../apis/backend";
-import { useAppSelector } from "../redux/hooks";
 
 import "./style.css";
 import ProgressBar from "./ProgressBar";
+import { useSession } from "../context/SessionContext";
+
+export type statementStorageData = {
+  id: number;
+  answers: string[];
+  answereSaved: boolean;
+};
 
 function Layout() {
   const [statementArray, setStatementArray] = useState<ReactNode[]>([]);
-  const [statementsData, setStatementsData] = useStickyState(
-    [],
-    "statementsData"
-  );
+  const [statementsData, setStatementsData] = useStickyState<
+    statementStorageData[]
+  >([], "statementsData");
 
   const [surveyLength, setSurveyLength] = useState(0);
 
-  // const surveySession = useSelector((state) => state.login.surveySession);
-  const urlParams = useAppSelector((state) => state.urlslice.urlParams);
+  const {
+    state: { sessionId, loading, urlParams },
+  } = useSession();
 
-  const [sessionId, setSessionId] = useStickyState("", "surveySessionId");
-  const [unansweredQuestionIndex, setUnansweredQuestionIndex] = useState(null);
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   const onCompleteCallback = (record: any) => {
     Backend.post("/experiments/individual", {
@@ -37,7 +45,7 @@ function Layout() {
     });
   };
 
-  const handleAnswerSaving = (tid, answerState) => {
+  const handleAnswerSaving = (tid: number, answerState: boolean) => {
     setStatementsData((prevState) =>
       prevState.map((data) =>
         data.id === tid
@@ -47,7 +55,7 @@ function Layout() {
     );
   };
 
-  const getNextStatement = async (sessionId) => {
+  const getNextStatement = async (sessionId: string) => {
     try {
       const { data: response } = await Backend.get("/treatments", {
         withCredentials: true,
@@ -59,21 +67,17 @@ function Layout() {
     }
   };
 
-  const pushResultComponent = (sessionIdResult: string) => {
+  const pushResultComponent = () => {
     setStatementArray((oldArray) => [
       ...oldArray,
       <CRT onComplete={onCompleteCallback} />,
       <RmeTen onComplete={onCompleteCallback} />,
       <Demographics onComplete={onCompleteCallback} />,
-      <Result
-        key={oldArray.length}
-        sessionId={sessionIdResult}
-        showSignUpBox={true}
-      />,
+      <Result key={oldArray.length} />,
     ]);
   };
 
-  const pushNewStatement = (statementId, statementText) => {
+  const pushNewStatement = (statementId: number, statementText: string) => {
     setStatementsData((oldArray) => [
       ...oldArray,
       {
@@ -87,13 +91,9 @@ function Layout() {
       ...oldArray,
       <Statement
         key={oldArray.length}
-        next={next}
-        back={back}
-        currentStep={oldArray.length + 1}
         statementText={statementText}
         statementId={statementId}
         onChange={handleStatementChange}
-        onSaveStatement={handleAnswerSaving}
         data={
           statementsData[oldArray.length] || {
             id: statementId,
@@ -101,23 +101,19 @@ function Layout() {
             answereSaved: false,
           }
         }
-        unansweredQuestionIndex={unansweredQuestionIndex}
       />,
     ]);
   };
 
-  const { steps, setCurrentStepIndex, currentStepIndex, back, next } =
-    MultiStepForm({
-      steps: statementsData,
-      sessionId: sessionId,
-      handleAnswerSaving: handleAnswerSaving,
-      getNextStatement: getNextStatement,
-      pushNewStatement: pushNewStatement,
-      pushResultComponent: pushResultComponent,
-      setUnansweredQuestionIndex: setUnansweredQuestionIndex,
-    });
+  const { setCurrentStepIndex, currentStepIndex, back, next } = MultiStepForm({
+    steps: statementsData,
+    handleAnswerSaving: handleAnswerSaving,
+    getNextStatement: getNextStatement,
+    pushNewStatement: pushNewStatement,
+    pushResultComponent: pushResultComponent,
+  });
 
-  const handleStatementChange = (tid, updatedData) => {
+  const handleStatementChange = (tid: number, updatedData: string[]) => {
     setStatementsData((prevState) =>
       prevState.map((data) =>
         data.id === tid
@@ -129,14 +125,8 @@ function Layout() {
 
   useEffect(() => {
     (async () => {
+      // Only fetch if sessionId is not set
       try {
-        // First, get the sessionId
-        const sessionResponse = await Backend.get("/", {
-          withCredentials: true,
-        });
-        const incommingSessionId = sessionResponse.data;
-        setSessionId(incommingSessionId);
-
         // Then, get the experiments data
         const experimentsResponse = await Backend.get("/experiments", {
           params: urlParams.reduce((acc: any, param: any) => {
@@ -147,15 +137,13 @@ function Layout() {
 
         // Process the experiments data
         const initialAnswers = experimentsResponse.data.statements.map(
-          (statement) => ({
+          (statement: { id: number }) => ({
             id: statement.id,
             answers: new Array(questionData.length).fill(""),
             answereSaved: false,
           })
         );
         setStatementsData(initialAnswers);
-
-        localStorage.setItem("statementsData", JSON.stringify(statementsData));
 
         setSurveyLength(experimentsResponse.data.statements.length + 3);
 
@@ -168,15 +156,10 @@ function Layout() {
               return (
                 <Statement
                   key={index}
-                  next={next}
-                  back={back}
-                  currentStep={index + 1}
-                  totalSteps={experimentsResponse.data.statements.length}
                   statementText={statement.statement}
                   imageUrl={statement.image}
                   statementId={statement.id}
                   onChange={handleStatementChange}
-                  onSaveStatement={handleAnswerSaving}
                   data={
                     statementsData[index] || {
                       id: statement.id,
@@ -191,7 +174,7 @@ function Layout() {
         );
 
         // Finally, push the result component
-        pushResultComponent(incommingSessionId);
+        pushResultComponent();
       } catch (error) {
         // Handle errors if any of the above operations fail
         console.error("An error occurred:", error);
@@ -199,7 +182,7 @@ function Layout() {
     })();
   }, []);
 
-  const submitHandler = (event) => {
+  const submitHandler = (event: any) => {
     event.preventDefault();
     next();
   };

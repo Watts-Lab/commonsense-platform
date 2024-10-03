@@ -1,7 +1,7 @@
 // External Module Imports
 const express = require("express");
-const cors = require("cors");
 const session = require("express-session");
+const cors = require("cors");
 const mysql = require("mysql2");
 const MySQLStore = require("express-mysql-session")(session);
 

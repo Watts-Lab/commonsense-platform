@@ -14,20 +14,17 @@ const register = async (email, sessionId) => {
       magicLink: crypto.randomBytes(64).toString("hex"),
       sessionId: sessionId,
     };
-
     let user = await users.create(newUser);
-
     // send magic link to email
-    let sendEmail = send_magic_link(email, user.magicLink, "signup");
-
-    return { ok: true, message: "User created" };
+    await send_magic_link(email, user.magicLink, "signup");
+    return { ok: true, message: "User created", user };
   } catch (error) {
     return { ok: false, error };
   }
 };
 
 const login = async (req, res) => {
-  const { email, magicLink, surveySession } = req.body;
+  const { email, magicLink, sessionId } = req.body;
 
   if (!email)
     return res.json({ ok: false, message: "All fields are required" });
@@ -37,7 +34,7 @@ const login = async (req, res) => {
   try {
     let user = await users.findOne({ where: { email: email } });
     if (!user) {
-      let reg = await register(email, surveySession);
+      let reg = await register(email, sessionId);
       res.send({
         ok: true,
         message: "Click the link in the email to sign in",
