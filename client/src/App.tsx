@@ -27,18 +27,7 @@ import Consent from "./components/Consent";
 import Enter from "./components/Enter";
 import SocialSurvey from "./components/SocialSurvey";
 
-// hooks
-import { useSession } from "./context/SessionContext";
-
 const App = () => {
-  const {
-    state: { loading },
-  } = useSession();
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
   useEffect(() => {
     AOS.init({
       once: true,

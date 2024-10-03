@@ -49,68 +49,67 @@ describe("fill out the survay", () => {
 
     // Go to individual question pages
 
-    cy.get("input[type='number'][id*='sq_106i']").type("1");
-    cy.get("input[type='number'][id*='sq_107i']").type("1");
-    cy.get("input[type='number'][id*='sq_108i']").type("1");
-    cy.get("input[type='number'][id*='sq_109i']").type("1");
-    cy.get("input[type='number'][id*='sq_110i']").type("1");
-    cy.get("input[type='number'][id*='sq_111i']").type("1");
+    cy.get("input[type='number'][id*='sq_100i']").type("1");
+    cy.get("input[type='number'][id*='sq_101i']").type("1");
+    cy.get("input[type='number'][id*='sq_102i']").type("1");
+    cy.get("input[type='number'][id*='sq_103i']").type("1");
+    cy.get("input[type='number'][id*='sq_104i']").type("1");
+    cy.get("input[type='number'][id*='sq_105i']").type("1");
 
     cy.get("input[type='button'][value='Complete']").click();
 
     // Go through RME questions
 
     const list_of_ids = [
-      "sq_133i_0",
-      "sq_135i_0",
-      "sq_137i_0",
-      "sq_139i_0",
-      "sq_141i_0",
-      "sq_143i_0",
-      "sq_145i_0",
-      "sq_147i_0",
-      "sq_149i_0",
+      "sq_107i_0",
+      "sq_109i_0",
+      "sq_111i_0",
+      "sq_113i_0",
+      "sq_115i_0",
+      "sq_117i_0",
+      "sq_119i_0",
+      "sq_121i_0",
+      "sq_123i_0",
+      "sq_125i_0",
     ];
 
-    list_of_ids.forEach((id) => {
+    list_of_ids.forEach((id, index) => {
       cy.get(`input[type='radio'][id*='${id}']`)
         .check({ force: true })
         .should("be.checked");
-      cy.get("input[type='button'][value='Next']").click();
+      if (index !== list_of_ids.length - 1) {
+        cy.get("input[type='button'][value='Next']").click();
+      } else {
+        cy.get("input[type='button'][value='Complete']").click();
+      }
     });
-
-    // Go through the last page
-    cy.get(`input[type='radio'][id*='sq_151i_0']`)
-      .check({ force: true })
-      .should("be.checked");
-    cy.get("input[type='button'][value='Complete']").click();
 
     // Fill the demographic form
     // Birth year
-    cy.get("input[type='text'][id*='sq_169i']").type("1990");
+    cy.get("input[type='text'][id*='sq_126i']").type("1990");
 
     // Gender
-    cy.get("input[type='radio'][id*='sq_170i_0']")
+    cy.get("input[type='radio'][id*='sq_127i_0']")
       .check({ force: true })
       .should("be.checked");
 
-    cy.get("input[type='text'][id*='sq_172i_0']").type("Other\n", {
+    cy.get("input[type='text'][id*='sq_129i_0']").type("Other\n", {
       force: true,
     });
 
-    cy.get("input[type='text'][id*='sq_173i_0']").type("English\n", {
+    cy.get("input[type='text'][id*='sq_130i_0']").type("English\n", {
       force: true,
     });
 
-    cy.get("input[type='radio'][id*='sq_175i_0']")
+    cy.get("input[type='radio'][id*='sq_132i_0']")
       .check({ force: true })
       .should("be.checked");
 
-    cy.get("input[type='radio'][id*='sq_176i_0']")
+    cy.get("input[type='radio'][id*='sq_133i_0']")
       .check({ force: true })
       .should("be.checked");
 
-    cy.get("input[type='text'][id*='sq_178i_0']").type("Algeria\n", {
+    cy.get("input[type='text'][id*='sq_135i_0']").type("Algeria\n", {
       force: true,
     });
 
@@ -122,7 +121,7 @@ describe("fill out the survay", () => {
     cy.wait("@resultData").its("response.statusCode").should("equal", 200);
 
     cy.wait(1000); // Wait for 1 second before selecting the radio button
-    
+
     cy.get('[data-cy="commonsense-score"]')
       .invoke("text")
       .then(parseFloat)
