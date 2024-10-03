@@ -28,12 +28,8 @@ function Layout() {
   const [surveyLength, setSurveyLength] = useState(0);
 
   const {
-    state: { sessionId, loading, urlParams },
+    state: { sessionId, urlParams },
   } = useSession();
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
 
   const onCompleteCallback = (record: any) => {
     Backend.post("/experiments/individual", {

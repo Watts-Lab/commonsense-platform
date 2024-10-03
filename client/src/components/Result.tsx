@@ -15,12 +15,8 @@ function Result() {
   >([], "statementsData");
 
   const {
-    state: { sessionId, loading, urlParams },
+    state: { sessionId, urlParams },
   } = useSession();
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
 
   const [commonSenseScore, setCommonSenseScore] = useState({
     commonsense: 0,

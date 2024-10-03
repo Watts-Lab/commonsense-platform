@@ -37,7 +37,6 @@ const App = () => {
     });
   }, []);
 
-  const { t } = useTranslation();
   useLocalizeDocumentAttributes();
 
   return (
