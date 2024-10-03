@@ -12,8 +12,6 @@ interface StatementProps {
     answers: string[];
   };
   statementId: number;
-  currentStep: number;
-  totalSteps: number;
   onChange: (statementId: number, answers: string[]) => void;
   unansweredQuestionIndex?: number;
 }
@@ -23,8 +21,6 @@ function Statement({
   imageUrl,
   data,
   statementId,
-  currentStep,
-  totalSteps,
   onChange,
   unansweredQuestionIndex,
 }: StatementProps) {

@@ -3,7 +3,7 @@ import React, { Fragment, useState } from "react";
 function NotificationBox({ userEmail }: { userEmail: string }) {
   return (
     <a
-      href="/"
+      href="#"
       className="w-full text-center group block mx-auto rounded-lg p-6 bg-green-600 ring-1 ring-slate-900/5 shadow-lg space-y-3 hover:bg-green-800 hover:ring-sky-500"
     >
       <div className="space-x-3">

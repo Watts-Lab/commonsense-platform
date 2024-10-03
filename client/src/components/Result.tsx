@@ -1,30 +1,22 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
 import * as Plot from "@observablehq/plot";
 import "./style.css";
 import Backend from "../apis/backend";
 import TwitterText from "../utils/TwitterText";
 import NotificationBox from "../utils/NotificationBox";
 import useStickyState from "../hooks/useStickyState";
-import { useAppSelector } from "../redux/hooks";
 
-type ResultProps = {
-  sessionId: string;
-  showSignUpBox: boolean;
-};
+import { statementStorageData } from "./Layout";
+import { useSession } from "../context/SessionContext";
 
-function Result({ sessionId, showSignUpBox }: ResultProps) {
-  const navigate = useNavigate();
+function Result() {
+  const [_statementsData, setStatementsData] = useStickyState<
+    statementStorageData[]
+  >([], "statementsData");
 
-  const [_statementsData, setStatementsData] = useStickyState(
-    [],
-    "statementsData"
-  );
-
-  const [trueSessionId, setTrueSessionId] = useStickyState(
-    sessionId,
-    "surveySessionId"
-  );
+  const {
+    state: { sessionId, urlParams },
+  } = useSession();
 
   const [commonSenseScore, setCommonSenseScore] = useState({
     commonsense: 0,
@@ -38,7 +30,6 @@ function Result({ sessionId, showSignUpBox }: ResultProps) {
   const [emailError, setEmailError] = useState("");
 
   const [notifBox, setNotifBox] = useState(false);
-  const urlParams = useAppSelector((state) => state.urlslice.urlParams);
   const [aTurkBox, setATurkBox] = useState(false);
 
   useEffect(() => {
@@ -51,13 +42,13 @@ function Result({ sessionId, showSignUpBox }: ResultProps) {
         if (response.data.commonsensicality !== 0) {
           setCommonSenseScore({
             commonsense: Math.round(
-              Number(response.data.commonsensicality).toFixed(2) * 100
+              Number(Number(response.data.commonsensicality).toFixed(2)) * 100
             ),
             awareness: Math.round(
-              Number(response.data.awareness).toFixed(2) * 100
+              Number(Number(response.data.awareness).toFixed(2)) * 100
             ),
             consensus: Math.round(
-              Number(response.data.consensus).toFixed(2) * 100
+              Number(Number(response.data.consensus).toFixed(2)) * 100
             ),
           });
         }
@@ -65,32 +56,10 @@ function Result({ sessionId, showSignUpBox }: ResultProps) {
       .finally(() => {
         setLoadingResults(false);
       });
-  }, []);
-
-  useEffect(() => {
-    Backend.post("/results", {
-      withCredentials: true,
-      sessionId: trueSessionId,
-    }).then((response) => {
-      if (response.data.commonsensicality !== 0) {
-        setCommonSenseScore({
-          commonsense: Math.round(
-            Number(response.data.commonsensicality).toFixed(2) * 100
-          ),
-          awareness: Math.round(
-            Number(response.data.awareness).toFixed(2) * 100
-          ),
-          consensus: Math.round(
-            Number(response.data.consensus).toFixed(2) * 100
-          ),
-        });
-      }
-    });
-  }, []);
+  }, [sessionId]);
 
   useEffect(() => {
     setStatementsData([]);
-
     urlParams.forEach((obj) => {
       if (obj.key === "source" && obj.value === "mturk") {
         setATurkBox(true);
@@ -98,6 +67,7 @@ function Result({ sessionId, showSignUpBox }: ResultProps) {
     });
   }, []);
 
+  // TODO: use the one from context
   const signUp = async (email: string, sessionId: string) => {
     try {
       await Backend.post(`/users/enter`, { email, sessionId });
@@ -106,7 +76,9 @@ function Result({ sessionId, showSignUpBox }: ResultProps) {
     }
   };
 
-  const enterEmail = (e) => {
+  const enterEmail = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setUserEmail(e.target.value);
     if (emailError) {
       setEmailError("");
@@ -130,18 +102,9 @@ function Result({ sessionId, showSignUpBox }: ResultProps) {
     }
 
     // Proceed with the signup process
-    signUp(userEmail, trueSessionId);
+    signUp(userEmail, sessionId);
     setNotifBox(true);
   };
-
-  useEffect(() => {
-    if (notifBox) {
-      const timer = setTimeout(() => {
-        navigate("/");
-      }, 2000);
-      return () => clearTimeout(timer);
-    }
-  }, [notifBox, navigate]);
 
   // const containerRef = useRef();
   const [data, setData] = useState([]);
@@ -208,7 +171,7 @@ function Result({ sessionId, showSignUpBox }: ResultProps) {
 
   async function handleCopy() {
     try {
-      await navigator.clipboard.writeText(sessionId ?? "");
+      await navigator.clipboard.writeText(sessionId);
     } catch (error) {
       console.error("Failed to copy text:", error);
     }
@@ -300,7 +263,7 @@ function Result({ sessionId, showSignUpBox }: ResultProps) {
       {/* <div className="flex justify-center" ref={containerRef} /> */}
       <TwitterText
         percentage={commonSenseScore.commonsense}
-        sessionId={trueSessionId}
+        sessionId={sessionId}
       />
       <div className="flex flex-col items-center pt-7">
         <div className="w-full bg-white md:mt-0 sm:max-w-lg xl:p-0 dark:bg-gray-800 dark:border-gray-700">

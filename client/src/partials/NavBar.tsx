@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { HashLink } from "react-router-hash-link";
-import { useAppSelector } from "../redux/hooks";
 import { useTranslation } from "react-i18next";
 
 import ConsentModal from "../components/ConsentModal";
@@ -9,18 +7,16 @@ import LocaleSwitcher from "../components/LocaleSwitcher";
 
 import Icon from "../images/Light-mode.svg";
 import "../css/styles.css";
+import { useSession } from "../context/SessionContext";
 
 const Navbar: React.FC = () => {
-  const loggedIn = useAppSelector((state) => state.login.loggedIn);
-  const email = useAppSelector((state) => state.login.email);
+  const {
+    state: { user },
+  } = useSession();
   const { t } = useTranslation();
 
   const [top, setTop] = useState(true);
   const [isMenuOpen, setMenuOpen] = useState(false);
-
-  const toggleMenu = () => {
-    setMenuOpen(!isMenuOpen);
-  };
 
   useEffect(() => {
     const onScroll = () => {
@@ -62,7 +58,7 @@ const Navbar: React.FC = () => {
                 <a href="/research">{t("navbar.research")}</a>
               </li>
               <li className="mb-2">
-                {!loggedIn ? (
+                {!user ? (
                   <a href="/signin">{t("navbar.signin")}</a>
                 ) : (
                   <a href="/dashboard">{t("navbar.dashboard")}</a>
@@ -94,7 +90,7 @@ const Navbar: React.FC = () => {
               </a>
             </li>
             <li className="mb-2">
-              {!loggedIn ? (
+              {!user ? (
                 <a href="/signin" className="button-long-text">
                   {/* Signin */}
                   {t("navbar.signin")}

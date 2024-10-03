@@ -58,7 +58,7 @@ export const questionData: IQuestionData[] = [
   {
     id: 5,
     question:
-      "Overall, do you think this statement is an example of common sense?",
+      "Overall, do you think this statement is an example of common sense? *",
     possibleAnswers: ["Yes", "No"],
     tooltip:
       "This question seeks to gather insights on the perceived consensus among individuals regarding the given statement. We are interested in understanding your opinion about whether you believe that the majority of other people would agree with the statement presented.",

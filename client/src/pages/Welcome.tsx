@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import Header from "../partials/Header";
+import Navbar from "../partials/NavBar";
 
 const Welcome: React.FC = () => {
   const { t } = useTranslation();
@@ -8,7 +8,7 @@ const Welcome: React.FC = () => {
   return (
     <div className="flex flex-col min-h-screen overflow-hidden">
       {/*  Site header */}
-      <Header where="/" />
+      <Navbar />
 
       {/*  Page content */}
       <main className="flex-grow">
