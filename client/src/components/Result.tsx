@@ -67,6 +67,7 @@ function Result() {
     });
   }, []);
 
+  // TODO: use the one from context
   const signUp = async (email: string, sessionId: string) => {
     try {
       await Backend.post(`/users/enter`, { email, sessionId });
@@ -101,7 +102,7 @@ function Result() {
     }
 
     // Proceed with the signup process
-    signUp(userEmail, sessionId ?? "");
+    signUp(userEmail, sessionId);
     setNotifBox(true);
   };
 
