@@ -17,7 +17,7 @@ interface SessionContextProps {
   actions: {
     setSessionId: React.Dispatch<React.SetStateAction<string>>;
     setUser: React.Dispatch<React.SetStateAction<User | null>>;
-    signIn: (email: string, password: string) => Promise<void>;
+    signIn: (email: string, magicLink?: string) => Promise<void>;
     signUp: (email: string) => Promise<void>;
     setUrlParams: React.Dispatch<
       React.SetStateAction<{ key: string; value: string }[]>
@@ -44,6 +44,9 @@ interface SessionProviderProps {
 export const SessionProvider = ({ children }: SessionProviderProps) => {
   const [sessionId, setSessionIdState] = useState<string>(() => {
     const storedSessionId = localStorage.getItem("sessionId");
+    if (storedSessionId === "undefined") {
+      return "";
+    }
     return storedSessionId || "";
   });
 
@@ -140,20 +143,29 @@ export const SessionProvider = ({ children }: SessionProviderProps) => {
     localStorage.setItem("user", JSON.stringify(value));
   };
 
-  const signIn = async (email: string, magicLink: string) => {
+  const signIn = async (email: string, magicLink?: string) => {
     try {
       const response = await Backend.post(
         "/users/enter",
-        { email, magicLink },
+        { email, magicLink, sessionId },
         { withCredentials: true }
       );
 
-      if (response.data.token) {
-        setSessionId(response.data.sessionId);
-        setUser({ email, token: response.data.token });
-        navigate("/dashboard");
+      if (magicLink) {
+        if (response.data.token) {
+          setSessionId(response.data.sessionId);
+          setUser({ email, token: response.data.token });
+          // wait for state to update and then navigate
+          setTimeout(() => {
+            navigate("/dashboard");
+          }, 1000);
+        } else {
+          alert(response.data.message);
+        }
       } else {
-        alert(response.data.message);
+        if (!response.data.ok) {
+          console.error("Error during sign-in:", response.data.message);
+        }
       }
     } catch (error) {
       console.error("Error during sign-in:", error);

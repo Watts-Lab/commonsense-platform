@@ -38,10 +38,8 @@ app.get("/api/images/*", (req, res) => {
   res.sendFile(`${__dirname}/survey/public/${imageName}`);
 });
 
-
 // const { getAllTreatments } = require("./controllers/treatments");
 // getAllTreatments();
-
 
 app.get("/api", (req, res) => {
   res.send(req.sessionID);

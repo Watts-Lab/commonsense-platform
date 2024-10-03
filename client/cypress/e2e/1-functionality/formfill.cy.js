@@ -120,7 +120,7 @@ describe("fill out the survay", () => {
 
     cy.wait("@resultData").its("response.statusCode").should("equal", 200);
 
-    cy.wait(1000); // Wait for 1 second before selecting the radio button
+    cy.wait(2000); // Wait for 1 second before selecting the radio button
 
     cy.get('[data-cy="commonsense-score"]')
       .invoke("text")

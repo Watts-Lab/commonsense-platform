@@ -25,6 +25,7 @@ const register = async (email, sessionId) => {
 
 const login = async (req, res) => {
   const { email, magicLink, sessionId } = req.body;
+  console.log(email, magicLink, sessionId);
 
   if (!email)
     return res.json({ ok: false, message: "All fields are required" });
@@ -46,19 +47,40 @@ const login = async (req, res) => {
           magicLinkExpired: false,
         });
         // send email with magic link
-        send_magic_link(email, user.magicLink);
-        res.send({
+        await send_magic_link(email, user.magicLink);
+        return res.send({
           ok: true,
           message: "Click the link in the email to sign in",
         });
-      } catch {}
+      } catch (error) {
+        return res.send({
+          ok: false,
+          message: "We could not send you a magic link. Please try again later",
+        });
+      }
     } else if (user.magicLink === magicLink && !user.magicLinkExpired) {
-      // create token
-      const token = jwt.sign(user.toJSON(), jwt_secret, { expiresIn: "12h" }); //{expiresIn:'365d'}
-      const sessionId = user.sessionId ? user.sessionId : "";
+      const newSessionId = user.sessionId ? user.sessionId : sessionId;
+      // if user sessionId field is empty give it a value and update the user
+      if (!user.sessionId) {
+        console.log("updating sessionId since it is null");
+        user = await user.update({
+          magicLinkExpired: true,
+          sessionId: newSessionId,
+        });
+      } else {
+        user = await user.update({ magicLinkExpired: true });
+      }
 
-      await user.update({ magicLinkExpired: true });
-      res.json({ ok: true, message: "Welcome back", token, email, sessionId });
+      // create token
+      const token = jwt.sign(user.toJSON(), jwt_secret, { expiresIn: "12h" });
+
+      res.json({
+        ok: true,
+        message: "Welcome back",
+        token,
+        email,
+        sessionId: newSessionId,
+      });
     } else {
       return res.json({
         ok: false,

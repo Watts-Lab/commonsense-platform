@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Navbar from "../partials/NavBar";
@@ -43,6 +43,7 @@ const Dashboard: React.FC = () => {
     state: { user, sessionId },
     actions: { setUser },
   } = useSession();
+
   const [answerList, setAnswerList] = useState<Answer[]>([]);
   const [activeTab, setActiveTab] = useState<string>("dashboard");
   const [editing, setEditing] = useState<boolean>(false);
@@ -54,8 +55,6 @@ const Dashboard: React.FC = () => {
   }>({});
 
   const navigate = useNavigate();
-  const tokenString = localStorage.getItem("token");
-  const token = tokenString !== null ? JSON.parse(tokenString) : null;
 
   const handleTabClick = (tabId: string) => {
     setActiveTab(tabId);
@@ -63,7 +62,7 @@ const Dashboard: React.FC = () => {
 
   const deleteAccount = async () => {
     try {
-      Backend.defaults.headers.common["Authorization"] = token;
+      Backend.defaults.headers.common["Authorization"] = user?.token;
       const response = await Backend.post("/users/deleteaccount", {
         email: "",
       });
@@ -74,6 +73,8 @@ const Dashboard: React.FC = () => {
   };
 
   const signOut = () => {
+    localStorage.removeItem("user");
+    localStorage.removeItem("sessionId");
     setUser(null);
     navigate("/");
   };
@@ -85,9 +86,9 @@ const Dashboard: React.FC = () => {
   }, [user]);
 
   const getAnswers = async () => {
-    if (token === null) return;
+    if (user?.token === null) return;
     try {
-      Backend.defaults.headers.common["Authorization"] = token;
+      Backend.defaults.headers.common["Authorization"] = user?.token;
       const response = await Backend.post("/answers/getanswers", {
         email: "user@test.com",
       });
@@ -165,7 +166,7 @@ const Dashboard: React.FC = () => {
     }));
 
     try {
-      Backend.defaults.headers.common["Authorization"] = token;
+      Backend.defaults.headers.common["Authorization"] = user?.token;
       const response = await Backend.post("/answers/changeanswers", {
         statementId: currentAnswer.statementId,
         I_agree:
@@ -207,7 +208,7 @@ const Dashboard: React.FC = () => {
 
   const useEditAnswer = async () => {
     if (editing) {
-      if (!token) return;
+      if (!user) return;
 
       try {
         await getAnswers(); // call getAnswers to refresh the data and get new percentage
@@ -237,7 +238,7 @@ const Dashboard: React.FC = () => {
                     <button
                       className={`inline-block p-4 border-b-2 rounded-t-lg ${
                         activeTab === "dashboard"
-                          ? "border-brand-500"
+                          ? "border-gray-600 bg-gray-50 dark:bg-gray-600"
                           : "border-transparent"
                       } hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300`}
                       onClick={() => handleTabClick("dashboard")}
@@ -254,7 +255,7 @@ const Dashboard: React.FC = () => {
                     <button
                       className={`inline-block p-4 border-b-2 rounded-t-lg ${
                         activeTab === "profile"
-                          ? "border-brand-500"
+                          ? "border-gray-600 bg-gray-50 dark:bg-gray-600"
                           : "border-transparent"
                       }`}
                       onClick={() => handleTabClick("profile")}
@@ -271,7 +272,7 @@ const Dashboard: React.FC = () => {
                     <button
                       className={`inline-block p-4 border-b-2 rounded-t-lg ${
                         activeTab === "statement"
-                          ? "border-brand-500"
+                          ? "border-gray-600 bg-gray-50 dark:bg-gray-600"
                           : "border-transparent"
                       }`}
                       onClick={() => handleTabClick("statement")}
@@ -288,7 +289,7 @@ const Dashboard: React.FC = () => {
                     <button
                       className={`inline-block p-4 border-b-2 rounded-t-lg ${
                         activeTab === "settings"
-                          ? "border-brand-500"
+                          ? "border-gray-600 bg-gray-50 dark:bg-gray-600"
                           : "border-transparent"
                       } hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300`}
                       onClick={() => handleTabClick("settings")}

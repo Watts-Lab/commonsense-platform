@@ -1,38 +1,20 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
 
-import Backend from "../apis/backend";
-
 import Navbar from "../partials/NavBar";
 import NotificationBox from "../utils/NotificationBox";
 import Footer from "../partials/Footer";
 import { useTranslation } from "react-i18next";
-import useStickyState from "../hooks/useStickyState";
+import { useSession } from "../context/SessionContext";
 
 const SignIn: React.FC = () => {
+  const {
+    actions: { signIn },
+  } = useSession();
   const [userEmail, setUserEmail] = useState("");
 
   const [notifBox, setNotifBox] = useState(false);
 
-  const [sessionId, setSessionId] = useStickyState("", "surveySessionId");
-
   const { t } = useTranslation();
-
-  const signIn = async (email: string, magicLink: string = "") => {
-    try {
-      let res = await Backend.post(`/users/enter`, {
-        email,
-        magicLink,
-        sessionId,
-      });
-      if (res.data.token) {
-        setNotifBox(false);
-      } else {
-        setNotifBox(true);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const enterEmail = (e: ChangeEvent<HTMLInputElement>) => {
     setUserEmail(e.target.value);
@@ -40,7 +22,9 @@ const SignIn: React.FC = () => {
 
   const emailSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    signIn(userEmail);
+    signIn(userEmail).then(() => {
+      setNotifBox(true);
+    });
   };
 
   return (
@@ -49,8 +33,8 @@ const SignIn: React.FC = () => {
       <Navbar />
 
       {/*  Page content */}
-      <main className="flex-grow">
-        <section className="bg-gray-100 dark:bg-gray-600 text-gray-800 dark:text-gray-300">
+      <main className="flex-grow bg-gray-100 dark:bg-gray-600 text-gray-800 dark:text-gray-300">
+        <section>
           <div className="max-w-6xl mx-auto px-4 sm:px-6">
             <div className="pt-32 pb-12 md:pt-40 md:pb-20">
               {/* Page header */}
