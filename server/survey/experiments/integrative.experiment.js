@@ -2,7 +2,12 @@ const { GetStatementById } = require("../treatments/statement-by-id.treatment");
 
 const designPoints = [
   {
-    // 0	1	0	0	0	0
+    // behavior = 0
+    // everyday = 1
+    // figure_of_speech = 0
+    // judgment = 0
+    // opinion = 0
+    // reasoning = 0
     params: {
       ids: [
         8830, 8831, 8832, 8833, 8834, 8835, 8836, 8837, 8838, 8839, 8840, 8841,
@@ -14,7 +19,12 @@ const designPoints = [
     },
     function: GetStatementById,
   },
-  // 1	1	0	1	1	1
+  // behavior = 1
+  // everyday = 1
+  // figure_of_speech = 0
+  // judgment = 1
+  // opinion = 1
+  // reasoning = 1
   {
     params: {
       ids: [
@@ -110,6 +120,78 @@ const designPoints = [
       ids: [
         8920, 8921, 8922, 8923, 8924, 8925, 8926, 8927, 8928, 8929, 8930, 8931,
         8932, 8933, 8934,
+      ],
+    },
+    validity: (req) => {
+      return req.query.source != "mturk";
+    },
+    function: GetStatementById,
+  },
+  {
+    // behavior = 0
+    // everyday = 0
+    // figure_of_speech = 0
+    // judgment = 1
+    // opinion = 1
+    // reasoning = 0
+    params: {
+      ids: [
+        8935, 8936, 8937, 8938, 8939, 8940, 8941, 8942, 8943, 8944, 8945, 8946,
+        8947, 8948, 8949,
+      ],
+    },
+    validity: (req) => {
+      return req.query.source != "mturk";
+    },
+    function: GetStatementById,
+  },
+  {
+    // behavior = 0
+    // everyday = 1
+    // figure_of_speech = 0
+    // judgment = 1
+    // opinion = 0
+    // reasoning = 0
+    params: {
+      ids: [
+        8950, 8951, 8952, 8953, 8954, 8955, 8956, 8957, 8958, 8959, 8960, 8961,
+        8962, 8963, 8964,
+      ],
+    },
+    validity: (req) => {
+      return req.query.source != "mturk";
+    },
+    function: GetStatementById,
+  },
+  {
+    // behavior = 0
+    // everyday = 1
+    // figure_of_speech = 0
+    // judgment = 1
+    // opinion = 1
+    // reasoning = 0
+    params: {
+      ids: [
+        8965, 8966, 8967, 8968, 8969, 8970, 8971, 8972, 8973, 8974, 8975, 8976,
+        8977, 8978, 8979,
+      ],
+    },
+    validity: (req) => {
+      return req.query.source != "mturk";
+    },
+    function: GetStatementById,
+  },
+  {
+    // behavior = 1
+    // everyday = 0
+    // figure_of_speech = 0
+    // judgment = 1
+    // opinion = 1
+    // reasoning = 1
+    params: {
+      ids: [
+        8980, 8981, 8982, 8983, 8984, 8985, 8986, 8987, 8988, 8989, 8990, 8991,
+        8992, 8993, 8994,
       ],
     },
     validity: (req) => {
