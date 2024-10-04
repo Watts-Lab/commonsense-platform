@@ -1,5 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
-import adler32 from "./hashing";
+import { useEffect, useState } from "react";
 
 interface TwitterTextProps {
   percentage: number;
@@ -30,7 +29,8 @@ const TwitterText = (props: TwitterTextProps) => {
   }
 
   const generateBlocksArray = () => {
-    const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+    const pick = (arr: string[]): string =>
+      arr[Math.floor(Math.random() * arr.length)];
 
     const score = props.percentage;
     const breakPoint = Math.min(Math.floor(score / 10));

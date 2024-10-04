@@ -2,15 +2,9 @@ import ReportIssue from "../components/Feedback/ReportIssue";
 
 import cssLabLogo from "../images/logo_css_white.png";
 import uPenn from "../images/logo_penn_white.png";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 function Footer() {
-  const updateDate = () => {
-    const date = new Date();
-    const year = date.getFullYear();
-    return year;
-  };
-
   const { t } = useTranslation();
 
   return (
@@ -20,12 +14,16 @@ function Footer() {
           <a href="https://css.seas.upenn.edu">
             <img
               src={cssLabLogo}
-              alt={t('footer.css-lab')}
+              alt={t("footer.css-lab")}
               className="h-12 object-cover"
             />
           </a>
           <a href="https://www.upenn.edu/">
-            <img src={uPenn} alt={t('footer.upenn-logo')} className="h-12 object-cover" />
+            <img
+              src={uPenn}
+              alt={t("footer.upenn-logo")}
+              className="h-12 object-cover"
+            />
           </a>
         </div>
       </nav>

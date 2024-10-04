@@ -44,7 +44,7 @@ export const Radar = ({ width, height, data, axisConfig }: RadarProps) => {
 
   // Compute the y scales: 1 scale per variable.
   // Provides the distance to the center.
-  let yScales: { [name: string]: YScale } = {};
+  const yScales: { [name: string]: YScale } = {};
   axisConfig.forEach((axis) => {
     yScales[axis.name] = d3
       .scaleRadial()

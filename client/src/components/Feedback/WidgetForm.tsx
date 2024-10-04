@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { FeedbackTypeStep } from "./Steps/FeedbackTypeStep";
 import { FeedbackContentStep } from "./Steps/FeedbackContentStep";
 import { FeedbackSuccessStep } from "./Steps/FeedbackSuccessStep";
@@ -46,7 +46,7 @@ const feedbackTypes = {
 
 export const feedbackType = Object.keys(feedbackTypes);
 
-function WidgetForm(props: any) {
+function WidgetForm() {
   const [feedbackType, setFeedbackType] = useState<string | null>(null);
   const [feedbackSent, setFeedbackSent] = useState(false);
 

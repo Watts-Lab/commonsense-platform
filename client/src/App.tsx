@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 
 // i18n
-import { useTranslation } from "react-i18next";
 import useLocalizeDocumentAttributes from "./i18n/useLocalizeDocumentAttributes";
 
 import { Routes, Route } from "react-router-dom";

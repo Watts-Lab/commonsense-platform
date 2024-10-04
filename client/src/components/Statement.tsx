@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
-import ProgressBar from "./ProgressBar";
+import { useEffect, useState } from "react";
 import SurveyImage from "./SurveyImage";
 import "./style.css";
 import Question from "./Question";
-import { questionData, IQuestionData } from "../data/questions"; // Import here
+import { questionData } from "../data/questions"; // Import here
 
 interface StatementProps {
   statementText: string;

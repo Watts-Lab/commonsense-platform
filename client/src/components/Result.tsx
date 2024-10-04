@@ -204,8 +204,8 @@ function Result() {
         </>
       ) : null}
       <p className="py-4">
-        You've completed the common sense trial. At any point you can answer
-        more questions by logging in.
+        You&apos;ve completed the common sense trial. At any point you can
+        answer more questions by logging in.
       </p>
       {loadingResults ? (
         <div className="flex justify-center pb-4">

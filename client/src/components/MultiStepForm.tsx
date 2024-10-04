@@ -55,7 +55,7 @@ function MultiStepForm({
           origLanguage: "en",
           sessionId: sessionId,
           withCredentials: true,
-        }).then((response) => {
+        }).then(() => {
           handleAnswerSaving(steps[currentStepIndex].id, true);
           steps[currentStepIndex].answereSaved = true;
         });

@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import Backend from "../apis/backend";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 interface User {
   email: string;
@@ -63,9 +63,6 @@ export const SessionProvider = ({ children }: SessionProviderProps) => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
 
-  // for removing url params
-  const [searchParamsNew, setSearchParamsNew] = useSearchParams();
-
   useEffect(() => {
     const initializeSession = async () => {
       if (sessionId === "") {
@@ -115,7 +112,6 @@ export const SessionProvider = ({ children }: SessionProviderProps) => {
     // Dispatch the updated parameters
     if (URLParams.length > 0) {
       setUrlParams(urlParams);
-      setSearchParamsNew("");
     }
   }, [location.pathname]);
 
@@ -183,7 +179,9 @@ export const SessionProvider = ({ children }: SessionProviderProps) => {
         } else {
           setUser(null);
         }
-      } catch (error) {}
+      } catch {
+        setUser(null);
+      }
     };
     verify_token();
   }, []);

@@ -10,7 +10,7 @@ const SurveyPage: React.FC = () => {
       <main className="p-3 max-w-3xl w-full pb-32">
         <Layout />
         <Feedback />
-        {/* <DarkModeSwitcher /> */}
+        <DarkModeSwitcher />
       </main>
     </div>
   );
