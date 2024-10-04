@@ -15,7 +15,6 @@ router.post(
   [body("sessionId").notEmpty().withMessage("sessionId is required")],
   async (req, res) => {
     // Check for validation errors
-    // console.log("req.body", req.body);
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
@@ -72,7 +71,6 @@ router.post(
 );
 
 router.get("/all", async (req, res) => {
-  console.log("req.sessionID", req.query.sessionId);
   await answers
     .findAll({
       include: [

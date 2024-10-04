@@ -25,7 +25,6 @@ import Finish from "./pages/Finish";
 // components
 import Consent from "./components/Consent";
 import Enter from "./components/Enter";
-import SocialSurvey from "./components/SocialSurvey";
 
 const App = () => {
   useEffect(() => {
@@ -55,11 +54,6 @@ const App = () => {
           <Route path="/finish" element={<Finish />} />
           <Route path="/welcome" element={<Welcome />} />
           <Route path="/dashboard" element={<Dashboard />} />
-
-          <Route
-            path="/social"
-            element={<SocialSurvey statementText={"hey hey"} />}
-          />
         </Routes>
       </div>
     </div>

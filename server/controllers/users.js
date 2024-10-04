@@ -25,7 +25,6 @@ const register = async (email, sessionId) => {
 
 const login = async (req, res) => {
   const { email, magicLink, sessionId } = req.body;
-  console.log(email, magicLink, sessionId);
 
   if (!email)
     return res.json({ ok: false, message: "All fields are required" });
