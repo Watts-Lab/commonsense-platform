@@ -28,7 +28,7 @@ describe("fill out the survay", () => {
       )
         .check({ force: true })
         .should("be.checked");
-      cy.get("input[type='radio'][id*='question5-No']")
+      cy.get("input[type='radio'][id*='question5-Yes']")
         .check({ force: true })
         .should("be.checked");
       // cy.get(
