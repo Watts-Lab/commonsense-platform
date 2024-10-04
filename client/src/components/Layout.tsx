@@ -176,7 +176,7 @@ function Layout() {
         console.error("An error occurred:", error);
       }
     })();
-  }, []);
+  }, [sessionId]);
 
   const submitHandler = (event: any) => {
     event.preventDefault();
