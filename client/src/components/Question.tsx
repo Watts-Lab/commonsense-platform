@@ -27,8 +27,6 @@ function Question({
     setAnswer(question.id, event.target.value);
   };
 
-  const errorStyle = "p-3 rounded-md border-2 border-rose-600";
-
   return (
     <div className="py-3" onChange={onChange}>
       <div className="flex flex-row justify-between">
@@ -47,7 +45,7 @@ function Question({
       )}
 
       <ul className="grid w-full gap-2 md:grid-cols-2 py-2">
-        {question.possibleAnswers.map((optionText, index) => {
+        {question.possibleAnswers.map((optionText) => {
           const optionIdentifier = `${questionIdentifier}-${optionText}`;
 
           return (

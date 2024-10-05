@@ -163,10 +163,10 @@ const StatementForm = () => {
     };
 
     try {
-      const submissionResult = await submitUserStatement(statementData);
+      await submitUserStatement(statementData);
       setIsSubmitted(true);
       setSubmissionError("");
-    } catch (error) {
+    } catch {
       setSubmissionError("There was an error submitting the form.");
     }
   };

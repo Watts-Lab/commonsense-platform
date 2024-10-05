@@ -22,10 +22,6 @@ const ConsentModal = ({ buttonText, buttonClass }: ConsentModalProps) => {
 
   const cancelButtonRef = useRef(null);
 
-  function closeModal() {
-    setOpen(false);
-  }
-
   function giveConsent() {
     setConsent(true);
     localStorage.setItem("consent", "true");

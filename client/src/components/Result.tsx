@@ -8,8 +8,10 @@ import useStickyState from "../hooks/useStickyState";
 
 import { statementStorageData } from "./Layout";
 import { useSession } from "../context/SessionContext";
+import { rawData } from "../partials/Scores";
 
 function Result() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_statementsData, setStatementsData] = useStickyState<
     statementStorageData[]
   >([], "statementsData");
@@ -106,68 +108,64 @@ function Result() {
     setNotifBox(true);
   };
 
-  // const containerRef = useRef();
-  const [data, setData] = useState([]);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [individualCommonsensicality, setIndividualCommonsensicality] =
-    useState([]);
+    useState(
+      rawData
+        .sort((a, b) => a.commonsensicality - b.commonsensicality)
+        .map((value) => ({ ...value, count: 1 }))
+    );
 
-  // useEffect(() => {
-  //   if (sessionId) {
-  //     Backend.get("/results/all", {
-  //       withCredentials: true,
-  //       params: {
-  //         sessionId: sessionId,
-  //       },
-  //     })
-  //       .then((response) => {
-  //         setData(
-  //           response.data.sort(
-  //             (a, b) => a.commonsensicality - b.commonsensicality
-  //           )
-  //         );
-  //         return response.data;
-  //       })
-  //       .then((data) => {
-  //         setIndividualCommonsensicality(
-  //           data.map((value, index) => ({
-  //             sessionId: value.sessionId,
-  //             commonsensicality: value.commonsensicality,
-  //             count: 1,
-  //           }))
-  //         );
-  //       });
-  //   }
-  // }, [sessionId]);
+  useEffect(() => {
+    const alldata = [
+      ...individualCommonsensicality,
+      {
+        sessionId: "You",
+        commonsensicality: commonSenseScore.commonsense / 100,
+        count: 1,
+      },
+    ].sort((a, b) => a.commonsensicality - b.commonsensicality);
 
-  // useEffect(() => {
-  //   const plot = Plot.plot({
-  //     x: { percent: true, domain: [0, 100], clamp: true },
-  //     y: { axis: false },
-  //     color: { scheme: "Magma" },
-  //     marks: [
-  //       Plot.rectY(
-  //         individualCommonsensicality,
-  //         Plot.binX(
-  //           {
-  //             y: "count",
-  //             fill: "x",
-  //             fillOpacity: (bin) =>
-  //               bin.some((r) => r.sessionId === "You") ? 1 : 0.3,
-  //           },
-  //           {
-  //             thresholds: 20,
-  //             // stroke: "black",
-  //             strokeOpacity: 0.2,
-  //             x: "commonsensicality",
-  //           }
-  //         )
-  //       ),
-  //       Plot.ruleY([0]),
-  //     ],
-  //   });
-  //   containerRef.current.append(plot);
-  //   return () => plot.remove();
-  // }, [data, individualCommonsensicality]);
+    setIndividualCommonsensicality(alldata);
+  }, [commonSenseScore]);
+
+  useEffect(() => {
+    const plot = Plot.plot({
+      x: { percent: true, domain: [0, 100], clamp: true },
+      y: { axis: false },
+      color: { scheme: "Magma" },
+      marks: [
+        Plot.rectY(
+          individualCommonsensicality,
+          Plot.binX(
+            {
+              y: "count",
+              fill: "x",
+              fillOpacity: (
+                bin: {
+                  sessionId: string;
+                  commonsensicality: number;
+                  count: number;
+                }[]
+              ) => (bin.some((r) => r.sessionId === "You") ? 1 : 0.3),
+            },
+            {
+              thresholds: 20,
+              // stroke: "black",
+              x: "commonsensicality",
+            }
+          )
+        ),
+        Plot.ruleY([0]),
+      ],
+    });
+
+    if (containerRef.current) {
+      containerRef.current.innerHTML = "";
+      containerRef.current.appendChild(plot);
+    }
+    return () => plot.remove();
+  }, [commonSenseScore, individualCommonsensicality]);
 
   async function handleCopy() {
     try {
@@ -204,8 +202,8 @@ function Result() {
         </>
       ) : null}
       <p className="py-4">
-        You've completed the common sense trial. At any point you can answer
-        more questions by logging in.
+        You&apos;ve completed the common sense trial. At any point you can
+        answer more questions by logging in.
       </p>
       {loadingResults ? (
         <div className="flex justify-center pb-4">
@@ -260,7 +258,7 @@ function Result() {
         become more accurate as others answer more questions. If you log in
         below you can continue to see this score as it updates over time.
       </p>
-      {/* <div className="flex justify-center" ref={containerRef} /> */}
+      <div className="flex justify-center" ref={containerRef} />
       <TwitterText
         percentage={commonSenseScore.commonsense}
         sessionId={sessionId}

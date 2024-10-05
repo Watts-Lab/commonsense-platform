@@ -1,5 +1,3 @@
-import React, { Fragment, useState } from "react";
-
 function NotificationBoxEmail({ userEmail }: { userEmail: string }) {
   return (
     <a

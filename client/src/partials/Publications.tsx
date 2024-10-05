@@ -54,7 +54,7 @@ function Publications() {
                 className="relative flex flex-col p-6 bg-gray-50 dark:bg-slate-900 rounded shadow-xl h-40"
               >
                 <h4 className="text-xl font-bold leading-snug tracking-tight pb-3">
-                  <a href={publication.link} target="_blank">
+                  <a href={publication.link} target="_blank" rel="noreferrer">
                     {publication.title}
                   </a>
                   <span className="bg-blue-600 text-gray-200 text-xs font-medium mx-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">

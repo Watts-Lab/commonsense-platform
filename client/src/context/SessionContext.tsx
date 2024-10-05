@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import Backend from "../apis/backend";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 interface User {
   email: string;
@@ -56,15 +56,17 @@ export const SessionProvider = ({ children }: SessionProviderProps) => {
   const [loading, setLoading] = useState(true);
 
   const [urlParams, setUrlParams] = useState<{ key: string; value: string }[]>(
-    []
+    () => {
+      const storedParams = localStorage.getItem("urlParams");
+      if (storedParams === "undefined") {
+        return [];
+      }
+      return JSON.parse(storedParams || "[]");
+    }
   );
 
   const navigate = useNavigate();
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-
-  // for removing url params
-  const [searchParamsNew, setSearchParamsNew] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
     const initializeSession = async () => {
@@ -102,20 +104,32 @@ export const SessionProvider = ({ children }: SessionProviderProps) => {
 
     // Get the current URL parameters
     const currentParams = searchParams.entries();
-    const URLParams = [...currentParams].map(([key, value]) => ({
-      key,
-      value,
-    }));
+    const URLParams = [...currentParams].reduce((acc, [key, value]) => {
+      if (
+        !urlParams.some((param) => param.key === key && param.value === value)
+      ) {
+        acc.push({ key, value });
+      }
+      return acc;
+    }, [] as { key: string; value: string }[]);
 
     if (location.pathname.startsWith("/s/")) {
       const shareLink = location.pathname.substring(3);
       URLParams.push({ key: "shareLink", value: shareLink });
+      location.pathname = "/";
     }
 
     // Dispatch the updated parameters
     if (URLParams.length > 0) {
-      setUrlParams(urlParams);
-      setSearchParamsNew("");
+      console.log("URLParams", URLParams);
+      setUrlParams((prev) => [...prev, ...URLParams]);
+      localStorage.setItem(
+        "urlParams",
+        JSON.stringify([...urlParams, ...URLParams])
+      );
+      setSearchParams();
+    } else {
+      setSearchParams();
     }
   }, [location.pathname]);
 
@@ -183,7 +197,9 @@ export const SessionProvider = ({ children }: SessionProviderProps) => {
         } else {
           setUser(null);
         }
-      } catch (error) {}
+      } catch {
+        setUser(null);
+      }
     };
     verify_token();
   }, []);

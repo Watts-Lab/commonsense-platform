@@ -144,8 +144,6 @@ const Dashboard: React.FC = () => {
     id: number,
     type: "I_agree" | "others_agree"
   ) => {
-    const stateKey =
-      type === "I_agree" ? "agreeCheckboxStates" : "othersAgreeCheckboxStates";
     const setState =
       type === "I_agree"
         ? setAgreeCheckboxStates

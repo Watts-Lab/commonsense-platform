@@ -1,6 +1,6 @@
 import { ReactNode, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-// @ts-ignore
+// @ts-expect-error no types available
 import { CRT, RmeTen, Demographics } from "@watts-lab/surveys";
 import Statement from "./Statement";
 import MultiStepForm from "./MultiStepForm";
@@ -31,6 +31,7 @@ function Layout() {
     state: { sessionId, urlParams },
   } = useSession();
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onCompleteCallback = (record: any) => {
     Backend.post("/experiments/individual", {
       sessionId: sessionId,
@@ -66,9 +67,9 @@ function Layout() {
   const pushResultComponent = () => {
     setStatementArray((oldArray) => [
       ...oldArray,
-      <CRT onComplete={onCompleteCallback} />,
-      <RmeTen onComplete={onCompleteCallback} />,
-      <Demographics onComplete={onCompleteCallback} />,
+      <CRT key="crt" onComplete={onCompleteCallback} />,
+      <RmeTen key="rmet" onComplete={onCompleteCallback} />,
+      <Demographics key="demographic" onComplete={onCompleteCallback} />,
       <Result key={oldArray.length} />,
     ]);
   };
@@ -125,10 +126,16 @@ function Layout() {
       try {
         // Then, get the experiments data
         const experimentsResponse = await Backend.get("/experiments", {
-          params: urlParams.reduce((acc: any, param: any) => {
-            acc[param.key] = param.value;
-            return acc;
-          }, {}),
+          params: urlParams.reduce(
+            (
+              acc: Record<string, string>,
+              param: { key: string; value: string }
+            ) => {
+              acc[param.key] = param.value;
+              return acc;
+            },
+            {}
+          ),
         });
 
         // Process the experiments data
@@ -178,7 +185,7 @@ function Layout() {
     })();
   }, [sessionId]);
 
-  const submitHandler = (event: any) => {
+  const submitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     next();
   };

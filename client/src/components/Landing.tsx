@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import "./style.css";
 import Consent from "./Consent";
 
-function Landing(props: any) {
+function Landing() {
   const { t } = useTranslation();
 
   return (
