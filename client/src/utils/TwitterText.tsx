@@ -5,7 +5,7 @@ interface TwitterTextProps {
   sessionId: string;
 }
 
-const TwitterText = (props: TwitterTextProps) => {
+const TwitterText = ({ sessionId, percentage }: TwitterTextProps) => {
   const [isShared, setIsShared] = useState(false);
   const [textareaValue, setTextareaValue] = useState("");
   const [coppied, setCoppied] = useState(false);
@@ -32,7 +32,7 @@ const TwitterText = (props: TwitterTextProps) => {
     const pick = (arr: string[]): string =>
       arr[Math.floor(Math.random() * arr.length)];
 
-    const score = props.percentage;
+    const score = percentage;
     const breakPoint = Math.min(Math.floor(score / 10));
     const blocks = [];
 
@@ -73,21 +73,16 @@ const TwitterText = (props: TwitterTextProps) => {
   useEffect(() => {
     // Call the function to generate blocks array
     const blocks = generateBlocksArray();
-    const percentage = `My common sense is ${props.percentage}%`;
-    const newValue =
-      props.sessionId === null
-        ? `${percentage}\n${blocks.join(
-            ""
-          )}\nCheck yours: https://commonsense.seas.upenn.edu/`
-        : `${percentage}\n${blocks.join(
-            ""
-          )}\nCheck yours: https://commonsense.seas.upenn.edu/${props.sessionId.slice(
-            0,
-            7
-          )}`;
+    const percentagetext = `My common sense is ${percentage}%`;
+    const newValue = `${percentagetext}\n${blocks.join(
+      ""
+    )}\nCheck yours: https://commonsense.seas.upenn.edu/s/${sessionId.slice(
+      0,
+      7
+    )}`;
 
     setTextareaValue(newValue);
-  }, [props.percentage, props.sessionId]); // Update dependencies array
+  }, [percentage, sessionId]); // Update dependencies array
 
   return (
     <div className="flex flex-col items-center pt-3">
