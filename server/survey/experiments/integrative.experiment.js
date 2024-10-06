@@ -321,7 +321,7 @@ const experiment = {
     );
 
     // find treatments with less than 100 completion
-    const valid_experiments = experiment_count.filter((t) => t.count < 100);
+    const valid_experiments = experiment_count.filter((t) => t.count < 50);
 
     // select the least frequent treatment
     if (valid_experiments.length > 0) {
