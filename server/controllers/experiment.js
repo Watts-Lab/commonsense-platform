@@ -1,6 +1,7 @@
 const experiments = require("../survey/experiments");
 const {
-  saveExperiment,
+  createExperiment,
+  updateExperiment,
 } = require("../survey/experiments/utils/save-experiment");
 const {
   saveIndividualDB,
@@ -8,10 +9,17 @@ const {
 const {
   FindLeastFrequentExperiment,
 } = require("../survey/experiments/utils/reverse-weight-selector");
+const { body, query, validationResult } = require("express-validator");
 
 const { stringy } = require("../survey/treatments/utils/id-generator");
 
 const returnStatements = async (req, res) => {
+  // Check for validation errors in the request
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
   const oursobject = experiments
     .flatMap((experiment) =>
       experiment.treatments.map((treatment) => {
@@ -61,15 +69,9 @@ const returnStatements = async (req, res) => {
     finished: false,
   };
 
-  await saveExperiment(experimentData)
-    .then((newExperiment) => {
-      console.log("Experiment saved:", newExperiment.id);
-    })
-    .catch((error) => {
-      console.error("Error saving experiment:", error);
-    });
+  const experiment = await createExperiment(experimentData);
 
-  res.json({ statements: result.answer });
+  res.json({ statements: result.answer, experimentId: experiment.id });
 };
 
 const saveIndividual = async (req, res) => {
@@ -92,7 +94,26 @@ const saveIndividual = async (req, res) => {
   res.json({ ok: true });
 };
 
+const saveExperiment = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+  const experimentId = req.body.experimentId;
+
+  updateExperiment(experimentId, { finished: true })
+    .then((updatedExperiment) => {
+      console.log("Experiment saved:", updatedExperiment.id);
+    })
+    .catch((error) => {
+      console.error("Error saving experiment:", error);
+    });
+
+  res.json({ ok: true });
+};
+
 module.exports = {
   returnStatements,
   saveIndividual,
+  saveExperiment,
 };

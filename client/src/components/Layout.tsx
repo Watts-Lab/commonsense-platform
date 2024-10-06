@@ -64,13 +64,13 @@ function Layout() {
     }
   };
 
-  const pushResultComponent = () => {
+  const pushResultComponent = (experimentId: number) => {
     setStatementArray((oldArray) => [
       ...oldArray,
       <CRT key="crt" onComplete={onCompleteCallback} />,
       <RmeTen key="rmet" onComplete={onCompleteCallback} />,
       <Demographics key="demographic" onComplete={onCompleteCallback} />,
-      <Result key={oldArray.length} />,
+      <Result key={oldArray.length} experimentId={experimentId} />,
     ]);
   };
 
@@ -107,7 +107,6 @@ function Layout() {
     handleAnswerSaving: handleAnswerSaving,
     getNextStatement: getNextStatement,
     pushNewStatement: pushNewStatement,
-    pushResultComponent: pushResultComponent,
   });
 
   const handleStatementChange = (tid: number, updatedData: string[]) => {
@@ -180,7 +179,7 @@ function Layout() {
         );
 
         // Finally, push the result component
-        pushResultComponent();
+        pushResultComponent(experimentsResponse.data.experimentId);
       } catch (error) {
         // Handle errors if any of the above operations fail
         console.error("An error occurred:", error);

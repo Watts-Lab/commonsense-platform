@@ -10,14 +10,9 @@ type MultiStepFormProps = {
   handleAnswerSaving: (tid: number, answerState: boolean) => void;
   getNextStatement: (sessionId: string) => void;
   pushNewStatement: (id: number, statement: string) => void;
-  pushResultComponent: (sessionId: string) => void;
 };
 
-function MultiStepForm({
-  steps,
-
-  handleAnswerSaving,
-}: MultiStepFormProps) {
+function MultiStepForm({ steps, handleAnswerSaving }: MultiStepFormProps) {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
 
   const {

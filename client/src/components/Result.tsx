@@ -10,7 +10,11 @@ import { statementStorageData } from "./Layout";
 import { useSession } from "../context/SessionContext";
 import { rawData } from "../partials/Scores";
 
-function Result() {
+type ResultProps = {
+  experimentId: number;
+};
+
+function Result({ experimentId }: ResultProps) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_statementsData, setStatementsData] = useStickyState<
     statementStorageData[]
@@ -128,6 +132,23 @@ function Result() {
 
     setIndividualCommonsensicality(alldata);
   }, [commonSenseScore]);
+
+  useEffect(() => {
+    const saveExperiment = async () => {
+      try {
+        await Backend.post("/experiments/save", {
+          sessionId,
+          experimentId,
+        });
+      } catch (error) {
+        console.error("Failed to save experiment:", error);
+      }
+    };
+
+    if (experimentId) {
+      saveExperiment();
+    }
+  }, [sessionId, experimentId]);
 
   useEffect(() => {
     const plot = Plot.plot({
