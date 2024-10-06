@@ -147,9 +147,9 @@ const saveExperiment = async (req, res) => {
   }
   const experimentId = req.body.experimentId;
 
-  updateExperiment(experimentId, { finished: true })
+  await updateExperiment(experimentId, { finished: true })
     .then((updatedExperiment) => {
-      console.log("Experiment saved:", updatedExperiment.id);
+      console.log("Experiment saved:", updatedExperiment);
     })
     .catch((error) => {
       console.error("Error saving experiment:", error);
