@@ -46,8 +46,13 @@ const returnStatements = async (req, res) => {
 
   const result = await treatmentObject.function(treatmentObject.params);
 
+  const userSessionId = req.query.sessionId;
+
+  // Remove sessionId from req.query
+  delete req.query.sessionId;
+
   const experimentData = {
-    userSessionId: req.sessionID,
+    userSessionId: userSessionId,
     experimentId: stringy(treatmentObject.params),
     experimentType: treatmentObject.experimentName,
     experimentInfo: treatmentObject,
@@ -56,7 +61,7 @@ const returnStatements = async (req, res) => {
     finished: false,
   };
 
-  saveExperiment(experimentData)
+  await saveExperiment(experimentData)
     .then((newExperiment) => {
       console.log("Experiment saved:", newExperiment.id);
     })
@@ -69,7 +74,7 @@ const returnStatements = async (req, res) => {
 
 const saveIndividual = async (req, res) => {
   const individualData = {
-    userSessionId: req.sessionID,
+    userSessionId: req.body.sessionId,
     informationType: req.body.informationType,
     experimentInfo: req.body.experimentInfo,
     urlParams: req.query.source ? req.query.source : null,

@@ -7,18 +7,16 @@ import "./i18n/config";
 import { SessionProvider } from "./context/SessionContext";
 
 ReactDOM.createRoot(document.getElementById("root") as Element).render(
-  // <React.StrictMode>
-
-  <Router>
-    <SessionProvider>
-      <React.Suspense
-        // notify users that active translation files are downloading during slow connections
-        fallback={<div>Loading...</div>}
-      >
-        <App />
-      </React.Suspense>
-    </SessionProvider>
-  </Router>
-
-  // </React.StrictMode>
+  <React.StrictMode>
+    <Router>
+      <SessionProvider>
+        <React.Suspense
+          // notify users that active translation files are downloading during slow connections
+          fallback={<div>Loading...</div>}
+        >
+          <App />
+        </React.Suspense>
+      </SessionProvider>
+    </Router>
+  </React.StrictMode>
 );

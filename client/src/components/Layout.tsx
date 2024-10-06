@@ -126,16 +126,19 @@ function Layout() {
       try {
         // Then, get the experiments data
         const experimentsResponse = await Backend.get("/experiments", {
-          params: urlParams.reduce(
-            (
-              acc: Record<string, string>,
-              param: { key: string; value: string }
-            ) => {
-              acc[param.key] = param.value;
-              return acc;
-            },
-            {}
-          ),
+          params: {
+            sessionId: sessionId,
+            ...urlParams.reduce(
+              (
+                acc: Record<string, string>,
+                param: { key: string; value: string }
+              ) => {
+                acc[param.key] = param.value;
+                return acc;
+              },
+              {}
+            ),
+          },
         });
 
         // Process the experiments data
