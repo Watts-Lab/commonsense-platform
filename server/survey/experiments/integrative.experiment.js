@@ -5,78 +5,68 @@ const {
 const { stringy } = require("../treatments/utils/id-generator");
 
 const designPoints = [
-  {
-    // behavior = 0
-    // everyday = 1
-    // figure_of_speech = 0
-    // judgment = 0
-    // opinion = 0
-    // reasoning = 0
-    params: {
-      ids: [
-        8830, 8831, 8832, 8833, 8834, 8835, 8836, 8837, 8838, 8839, 8840, 8841,
-        8842, 8843, 8844,
-      ],
-    },
-    validity: (req, params) => {
-      return req.query.source != "mturk";
-    },
-    function: GetStatementById,
-  },
-  // behavior = 1
-  // everyday = 1
-  // figure_of_speech = 0
-  // judgment = 1
-  // opinion = 1
-  // reasoning = 1
-  {
-    params: {
-      ids: [
-        8845, 8846, 8847, 8848, 8849, 8850, 8851, 8852, 8853, 8854, 8855, 8856,
-        8857, 8858, 8859,
-      ],
-    },
-    validity: (req, params) => {
-      return req.query.source != "mturk";
-    },
-    function: GetStatementById,
-  },
-  {
-    // behavior = 0
-    // everyday = 1
-    // figure_of_speech = 0
-    // judgment = 0
-    // opinion = 0
-    // reasoning = 0
-    params: {
-      ids: [
-        8860, 8861, 8862, 8863, 8864, 8865, 8866, 8867, 8868, 8869, 8870, 8871,
-        8872, 8873, 8874,
-      ],
-    },
-    validity: (req, params) => {
-      return req.query.source != "mturk";
-    },
-    function: GetStatementById,
-  },
-  {
-    // behavior = 1
-    // everyday = 0
-    // figure_of_speech = 0
-    // judgment = 1
-    // opinion = 1
-    // reasoning = 0
-    params: {
-      ids: [
-        8875, 8876, 8877, 8878, 8879, 8880, 8881, 8882, 8883, 8884, 8885, 8886,
-        8887, 8888, 8889,
-      ],
-    },
-    validity: (req, params) => {
-      return req.query.source != "mturk";
-    },
-    function: GetStatementById,
-  },
+  // {
+  //   // behavior = 0 everyday = 1 figure_of_speech = 0 judgment = 0 opinion = 0 reasoning = 0
+  //   params: {
+  //     ids: [
+  //       8830, 8831, 8832, 8833, 8834, 8835, 8836, 8837, 8838, 8839, 8840, 8841,
+  //       8842, 8843, 8844,
+  //     ],
+  //   },
+  //   validity: (req, params) => {
+  //     return req.query.source != "mturk";
+  //   },
+  //   function: GetStatementById,
+  // },
+  // // behavior = 1 everyday = 1 figure_of_speech = 0 judgment = 1 opinion = 1 reasoning = 1
+  // {
+  //   params: {
+  //     ids: [
+  //       8845, 8846, 8847, 8848, 8849, 8850, 8851, 8852, 8853, 8854, 8855, 8856,
+  //       8857, 8858, 8859,
+  //     ],
+  //   },
+  //   validity: (req, params) => {
+  //     return req.query.source != "mturk";
+  //   },
+  //   function: GetStatementById,
+  // },
+  // {
+  //   // behavior = 0
+  //   // everyday = 1
+  //   // figure_of_speech = 0
+  //   // judgment = 0
+  //   // opinion = 0
+  //   // reasoning = 0
+  //   params: {
+  //     ids: [
+  //       8860, 8861, 8862, 8863, 8864, 8865, 8866, 8867, 8868, 8869, 8870, 8871,
+  //       8872, 8873, 8874,
+  //     ],
+  //   },
+  //   validity: (req, params) => {
+  //     return req.query.source != "mturk";
+  //   },
+  //   function: GetStatementById,
+  // },
+  // {
+  //   // behavior = 1
+  //   // everyday = 0
+  //   // figure_of_speech = 0
+  //   // judgment = 1
+  //   // opinion = 1
+  //   // reasoning = 0
+  //   params: {
+  //     ids: [
+  //       8875, 8876, 8877, 8878, 8879, 8880, 8881, 8882, 8883, 8884, 8885, 8886,
+  //       8887, 8888, 8889,
+  //     ],
+  //   },
+  //   validity: (req, params) => {
+  //     return req.query.source != "mturk";
+  //   },
+  //   function: GetStatementById,
+  // },
   {
     // behavior = 1
     // everyday = 1
