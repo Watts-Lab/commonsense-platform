@@ -1,4 +1,8 @@
 const { GetStatementById } = require("../treatments/statement-by-id.treatment");
+const {
+  FindLeastFrequentFinishedExperiment,
+} = require("./utils/reverse-weight-selector");
+const { stringy } = require("../treatments/utils/id-generator");
 
 const designPoints = [
   {
@@ -14,7 +18,7 @@ const designPoints = [
         8842, 8843, 8844,
       ],
     },
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source != "mturk";
     },
     function: GetStatementById,
@@ -32,7 +36,7 @@ const designPoints = [
         8857, 8858, 8859,
       ],
     },
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source != "mturk";
     },
     function: GetStatementById,
@@ -50,7 +54,7 @@ const designPoints = [
         8872, 8873, 8874,
       ],
     },
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source != "mturk";
     },
     function: GetStatementById,
@@ -68,7 +72,7 @@ const designPoints = [
         8887, 8888, 8889,
       ],
     },
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source != "mturk";
     },
     function: GetStatementById,
@@ -86,7 +90,7 @@ const designPoints = [
         8902, 8903, 8904,
       ],
     },
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source != "mturk";
     },
     function: GetStatementById,
@@ -104,7 +108,7 @@ const designPoints = [
         8917, 8918, 8919,
       ],
     },
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source != "mturk";
     },
     function: GetStatementById,
@@ -122,7 +126,7 @@ const designPoints = [
         8932, 8933, 8934,
       ],
     },
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source != "mturk";
     },
     function: GetStatementById,
@@ -140,7 +144,7 @@ const designPoints = [
         8947, 8948, 8949,
       ],
     },
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source != "mturk";
     },
     function: GetStatementById,
@@ -158,7 +162,7 @@ const designPoints = [
         8962, 8963, 8964,
       ],
     },
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source != "mturk";
     },
     function: GetStatementById,
@@ -176,7 +180,7 @@ const designPoints = [
         8977, 8978, 8979,
       ],
     },
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source != "mturk";
     },
     function: GetStatementById,
@@ -194,7 +198,7 @@ const designPoints = [
         8992, 8993, 8994,
       ],
     },
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source != "mturk";
     },
     function: GetStatementById,
@@ -208,7 +212,7 @@ const designPoints = [
         9009, 9010, 9011,
       ],
     },
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source != "mturk";
     },
     function: GetStatementById,
@@ -221,7 +225,7 @@ const designPoints = [
         9024, 9025, 9026,
       ],
     },
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source != "mturk";
     },
     function: GetStatementById,
@@ -234,7 +238,7 @@ const designPoints = [
         9039, 9040, 9041,
       ],
     },
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source != "mturk";
     },
     function: GetStatementById,
@@ -247,7 +251,7 @@ const designPoints = [
         9054, 9055, 9056,
       ],
     },
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source != "mturk";
     },
     function: GetStatementById,
@@ -260,7 +264,7 @@ const designPoints = [
         9069, 9070, 9071,
       ],
     },
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source != "mturk";
     },
     function: GetStatementById,
@@ -273,7 +277,7 @@ const designPoints = [
         9084, 9085, 9086,
       ],
     },
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source != "mturk";
     },
     function: GetStatementById,
@@ -286,7 +290,7 @@ const designPoints = [
         9099, 9100, 9101,
       ],
     },
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source != "mturk";
     },
     function: GetStatementById,
@@ -299,7 +303,7 @@ const designPoints = [
         9114, 9115, 9116,
       ],
     },
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source != "mturk";
     },
     function: GetStatementById,
@@ -309,8 +313,25 @@ const designPoints = [
 const experiment = {
   experimentName: "design-point",
   treatments: designPoints,
-  treatmentAssigner: (subject, treatments) => {
-    return treatments[Math.floor(Math.random() * treatments.length)];
+  treatmentAssigner: async (treatments) => {
+    const experiment_count = await FindLeastFrequentFinishedExperiment(
+      treatments.map((treatment) => {
+        return treatment.params;
+      })
+    );
+
+    // find treatments with less than 100 completion
+    const valid_experiments = experiment_count.filter((t) => t.count < 100);
+
+    // select the least frequent treatment
+    if (valid_experiments.length > 0) {
+      const selected_treatment = valid_experiments[0].experimentId;
+      return treatments.find((treatment) => {
+        return stringy(treatment.params) === selected_treatment;
+      });
+    } else {
+      return null;
+    }
   },
 };
 

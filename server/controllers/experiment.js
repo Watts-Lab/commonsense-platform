@@ -9,6 +9,9 @@ const {
 const {
   FindLeastFrequentExperiment,
 } = require("../survey/experiments/utils/reverse-weight-selector");
+const {
+  GetStatementsWeighted,
+} = require("../survey/treatments/weighted-random.treatment");
 const { body, query, validationResult } = require("express-validator");
 
 const { stringy } = require("../survey/treatments/utils/id-generator");
@@ -20,50 +23,93 @@ const returnStatements = async (req, res) => {
     return res.status(400).json({ errors: errors.array() });
   }
 
-  const oursobject = experiments
+  // Filter out invalid treatments
+  const valid_experiments = experiments
     .flatMap((experiment) =>
       experiment.treatments.map((treatment) => {
         return {
+          experiment_name: experiment.experimentName,
+          experiment_assigner: experiment.treatmentAssigner,
           validity: () => true,
-          req: { ...req.body },
-          ...experiment,
           ...treatment,
         };
       })
     )
-    .filter((treatment) => treatment.validity({ ...req }));
+    .filter((treatment) => {
+      return treatment.validity({ ...req }, treatment.params);
+    });
 
-  const groupedExperiments = oursobject.reduce((acc, experiment) => {
-    const experimentName = experiment.experimentName;
-    if (!acc[experimentName]) {
-      acc[experimentName] = [];
+  // Group valid experiments by experiment name and treatment
+  const grouped_experiments = valid_experiments.reduce((acc, experiment) => {
+    if (!acc[experiment.experiment_name]) {
+      acc[experiment.experiment_name] = {
+        experiment_assigner: experiment.experiment_assigner,
+        experiment_valid_treatments: [],
+      };
     }
-    acc[experimentName].push(experiment);
+    acc[experiment.experiment_name].experiment_valid_treatments.push(
+      experiment
+    );
     return acc;
   }, {});
 
-  const selectedTreatment = await FindLeastFrequentExperiment(
-    oursobject.map((treatment) => {
-      return treatment.params;
-    })
+  // Ensure async operations are handled correctly
+  for (const experiment_name of Object.keys(grouped_experiments)) {
+    const experiment = grouped_experiments[experiment_name];
+    const assigned_treatment = await experiment.experiment_assigner(
+      experiment.experiment_valid_treatments
+    );
+
+    // If a treatment was assigned, add it to the experiment
+    if (assigned_treatment) {
+      // Assign the treatment to the experiment
+      grouped_experiments[experiment_name].assigned_treatment =
+        assigned_treatment;
+    } else {
+      // Remove the experiment if no treatment was assigned
+      delete grouped_experiments[experiment_name];
+    }
+  }
+
+  let random_experiment = {};
+
+  // if grouped_experiments is empty, asign a default treatment
+  if (Object.keys(grouped_experiments).length === 0) {
+    random_experiment = {
+      assigned_treatment: {
+        experiment_name: "default",
+        params: {
+          sessionId: req.query.sessionId,
+          validStatementList: [],
+          numberOfStatements: 15,
+        },
+        function: GetStatementsWeighted,
+        validity: (req, params) => {
+          return true;
+        },
+      },
+    };
+  } else {
+    // Select a random experiment from grouped_experiments
+    const experiment_names = Object.keys(grouped_experiments);
+    const random_experiment_name =
+      experiment_names[Math.floor(Math.random() * experiment_names.length)];
+    random_experiment = grouped_experiments[random_experiment_name];
+  }
+
+  const result = await random_experiment.assigned_treatment.function(
+    random_experiment.assigned_treatment.params
   );
 
-  const treatmentObject = oursobject.find((treatment) => {
-    return stringy(treatment.params) === selectedTreatment;
-  });
-
-  const result = await treatmentObject.function(treatmentObject.params);
-
-  const userSessionId = req.query.sessionId;
-
+  const user_session_id = req.query.sessionId;
   // Remove sessionId from req.query
   delete req.query.sessionId;
 
   const experimentData = {
-    userSessionId: userSessionId,
-    experimentId: stringy(treatmentObject.params),
-    experimentType: treatmentObject.experimentName,
-    experimentInfo: treatmentObject,
+    userSessionId: user_session_id,
+    experimentId: stringy(random_experiment.assigned_treatment.params),
+    experimentType: random_experiment.assigned_treatment.experiment_name,
+    experimentInfo: random_experiment.assigned_treatment,
     statementList: result.answer,
     urlParams: stringy(req.query) ? stringy(req.query) : null,
     finished: false,
