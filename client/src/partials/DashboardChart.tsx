@@ -6,7 +6,7 @@ import { useSession } from "../context/SessionContext";
 
 function DashboardChart() {
   const {
-    state: { sessionId, urlParams },
+    state: { sessionId },
   } = useSession();
 
   const [commonSenseScore, setCommonSenseScore] = useState({
@@ -43,7 +43,7 @@ function DashboardChart() {
     Backend.get("/results/all", {
       withCredentials: true,
       params: {
-        sessionId: urlParams,
+        sessionId: sessionId,
       },
     })
       .then((response) => {

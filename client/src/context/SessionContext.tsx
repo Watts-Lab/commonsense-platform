@@ -191,10 +191,8 @@ export const SessionProvider = ({ children }: SessionProviderProps) => {
       if (user === null) return;
       try {
         Backend.defaults.headers.common["Authorization"] = user.token;
-        const response = await Backend.post(`/users/verify`);
-        if (response.data.ok) {
-          setUser({ email: user.email, token: user.token });
-        } else {
+        const response = await Backend.post("/users/verify");
+        if (!response.data.ok) {
           setUser(null);
         }
       } catch {

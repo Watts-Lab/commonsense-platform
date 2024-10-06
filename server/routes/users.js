@@ -1,11 +1,33 @@
 const router = require("express").Router();
 const controller = require("../controllers/users");
+const { header } = require("express-validator");
 
-router.get("/", (req, res) => {
-    res.status(200).json({ message: "Users route" });
-  });
 router.post("/enter", controller.login);
-router.post("/verify", controller.verify_token);
-router.post("/deleteaccount", controller.delete_account);
+router.post(
+  "/verify",
+  [
+    header("Authorization")
+      .exists()
+      .withMessage("Authorization header is missing")
+      .isString()
+      .withMessage("Authorization header must be a string")
+      .notEmpty()
+      .withMessage("Authorization header cannot be empty"),
+  ],
+  controller.verify_token
+);
+router.post(
+  "/deleteaccount",
+  [
+    header("Authorization")
+      .exists()
+      .withMessage("Authorization header is missing")
+      .isString()
+      .withMessage("Authorization header must be a string")
+      .notEmpty()
+      .withMessage("Authorization header cannot be empty"),
+  ],
+  controller.delete_account
+);
 
 module.exports = router;
