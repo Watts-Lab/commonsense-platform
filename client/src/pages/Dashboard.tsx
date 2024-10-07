@@ -66,7 +66,13 @@ const Dashboard: React.FC = () => {
       const response = await Backend.post("/users/deleteaccount", {
         email: "",
       });
-      return response.data.ok;
+      if (!response.data.ok) {
+        console.error("Error deleting account:", response.data.message);
+        return;
+      } else {
+        console.log("Account deleted");
+        signOut();
+      }
     } catch (error) {
       console.log(error);
     }
