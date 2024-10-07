@@ -8,10 +8,10 @@ export function FeedbackTypeStep({
 }) {
   return (
     <>
-      <header>
-        <span className="leading-6 pr-6 mr-7 text-black dark:text-gray-100">
+      <header className="flex justify-between items-center w-full">
+        <p className="text-black dark:text-gray-100">
           Please give us your feedback!
-        </span>
+        </p>
         <CloseButton />
       </header>
       <div className="flex py-8 gap-2 w-full">

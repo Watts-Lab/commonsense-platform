@@ -8,7 +8,7 @@ import { useSession } from "../context/SessionContext";
 type MultiStepFormProps = {
   steps: statementStorageData[];
   handleAnswerSaving: (tid: number, answerState: boolean) => void;
-  getNextStatement: (sessionId: string) => void;
+  getNextStatement?: (sessionId: string) => void;
   pushNewStatement: (id: number, statement: string) => void;
 };
 
