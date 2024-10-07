@@ -39,6 +39,9 @@ function Layout() {
       experimentInfo: record,
     }).finally(() => {
       setCurrentStepIndex((i) => i + 1);
+      if (record.surveyName !== "demographics") {
+        localStorage.setItem(record.surveyName, JSON.stringify(record));
+      }
     });
   };
 
@@ -50,18 +53,6 @@ function Layout() {
           : data
       )
     );
-  };
-
-  const getNextStatement = async (sessionId: string) => {
-    try {
-      const { data: response } = await Backend.get("/treatments", {
-        withCredentials: true,
-        params: { sessionId: sessionId },
-      });
-      return response;
-    } catch (error) {
-      console.log(error);
-    }
   };
 
   const pushResultComponent = (experimentId: number) => {
@@ -105,7 +96,6 @@ function Layout() {
   const { setCurrentStepIndex, currentStepIndex, back, next } = MultiStepForm({
     steps: statementsData,
     handleAnswerSaving: handleAnswerSaving,
-    getNextStatement: getNextStatement,
     pushNewStatement: pushNewStatement,
   });
 

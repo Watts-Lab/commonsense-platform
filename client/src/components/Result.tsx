@@ -10,8 +10,43 @@ import { statementStorageData } from "./Layout";
 import { useSession } from "../context/SessionContext";
 import { rawData } from "../partials/Scores";
 
+interface CRT {
+  surveyName: string;
+  responses: {
+    drill_hammer: number;
+    rachel: number;
+    toaster: number;
+    apples: number;
+    eggs: number;
+    dog_cat: number;
+  };
+  result: {
+    score: number;
+    normScore: number;
+  };
+}
+interface RmeTen {
+  surveyName: string;
+  responses: {
+    rme_item_4: string;
+    rme_item_6: string;
+    rme_item_11: string;
+    rme_item_15: string;
+    rme_item_17: string;
+    rme_item_22: string;
+    rme_item_24: string;
+    rme_item_27: string;
+    rme_item_28: string;
+    rme_item_29: string;
+  };
+  result: {
+    score: number;
+    normScore: number;
+  };
+}
+
 type ResultProps = {
-  experimentId: number;
+  experimentId?: number;
 };
 
 function Result({ experimentId }: ResultProps) {
@@ -37,6 +72,25 @@ function Result({ experimentId }: ResultProps) {
 
   const [notifBox, setNotifBox] = useState(false);
   const [aTurkBox, setATurkBox] = useState(false);
+
+  // CRT and rmeTen
+  const [individualCRT] = useState<CRT | null>(() => {
+    const storedParams = localStorage.getItem("CRT");
+    if (storedParams) {
+      return JSON.parse(storedParams);
+    }
+    return null;
+  });
+
+  const [individualRmeTen] = useState<RmeTen | null>(() => {
+    const storedParams = localStorage.getItem("rmeTen");
+    if (storedParams) {
+      return JSON.parse(storedParams);
+    }
+    return null;
+  });
+
+  console.log(individualCRT, individualRmeTen);
 
   useEffect(() => {
     setLoadingResults(true);
@@ -279,6 +333,22 @@ function Result({ experimentId }: ResultProps) {
         become more accurate as others answer more questions. If you log in
         below you can continue to see this score as it updates over time.
       </p>
+      {individualCRT && individualRmeTen && (
+        <p className="pb-4">
+          You have also completed the Cognitive Reflection Test (CRT) and the
+          Reading the Mind in the Eyes Test (RMET). You scored{" "}
+          <span className="font-bold text-blue-700 dark:text-blue-400 dark:text-opacity-80">
+            {individualCRT.result.score}/6
+          </span>{" "}
+          on the CRT and{" "}
+          <span className="font-bold text-blue-700 dark:text-blue-400 dark:text-opacity-80">
+            {individualRmeTen.result.score}/10
+          </span>{" "}
+          on the RME. These scores do not affect your common sense score but
+          measure different aspects of your thinking.
+        </p>
+      )}
+
       <div className="flex justify-center" ref={containerRef} />
       <TwitterText
         percentage={commonSenseScore.commonsense}
