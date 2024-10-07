@@ -46,7 +46,7 @@ function MultiStepForm({ steps, handleAnswerSaving }: MultiStepFormProps) {
           others_agree_reason: steps[currentStepIndex].answers[3].split("-")[1],
           perceived_commonsense:
             steps[currentStepIndex].answers[4].split("-")[1] === "Yes" ? 1 : 0,
-          clarity: "removed",
+          clarity: steps[currentStepIndex].answers[5],
           origLanguage: "en",
           sessionId: sessionId,
           withCredentials: true,

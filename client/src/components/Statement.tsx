@@ -1,8 +1,13 @@
 import { useEffect, useState } from "react";
 import SurveyImage from "./SurveyImage";
 import "./style.css";
-import Question from "./Question";
-import { questionData } from "../data/questions"; // Import here
+import MultiChoiceQuestion from "./MultiChoiceQustion";
+import {
+  MultipleChoiceQuestionType,
+  questionData,
+  TextQuestionType,
+} from "../data/questions"; // Import here
+import TextQuestion from "./TextQuestion";
 
 interface StatementProps {
   statementText: string;
@@ -21,7 +26,6 @@ function Statement({
   data,
   statementId,
   onChange,
-  unansweredQuestionIndex,
 }: StatementProps) {
   const [answers, setAnswers] = useState<string[]>(data.answers);
 
@@ -50,17 +54,27 @@ function Statement({
         Required fields are marked with an asterisk *
       </p>
       {questionData.map((question, index) => {
-        const isUnanswered = unansweredQuestionIndex === index + 1;
-        return (
-          <Question
-            key={index}
-            statementId={statementId}
-            question={question}
-            answerValue={answers[index]}
-            setAnswer={handleAnswerChange}
-            unanswered={isUnanswered}
-          />
-        );
+        if (question.type === "multipleChoice") {
+          return (
+            <MultiChoiceQuestion
+              key={index}
+              statementId={statementId}
+              question={question as MultipleChoiceQuestionType}
+              answerValue={answers[index]}
+              setAnswer={handleAnswerChange}
+            />
+          );
+        } else {
+          return (
+            <TextQuestion
+              key={index}
+              statementId={statementId}
+              question={question as TextQuestionType}
+              answerValue={answers[index]}
+              setAnswer={handleAnswerChange}
+            />
+          );
+        }
       })}
     </>
   );

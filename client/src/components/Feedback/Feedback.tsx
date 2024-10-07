@@ -6,7 +6,7 @@ import WidgetForm from "./WidgetForm";
 function Feedback() {
   return (
     <>
-      <Popover className="lg:fixed bottom-0 left-0 w-full flex justify-center items-center md:bottom-8 md:right-2 md:w-auto md:left-auto md:justify-end">
+      <Popover className="lg:fixed bottom-0 left-0 w-full flex justify-center items-center md:bottom-4 md:right-2 md:w-auto md:left-auto md:justify-end">
         <Popover.Panel>
           <WidgetForm />
         </Popover.Panel>
