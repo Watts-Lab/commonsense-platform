@@ -20,6 +20,7 @@ export type statementStorageData = {
 };
 
 function Layout() {
+  const [loading, setLoading] = useState(false);
   const [statementArray, setStatementArray] = useState<ReactNode[]>([]);
   const [statementsData, setStatementsData] = useStickyState<
     statementStorageData[]
@@ -113,6 +114,7 @@ function Layout() {
     (async () => {
       // Only fetch if sessionId is not set
       try {
+        setLoading(true);
         // Then, get the experiments data
         const experimentsResponse = await Backend.get("/experiments", {
           params: {
@@ -173,6 +175,8 @@ function Layout() {
       } catch (error) {
         // Handle errors if any of the above operations fail
         console.error("An error occurred:", error);
+      } finally {
+        setLoading(false);
       }
     })();
   }, [sessionId]);
@@ -184,47 +188,62 @@ function Layout() {
 
   return (
     <>
-      <form id="main-survey" onSubmit={submitHandler}>
-        {currentStepIndex !== surveyLength ? (
-          <ProgressBar
-            currentStep={currentStepIndex}
-            totalSteps={surveyLength}
+      {loading ? (
+        <>
+          <ProgressBar currentStep={0} totalSteps={0} />
+          <Statement
+            statementText={"Loading statement..."}
+            statementId={0}
+            onChange={() => {}}
+            data={{
+              answers: ["", "", "", "", "", ""],
+            }}
+            loading={true}
           />
-        ) : null}
-        {statementArray[currentStepIndex]}
+        </>
+      ) : (
+        <form id="main-survey" onSubmit={submitHandler}>
+          {currentStepIndex !== surveyLength ? (
+            <ProgressBar
+              currentStep={currentStepIndex}
+              totalSteps={surveyLength}
+            />
+          ) : null}
+          {statementArray[currentStepIndex]}
 
-        {currentStepIndex < surveyLength - 3 && (
-          <div className="flex justify-between">
-            <button
-              onClick={back}
-              type="button"
-              className="order-1 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            >
-              {(() => {
-                if (currentStepIndex === 0) {
-                  return <Link to="/consent">Start</Link>;
-                } else {
-                  return "← Previous";
-                }
-              })()}
-            </button>
+          {currentStepIndex < surveyLength - 3 && (
+            <div className="flex justify-between">
+              <button
+                onClick={back}
+                type="button"
+                className="order-1 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              >
+                {(() => {
+                  if (currentStepIndex === 0) {
+                    return <Link to="/consent">Start</Link>;
+                  } else {
+                    return "← Previous";
+                  }
+                })()}
+              </button>
 
-            <button
-              type="submit"
-              className="order-last text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            >
-              {(() => {
-                if (currentStepIndex === surveyLength - 3) {
-                  // return <Link to="/finish">Finish</Link>;
-                  return "Continue";
-                } else {
-                  return "Next →";
-                }
-              })()}
-            </button>
-          </div>
-        )}
-      </form>
+              <button
+                type="submit"
+                className="order-last text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              >
+                {(() => {
+                  if (currentStepIndex === surveyLength - 3) {
+                    // return <Link to="/finish">Finish</Link>;
+                    return "Continue";
+                  } else {
+                    return "Next →";
+                  }
+                })()}
+              </button>
+            </div>
+          )}
+        </form>
+      )}
     </>
   );
 }

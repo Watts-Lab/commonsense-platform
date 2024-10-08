@@ -18,6 +18,7 @@ interface StatementProps {
   statementId: number;
   onChange: (statementId: number, answers: string[]) => void;
   unansweredQuestionIndex?: number;
+  loading?: boolean;
 }
 
 function Statement({
@@ -26,6 +27,7 @@ function Statement({
   data,
   statementId,
   onChange,
+  loading,
 }: StatementProps) {
   const [answers, setAnswers] = useState<string[]>(data.answers);
 
@@ -53,29 +55,37 @@ function Statement({
       <p className="px-3 pt-3 tracking-tighter text-gray-500 md:text-sm dark:text-gray-400">
         Required fields are marked with an asterisk *
       </p>
-      {questionData.map((question, index) => {
-        if (question.type === "multipleChoice") {
-          return (
-            <MultiChoiceQuestion
-              key={index}
-              statementId={statementId}
-              question={question as MultipleChoiceQuestionType}
-              answerValue={answers[index]}
-              setAnswer={handleAnswerChange}
-            />
-          );
-        } else {
-          return (
-            <TextQuestion
-              key={index}
-              statementId={statementId}
-              question={question as TextQuestionType}
-              answerValue={answers[index]}
-              setAnswer={handleAnswerChange}
-            />
-          );
-        }
-      })}
+      {loading ? (
+        <div className="flex justify-center items-center min-h-[600px]">
+          <div className="w-16 h-16 border-4 border-blue-500 border-dashed rounded-full animate-spin"></div>
+        </div>
+      ) : (
+        <>
+          {questionData.map((question, index) => {
+            if (question.type === "multipleChoice") {
+              return (
+                <MultiChoiceQuestion
+                  key={`${question.type}-${index}`}
+                  statementId={statementId}
+                  question={question as MultipleChoiceQuestionType}
+                  answerValue={answers[index]}
+                  setAnswer={handleAnswerChange}
+                />
+              );
+            } else {
+              return (
+                <TextQuestion
+                  key={`${question.type}-${index}`}
+                  statementId={statementId}
+                  question={question as TextQuestionType}
+                  answerValue={answers[index]}
+                  setAnswer={handleAnswerChange}
+                />
+              );
+            }
+          })}
+        </>
+      )}
     </>
   );
 }
