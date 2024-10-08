@@ -52,9 +52,6 @@ function Statement({
           {statementText}
         </h3>
       </div>
-      <p className="px-3 pt-3 tracking-tighter text-gray-500 md:text-sm dark:text-gray-400">
-        Required fields are marked with an asterisk *
-      </p>
       {loading ? (
         <div className="flex justify-center items-center min-h-[600px]">
           <div className="w-16 h-16 border-4 border-blue-500 border-dashed rounded-full animate-spin"></div>

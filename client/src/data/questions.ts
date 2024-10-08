@@ -24,7 +24,7 @@ export const questionData: IQuestionData[] = [
   {
     id: 1,
     type: "multipleChoice",
-    question: "Do you agree with this statement? *",
+    question: "Do you agree with this statement?",
     description:
       "(if the answer is, it depends, respond with your most common or most likely answer)",
     possibleAnswers: ["Yes", "No"],
@@ -34,7 +34,7 @@ export const questionData: IQuestionData[] = [
   {
     id: 2,
     type: "multipleChoice",
-    question: "Why did you answer the way you did about <b>yourself?</b> *",
+    question: "Why did you answer the way you did about <b>yourself?</b>",
     possibleAnswers: [
       "It's obvious",
       "It's something I learned",
@@ -49,7 +49,7 @@ export const questionData: IQuestionData[] = [
     id: 3,
     type: "multipleChoice",
     question:
-      "Do you think most other people would agree with this statement? *",
+      "Do you think most other people would agree with this statement?",
     description:
       "(if the answer is, it depends, respond with your most common or most likely answer)",
     possibleAnswers: ["Yes", "No"],
@@ -61,7 +61,7 @@ export const questionData: IQuestionData[] = [
     id: 4,
     type: "multipleChoice",
     question:
-      "Why did you answer the way you did about most <b>other people?</b> *",
+      "Why did you answer the way you did about most <b>other people?</b>",
     possibleAnswers: [
       "I think most people have good judgement with regard to this topic",
       "I think most people lack good judgment with regard to this topic",
@@ -76,7 +76,7 @@ export const questionData: IQuestionData[] = [
     id: 5,
     type: "multipleChoice",
     question:
-      "Overall, do you think this statement is an example of common sense? *",
+      "Overall, do you think this statement is an example of common sense?",
     possibleAnswers: ["Yes", "No"],
     tooltip:
       "This question seeks to gather insights on the perceived consensus among individuals regarding the given statement. We are interested in understanding your opinion about whether you believe that the majority of other people would agree with the statement presented.",
