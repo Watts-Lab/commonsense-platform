@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { answers, statements } = require("../models");
+const { answers, statements, sequelize } = require("../models");
 
 const { body, query, validationResult } = require("express-validator");
 
@@ -63,6 +63,15 @@ router.post(
         commonsensicality: Math.sqrt(data.awareness * data.consensus),
       }))
       .then((data) => res.json(data))
+      .then(async () => {
+        await sequelize.query(
+          "CALL update_statement_median;",
+          {
+            type: sequelize.QueryTypes.CALL,
+          }
+        );
+        console.log("Median updated");
+      })
       .catch((error) => {
         // Handle any errors that occur during the query
         console.error("Error executing the query:", error);
