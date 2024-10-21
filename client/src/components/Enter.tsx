@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 import Navbar from "../partials/NavBar";
 import Footer from "../partials/Footer";
@@ -12,6 +13,7 @@ const Enter: React.FC = () => {
   const {
     actions: { signIn },
   } = useSession();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (params.email && params.link) {
@@ -33,7 +35,10 @@ const Enter: React.FC = () => {
             className="spinner-border animate-spin inline-block w-12 h-12 border-4 border-t-transparent border-gray-500 rounded-full"
             role="status"
           ></div>
-          <p className="text-xl mt-4">Verifying your magic link...</p>
+          <p className="text-xl mt-4">
+            {/* Verifying your magic link... */}
+            {t("enter.verifying-magic-link")}
+          </p>
         </div>
       </main>
       {/* Site footer */}

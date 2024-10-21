@@ -1,9 +1,12 @@
 import React from "react";
 import { Popover } from "@headlessui/react";
 import ChatIcon from "./ChatIcon";
+import { useTranslation } from "react-i18next";
 import WidgetForm from "./WidgetForm";
 
 function Feedback() {
+  const { t } = useTranslation();
+
   return (
     <>
       <Popover className="lg:fixed bottom-0 left-0 w-full flex justify-center items-center md:bottom-4 md:right-2 md:w-auto md:left-auto md:justify-end">
@@ -14,7 +17,8 @@ function Feedback() {
           <ChatIcon />
           <span className="max-w-0 md:overflow-hidden md:group-hover:max-w-xs md:transition-all duration-500 ease-linear dark:text-white">
             <span className="pl-2"></span>
-            Feedback
+            {/* Feedback */}
+            {t("feedback.feedback")}
           </span>
         </Popover.Button>
       </Popover>

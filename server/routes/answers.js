@@ -35,7 +35,7 @@ router.post(
         others_agree: req.body.others_agree,
         others_agree_reason: req.body.others_agree_reason,
         perceived_commonsense: req.body.perceived_commonsense,
-        origLanguage: "en",
+        origLanguage: req.body.origLanguage,
         sessionId: req.body.sessionId,
         clientVersion: process.env.GITHUB_HASH,
       };
@@ -94,6 +94,22 @@ router.post(
         if (err) {
           res.json({ ok: false, message: "something went wrong" });
         } else {
+          const languageMap = {
+            en: "statement",
+            zh: "statement_zh",
+            ru: "statement_ru",
+            pt: "statement_pt",
+            ja: "statement_ja",
+            hi: "statement_hi",
+            fr: "statement_fr",
+            es: "statement_es",
+            bn: "statement_bn",
+            ar: "statement_ar",
+          };
+
+          const language = req.body.language;
+          const statementColumn = languageMap[language] || "statement"; // default to 'statement' if column is not supported
+
           getSessionId(succ.email)
             .then((sessionID) => {
               if (sessionID) {
@@ -106,7 +122,7 @@ router.post(
                       {
                         model: statements,
                         as: "statement",
-                        attributes: ["statement"],
+                        attributes: [statementColumn], // select the correct column based on the language
                       },
                     ],
                     order: [["createdAt", "DESC"]],
@@ -182,7 +198,7 @@ router.post(
               others_agree: req.body.others_agree,
               others_agree_reason: req.body.others_agree_reason,
               perceived_commonsense: req.body.perceived_commonsense,
-              origLanguage: "en",
+              origLanguage: req.body.origLanguage,
               sessionId: req.body.sessionId,
               clientVersion: process.env.GITHUB_HASH,
             };

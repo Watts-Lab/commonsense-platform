@@ -96,7 +96,7 @@ const Navbar: React.FC = () => {
                   {t("navbar.signin")}
                 </Link>
               ) : (
-                <Link to="/dashboard" className="text-base hover:underline">
+                <Link to="/dashboard" className="button-long-text">
                   {t("navbar.dashboard")}
                 </Link>
               )}

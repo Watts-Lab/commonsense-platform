@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Backend from "../apis/backend";
+import { useTranslation } from "react-i18next";
 
 import "./style.css";
 import { statementStorageData } from "./Layout";
@@ -13,6 +14,9 @@ type MultiStepFormProps = {
 };
 
 function MultiStepForm({ steps, handleAnswerSaving }: MultiStepFormProps) {
+  const { i18n } = useTranslation();
+  const language = i18n.language;
+
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
 
   const {
@@ -47,7 +51,7 @@ function MultiStepForm({ steps, handleAnswerSaving }: MultiStepFormProps) {
           perceived_commonsense:
             steps[currentStepIndex].answers[4].split("-")[1] === "Yes" ? 1 : 0,
           clarity: steps[currentStepIndex].answers[5],
-          origLanguage: "en",
+          origLanguage: language || "en",
           sessionId: sessionId,
           withCredentials: true,
         }).then(() => {
