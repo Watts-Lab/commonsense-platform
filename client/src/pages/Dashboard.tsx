@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -92,19 +93,19 @@ const Dashboard: React.FC = () => {
     }
   }, [user]);
 
-  const getAnswers = async () => { 
+  const getAnswers = async () => {
     if (user?.token === null) return;
     try {
       Backend.defaults.headers.common["Authorization"] = user?.token;
       const response = await Backend.post("/answers/getanswers", {
         email: "user@test.com",
-        language: language, // get answers based on the current UI language 
+        language: language, // get answers based on the current UI language
       });
       if (!Array.isArray(response.data)) {
         console.error("Expected an array but got:", response.data);
         return;
       }
-      
+
       const updatedAnswers = response.data;
       const statementIds = updatedAnswers.map((answer) => answer.statementId);
       const agreementResponse = await Backend.post(
@@ -359,7 +360,9 @@ const Dashboard: React.FC = () => {
                                   onClick={useEditAnswer}
                                   className="px-2 py-2 text-white bg-[#2d374a] hover:bg-[#1a202c] rounded-md w-[90px] h-[50px] text-center shadow-md transition duration-300 ease-in-out transform hover:scale-105"
                                 >
-                                  {editing ? t('dashboard.done') : t('dashboard.edit-answers')}
+                                  {editing
+                                    ? t("dashboard.done")
+                                    : t("dashboard.edit-answers")}
                                 </button>
                               </th>
                             </tr>
@@ -376,7 +379,9 @@ const Dashboard: React.FC = () => {
                                   scope="row"
                                   className="min-w-[18rem] max-w-[60rem] px-6 py-4 font-medium text-gray-900 whitespace-normal dark:text-white"
                                 >
-                                  {(answer.statement as any)[`statement_${language}`] || answer.statement.statement}
+                                  {(answer.statement as any)[
+                                    `statement_${language}`
+                                  ] || answer.statement.statement}
                                 </td>
                                 <td className="px-6 py-4">
                                   {editing && (

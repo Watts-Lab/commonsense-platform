@@ -160,7 +160,7 @@
   "twitter-text": {
     "share-button": "复制并分享！",
     "percentage": "我的常识是{{percentage}}%",
-    "check-yours": "检查你的：commonsensicality.org/{{sessionId}}"
+    "check-yours": "检查你的：commonsensicality.org/s/{{sessionId}}"
   },
   "notification": {
     "welcome": "欢迎",

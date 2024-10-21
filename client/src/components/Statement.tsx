@@ -8,7 +8,6 @@ import {
   TextQuestionType,
 } from "../data/questions"; // Import here
 import TextQuestion from "./TextQuestion";
-import { useTranslation } from "react-i18next";
 
 interface StatementProps {
   statementText: string;
@@ -31,7 +30,6 @@ function Statement({
   loading,
 }: StatementProps) {
   const [answers, setAnswers] = useState<string[]>(data.answers);
-  const { t } = useTranslation();
 
   useEffect(() => {
     onChange(statementId, answers);

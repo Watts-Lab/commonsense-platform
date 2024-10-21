@@ -14,7 +14,7 @@ type MultiStepFormProps = {
 };
 
 function MultiStepForm({ steps, handleAnswerSaving }: MultiStepFormProps) {
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
   const language = i18n.language;
 
   const [currentStepIndex, setCurrentStepIndex] = useState(0);

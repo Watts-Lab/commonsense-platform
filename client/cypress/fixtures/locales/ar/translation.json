@@ -160,7 +160,7 @@
   "twitter-text": {
     "share-button": "نسخ ومشاركة!",
     "percentage": "حساسي العام هو {{percentage}}%",
-    "check-yours": "تحقق من حساسيتك: commonsensicality.org/{{sessionId}}"
+    "check-yours": "تحقق من حساسيتك: commonsensicality.org/s/{{sessionId}}"
   },
   "notification": {
     "welcome": "مرحبا",

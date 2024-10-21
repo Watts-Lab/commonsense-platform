@@ -160,7 +160,7 @@
   "twitter-text": {
     "share-button": "Copiar e Compartilhar!",
     "percentage": "Meu bom senso é de {{percentage}}%",
-    "check-yours": "Verifique o seu: commonsensicality.org/{{sessionId}}"
+    "check-yours": "Verifique o seu: commonsensicality.org/s/{{sessionId}}"
   },
   "notification": {
     "welcome": "Bem-vindo",

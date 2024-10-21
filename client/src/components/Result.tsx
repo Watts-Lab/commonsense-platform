@@ -336,20 +336,20 @@ function Result({ experimentId }: ResultProps) {
       )}
 
       <p className="pb-4">
-         {/* This score is based on a calculation of how similar your beliefs are to
+        {/* This score is based on a calculation of how similar your beliefs are to
         others (yours are {commonSenseScore.awareness}% similar), and how
         accurately you rated what others think (you were{" "}
         {commonSenseScore.consensus}% accurate). */}
         {t("result.score-description", {
           awareness: commonSenseScore.awareness,
-          consensus: commonSenseScore.consensus
+          consensus: commonSenseScore.consensus,
         })}
       </p>
       <p className="pb-4">
         {/* This is calculated by comparing your answers to others answers, so it
         will become more accurate if you answer more questions and it will
         become more accurate as others answer more questions. If you log in
-        below you can continue to see this score as it updates over time.
+        below you can continue to see this score as it updates over time. */}
       </p>
       {individualCRT && individualRmeTen && (
         <p className="pb-4">

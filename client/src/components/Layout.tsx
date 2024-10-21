@@ -1,7 +1,7 @@
 import { ReactNode, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-// @ts-expect-error no types availableimport { useTranslation } from "react-i18next";
-
+import { useTranslation } from "react-i18next";
+// @ts-expect-error no types available
 import { CRT, RmeTen, Demographics } from "@watts-lab/surveys";
 import Statement from "./Statement";
 import MultiStepForm from "./MultiStepForm";
@@ -23,8 +23,10 @@ export type statementStorageData = {
 function Layout() {
   const [loading, setLoading] = useState(false);
   // get the current language
-  const { t, i18n } = useTranslation();
-  const language = i18n.language;
+  const {
+    t,
+    i18n: { language },
+  } = useTranslation();
 
   const [statementArray, setStatementArray] = useState<ReactNode[]>([]);
   const [statementsData, setStatementsData] = useStickyState<
@@ -66,7 +68,11 @@ function Layout() {
       ...oldArray,
       <CRT key="crt" onComplete={onCompleteCallback} language={language} />,
       <RmeTen key="rmet" onComplete={onCompleteCallback} language={language} />,
-      <Demographics key="demographic" onComplete={onCompleteCallback} language={language} />,
+      <Demographics
+        key="demographic"
+        onComplete={onCompleteCallback}
+        language={language}
+      />,
       <Result key={oldArray.length} experimentId={experimentId} />,
     ]);
   };
@@ -123,22 +129,22 @@ function Layout() {
         // Then, get the experiments data
         const experimentsResponse = await Backend.get("/experiments", {
           params: {
-        ...{
-            sessionId: sessionId,
-            ...urlParams.reduce(
-              (
-                acc: Record<string, string>,
-                param: { key: string; value: string }
-              ) => {
+            ...{
+              sessionId: sessionId,
+              ...urlParams.reduce(
+                (
+                  acc: Record<string, string>,
+                  param: { key: string; value: string }
+                ) => {
                   acc[param.key] = param.value;
                   return acc;
                 },
-              {}
-            ),
-          },
+                {}
+              ),
+            },
             language: language, // add language parameter
-      },
-    });
+          },
+        });
 
         // Process the experiments data
         const initialAnswers = experimentsResponse.data.statements.map(
@@ -158,14 +164,13 @@ function Layout() {
               statement: { statement: string; image?: string; id: number },
               index: number
             ) => {
-              const statementText = (statement as any)[`statement_${language}`] || statement.statement; // define the statement in the current language
+              const statementText =
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                (statement as any)[`statement_${language}`] ||
+                statement.statement; // define the statement in the current language
               return (
                 <Statement
                   key={index}
-                  next={next}
-                  back={back}
-                  currentStep={index + 1}
-                  totalSteps={response.data.statements.length}
                   statementText={statementText}
                   imageUrl={statement.image}
                   statementId={statement.id}
@@ -192,7 +197,7 @@ function Layout() {
         setLoading(false);
       }
     })();
-  }, [language,sessionId]); // retrieve new statements when language changes
+  }, [language, sessionId]); // retrieve new statements when language changes
 
   const submitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -233,10 +238,12 @@ function Layout() {
               >
                 {(() => {
                   if (currentStepIndex === 0) {
-                    return <Link to="/consent">
-                    {/* Start */}
-                    {t("layout.start")}
-                  </Link>;
+                    return (
+                      <Link to="/consent">
+                        {/* Start */}
+                        {t("layout.start")}
+                      </Link>
+                    );
                   } else {
                     return t("layout.previous");
                   }
@@ -250,9 +257,9 @@ function Layout() {
                 {(() => {
                   if (currentStepIndex === surveyLength - 3) {
                     // return <Link to="/finish">Finish</Link>;
-                    return t('layout.continue');
+                    return t("layout.continue");
                   } else {
-                    return t('layout.next');
+                    return t("layout.next");
                   }
                 })()}
               </button>

@@ -160,7 +160,7 @@
   "twitter-text": {
     "share-button": "コピー＆シェア！",
     "percentage": "私の常識は{{percentage}}%です",
-    "check-yours": "あなたの常識を確認する: commonsensicality.org/{{sessionId}}"
+    "check-yours": "あなたの常識を確認する: commonsensicality.org/s/{{sessionId}}"
   },
   "notification": {
     "welcome": "ようこそ",

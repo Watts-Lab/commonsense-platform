@@ -162,7 +162,7 @@
   "twitter-text": {
     "share-button": "Copy & Share!",
     "percentage": "My common sense is {{percentage}}%",
-    "check-yours": "Check yours: commonsensicality.org/{{sessionId}}"
+    "check-yours": "Check yours: commonsensicality.org/s/{{sessionId}}"
   },
   "notification": {
     "welcome": "Welcome",

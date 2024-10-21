@@ -160,7 +160,7 @@
   "twitter-text": {
     "share-button": "কপি এবং শেয়ার!",
     "percentage": "আমার সাধারণ জ্ঞান {{percentage}}%",
-    "check-yours": "আপনারটি পরীক্ষা করুন: commonsensicality.org/{{sessionId}}"
+    "check-yours": "আপনারটি পরীক্ষা করুন: commonsensicality.org/s/{{sessionId}}"
   },
   "notification": {
     "welcome": "স্বাগতম",

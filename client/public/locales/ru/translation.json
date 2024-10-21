@@ -160,7 +160,7 @@
   "twitter-text": {
     "share-button": "Копировать и поделиться!",
     "percentage": "Мой здравый смысл {{percentage}}%",
-    "check-yours": "Проверьте свой: commonsensicality.org/{{sessionId}}"
+    "check-yours": "Проверьте свой: commonsensicality.org/s/{{sessionId}}"
   },
   "notification": {
     "welcome": "Добро пожаловать",

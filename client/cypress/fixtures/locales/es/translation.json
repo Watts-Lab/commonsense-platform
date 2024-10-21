@@ -166,7 +166,7 @@
   "twitter-text": {
     "share-button": "¡Copiar y Compartir!",
     "percentage": "Mi sentido común es del {{percentage}}%",
-    "check-yours": "Comprueba el tuyo: commonsensicality.org/{{sessionId}}"
+    "check-yours": "Comprueba el tuyo: commonsensicality.org/s/{{sessionId}}"
   },
   "notification": {
     "welcome": "Bienvenido",

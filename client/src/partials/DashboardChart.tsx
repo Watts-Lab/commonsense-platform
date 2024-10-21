@@ -1,6 +1,5 @@
 import { useEffect, useState, useRef } from "react";
 import * as Plot from "@observablehq/plot";
-import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 
 import Backend from "../apis/backend";
@@ -111,7 +110,7 @@ function DashboardChart() {
             <div className="flex flex-col justify-center items-center h-full text-white">
               <div className="text-gray-600 pb-4 text-2xl">
                 {/* Your score */}
-                {t('dashboard-chart.your-score')}
+                {t("dashboard-chart.your-score")}
               </div>
               <div
                 className="radial-progress bg-gray-600 text-gray-300 border-4 border-gray-600"
@@ -124,9 +123,8 @@ function DashboardChart() {
           <p className="pb-4">
             {/* This score is based on a calculation of how similar your beliefs are
             to others (yours are {commonSenseScore.awareness}% similar), and how
-            accurately you rated what others think (you were{" "}
-            {commonSenseScore.consensus}% accurate). */}
-            {t('dashboard-chart.score-description', {
+            accurately you rated what others think (you were  {commonSenseScore.consensus}% accurate). */}
+            {t("dashboard-chart.score-description", {
               awareness: commonSenseScore.awareness,
               consensus: commonSenseScore.consensus,
             })}
@@ -136,7 +134,7 @@ function DashboardChart() {
             {/* This is calculated by comparing your answers to others answers, so
             it will become more accurate if you answer more questions and it
             will become more accurate as others answer more questions. */}
-            {t('dashboard-chart.calculated')}
+            {t("dashboard-chart.calculated")}
           </p>
         </div>
       </div>

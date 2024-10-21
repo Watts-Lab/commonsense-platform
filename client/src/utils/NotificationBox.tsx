@@ -1,4 +1,3 @@
-import React, { Fragment, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 function NotificationBox({ userEmail }: { userEmail: string }) {
@@ -16,9 +15,9 @@ function NotificationBox({ userEmail }: { userEmail: string }) {
         </h3>
       </div>
       <p className="text-white group-hover:text-white text-sm">
-         {/* An email with your verification link has been sent to {userEmail}.
+        {/* An email with your verification link has been sent to {userEmail}.
         Please click on the link to verify your email. */}
-        {t("notification.text", { email: props.userEmail })}
+        {t("notification.text", { email: userEmail })}
       </p>
     </a>
   );
