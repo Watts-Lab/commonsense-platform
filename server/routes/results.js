@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { answers, statements } = require("../models");
+const { answers, statements, sequelize } = require("../models");
 
 const { body, query, validationResult } = require("express-validator");
 
@@ -15,7 +15,6 @@ router.post(
   [body("sessionId").notEmpty().withMessage("sessionId is required")],
   async (req, res) => {
     // Check for validation errors
-    // console.log("req.body", req.body);
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
@@ -64,6 +63,15 @@ router.post(
         commonsensicality: Math.sqrt(data.awareness * data.consensus),
       }))
       .then((data) => res.json(data))
+      .then(async () => {
+        await sequelize.query(
+          "CALL update_statement_median;",
+          {
+            type: sequelize.QueryTypes.CALL,
+          }
+        );
+        console.log("Median updated");
+      })
       .catch((error) => {
         // Handle any errors that occur during the query
         console.error("Error executing the query:", error);
@@ -72,7 +80,6 @@ router.post(
 );
 
 router.get("/all", async (req, res) => {
-  console.log("req.sessionID", req.query.sessionId);
   await answers
     .findAll({
       include: [

@@ -1,37 +1,38 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
-import { HashLink } from "react-router-hash-link";
-import { useAppSelector } from "../redux/hooks";
-import { useTranslation } from 'react-i18next';
-
+import { useTranslation } from "react-i18next";
 import ConsentModal from "../components/ConsentModal";
 import LocaleSwitcher from "../components/LocaleSwitcher";
-
 import Icon from "../images/Light-mode.svg";
-import '../css/styles.css';
+import "../css/styles.css";
+import { useSession } from "../context/SessionContext";
+import { debounce } from "lodash";
 
 const Navbar: React.FC = () => {
-  const loggedIn = useAppSelector((state) => state.login.loggedIn);
-  const email = useAppSelector((state) => state.login.email);
+  const {
+    state: { user },
+  } = useSession();
   const { t } = useTranslation();
+  const [isTop, setTop] = useState(true);
 
-  const [top, setTop] = useState(true);
-  const [isMenuOpen, setMenuOpen] = useState(false);
-
-  const toggleMenu = () => {
-    setMenuOpen(!isMenuOpen);
-  };
+  const handleScroll = useCallback(
+    debounce(() => {
+      setTop(window.scrollY < 10);
+    }, 100), // You can adjust the debounce time as needed
+    []
+  );
 
   useEffect(() => {
-    const onScroll = () => {
-      setTop(window.scrollY < 10);
-    };
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [handleScroll]);
 
   return (
-    <div className="navbar bg-neutral text-neutral-content">
+    <nav
+      className={`navbar bg-neutral text-neutral-content dark:text-gray-50 ${
+        isTop ? "at-top" : ""
+      }`}
+    >
       <div className="mx-auto max-w-screen-xl w-full flex justify-between items-center px-2 lg:px-4">
         <div className="navbar-start flex items-center">
           <div className="dropdown">
@@ -56,73 +57,63 @@ const Navbar: React.FC = () => {
               className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-200 rounded-box w-52 text-gray-900"
             >
               <li className="mb-2">
-                <a href="/people">{t('navbar.people')}</a>
+                <Link to="/people">{t("navbar.people")}</Link>
               </li>
               <li className="mb-2">
-                <a href="/research">{t('navbar.research')}</a>
+                <Link to="/research">{t("navbar.research")}</Link>
               </li>
               <li className="mb-2">
-                {!loggedIn ? (
-                  <a href="/signin">{t('navbar.signin')}</a>
+                {!user ? (
+                  <Link to="/signin">{t("navbar.signin")}</Link>
                 ) : (
-                  <a href="/dashboard">{t('navbar.dashboard')}</a>
+                  <Link to="/dashboard">{t("navbar.dashboard")}</Link>
                 )}
               </li>
             </ul>
           </div>
-
           <Link to="/" className="flex items-center" aria-label="Logo">
             <img className="h-9 block" src={Icon} alt="Logo" />
             <span className="text-lg font-bold inline-block ml-2">
-              {/* The common sense project */}
-              {t('navbar.commonsense')}
+              {t("navbar.commonsense")}
             </span>
           </Link>
         </div>
         <div className="navbar-center hidden lg:flex justify-center flex-1">
           <ul className="flex space-x-10 lg:space-x-10">
             <li className="mb-2">
-              <a href="/people" className="button-long-text">
-                {/* People */}
-                {t('navbar.people')}
-              </a>
+              <Link to="/people" className="button-long-text">
+                {t("navbar.people")}
+              </Link>
             </li>
             <li className="mb-2">
-              <a href="/research" className="button-long-text">
-                {/* Research */}
-                {t('navbar.research')}
-              </a>
+              <Link to="/research" className="button-long-text">
+                {t("navbar.research")}
+              </Link>
             </li>
             <li className="mb-2">
-              {!loggedIn ? (
-                <a href="/signin" className="button-long-text">
-                  {/* Signin */}
-                  {t('navbar.signin')}
-                </a>
+              {!user ? (
+                <Link to="/signin" className="button-long-text">
+                  {t("navbar.signin")}
+                </Link>
               ) : (
-                <>
-                  <a
-                    href="/dashboard"
-                    className="button-long-text"
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    {/* Dashboard */}
-                    {t('navbar.dashboard')}
-                  </a>
-                </>
+                <Link to="/dashboard" className="button-long-text">
+                  {t("navbar.dashboard")}
+                </Link>
               )}
             </li>
           </ul>
         </div>
-
         <div className="navbar-end flex items-center px-2 lg:px-4">
-          <ConsentModal buttonText={t('navbar.participate →')} buttonClass="btn" />
+          <ConsentModal
+            buttonText={t("navbar.participate →")}
+            buttonClass="btn dark:text-gray-50"
+          />
           <div className="ml-4">
             <LocaleSwitcher />
           </div>
         </div>
       </div>
-    </div>
+    </nav>
   );
 };
 

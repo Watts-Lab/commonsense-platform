@@ -1,24 +1,24 @@
 import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
-import { useAppSelector, useAppDispatch } from "../redux/hooks";
-import { setUrlParams } from "../redux/slices/urlSlice";
-
 import Navbar from "../partials/NavBar";
 import Banner from "../partials/Banner";
 import Footer from "../partials/Footer";
+import { useSession } from "../context/SessionContext";
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
+  const {
+    state: { urlParams },
+    actions: { setUrlParams },
+  } = useSession();
 
-  const dispatch = useAppDispatch();
-  const urlParams = useAppSelector((state) => state.urlslice.urlParams);
   const { shareLink } = useParams();
 
   useEffect(() => {
     if (shareLink) {
       const newParams = [...urlParams, { key: "shareLink", value: shareLink }];
-      dispatch(setUrlParams({ urlParams: newParams }));
+      setUrlParams(newParams);
       // Now navigate to the root path, replacing the current entry
       navigate("/", { replace: true });
     }

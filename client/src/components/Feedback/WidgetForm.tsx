@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { FeedbackTypeStep } from "./Steps/FeedbackTypeStep";
 import { FeedbackContentStep } from "./Steps/FeedbackContentStep";
 import { FeedbackSuccessStep } from "./Steps/FeedbackSuccessStep";
-import useDarkMode from "../../hooks/useDarkMode";
 
 const feedbackTypes = {
   BUG: {
@@ -14,7 +13,7 @@ const feedbackTypes = {
         viewBox="0 0 24 24"
         strokeWidth={1.5}
         stroke="currentColor"
-        className="w-4 h-4"
+        className="w-4 h-4 dark:stroke-black"
       >
         <path
           strokeLinecap="round"
@@ -33,7 +32,7 @@ const feedbackTypes = {
         viewBox="0 0 24 24"
         strokeWidth={1.5}
         stroke="currentColor"
-        className="w-4 h-4"
+        className="w-4 h-4 dark:stroke-black"
       >
         <path
           strokeLinecap="round"
@@ -47,10 +46,9 @@ const feedbackTypes = {
 
 export const feedbackType = Object.keys(feedbackTypes);
 
-function WidgetForm(props: any) {
+function WidgetForm() {
   const [feedbackType, setFeedbackType] = useState<string | null>(null);
   const [feedbackSent, setFeedbackSent] = useState(false);
-  const [isDarkMode] = useDarkMode();
 
   function handleRestartFeedback() {
     setFeedbackSent(false);
@@ -58,7 +56,7 @@ function WidgetForm(props: any) {
   }
 
   return (
-    <div className={`${isDarkMode ? 'bg-slate-600' : 'bg-slate-100'} p-4 relative rounded-2xl flex flex-col items-center shadow-lg w-[calc(100vw-2rem)] md:w-auto`}>
+    <div className="dark:bg-slate-600 bg-slate-100 p-4 relative rounded-2xl flex flex-col items-center shadow-lg w-[calc(100vw-2rem)] md:w-auto">
       {feedbackSent ? (
         <FeedbackSuccessStep onFeedbackRestartRequest={handleRestartFeedback} />
       ) : (

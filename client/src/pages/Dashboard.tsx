@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Navbar from "../partials/NavBar";
@@ -6,10 +6,8 @@ import Footer from "../partials/Footer";
 import DashboardChart from "../partials/DashboardChart";
 import StatementForm from "../components/StatementForm";
 import Backend from "../apis/backend";
-import { useAppDispatch } from '../redux/hooks';
-import { clearUserData } from '../redux/slices/loginSlice';
 
-import { useAppSelector } from "../redux/hooks";
+import { useSession } from "../context/SessionContext";
 interface Statement {
   statement: string;
 }
@@ -42,18 +40,22 @@ interface Answer {
 const Dashboard: React.FC = () => {
   const { t, i18n } = useTranslation();
   const language = i18n.language; // get the current language
-  const loggedIn = useAppSelector((state) => state.login.loggedIn);
+  const {
+    state: { user, sessionId },
+    actions: { setUser },
+  } = useSession();
+
   const [answerList, setAnswerList] = useState<Answer[]>([]);
   const [activeTab, setActiveTab] = useState<string>("dashboard");
   const [editing, setEditing] = useState<boolean>(false);
-  const [othersAgreeCheckboxStates, setOthersAgreeCheckboxStates] = useState<{ [key: number]: boolean }>({});
-  const [agreeCheckboxStates, setAgreeCheckboxStates] = useState<{ [key: number]: boolean }>({});
-  const containerRef = useRef();
+  const [othersAgreeCheckboxStates, setOthersAgreeCheckboxStates] = useState<{
+    [key: number]: boolean;
+  }>({});
+  const [agreeCheckboxStates, setAgreeCheckboxStates] = useState<{
+    [key: number]: boolean;
+  }>({});
+
   const navigate = useNavigate();
-  const surveySession = useAppSelector((state) => state.login.surveySession);
-  const tokenString = localStorage.getItem("token");
-  const token = tokenString !== null ? JSON.parse(tokenString) : null;
-  const dispatch = useAppDispatch();
 
   const handleTabClick = (tabId: string) => {
     setActiveTab(tabId);
@@ -61,31 +63,39 @@ const Dashboard: React.FC = () => {
 
   const deleteAccount = async () => {
     try {
-      Backend.defaults.headers.common["Authorization"] = token;
+      Backend.defaults.headers.common["Authorization"] = user?.token;
       const response = await Backend.post("/users/deleteaccount", {
         email: "",
       });
-      return response.data.ok;
+      if (!response.data.ok) {
+        console.error("Error deleting account:", response.data.message);
+        return;
+      } else {
+        console.log("Account deleted");
+        signOut();
+      }
     } catch (error) {
       console.log(error);
     }
   };
 
   const signOut = () => {
-    dispatch(clearUserData());
-    navigate('/');
+    localStorage.removeItem("user");
+    localStorage.removeItem("sessionId");
+    setUser(null);
+    navigate("/");
   };
 
   useEffect(() => {
-    if (!loggedIn) {
+    if (!user) {
       navigate("/signin");
     }
-  }, [loggedIn, navigate]);
+  }, [user]);
 
   const getAnswers = async () => { 
-    if (token === null) return;
+    if (user?.token === null) return;
     try {
-      Backend.defaults.headers.common["Authorization"] = token;
+      Backend.defaults.headers.common["Authorization"] = user?.token;
       const response = await Backend.post("/answers/getanswers", {
         email: "user@test.com",
         language: language, // get answers based on the current UI language 
@@ -96,8 +106,11 @@ const Dashboard: React.FC = () => {
       }
       
       const updatedAnswers = response.data;
-      const statementIds = updatedAnswers.map(answer => answer.statementId);
-      const agreementResponse = await Backend.post("/results/agreementPercentage", { statementIds });
+      const statementIds = updatedAnswers.map((answer) => answer.statementId);
+      const agreementResponse = await Backend.post(
+        "/results/agreementPercentage",
+        { statementIds }
+      );
       const agreementPercentages = agreementResponse.data;
 
       const initialCheckboxStates = updatedAnswers.reduce((acc, answer) => {
@@ -106,18 +119,23 @@ const Dashboard: React.FC = () => {
       }, {});
       setOthersAgreeCheckboxStates(initialCheckboxStates);
 
-      const initialAgreeCheckboxStates = updatedAnswers.reduce((acc, answer) => {
-        acc[answer.id] = answer.I_agree;
-        return acc;
-      }, {});
+      const initialAgreeCheckboxStates = updatedAnswers.reduce(
+        (acc, answer) => {
+          acc[answer.id] = answer.I_agree;
+          return acc;
+        },
+        {}
+      );
       setAgreeCheckboxStates(initialAgreeCheckboxStates);
 
-      const updatedAnswerList = updatedAnswers.map(answer => ({
+      const updatedAnswerList = updatedAnswers.map((answer) => ({
         ...answer,
-        agreement: agreementPercentages[answer.statementId] || { I_agree: 0, others_agree: 0 },
+        agreement: agreementPercentages[answer.statementId] || {
+          I_agree: 0,
+          others_agree: 0,
+        },
       }));
       setAnswerList(updatedAnswerList);
-
     } catch (error) {
       console.log("Error fetching answers:", error);
     }
@@ -130,11 +148,18 @@ const Dashboard: React.FC = () => {
   //  Change I_agree or others_agree variable -- Usage:
   // For I_agree: handleCheckboxChange(id, 'I_agree')
   // For others_agree: handleCheckboxChange(id, 'others_agree')
-  const handleCheckboxChange = async (id: number, type: 'I_agree' | 'others_agree') => {
-    const stateKey = type === 'I_agree' ? 'agreeCheckboxStates' : 'othersAgreeCheckboxStates';
-    const setState = type === 'I_agree' ? setAgreeCheckboxStates : setOthersAgreeCheckboxStates;
-    const newCheckedState = !((type === 'I_agree' ? agreeCheckboxStates : othersAgreeCheckboxStates)[id]);
-    const currentAnswer = answerList.find(answer => answer.id === id);
+  const handleCheckboxChange = async (
+    id: number,
+    type: "I_agree" | "others_agree"
+  ) => {
+    const setState =
+      type === "I_agree"
+        ? setAgreeCheckboxStates
+        : setOthersAgreeCheckboxStates;
+    const newCheckedState = !(
+      type === "I_agree" ? agreeCheckboxStates : othersAgreeCheckboxStates
+    )[id];
+    const currentAnswer = answerList.find((answer) => answer.id === id);
 
     if (!currentAnswer) {
       console.error("Answer not found");
@@ -147,18 +172,32 @@ const Dashboard: React.FC = () => {
     }));
 
     try {
-      Backend.defaults.headers.common["Authorization"] = token;
+      Backend.defaults.headers.common["Authorization"] = user?.token;
       const response = await Backend.post("/answers/changeanswers", {
         statementId: currentAnswer.statementId,
-        I_agree: type === 'I_agree' ? (newCheckedState ? 1 : 0) : (currentAnswer.I_agree ? 1 : 0),
+        I_agree:
+          type === "I_agree"
+            ? newCheckedState
+              ? 1
+              : 0
+            : currentAnswer.I_agree
+            ? 1
+            : 0,
         I_agree_reason: "n/a - answer changed",
-        others_agree: type === 'others_agree' ? (newCheckedState ? 1 : 0) : (currentAnswer.others_agree ? 1 : 0),
+        others_agree:
+          type === "others_agree"
+            ? newCheckedState
+              ? 1
+              : 0
+            : currentAnswer.others_agree
+            ? 1
+            : 0,
         others_agree_reason: "n/a - answer changed",
         perceived_commonsense: 0,
-        sessionId: surveySession,
+        sessionId: sessionId,
       });
       console.log(`${type} updated`, response.data);
-      if (type == 'I_agree') {
+      if (type == "I_agree") {
         currentAnswer.I_agree = newCheckedState;
       } else {
         currentAnswer.others_agree = newCheckedState;
@@ -175,7 +214,7 @@ const Dashboard: React.FC = () => {
 
   const useEditAnswer = async () => {
     if (editing) {
-      if (!token) return;
+      if (!user) return;
 
       try {
         await getAnswers(); // call getAnswers to refresh the data and get new percentage
@@ -203,10 +242,11 @@ const Dashboard: React.FC = () => {
                 >
                   <li className="mr-2" role="presentation">
                     <button
-                      className={`inline-block p-4 border-b-2 rounded-t-lg ${activeTab === "dashboard"
-                        ? "border-brand-500"
-                        : "border-transparent"
-                        } hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300`}
+                      className={`inline-block p-4 border-b-2 rounded-t-lg ${
+                        activeTab === "dashboard"
+                          ? "border-gray-600 bg-gray-50 dark:bg-gray-600"
+                          : "border-transparent"
+                      } hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300`}
                       onClick={() => handleTabClick("dashboard")}
                       role="tab"
                       aria-controls="dashboard"
@@ -219,10 +259,11 @@ const Dashboard: React.FC = () => {
 
                   <li className="mr-2" role="presentation">
                     <button
-                      className={`inline-block p-4 border-b-2 rounded-t-lg ${activeTab === "profile"
-                        ? "border-brand-500"
-                        : "border-transparent"
-                        }`}
+                      className={`inline-block p-4 border-b-2 rounded-t-lg ${
+                        activeTab === "profile"
+                          ? "border-gray-600 bg-gray-50 dark:bg-gray-600"
+                          : "border-transparent"
+                      }`}
                       onClick={() => handleTabClick("profile")}
                       role="tab"
                       aria-controls="profile"
@@ -235,10 +276,11 @@ const Dashboard: React.FC = () => {
 
                   <li className="mr-2" role="presentation">
                     <button
-                      className={`inline-block p-4 border-b-2 rounded-t-lg ${activeTab === "statement"
-                        ? "border-brand-500"
-                        : "border-transparent"
-                        }`}
+                      className={`inline-block p-4 border-b-2 rounded-t-lg ${
+                        activeTab === "statement"
+                          ? "border-gray-600 bg-gray-50 dark:bg-gray-600"
+                          : "border-transparent"
+                      }`}
                       onClick={() => handleTabClick("statement")}
                       role="tab"
                       aria-controls="statement"
@@ -251,10 +293,11 @@ const Dashboard: React.FC = () => {
 
                   <li className="mr-2" role="presentation">
                     <button
-                      className={`inline-block p-4 border-b-2 rounded-t-lg ${activeTab === "settings"
-                        ? "border-brand-500"
-                        : "border-transparent"
-                        } hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300`}
+                      className={`inline-block p-4 border-b-2 rounded-t-lg ${
+                        activeTab === "settings"
+                          ? "border-gray-600 bg-gray-50 dark:bg-gray-600"
+                          : "border-transparent"
+                      } hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300`}
                       onClick={() => handleTabClick("settings")}
                       role="tab"
                       aria-controls="settings"
@@ -267,17 +310,19 @@ const Dashboard: React.FC = () => {
                 </ul>
                 <div id="myTabContent">
                   <div
-                    className={`p-4 rounded-lg bg-gray-50 dark:bg-gray-800 ${activeTab === "dashboard" ? "block" : "hidden"
-                      }`}
+                    className={`p-4 rounded-lg bg-gray-50 dark:bg-gray-800 ${
+                      activeTab === "dashboard" ? "block" : "hidden"
+                    }`}
                     id="dashboard"
                     role="tabpanel"
                     aria-labelledby="dashboard-tab"
                   >
-                    <DashboardChart sessionId={surveySession} />
+                    <DashboardChart />
                   </div>
                   <div
-                    className={`p-4 rounded-lg bg-gray-50 dark:bg-gray-800 ${activeTab === "profile" ? "block" : "hidden"
-                      }`}
+                    className={`p-4 rounded-lg bg-gray-50 dark:bg-gray-800 ${
+                      activeTab === "profile" ? "block" : "hidden"
+                    }`}
                     id="profile"
                     role="tabpanel"
                     aria-labelledby="profile-tab"
@@ -339,18 +384,23 @@ const Dashboard: React.FC = () => {
                                       type="checkbox"
                                       className="toggle toggle-sm mr-3 align-middle relative"
                                       checked={agreeCheckboxStates[answer.id]}
-                                      onChange={() => handleCheckboxChange(answer.id, "I_agree")}
+                                      onChange={() =>
+                                        handleCheckboxChange(
+                                          answer.id,
+                                          "I_agree"
+                                        )
+                                      }
                                     />
                                   )}
                                   {agreeCheckboxStates[answer.id] ? (
                                     <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
                                       {/* Yes */}
-                                      {t('dashboard.yes')}
+                                      {t("dashboard.yes")}
                                     </span>
                                   ) : (
                                     <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
                                       {/* No */}
-                                      {t('dashboard.no')}
+                                      {t("dashboard.no")}
                                     </span>
                                   )}
                                 </td>
@@ -359,31 +409,39 @@ const Dashboard: React.FC = () => {
                                     <input
                                       type="checkbox"
                                       className="toggle toggle-sm mr-3 align-middle relative"
-                                      checked={othersAgreeCheckboxStates[answer.id]}
-                                      onChange={() => handleCheckboxChange(answer.id, "others_agree")}
+                                      checked={
+                                        othersAgreeCheckboxStates[answer.id]
+                                      }
+                                      onChange={() =>
+                                        handleCheckboxChange(
+                                          answer.id,
+                                          "others_agree"
+                                        )
+                                      }
                                     />
                                   )}
                                   {othersAgreeCheckboxStates[answer.id] ? (
                                     <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
                                       {/* Yes */}
-                                      {t('dashboard.yes')}
+                                      {t("dashboard.yes")}
                                     </span>
                                   ) : (
                                     <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
                                       {/* No */}
-                                      {t('dashboard.no')}
+                                      {t("dashboard.no")}
                                     </span>
                                   )}
                                 </td>
                                 <td className="px-6 py-4">
-                                  {answer.agreement ?
-                                    (answer.others_agree ?
-                                      `${((answer.agreement.others_agree)).toFixed(0)}%` :
-                                      `${((100 - answer.agreement.others_agree)).toFixed(0)}%`)
-                                    :
-                                    "N/A"
-
-                                  }
+                                  {answer.agreement
+                                    ? answer.others_agree
+                                      ? `${answer.agreement.others_agree.toFixed(
+                                          0
+                                        )}%`
+                                      : `${(
+                                          100 - answer.agreement.others_agree
+                                        ).toFixed(0)}%`
+                                    : "N/A"}
                                 </td>
                               </tr>
                             ))}
@@ -393,8 +451,9 @@ const Dashboard: React.FC = () => {
                   </div>
 
                   <div
-                    className={`p-4 rounded-lg bg-gray-50 dark:bg-gray-800 ${activeTab === "statement" ? "block" : "hidden"
-                      }`}
+                    className={`p-4 rounded-lg bg-gray-50 dark:bg-gray-800 ${
+                      activeTab === "statement" ? "block" : "hidden"
+                    }`}
                     id="statement"
                     role="tabpanel"
                     aria-labelledby="statement-tab"
@@ -403,8 +462,9 @@ const Dashboard: React.FC = () => {
                   </div>
 
                   <div
-                    className={`p-4 rounded-lg bg-gray-50 dark:bg-gray-800 ${activeTab === "settings" ? "block" : "hidden"
-                      }`}
+                    className={`p-4 rounded-lg bg-gray-50 dark:bg-gray-800 ${
+                      activeTab === "settings" ? "block" : "hidden"
+                    }`}
                     id="settings"
                     role="tabpanel"
                     aria-labelledby="settings-tab"

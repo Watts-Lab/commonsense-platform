@@ -18,7 +18,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -39,7 +39,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -60,7 +60,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -81,7 +81,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -102,7 +102,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -123,7 +123,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -144,7 +144,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -165,7 +165,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -186,7 +186,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -207,7 +207,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -228,7 +228,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -249,7 +249,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -270,7 +270,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -291,7 +291,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -312,7 +312,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -333,7 +333,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -354,7 +354,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -375,7 +375,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -396,7 +396,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -417,7 +417,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -438,7 +438,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -459,7 +459,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -480,7 +480,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -501,7 +501,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -522,7 +522,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -543,7 +543,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -564,7 +564,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -585,7 +585,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -606,7 +606,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -627,7 +627,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -648,7 +648,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -669,7 +669,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -690,7 +690,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -711,7 +711,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -732,7 +732,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -753,7 +753,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -774,7 +774,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -795,7 +795,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -816,7 +816,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -837,7 +837,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -858,7 +858,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -879,7 +879,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -900,7 +900,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -921,7 +921,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -942,7 +942,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -963,7 +963,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -984,7 +984,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -1005,7 +1005,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -1026,7 +1026,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -1047,7 +1047,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -1068,7 +1068,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -1089,7 +1089,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -1110,7 +1110,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -1131,7 +1131,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -1152,7 +1152,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -1173,7 +1173,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -1194,7 +1194,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -1215,7 +1215,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -1236,7 +1236,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -1257,7 +1257,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -1278,7 +1278,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -1299,7 +1299,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -1320,7 +1320,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -1341,7 +1341,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -1362,7 +1362,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -1383,7 +1383,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -1404,7 +1404,7 @@ const defaultTreatment = [
       ],
     },
     function: GetStatementById,
-    validity: (req) => {
+    validity: (req, params) => {
       return req.query.source === "mturk";
     },
   },
@@ -1413,7 +1413,7 @@ const defaultTreatment = [
 const experiment = {
   experimentName: "design-design_point-old-statements",
   treatments: defaultTreatment,
-  treatmentAssigner: (subject, treatments) => {
+  treatmentAssigner: (treatments) => {
     return treatments[Math.floor(Math.random() * treatments.length)];
   },
 };

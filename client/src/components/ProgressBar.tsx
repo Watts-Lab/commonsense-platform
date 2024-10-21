@@ -1,22 +1,30 @@
-import React, { useEffect, useState } from "react";
+import "./style.css";
 
-import './style.css';
+type ProgressBarProps = {
+  currentStep: number;
+  totalSteps: number;
+};
 
-function ProgressBar(props) {
-    
-    const progressStyle = {
-        width: Math.max(((props.currentStep)/(props.totalSteps))*100, 15) + "%", 
-    }
+function ProgressBar({ currentStep, totalSteps }: ProgressBarProps) {
+  const progressStyle = {
+    width: Math.max((currentStep / totalSteps) * 100, 15) + "%",
+  };
 
-    return (
+  return (
     <>
-    <div className="py-3">
-      <div className="w-full bg-gray-200 rounded-full dark:bg-gray-500">
-        <div className="bg-blue-600 text-xs font-medium text-blue-100 text-center p-1 leading-none rounded-full" style={progressStyle}> {props.currentStep} / {props.totalSteps} </div>
+      <div className="py-3">
+        <div className="w-full bg-gray-200 rounded-full dark:bg-gray-500">
+          <div
+            className="bg-blue-600 text-xs font-medium text-blue-100 text-center p-1 leading-none rounded-full"
+            style={progressStyle}
+          >
+            {" "}
+            {currentStep} / {totalSteps}{" "}
+          </div>
+        </div>
       </div>
-    </div>
     </>
-    )
+  );
 }
 
 export default ProgressBar;

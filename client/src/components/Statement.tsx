@@ -1,9 +1,13 @@
-import React, { useEffect, useState } from "react";
-import ProgressBar from "./ProgressBar";
+import { useEffect, useState } from "react";
 import SurveyImage from "./SurveyImage";
 import "./style.css";
-import Question from "./Question";
-import { questionData, IQuestionData } from "../data/questions"; // Import here
+import MultiChoiceQuestion from "./MultiChoiceQustion";
+import {
+  MultipleChoiceQuestionType,
+  questionData,
+  TextQuestionType,
+} from "../data/questions"; // Import here
+import TextQuestion from "./TextQuestion";
 import { useTranslation } from "react-i18next";
 
 interface StatementProps {
@@ -13,10 +17,9 @@ interface StatementProps {
     answers: string[];
   };
   statementId: number;
-  currentStep: number;
-  totalSteps: number;
   onChange: (statementId: number, answers: string[]) => void;
   unansweredQuestionIndex?: number;
+  loading?: boolean;
 }
 
 function Statement({
@@ -24,10 +27,8 @@ function Statement({
   imageUrl,
   data,
   statementId,
-  currentStep,
-  totalSteps,
   onChange,
-  unansweredQuestionIndex,
+  loading,
 }: StatementProps) {
   const [answers, setAnswers] = useState<string[]>(data.answers);
   const { t } = useTranslation();
@@ -47,30 +48,43 @@ function Statement({
 
   return (
     <>
-      <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
       <SurveyImage imageName={imageUrl} />
-      <div className="!sticky !top-0 !z-10 bg-white border-double border-blue-600 border-b-2 rounded-b-lg dark:bg-slate-400">
+      <div className="!sticky !top-0 !z-10 bg-white border-double border-blue-600 border-b-2 rounded-b-lg dark:bg-gray-600">
         <h3 className="mt-3.5 text-xl font-medium text-gray-900 dark:text-white text-center py-4">
           {statementText}
         </h3>
       </div>
-      <p className="px-3 pt-3 tracking-tighter text-gray-500 md:text-sm dark:text-gray-400">
-        {/* Required fields are marked with an asterisk * */}
-        {t("statement.required-fields")}
-      </p>
-      {questionData.map((question, index) => {
-        const isUnanswered = unansweredQuestionIndex === index + 1;
-        return (
-          <Question
-            key={index}
-            statementId={statementId}
-            question={question}
-            answerValue={answers[index]}
-            setAnswer={handleAnswerChange}
-            unanswered={isUnanswered}
-          />
-        );
-      })}
+      {loading ? (
+        <div className="flex justify-center items-center min-h-[800px]">
+          <div className="w-16 h-16 border-4 border-blue-500 border-dashed rounded-full animate-spin"></div>
+        </div>
+      ) : (
+        <>
+          {questionData.map((question, index) => {
+            if (question.type === "multipleChoice") {
+              return (
+                <MultiChoiceQuestion
+                  key={`${question.type}-${index}`}
+                  statementId={statementId}
+                  question={question as MultipleChoiceQuestionType}
+                  answerValue={answers[index]}
+                  setAnswer={handleAnswerChange}
+                />
+              );
+            } else {
+              return (
+                <TextQuestion
+                  key={`${question.type}-${index}`}
+                  statementId={statementId}
+                  question={question as TextQuestionType}
+                  answerValue={answers[index]}
+                  setAnswer={handleAnswerChange}
+                />
+              );
+            }
+          })}
+        </>
+      )}
     </>
   );
 }

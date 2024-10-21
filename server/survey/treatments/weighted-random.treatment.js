@@ -1,3 +1,6 @@
+const { sequelize } = require("../../models");
+const { stringy } = require("./utils/id-generator");
+
 /**
  * Retrieves weighted statements based on the provided parameters.
  *
@@ -56,7 +59,10 @@ const GetStatementsWeighted = async ({
         numberOfStatements,
       }),
       description: "GetStatementById",
-      answer: results,
+      answer: results.map((result) => ({
+        id: result.id,
+        statement: result.statement,
+      })),
     };
   } catch (error) {
     console.error(error);

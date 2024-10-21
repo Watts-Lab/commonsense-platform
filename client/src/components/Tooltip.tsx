@@ -1,10 +1,15 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
-const Tooltip = (props) => {
+type TooltipProps = {
+  className?: string;
+  text: string;
+};
+
+const Tooltip = ({ className, text }: TooltipProps) => {
   const [hover, setHover] = useState(false);
 
   return (
-    <div className={props.className}>
+    <div className={className}>
       <div
         className={`relative flex items-center text-gray-500 cursor-pointer ${
           hover && "hover:text-gray-600"
@@ -27,9 +32,7 @@ const Tooltip = (props) => {
         </svg>
         {hover && (
           <div className="absolute bottom-0 inline-block w-80 px-4 py-3 mb-10 -ml-72 text-white bg-gray-600 rounded-lg z-10">
-            <span className="inline-block text-sm leading-tight">
-              {props.text}
-            </span>
+            <span className="inline-block text-sm leading-tight">{text}</span>
             <span
               className="absolute bottom-0 right-0 w-5 h-5 -mb-1 transform rotate-45 bg-gray-600"
               style={{ left: "92%" }}

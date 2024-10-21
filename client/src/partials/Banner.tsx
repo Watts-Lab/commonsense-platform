@@ -1,21 +1,13 @@
 import React from "react";
 
-import { Histogram } from "./Histogram";
 import { commonsensicalityScores } from "./Scores";
 import ConsentModal from "../components/ConsentModal";
 import commonsenseLogo from "../images/Light-mode.svg";
-import { useTranslation } from 'react-i18next';
-
-type Language = {
-  nativeName: string;
-};
-
-type Languages = {
-  [key: string]: Language;
-};
+import { useTranslation } from "react-i18next";
+import Histogram from "./Histogram";
 
 const Banner: React.FC = () => {
-  const { t, i18n } = useTranslation(); 
+  const { t } = useTranslation();
 
   return (
     <>
@@ -37,23 +29,23 @@ const Banner: React.FC = () => {
               <img
                 className="mx-auto mb-6"
                 src={commonsenseLogo}
-                alt={t('banner.logo')}
+                alt={t("banner.logo")}
               />
               <div className="max-w-3xl mx-auto px-10">
                 <h1 className="text-3xl md:text-4xl font-bold leading-tighter tracking-tight mb-4">
                   {/* How common is common sense really? */}
-                  {t('banner.title')} 
+                  {t("banner.title")}
                 </h1>
                 <h2 className="text-1xl md:text-2xl font-bold leading-tighter tracking-tight mb-4">
                   {/* Join us to find out! */}
-                  {t('banner.subtitle')}
+                  {t("banner.subtitle")}
                 </h2>
                 <div className="max-w-xs sm:max-w-none sm:flex sm:justify-center">
                   <div>
                     <ConsentModal
                       // Measure your common sense
-                      buttonText={t("banner.button")} 
-                      buttonClass="text-white p-3 bg-gray-600 hover:bg-gray-700 w-full my-4 rounded-md sm:w-auto sm:mb-0"
+                      buttonText={t("banner.button")}
+                      buttonClass="text-white p-3 bg-gray-600 hover:bg-gray-700 w-full my-4 rounded-md sm:w-auto sm:mb-0 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
                     />
                   </div>
                 </div>
@@ -91,13 +83,13 @@ const Banner: React.FC = () => {
                     href="https://doi.org/10.1073/pnas.2309535121"
                   >
                     {/* A framework for quantifying individual and collective common sense */}
-                    {t('banner.paper')}
+                    {t("banner.paper")}
                   </a>
-                    {/* , published */}
-                    {t('banner.paragraph4-2')}{" "}
+                  {/* , published */}
+                  {t("banner.paragraph4-2")}{" "}
                   <span className="italic">
                     {/* in The Proceedings of the National Academy of Sciences. */}
-                    {t('banner.paragraph4-3')}
+                    {t("banner.paragraph4-3")}
                   </span>
                 </p>
               </div>

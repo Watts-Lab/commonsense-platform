@@ -30,11 +30,152 @@
 /* // sv-title sv-question__title
 // sv-title sv-question__title sv-question__title--answer */
 
+@media (prefers-color-scheme: dark) {
+  .sv-question__title {
+    color: #f3f4f6; /* Tailwind's gray-100 */
+  }
+}
+
+/* Light Mode Styles */
+input.sv-text {
+  color: #000000;
+  background-color: #ffffff;
+  border: 1px solid #d1d5db;
+}
+
+/* Placeholder Text Color */
+input.sv-text::placeholder {
+  color: #6b7280; /* Tailwind's gray-500 */
+}
+
+/* Dark Mode Styles */
+@media (prefers-color-scheme: dark) {
+  input.sv-text {
+    color: #f9fafb !important;
+    background-color: #1f2937 !important;
+    border: 1px solid #374151 !important;
+  }
+
+  input.sv-text::placeholder {
+    color: #9ca3af !important;
+  }
+}
+
+.sv-string-viewer {
+  color: #1f2937; /* Tailwind's gray-800 */
+}
+
+/* Dark Mode */
+@media (prefers-color-scheme: dark) {
+  .sv-string-viewer {
+    color: #f9fafb !important; /* Tailwind's gray-100 */
+  }
+}
+
+/* Light Mode */
+.sv-radio__decorator {
+  background-color: #ffffff;
+  border: 1px solid #d1d5db; /* Tailwind's gray-300 */
+}
+
+.sv-radio__svg {
+  fill: #1f2937; /* Tailwind's gray-800 */
+}
+
+/* Dark Mode */
+@media (prefers-color-scheme: dark) {
+  .sv-radio__decorator {
+    background-color: #1f2937 !important; /* Tailwind's gray-800 */
+    border: 1px solid #374151 !important; /* Tailwind's gray-700 */
+  }
+
+  .sv-radio__svg {
+    fill: #f9fafb !important; /* Tailwind's gray-100 */
+  }
+}
+
+/* Light Mode - Checked State */
+input.sv-item__control:checked + .sv-radio__decorator {
+  background-color: #3b82f6; /* Tailwind's blue-500 */
+  border-color: #3b82f6;
+}
+
+input.sv-item__control:checked + .sv-radio__decorator .sv-radio__svg {
+  fill: #ffffff; /* White */
+}
+
+/* Dark Mode - Checked State */
+@media (prefers-color-scheme: dark) {
+  input.sv-item__control:checked + .sv-radio__decorator {
+    background-color: #3b82f6 !important; /* Tailwind's blue-500 */
+    border-color: #3b82f6 !important;
+  }
+
+  input.sv-item__control:checked + .sv-radio__decorator .sv-radio__svg {
+    fill: #ffffff !important; /* White */
+  }
+}
+
+/* Light Mode - Hover State */
+.sv-selectbase__item:hover .sv-string-viewer {
+  color: #111827; /* Tailwind's gray-900 */
+}
+
+/* Dark Mode - Hover State */
+@media (prefers-color-scheme: dark) {
+  .sv-selectbase__item:hover .sv-string-viewer {
+    color: #ffffff !important; /* White */
+  }
+}
+
+/* Demographic */
+/* Dark Mode */
+@media (prefers-color-scheme: dark) {
+  /* Dropdown menu background */
+  .sv-popup__shadow,
+  .sv-popup__body-content {
+    background-color: #1f2937 !important; /* Tailwind's gray-800 */
+  }
+}
+/* Dark Mode */
+@media (prefers-color-scheme: dark) {
+  /* List items */
+  .sv-list__item {
+    background-color: transparent;
+    border-bottom: 1px solid #374151; /* Tailwind's gray-700 */
+  }
+
+  /* List items text */
+  .sv-list__item .sv-string-viewer {
+    color: #587da3 !important; /* Tailwind's gray-100 */
+  }
+
+  /* Hover state */
+  .sv-list__item:hover {
+    background-color: #374151 !important; /* Slightly lighter gray */
+  }
+
+  /* Selected item */
+  .sv-list__item[aria-selected="true"] {
+    background-color: #2563eb !important; /* Tailwind's blue-600 */
+  }
+
+  .sv-list__item[aria-selected="true"] .sv-string-viewer {
+    color: #ffffff !important; /* White */
+  }
+
+  /* .sv-list__item.sv-list__item--selected */
+  .sv-list__item[aria-selected="true"] {
+    background-color: #2563eb !important; /* Tailwind's blue-600 */
+  }
+}
+
 .sv-title {
-  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;
+  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;
   font-feature-settings: normal !important;
   font-variation-settings: normal !important;
-  font-weight: 700;
+  font-weight: 600;
   font-style: normal;
   font-stretch: normal;
   line-height: normal;

@@ -1,6 +1,10 @@
 import CloseButton from "../CloseButton";
 
-export function FeedbackSuccessStep({ onFeedbackRestartRequest }) {
+export function FeedbackSuccessStep({
+  onFeedbackRestartRequest,
+}: {
+  onFeedbackRestartRequest: () => void;
+}) {
   return (
     <>
       <header>
@@ -25,12 +29,14 @@ export function FeedbackSuccessStep({ onFeedbackRestartRequest }) {
           />
         </svg>
 
-        <span className="text-xl mt-2">We appreciate the feedback</span>
+        <span className="text-xl mt-2 dark:text-white">
+          We appreciate the feedback
+        </span>
 
         <button
           type="button"
           onClick={onFeedbackRestartRequest}
-          className="py-2 px-6 mt-6 bg-zinc-300 rounded-md border-transparent text-sm leading-6 hover:bg-zinc-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-zinc-900 focus:ring-brand-500 transition-colors"
+          className="py-2 px-6 mt-6 bg-zinc-300 rounded-md border-transparent text-sm leading-6 hover:bg-zinc-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-zinc-900 focus:ring-brand-500 transition-colors dark:text-black"
         >
           I want to send another
         </button>

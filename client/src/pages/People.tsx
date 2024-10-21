@@ -11,7 +11,7 @@ const People: React.FC = () => {
       <Navbar />
 
       {/*  Page content */}
-      <main className="flex-grow bg-gray-100">
+      <main className="flex-grow bg-gray-100 dark:bg-gray-600">
         {/*  Page sections */}
         <PeoplePartial />
       </main>

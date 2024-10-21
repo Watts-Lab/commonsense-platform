@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Backend from "../apis/backend";
+import { useSession } from "../context/SessionContext";
 import { useTranslation } from "react-i18next";
 
 type Feature = {
@@ -38,7 +39,7 @@ const StatementForm = () => {
     philosophyAndThinking: t("knowledge-categories.philosophy-and-thinking"),
     religionAndBeliefSystems: t("knowledge-categories.religion-and-belief-systems"),
     societyAndSocialSciences: t("knowledge-categories.society-and-social-sciences"),
-    technologyAndAppliedSciences: t("knowledge-categories.technology-and-applied-sciences"),
+    technologyAndAppliedSciences: t("knowledge-categories.technology-and-applied-sciences",),
   });
 
   const getTranslatedInitialState = (): FeatureState => ({
@@ -74,6 +75,23 @@ const StatementForm = () => {
     },
   });
 
+interface statementDataType {
+  statementText: string;
+  statementProperties: {
+    behavior: boolean;
+    everyday: boolean;
+    figureOfSpeech: boolean;
+    judgment: boolean;
+    opinion: boolean;
+    reasoning: boolean;
+    knowledgeCategory: string;
+  };
+}
+
+  const {
+    state: { user },
+  } = useSession();
+
   const [statement, setStatement] = useState<string>("");
   const [features, setFeatures] = useState<FeatureState>(getTranslatedInitialState);
   const [knowledgeCategory, setKnowledgeCategory] = useState<string>("");
@@ -86,14 +104,14 @@ const StatementForm = () => {
   // keep track of whether the statement field is valid
   const [isStatementValid, setIsStatementValid] = useState(true);
 
-  const tokenString = localStorage.getItem("token");
-  const token = tokenString !== null ? JSON.parse(tokenString) : null;
-
   const handleFeatureChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = e.target;
     setFeatures((prevFeatures) => ({
       ...prevFeatures,
-      [name]: { ...prevFeatures[name], checked },
+      [name as keyof FeatureState]: {
+        ...prevFeatures[name as keyof FeatureState],
+        checked,
+      },
     }));
   };
 
@@ -106,9 +124,9 @@ const StatementForm = () => {
     setIsStatementValid(statement.trim().length > 0);
   };
 
-  const submitUserStatement = async (statementData) => { 
+  const submitUserStatement = async (statementData: statementDataType) => {
     try {
-      Backend.defaults.headers.common["Authorization"] = token;
+      Backend.defaults.headers.common["Authorization"] = user?.token;
       const response = await Backend.post(
         "/userstatements/create",
         statementData
@@ -132,7 +150,6 @@ const StatementForm = () => {
     // Prepare the data in the format expected by the Sequelize model
     const statementData = {
       statementText: statement,
-
       statementProperties: {
         behavior: features.behavior.checked,
         everyday: features.everyday.checked,
@@ -145,10 +162,10 @@ const StatementForm = () => {
     };
 
     try {
-      const submissionResult = await submitUserStatement(statementData);
+      await submitUserStatement(statementData);
       setIsSubmitted(true);
       setSubmissionError("");
-    } catch (error) {
+    } catch {
       setSubmissionError("There was an error submitting the form.");
     }
   };
@@ -170,9 +187,7 @@ const StatementForm = () => {
     <div className="flex flex-col items-center justify-center p-4">
       {isSubmitted ? (
         <div className="my-4">
-          <p>
-            {t('statement-form.success-message')}
-          </p>
+          <p>{t('statement-form.success-message')}</p>
           <button onClick={handleReset} className="btn">
             {t('statement-form.submit-another')}
           </button>
@@ -196,14 +211,10 @@ const StatementForm = () => {
           </div>
 
           {!isStatementValid && (
-            <p className="text-red-500">
-              {t('statement-form.required-message')}
-            </p>
+            <p className="text-red-500">{t('statement-form.required-message')}</p>
           )}
 
-          <div className="divider text-md">
-            {t('statement-form.optional')}
-          </div>
+          <div className="divider text-md">{t('statement-form.optional')}</div>
 
           {Object.entries(features).map(
             ([key, { checked, text, description }]) => (
@@ -228,9 +239,7 @@ const StatementForm = () => {
 
           <div className="form-control my-4">
             <label className="label">
-              <span className="label-text">
-                {t('statement-form.knowledge-category')}
-              </span>
+              <span className="label-text">{t('statement-form.knowledge-category')}</span>
             </label>
             <select
               className="select select-bordered w-full rounded-md"

@@ -56,7 +56,6 @@ async function getAllStatements(params) {
       limit: params.limit,
     });
 
-    // console.log("Statement List:", statementList);
     return statementList;
   } catch (error) {
     // Handle any errors that occur during the database query

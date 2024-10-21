@@ -23,7 +23,6 @@ async function getAllStatements(params) {
       limit: params.limit,
     });
 
-    // console.log("Statement List:", statementList);
     return statementList;
   } catch (error) {
     // Handle any errors that occur during the database query
@@ -63,13 +62,10 @@ async function getAllTreatments() {
     console.error("Error fetching treatments:", error);
     throw error;
   }
-
-  // console.log("treatments: ", await treatments.findAll());
 }
 
 // controller for getting the treatment path /treatments/all
 const readTreatments = async (req, res, next) => {
-  console.log(manifest_treatments[9]);
   const assignedTreatment = manifest_treatments[9];
 
   res.send(
@@ -117,7 +113,6 @@ const matchTreatments = (req_param) => {
 
 const chooseTreatment = async (req_param) => {
   const treatmentIds = matchTreatments(req_param);
-  console.log("treatmentIds", treatmentIds);
   const treatmentCount = await treatments
     .findAll({
       attributes: [
@@ -160,8 +155,6 @@ const chooseTreatment = async (req_param) => {
     sessionId: req_param.sessionID,
   };
 
-  console.log("treatment parameters", treatment_parameters);
-
   let statements =
     typeof assignedTreatment.statements === "function"
       ? await assignedTreatment.statements(treatment_parameters)
@@ -180,10 +173,6 @@ const getTreatment = async (req, res, next) => {
         `${encodeURIComponent(key)}=${encodeURIComponent(req.query[key])}`
     )
     .join("&");
-
-  if (req.query.source) {
-    console.log("source", req.query.source);
-  }
 
   let user = await usertreatments.findOne({
     where: { sessionId: req.sessionID, finished: false },
@@ -226,7 +215,6 @@ const updateTreatment = async (req, res, next) => {
 };
 
 const readSpace = async (req, res, next) => {
-  // console.log(manifest_treatments[12]);
   const assignedTreatment = manifest_treatments[12];
 
   res.send(

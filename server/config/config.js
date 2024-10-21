@@ -8,6 +8,14 @@ module.exports = {
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     dialect: process.env.DB_DRIVER,
+    dialectOptions: {
+      connectTimeout: 10000,
+    },
+    pool: {
+      max: 5,
+      min: 0,
+      idle: 10000,
+    },
   },
   test: {
     username: process.env.DB_USER,
@@ -16,6 +24,14 @@ module.exports = {
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     dialect: process.env.DB_DRIVER,
+    dialectOptions: {
+      connectTimeout: 10000,
+    },
+    pool: {
+      max: 5,
+      min: 0,
+      idle: 10000,
+    },
   },
   production: {
     username: process.env.DB_USER,
@@ -24,6 +40,14 @@ module.exports = {
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     dialect: process.env.DB_DRIVER,
+    dialectOptions: {
+      connectTimeout: 10000,
+    },
+    pool: {
+      max: 5,
+      min: 0,
+      idle: 10000,
+    },
   },
   dboptions: {
     user: process.env.DB_USER,
@@ -31,10 +55,10 @@ module.exports = {
     database: process.env.DB_NAME,
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
-    connectionLimit: 10,
-    createDatabaseTable: true,
-    clearExpired: false,
-    endConnectionOnClose: true,
+    dialect: process.env.DB_DRIVER,
+    dialectOptions: {
+      connectTimeout: 10000,
+    },
     schema: {
       tableName: "sessions",
       columnNames: {
@@ -42,6 +66,11 @@ module.exports = {
         expires: "expires",
         data: "data",
       },
+    },
+    pool: {
+      max: 5,
+      min: 0,
+      idle: 10000,
     },
   },
 };

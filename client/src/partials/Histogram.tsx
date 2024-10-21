@@ -11,13 +11,12 @@ type HistogramProps = {
   data: number[];
 };
 
-export const Histogram: React.FC<HistogramProps> = ({ width, height, data }) => {
+function Histogram({ width, height, data }: HistogramProps) {
   const axesRef = useRef(null);
   const boundsWidth = width - MARGIN.right - MARGIN.left;
   const boundsHeight = height - MARGIN.top - MARGIN.bottom;
 
   const xScale = useMemo(() => {
-    const max = Math.max(...data);
     return d3
       .scaleLinear()
       .domain([0.3, 1]) // Adjusted domain for xScale
@@ -82,5 +81,6 @@ export const Histogram: React.FC<HistogramProps> = ({ width, height, data }) => 
       />
     </svg>
   );
-};
+}
 
+export default Histogram;
