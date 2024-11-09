@@ -129,19 +129,17 @@ function Layout() {
         // Then, get the experiments data
         const experimentsResponse = await Backend.get("/experiments", {
           params: {
-            ...{
-              sessionId: sessionId,
-              ...urlParams.reduce(
-                (
-                  acc: Record<string, string>,
-                  param: { key: string; value: string }
-                ) => {
-                  acc[param.key] = param.value;
-                  return acc;
-                },
-                {}
-              ),
-            },
+            sessionId: sessionId,
+            ...urlParams.reduce(
+              (
+                acc: Record<string, string>,
+                param: { key: string; value: string }
+              ) => {
+                acc[param.key] = param.value;
+                return acc;
+              },
+              {}
+            ),
             language: language, // add language parameter
           },
         });

@@ -20,6 +20,8 @@ export type IQuestionData = { type: "text" | "multipleChoice" } & (
   | TextQuestionType
 );
 
+
+// If any changes are made to the questions, make sure to update the translation files in the client/src/locales folder
 export const questionData: IQuestionData[] = [
   {
     id: 1,

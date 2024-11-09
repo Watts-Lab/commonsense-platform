@@ -137,7 +137,7 @@
   },
   "statement": {
     "required-fields": "Required fields are marked with an asterisk *"
-  }, 
+  },
   "enter": {
     "enter-verifying-magic-link": "Verifying your magic link"
   },
@@ -215,6 +215,11 @@
       "question": "Overall, do you think this statement is an example of common sense?",
       "possibleAnswers": ["Yes", "No"],
       "tooltip": "This question seeks to gather insights on the perceived consensus among individuals regarding the given statement. We are interested in understanding your opinion about whether you believe that the majority of other people would agree with the statement presented."
+    },
+    "6": {
+      "question": "<b>Optional:</b> Do you have any other comments or feedback about this statement?",
+      "description": "Please provide any additional comments or feedback you have about the statement.",
+      "tooltip": "This question is optional and aims to gather any additional comments or feedback you may have about the statement. Please provide any further insights, thoughts, or opinions you have regarding the statement presented."
     }
   },
   "dashboard-chart": {

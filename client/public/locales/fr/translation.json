@@ -213,6 +213,11 @@
       "question": "Dans l'ensemble, pensez-vous que cette déclaration est un exemple de bon sens ?",
       "possibleAnswers": ["Oui", "Non"],
       "tooltip": "Cette question cherche à recueillir des informations sur le consensus perçu parmi les individus concernant la déclaration donnée. Nous nous intéressons à comprendre votre opinion sur le fait que vous pensez que la majorité des autres personnes seraient d'accord avec la déclaration présentée."
+    },
+    "6": {
+      "question": "<b>Optionnel :</b> Avez-vous d'autres commentaires ou remarques concernant cette déclaration ?",
+      "description": "Veuillez fournir tout autre commentaire ou retour que vous pourriez avoir au sujet de cette déclaration.",
+      "tooltip": "Cette question est optionnelle et vise à recueillir tout commentaire ou retour supplémentaire que vous pourriez avoir sur la déclaration. Veuillez fournir toute autre perspective, pensée ou opinion que vous avez concernant la déclaration présentée."
     }
   },
   "dashboard-chart": {

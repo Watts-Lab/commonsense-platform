@@ -213,6 +213,11 @@
       "question": "No geral, você acha que esta declaração é um exemplo de senso comum?",
       "possibleAnswers": ["Sim", "Não"],
       "tooltip": "Esta pergunta busca coletar percepções sobre o consenso percebido entre os indivíduos em relação à declaração dada. Estamos interessados em entender sua opinião sobre se você acredita que a maioria das outras pessoas concordaria com a declaração apresentada."
+    },
+    "6": {
+      "question": "<b>Opcional:</b> Você tem outros comentários ou feedback sobre esta afirmação?",
+      "description": "Por favor, forneça quaisquer comentários ou feedback adicionais que você tenha sobre a afirmação.",
+      "tooltip": "Esta pergunta é opcional e visa coletar quaisquer comentários ou feedback adicionais que você possa ter sobre a afirmação. Por favor, forneça quaisquer outras percepções, pensamentos ou opiniões que tenha a respeito da afirmação apresentada."
     }
   },
   "dashboard-chart": {

@@ -99,14 +99,10 @@ const returnStatements = async (req, res) => {
     random_experiment = grouped_experiments[random_experiment_name];
   }
 
-  const result = await random_experiment.assigned_treatment.function(
-    random_experiment.assigned_
-    {
-      ...treatment.params
-  , 
-    },
-    language 
-  );
+  const result = await random_experiment.assigned_treatment.function({
+    ...random_experiment.assigned_treatment.params,
+    language,
+  });
 
   const user_session_id = req.query.sessionId;
   // Remove sessionId from req.query

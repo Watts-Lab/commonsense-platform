@@ -2,12 +2,9 @@ import { useEffect, useState } from "react";
 import SurveyImage from "./SurveyImage";
 import "./style.css";
 import MultiChoiceQuestion from "./MultiChoiceQustion";
-import {
-  MultipleChoiceQuestionType,
-  questionData,
-  TextQuestionType,
-} from "../data/questions"; // Import here
+import { questionData } from "../data/questions"; // Import here
 import TextQuestion from "./TextQuestion";
+import { useTranslation } from "react-i18next";
 
 interface StatementProps {
   statementText: string;
@@ -30,6 +27,7 @@ function Statement({
   loading,
 }: StatementProps) {
   const [answers, setAnswers] = useState<string[]>(data.answers);
+  const { t, i18n } = useTranslation();
 
   useEffect(() => {
     onChange(statementId, answers);
@@ -59,22 +57,48 @@ function Statement({
       ) : (
         <>
           {questionData.map((question, index) => {
+            const description = i18n.exists(
+              `questions.${question.id}.description`
+            );
             if (question.type === "multipleChoice") {
+              const translatedQuestion = {
+                id: question.id,
+                question: t(`questions.${question.id}.question`),
+                possibleAnswers: t(`questions.${question.id}.possibleAnswers`, {
+                  returnObjects: true,
+                }) as string[],
+                tooltip: t(`questions.${question.id}.tooltip`),
+                required: question.required,
+                // Only add description if it exists
+                ...(description && {
+                  description: t(`questions.${question.id}.description`),
+                }),
+              };
               return (
                 <MultiChoiceQuestion
                   key={`${question.type}-${index}`}
                   statementId={statementId}
-                  question={question as MultipleChoiceQuestionType}
+                  question={translatedQuestion}
                   answerValue={answers[index]}
                   setAnswer={handleAnswerChange}
                 />
               );
             } else {
+              const translatedQuestion = {
+                id: question.id,
+                question: t(`questions.${question.id}.question`),
+                tooltip: t(`questions.${question.id}.tooltip`),
+                required: question.required,
+                // Only add description if it exists
+                ...(description && {
+                  description: t(`questions.${question.id}.description`),
+                }),
+              };
               return (
                 <TextQuestion
                   key={`${question.type}-${index}`}
                   statementId={statementId}
-                  question={question as TextQuestionType}
+                  question={translatedQuestion}
                   answerValue={answers[index]}
                   setAnswer={handleAnswerChange}
                 />

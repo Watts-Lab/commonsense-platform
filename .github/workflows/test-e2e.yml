@@ -39,8 +39,9 @@ jobs:
         run: |
           mysql --protocol=tcp -h ${{ env.MYSQL_HOST }} --port ${{ env.MYSQL_PORT }} -u${{ env.MYSQL_USER }} -p${{ env.MYSQL_PWD }} -e "CREATE DATABASE IF NOT EXISTS ${{ env.MYSQL_DB }};"
 
-      - name: Seed the database
+      - name: Unzil db init file and seed the database
         run: |
+          unzip test/init.sql.zip -d test
           mysql --protocol=tcp -h ${{ env.MYSQL_HOST }} --port ${{ env.MYSQL_PORT }} -u${{ env.MYSQL_USER }} -p${{ env.MYSQL_PWD }} ${{ env.MYSQL_DB }} < test/init.sql
 
       - name: Set up Node.js

@@ -6,11 +6,13 @@ const { stringy } = require("./utils/id-generator");
  * Retrieves statements by their IDs.
  *
  * @param {Object} params - The parameters for retrieving statements.
- * @param {Array} params.ids - The IDs of the statements to retrieve.
+ * @param {Array<number>} params.ids - The IDs of the statements to retrieve.
+ * @param {string} [params.language] - The language code of the statements to retrieve.
  * @param {number} [params.limit] - The maximum number of statements to return.
- * @returns {Promise<Array>} - A promise that resolves to an array of statements.
+ * @returns {Promise<{ id: string, description: string, answer: Array<{ id: number, statement: string }> }>}
+ * - A promise that resolves to an object containing the statements.
  */
-const GetStatementById = async (params, language) => {
+const GetStatementById = async ({ ids, language, limit }) => {
   const languageMap = {
     en: "statement",
     zh: "statement_zh",
@@ -24,19 +26,23 @@ const GetStatementById = async (params, language) => {
     ar: "statement_ar",
   };
 
-  const selectedColumn = languageMap[language] || "statement"; // default to 'statement' if column is not supported
+  if (!ids) {
+    throw new Error("Missing required parameter: ids");
+  }
+
+  const selectedColumn = language ? languageMap[language] : "statement"; // Default to 'statement' if language is not supported
 
   const statementsText = await statements.findAll({
     where: {
-      id: params.ids,
+      id: ids,
     },
-    attributes: ["id", selectedColumn],
+    attributes: ["id", [selectedColumn, "statement"]], // Alias the selected column to 'statement'
     order: Sequelize.literal("rand()"),
   });
 
   return {
     id: stringy({
-      params,
+      ids,
     }),
     description: "GetStatementById",
     answer: statementsText,
