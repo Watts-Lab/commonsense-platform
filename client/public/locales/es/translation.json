@@ -158,6 +158,7 @@
     "of-100": "de 100",
     "score-description": "Esta puntuación se basa en un cálculo de cuán similares son tus creencias a las de otros (las tuyas son {{awareness}}% similares), y cuán acertadamente calificaste lo que piensan los demás (fuiste {{consensus}}% preciso).",
     "score-calculation": "Esto se calcula comparando tus respuestas con las respuestas de otros, por lo que se volverá más preciso si respondes más preguntas y se volverá más preciso a medida que otros respondan más preguntas. Si inicias sesión a continuación, podrás continuar viendo esta puntuación a medida que se actualiza con el tiempo.",
+    "score-crt-rmet": "También has completado la Prueba de Reflexión Cognitiva (CRT) y la Prueba de Leer la Mente en los Ojos (RMET). Obtuviste {{CRT}}/6 en el CRT y {{RME}}/10 en el RMET. Estas puntuaciones no afectan tu puntuación de sentido común, pero miden diferentes aspectos de tu pensamiento.",
     "create-account-1": "Crear una cuenta (opcional)",
     "your-email": "Tu correo electrónico",
     "placeholder": "nombre@empresa.com",

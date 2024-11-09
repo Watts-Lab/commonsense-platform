@@ -152,6 +152,7 @@
     "of-100": "sur 100",
     "score-description": "Ce score est basé sur un calcul de la similarité de vos croyances avec celles des autres (les vôtres sont similaires à {{awareness}}%), et de la précision de votre évaluation de ce que pensent les autres (vous avez été précis à {{consensus}}%).",
     "score-calculation": "Ceci est calculé en comparant vos réponses à celles des autres, donc cela deviendra plus précis si vous répondez à plus de questions et cela deviendra plus précis au fur et à mesure que les autres répondront à plus de questions. Si vous vous connectez ci-dessous, vous pourrez continuer à voir ce score se mettre à jour au fil du temps.",
+    "score-crt-rmet": "Vous avez également complété le Test de Réflexion Cognitive (CRT) et le Test de Lecture de l'Esprit dans les Yeux (RMET). Vous avez obtenu {{CRT}}/6 au CRT et {{RME}}/10 au RMET. Ces scores n'affectent pas votre score de bon sens mais mesurent différents aspects de votre pensée.",
     "create-account-1": "Créer un compte (optionnel)",
     "your-email": "Votre email",
     "placeholder": "name@company.com",

@@ -154,6 +154,7 @@
     "of-100": "of 100",
     "score-description": "This score is based on a calculation of how similar your beliefs are to others (yours are {{awareness}}% similar), and how accurately you rated what others think (you were {{consensus}}% accurate).",
     "score-calculation": "This is calculated by comparing your answers to others' answers, so it will become more accurate if you answer more questions and it will become more accurate as others answer more questions. If you log in below you can continue to see this score as it updates over time.",
+    "score-crt-rmet" :"You have also completed the Cognitive Reflection Test (CRT) and the Reading the Mind in the Eyes Test (RMET). You scored {{CRT}}/6 on the CRT and {{RME}}/10 on the RME. These scores do not affect your common sense score but measure different aspects of your thinking.",
     "create-account-1": "Create an account (optional)",
     "your-email": "Your email",
     "placeholder": "name@company.com",

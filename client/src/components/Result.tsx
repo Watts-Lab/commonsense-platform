@@ -91,8 +91,6 @@ function Result({ experimentId }: ResultProps) {
     return null;
   });
 
-  console.log(individualCRT, individualRmeTen);
-
   useEffect(() => {
     setLoadingResults(true);
     Backend.post("/results", {
@@ -286,8 +284,8 @@ function Result({ experimentId }: ResultProps) {
         </>
       ) : null}
       <p className="py-4">
-        You&apos;ve completed the common sense trial. At any point you can
-        answer more questions by logging in.
+        {/* You&apos;ve completed the common sense trial. At any point you can
+        answer more questions by logging in. */}
         {t("result.completed-trial")}
       </p>
       {loadingResults ? (
@@ -323,13 +321,12 @@ function Result({ experimentId }: ResultProps) {
                   >
                     {commonSenseScore.commonsense}
                   </div>
-                  <span className="text-pale-blue text-sm">of 100</span>
+                  <span className="text-pale-blue text-sm">
+                    {/* of 100 */}
+                    {t("result.of-100")}
+                  </span>
                 </div>
               </div>
-              <span className="text-pale-blue text-sm">
-                {/* of 100 */}
-                {t("result.of-100")}
-              </span>
             </div>
           </div>
         </div>
@@ -350,10 +347,11 @@ function Result({ experimentId }: ResultProps) {
         will become more accurate if you answer more questions and it will
         become more accurate as others answer more questions. If you log in
         below you can continue to see this score as it updates over time. */}
+        {t("result.score-calculation")}
       </p>
       {individualCRT && individualRmeTen && (
         <p className="pb-4">
-          You have also completed the Cognitive Reflection Test (CRT) and the
+          {/* You have also completed the Cognitive Reflection Test (CRT) and the
           Reading the Mind in the Eyes Test (RMET). You scored{" "}
           <span className="font-bold text-blue-700 dark:text-blue-400 dark:text-opacity-80">
             {individualCRT.result.score}/6
@@ -363,7 +361,11 @@ function Result({ experimentId }: ResultProps) {
             {individualRmeTen.result.score}/10
           </span>{" "}
           on the RME. These scores do not affect your common sense score but
-          measure different aspects of your thinking.
+          measure different aspects of your thinking. */}
+          {t("result.score-crt-rmet", {
+            CRT: individualCRT.result.score,
+            RME: individualRmeTen.result.score,
+          })}
         </p>
       )}
 
