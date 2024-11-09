@@ -44,6 +44,7 @@ interface RmeTen {
     normScore: number;
   };
 }
+import { useTranslation } from "react-i18next";
 
 type ResultProps = {
   experimentId?: number;
@@ -89,8 +90,6 @@ function Result({ experimentId }: ResultProps) {
     }
     return null;
   });
-
-  console.log(individualCRT, individualRmeTen);
 
   useEffect(() => {
     setLoadingResults(true);
@@ -250,15 +249,21 @@ function Result({ experimentId }: ResultProps) {
     }
   }
 
+  const { t } = useTranslation();
+
   return (
     <div className="text-justify leading-relaxed">
       {aTurkBox ? (
         <>
           <div className="flex flex-col items-center py-7">
-            <p className="pb-2 text-3xl">Thanks for completing our survey!</p>
+            <p className="pb-2 text-3xl">
+              {/* Thanks for completing our survey! */}
+              {t("result.thanks")}
+            </p>
             <p className="pb-2">
-              Copy the code below and paste it in the HIT as a completion
-              verification:
+              {/* Copy the code below and paste it in the HIT as a completion
+              verification: */}
+              {t("result.copy-code-text")}
             </p>
             <p className="pb-2 mb-3 font-semibold border-2 rounded py-1 px-3">
               {sessionId}
@@ -267,18 +272,21 @@ function Result({ experimentId }: ResultProps) {
               onClick={handleCopy}
               className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
             >
-              Copy code
+              {/* Copy code */}
+              {t("result.copy-code-button")}
             </button>
             <p className="text-2xl mt-3 pt-2 px-3">
-              Scroll down to see your results — not required.
+              {/* Scroll down to see your results — not required. */}
+              {t("result.scroll-down")}
             </p>
           </div>
           <hr />
         </>
       ) : null}
       <p className="py-4">
-        You&apos;ve completed the common sense trial. At any point you can
-        answer more questions by logging in.
+        {/* You&apos;ve completed the common sense trial. At any point you can
+        answer more questions by logging in. */}
+        {t("result.completed-trial")}
       </p>
       {loadingResults ? (
         <div className="flex justify-center pb-4">
@@ -313,7 +321,10 @@ function Result({ experimentId }: ResultProps) {
                   >
                     {commonSenseScore.commonsense}
                   </div>
-                  <span className="text-pale-blue text-sm">of 100</span>
+                  <span className="text-pale-blue text-sm">
+                    {/* of 100 */}
+                    {t("result.of-100")}
+                  </span>
                 </div>
               </div>
             </div>
@@ -322,20 +333,25 @@ function Result({ experimentId }: ResultProps) {
       )}
 
       <p className="pb-4">
-        This score is based on a calculation of how similar your beliefs are to
+        {/* This score is based on a calculation of how similar your beliefs are to
         others (yours are {commonSenseScore.awareness}% similar), and how
         accurately you rated what others think (you were{" "}
-        {commonSenseScore.consensus}% accurate).
+        {commonSenseScore.consensus}% accurate). */}
+        {t("result.score-description", {
+          awareness: commonSenseScore.awareness,
+          consensus: commonSenseScore.consensus,
+        })}
       </p>
       <p className="pb-4">
-        This is calculated by comparing your answers to others answers, so it
+        {/* This is calculated by comparing your answers to others answers, so it
         will become more accurate if you answer more questions and it will
         become more accurate as others answer more questions. If you log in
-        below you can continue to see this score as it updates over time.
+        below you can continue to see this score as it updates over time. */}
+        {t("result.score-calculation")}
       </p>
       {individualCRT && individualRmeTen && (
         <p className="pb-4">
-          You have also completed the Cognitive Reflection Test (CRT) and the
+          {/* You have also completed the Cognitive Reflection Test (CRT) and the
           Reading the Mind in the Eyes Test (RMET). You scored{" "}
           <span className="font-bold text-blue-700 dark:text-blue-400 dark:text-opacity-80">
             {individualCRT.result.score}/6
@@ -345,7 +361,11 @@ function Result({ experimentId }: ResultProps) {
             {individualRmeTen.result.score}/10
           </span>{" "}
           on the RME. These scores do not affect your common sense score but
-          measure different aspects of your thinking.
+          measure different aspects of your thinking. */}
+          {t("result.score-crt-rmet", {
+            CRT: individualCRT.result.score,
+            RME: individualRmeTen.result.score,
+          })}
         </p>
       )}
 
@@ -358,7 +378,8 @@ function Result({ experimentId }: ResultProps) {
         <div className="w-full bg-white md:mt-0 sm:max-w-lg xl:p-0 dark:bg-gray-800 dark:border-gray-700">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-              Create an account (optional)
+              {/* Create an account (optional) */}
+              {t("result.create-account-1")}
             </h1>
             {notifBox ? (
               <NotificationBox userEmail={userEmail} />
@@ -369,7 +390,8 @@ function Result({ experimentId }: ResultProps) {
                     htmlFor="email"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
-                    Your email
+                    {/* Your email */}
+                    {t("result.your-email")}
                   </label>
                   <input
                     onChange={enterEmail}
@@ -378,7 +400,7 @@ function Result({ experimentId }: ResultProps) {
                     name="email"
                     id="email"
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="name@company.com"
+                    placeholder={t("result.placeholder")}
                     required
                   />
                   {emailError && (
@@ -390,7 +412,8 @@ function Result({ experimentId }: ResultProps) {
                   onClick={emailSubmit}
                   className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
                 >
-                  Create an account
+                  {/* Create an account */}
+                  {t("result.create-account-2")}
                 </button>
               </div>
             )}

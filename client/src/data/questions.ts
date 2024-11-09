@@ -1,14 +1,16 @@
 export interface MultipleChoiceQuestionType {
   id: number;
+  type: "multipleChoice";
   question: string;
   description?: string;
-  possibleAnswers: string[];
+  possibleAnswers: { [key: number]: string };
   tooltip: string;
   required: boolean;
 }
 
 export interface TextQuestionType {
   id: number;
+  type: "text";
   question: string;
   description?: string;
   tooltip: string;
@@ -20,6 +22,7 @@ export type IQuestionData = { type: "text" | "multipleChoice" } & (
   | TextQuestionType
 );
 
+// If any changes are made to the questions, make sure to update the translation files in the client/src/locales folder
 export const questionData: IQuestionData[] = [
   {
     id: 1,
@@ -27,7 +30,10 @@ export const questionData: IQuestionData[] = [
     question: "Do you agree with this statement?",
     description:
       "(if the answer is, it depends, respond with your most common or most likely answer)",
-    possibleAnswers: ["Yes", "No"],
+    possibleAnswers: {
+      1: "Yes",
+      2: "No",
+    },
     tooltip: "If you think the statement is true or false.",
     required: true,
   },
@@ -35,12 +41,12 @@ export const questionData: IQuestionData[] = [
     id: 2,
     type: "multipleChoice",
     question: "Why did you answer the way you did about <b>yourself?</b>",
-    possibleAnswers: [
-      "It's obvious",
-      "It's something I learned",
-      "It's my opinion",
-      "I don't know",
-    ],
+    possibleAnswers: {
+      1: "It's obvious",
+      2: "It's something I learned",
+      3: "It's my opinion",
+      4: "I don't know",
+    },
     tooltip:
       "Why you chose the specific answer, we aim to understand the factors that influenced your decision. Please provide an explanation or rationale for your response.",
     required: true,
@@ -48,11 +54,13 @@ export const questionData: IQuestionData[] = [
   {
     id: 3,
     type: "multipleChoice",
-    question:
-      "Do you think most other people would agree with this statement?",
+    question: "Do you think most other people would agree with this statement?",
     description:
       "(if the answer is, it depends, respond with your most common or most likely answer)",
-    possibleAnswers: ["Yes", "No"],
+    possibleAnswers: {
+      1: "Yes",
+      2: "No",
+    },
     tooltip:
       "This question seeks to gather insights on the perceived consensus among individuals regarding the given statement. We are interested in understanding your opinion about whether you believe that the majority of other people would agree with the statement presented.",
     required: true,
@@ -62,12 +70,12 @@ export const questionData: IQuestionData[] = [
     type: "multipleChoice",
     question:
       "Why did you answer the way you did about most <b>other people?</b>",
-    possibleAnswers: [
-      "I think most people have good judgement with regard to this topic",
-      "I think most people lack good judgment with regard to this topic",
-      "I think it's mostly a matter of opinion",
-      "I don't know",
-    ],
+    possibleAnswers: {
+      1: "I think most people have good judgement with regard to this topic",
+      2: "I think most people lack good judgment with regard to this topic",
+      3: "I think it's mostly a matter of opinion",
+      4: "I don't know",
+    },
     tooltip:
       "This question aims to explore the reasoning behind your response regarding the perceived agreement of most other people with the given statement. We are interested in understanding the factors that influenced your decision and your perspective on how others might interpret or respond to the statement.",
     required: true,
@@ -77,7 +85,10 @@ export const questionData: IQuestionData[] = [
     type: "multipleChoice",
     question:
       "Overall, do you think this statement is an example of common sense?",
-    possibleAnswers: ["Yes", "No"],
+    possibleAnswers: {
+      1: "Yes",
+      2: "No",
+    },
     tooltip:
       "This question seeks to gather insights on the perceived consensus among individuals regarding the given statement. We are interested in understanding your opinion about whether you believe that the majority of other people would agree with the statement presented.",
     required: true,

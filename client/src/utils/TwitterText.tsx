@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 interface TwitterTextProps {
   percentage: number;
@@ -6,6 +7,7 @@ interface TwitterTextProps {
 }
 
 const TwitterText = ({ sessionId, percentage }: TwitterTextProps) => {
+  const { t } = useTranslation();
   const [isShared, setIsShared] = useState(false);
   const [textareaValue, setTextareaValue] = useState("");
   const [coppied, setCoppied] = useState(false);
@@ -73,13 +75,13 @@ const TwitterText = ({ sessionId, percentage }: TwitterTextProps) => {
   useEffect(() => {
     // Call the function to generate blocks array
     const blocks = generateBlocksArray();
-    const percentagetext = `My common sense is ${percentage}%`;
-    const newValue = `${percentagetext}\n${blocks.join(
-      ""
-    )}\nCheck yours: https://commonsense.seas.upenn.edu/s/${sessionId.slice(
-      0,
-      7
-    )}`;
+    const percentagetext = t("twitter-text.percentage", {
+      percentage: percentage,
+    });
+    const checkYoursText = t("twitter-text.check-yours", {
+      sessionId: sessionId.slice(0, 7),
+    });
+    const newValue = `${percentagetext}\n${blocks.join("")}\n${checkYoursText}`;
 
     setTextareaValue(newValue);
   }, [percentage, sessionId]); // Update dependencies array
@@ -91,7 +93,8 @@ const TwitterText = ({ sessionId, percentage }: TwitterTextProps) => {
         onClick={handleShare}
         className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
       >
-        {coppied ? "Coppied!" : "Copy & Share!"}
+        {/* Copy and share */}
+        {coppied ? "Coppied!" : t("twitter-text.share-button")}
       </button>
 
       {isShared && (

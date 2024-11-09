@@ -32,5 +32,50 @@
   "parentId": {
     "type": "INTEGER",
     "allowNull": true
+  },
+
+  "statement_zh": {
+    "type": "TEXT",
+    "allowNull": false
+  },
+
+  "statement_ru": {
+    "type": "TEXT",
+    "allowNull": false
+  },
+
+  "statement_pt": {
+    "type": "TEXT",
+    "allowNull": false
+  },
+
+  "statement_ja": {
+    "type": "TEXT",
+    "allowNull": false
+  },
+
+  "statement_hi": {
+    "type": "TEXT",
+    "allowNull": false
+  },
+
+  "statement_fr": {
+    "type": "TEXT",
+    "allowNull": false
+  },
+
+  "statement_es": {
+    "type": "TEXT",
+    "allowNull": false
+  },
+
+  "statement_bn": {
+    "type": "TEXT",
+    "allowNull": false
+  },
+  
+  "statement_ar": {
+    "type": "TEXT",
+    "allowNull": false
   }
 }

@@ -121,7 +121,6 @@ export const SessionProvider = ({ children }: SessionProviderProps) => {
 
     // Dispatch the updated parameters
     if (URLParams.length > 0) {
-      console.log("URLParams", URLParams);
       setUrlParams((prev) => [...prev, ...URLParams]);
       localStorage.setItem(
         "urlParams",

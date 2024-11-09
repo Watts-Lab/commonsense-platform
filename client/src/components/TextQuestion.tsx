@@ -6,14 +6,15 @@ import { TextQuestionType } from "../data/questions";
 
 interface QuestionProps {
   statementId: number;
-  question: TextQuestionType;
+  questionInfo: TextQuestionType;
   answerValue: string;
   setAnswer: (questionId: number, value: string) => void;
 }
 
-function TextQuestion({ question, answerValue, setAnswer }: QuestionProps) {
+function TextQuestion({ questionInfo, answerValue, setAnswer }: QuestionProps) {
+  const { id, question, description, tooltip } = questionInfo;
   const onChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setAnswer(question.id, event.target.value);
+    setAnswer(id, event.target.value);
   };
 
   return (
@@ -21,16 +22,16 @@ function TextQuestion({ question, answerValue, setAnswer }: QuestionProps) {
       <div className="flex flex-row justify-between">
         <h4
           className="order-1 font-bold required-field dark:text-gray-200"
-          dangerouslySetInnerHTML={{ __html: question.question }}
+          dangerouslySetInnerHTML={{ __html: question }}
         />
-        <Tooltip className="order-last" text={question.tooltip} />
+        <Tooltip className="order-last" text={tooltip} />
       </div>
 
       {/* Wrap the textarea and counter in a relative container */}
       <div className="relative mt-2">
         <textarea
           className="w-full p-2 pb-8 border-2 border-gray-300 rounded-md dark:text-gray-200"
-          placeholder={question.description}
+          placeholder={description}
           value={answerValue}
           onChange={onChange}
           rows={2}

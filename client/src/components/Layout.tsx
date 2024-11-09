@@ -1,5 +1,6 @@
 import { ReactNode, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 // @ts-expect-error no types available
 import { CRT, RmeTen, Demographics } from "@watts-lab/surveys";
 import Statement from "./Statement";
@@ -21,6 +22,12 @@ export type statementStorageData = {
 
 function Layout() {
   const [loading, setLoading] = useState(false);
+  // get the current language
+  const {
+    t,
+    i18n: { language },
+  } = useTranslation();
+
   const [statementArray, setStatementArray] = useState<ReactNode[]>([]);
   const [statementsData, setStatementsData] = useStickyState<
     statementStorageData[]
@@ -59,9 +66,13 @@ function Layout() {
   const pushResultComponent = (experimentId: number) => {
     setStatementArray((oldArray) => [
       ...oldArray,
-      <CRT key="crt" onComplete={onCompleteCallback} />,
-      <RmeTen key="rmet" onComplete={onCompleteCallback} />,
-      <Demographics key="demographic" onComplete={onCompleteCallback} />,
+      <CRT key="crt" onComplete={onCompleteCallback} language={language} />,
+      <RmeTen key="rmet" onComplete={onCompleteCallback} language={language} />,
+      <Demographics
+        key="demographic"
+        onComplete={onCompleteCallback}
+        language={language}
+      />,
       <Result key={oldArray.length} experimentId={experimentId} />,
     ]);
   };
@@ -129,6 +140,7 @@ function Layout() {
               },
               {}
             ),
+            language: language, // add language parameter
           },
         });
 
@@ -179,7 +191,7 @@ function Layout() {
         setLoading(false);
       }
     })();
-  }, [sessionId]);
+  }, [language, sessionId]); // retrieve new statements when language changes
 
   const submitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -220,9 +232,14 @@ function Layout() {
               >
                 {(() => {
                   if (currentStepIndex === 0) {
-                    return <Link to="/consent">Start</Link>;
+                    return (
+                      <Link to="/consent">
+                        {/* Start */}
+                        {t("layout.start")}
+                      </Link>
+                    );
                   } else {
-                    return "← Previous";
+                    return t("layout.previous");
                   }
                 })()}
               </button>
@@ -234,9 +251,9 @@ function Layout() {
                 {(() => {
                   if (currentStepIndex === surveyLength - 3) {
                     // return <Link to="/finish">Finish</Link>;
-                    return "Continue";
+                    return t("layout.continue");
                   } else {
-                    return "Next →";
+                    return t("layout.next");
                   }
                 })()}
               </button>

@@ -17,6 +17,8 @@ const { body, query, validationResult } = require("express-validator");
 const { stringy } = require("../survey/treatments/utils/id-generator");
 
 const returnStatements = async (req, res) => {
+  const language = req.query.language || "en"; // default to English if no language is provided
+
   // Check for validation errors in the request
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -97,9 +99,10 @@ const returnStatements = async (req, res) => {
     random_experiment = grouped_experiments[random_experiment_name];
   }
 
-  const result = await random_experiment.assigned_treatment.function(
-    random_experiment.assigned_treatment.params
-  );
+  const result = await random_experiment.assigned_treatment.function({
+    ...random_experiment.assigned_treatment.params,
+    language,
+  });
 
   const user_session_id = req.query.sessionId;
   // Remove sessionId from req.query

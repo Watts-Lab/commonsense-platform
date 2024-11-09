@@ -14,21 +14,21 @@ describe("fill out the survay", () => {
 
       cy.wait(1000); // Wait for 1 second before selecting the radio button
 
-      cy.get("input[type='radio'][id*='question1-Yes']")
+      cy.get("input[type='radio'][id*='question1-1']")
         .check({ force: true })
         .should("be.checked");
-      cy.get("input[type='radio'][id*=\"question2-It's obvious\"]")
+      cy.get("input[type='radio'][id*=\"question2-1\"]")
         .check({ force: true })
         .should("be.checked");
-      cy.get("input[type='radio'][id*='question3-No']")
+      cy.get("input[type='radio'][id*='question3-2']")
         .check({ force: true })
         .should("be.checked");
       cy.get(
-        "input[type='radio'][id*=\"question4-I think most people lack good judgment with regard to this topic\"]"
+        "input[type='radio'][id*=\"question4-1\"]"
       )
         .check({ force: true })
         .should("be.checked");
-      cy.get("input[type='radio'][id*='question5-Yes']")
+      cy.get("input[type='radio'][id*='question5-1']")
         .check({ force: true })
         .should("be.checked");
       // cy.get(
