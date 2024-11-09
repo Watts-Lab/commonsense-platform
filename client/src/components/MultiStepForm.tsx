@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import "./style.css";
 import { statementStorageData } from "./Layout";
 import { useSession } from "../context/SessionContext";
+import { questionData } from "../data/questions";
 
 type MultiStepFormProps = {
   steps: statementStorageData[];
@@ -12,6 +13,12 @@ type MultiStepFormProps = {
   getNextStatement?: (sessionId: string) => void;
   pushNewStatement: (id: number, statement: string) => void;
 };
+
+function getEnglishTextForAnswer(questionId: number, answerId: number) {
+  const question = questionData.find((q) => q.id === questionId);
+  if (!question || question.type !== "multipleChoice") return null;
+  return question.possibleAnswers[answerId];
+}
 
 function MultiStepForm({ steps, handleAnswerSaving }: MultiStepFormProps) {
   const { i18n } = useTranslation();
@@ -43,13 +50,19 @@ function MultiStepForm({ steps, handleAnswerSaving }: MultiStepFormProps) {
         Backend.post("/answers", {
           statementId: steps[currentStepIndex].id,
           I_agree:
-            steps[currentStepIndex].answers[0].split("-")[1] === "Yes" ? 1 : 0,
-          I_agree_reason: steps[currentStepIndex].answers[1].split("-")[1],
+            steps[currentStepIndex].answers[0].split("-")[1] === "1" ? 1 : 0,
+          I_agree_reason: getEnglishTextForAnswer(
+            2,
+            Number(steps[currentStepIndex].answers[1].split("-")[1])
+          ),
           others_agree:
-            steps[currentStepIndex].answers[2].split("-")[1] === "Yes" ? 1 : 0,
-          others_agree_reason: steps[currentStepIndex].answers[3].split("-")[1],
+            steps[currentStepIndex].answers[2].split("-")[1] === "1" ? 1 : 0,
+          others_agree_reason: getEnglishTextForAnswer(
+            4,
+            Number(steps[currentStepIndex].answers[3].split("-")[1])
+          ),
           perceived_commonsense:
-            steps[currentStepIndex].answers[4].split("-")[1] === "Yes" ? 1 : 0,
+            steps[currentStepIndex].answers[4].split("-")[1] === "1" ? 1 : 0,
           clarity: steps[currentStepIndex].answers[5],
           origLanguage: language || "en",
           sessionId: sessionId,

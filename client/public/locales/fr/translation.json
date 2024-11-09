@@ -181,38 +181,47 @@
     "1": {
       "question": "Êtes-vous d'accord avec cette déclaration ? *",
       "description": "(si la réponse dépend des circonstances, répondez avec votre réponse la plus courante ou la plus probable)",
-      "possibleAnswers": ["Oui", "Non"],
+      "possibleAnswers": {
+        "1": "Oui",
+        "2": "Non"
+      },
       "tooltip": "Si vous pensez que la déclaration est vraie ou fausse."
     },
     "2": {
       "question": "Pourquoi avez-vous répondu de cette manière à propos de <b>vous-même ?</b> *",
-      "possibleAnswers": [
-        "C'est évident",
-        "C'est quelque chose que j'ai appris",
-        "C'est mon avis",
-        "Je ne sais pas"
-      ],
+      "possibleAnswers": {
+        "1": "C'est évident",
+        "2": "C'est quelque chose que j'ai appris",
+        "3": "C'est mon avis",
+        "4": "Je ne sais pas"
+      },
       "tooltip": "Pourquoi vous avez choisi la réponse spécifique, nous visons à comprendre les facteurs qui ont influencé votre décision. Veuillez fournir une explication ou une justification de votre réponse."
     },
     "3": {
       "question": "Pensez-vous que la plupart des autres personnes seraient d'accord avec cette déclaration ? *",
       "description": "(si la réponse dépend des circonstances, répondez avec votre réponse la plus courante ou la plus probable)",
-      "possibleAnswers": ["Oui", "Non"],
+      "possibleAnswers": {
+        "1": "Oui",
+        "2": "Non"
+      },
       "tooltip": "Cette question cherche à recueillir des informations sur le consensus perçu parmi les individus concernant la déclaration donnée. Nous nous intéressons à comprendre votre opinion sur le fait que vous pensez que la majorité des autres personnes seraient d'accord avec la déclaration présentée."
     },
     "4": {
       "question": "Pourquoi avez-vous répondu de cette manière à propos de la majorité des <b>autres personnes ?</b> *",
-      "possibleAnswers": [
-        "Je pense que la plupart des gens ont un bon jugement à ce sujet",
-        "Je pense que la plupart des gens manquent de bon jugement à ce sujet",
-        "Je pense que c'est principalement une question d'opinion",
-        "Je ne sais pas"
-      ],
+      "possibleAnswers": {
+        "1": "Je pense que la plupart des gens ont un bon jugement à ce sujet",
+        "2": "Je pense que la plupart des gens manquent de bon jugement à ce sujet",
+        "3": "Je pense que c'est principalement une question d'opinion",
+        "4": "Je ne sais pas"
+      },
       "tooltip": "Cette question vise à explorer les raisons derrière votre réponse concernant l'accord perçu de la majorité des autres personnes avec la déclaration donnée. Nous nous intéressons à comprendre les facteurs qui ont influencé votre décision et votre perspective sur la manière dont les autres pourraient interpréter ou répondre à la déclaration."
     },
     "5": {
       "question": "Dans l'ensemble, pensez-vous que cette déclaration est un exemple de bon sens ?",
-      "possibleAnswers": ["Oui", "Non"],
+      "possibleAnswers": {
+        "1": "Oui",
+        "2": "Non"
+      },
       "tooltip": "Cette question cherche à recueillir des informations sur le consensus perçu parmi les individus concernant la déclaration donnée. Nous nous intéressons à comprendre votre opinion sur le fait que vous pensez que la majorité des autres personnes seraient d'accord avec la déclaration présentée."
     },
     "6": {

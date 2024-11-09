@@ -162,14 +162,10 @@ function Layout() {
               statement: { statement: string; image?: string; id: number },
               index: number
             ) => {
-              const statementText =
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                (statement as any)[`statement_${language}`] ||
-                statement.statement; // define the statement in the current language
               return (
                 <Statement
                   key={index}
-                  statementText={statementText}
+                  statementText={statement.statement}
                   imageUrl={statement.image}
                   statementId={statement.id}
                   onChange={handleStatementChange}

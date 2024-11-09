@@ -63,10 +63,11 @@ function Statement({
             if (question.type === "multipleChoice") {
               const translatedQuestion = {
                 id: question.id,
+                type: "multipleChoice" as const,
                 question: t(`questions.${question.id}.question`),
                 possibleAnswers: t(`questions.${question.id}.possibleAnswers`, {
                   returnObjects: true,
-                }) as string[],
+                }) as { [key: number]: string },
                 tooltip: t(`questions.${question.id}.tooltip`),
                 required: question.required,
                 // Only add description if it exists
@@ -78,7 +79,7 @@ function Statement({
                 <MultiChoiceQuestion
                   key={`${question.type}-${index}`}
                   statementId={statementId}
-                  question={translatedQuestion}
+                  questionInfo={translatedQuestion}
                   answerValue={answers[index]}
                   setAnswer={handleAnswerChange}
                 />
@@ -86,6 +87,7 @@ function Statement({
             } else {
               const translatedQuestion = {
                 id: question.id,
+                type: "text" as const,
                 question: t(`questions.${question.id}.question`),
                 tooltip: t(`questions.${question.id}.tooltip`),
                 required: question.required,
@@ -98,7 +100,7 @@ function Statement({
                 <TextQuestion
                   key={`${question.type}-${index}`}
                   statementId={statementId}
-                  question={translatedQuestion}
+                  questionInfo={translatedQuestion}
                   answerValue={answers[index]}
                   setAnswer={handleAnswerChange}
                 />

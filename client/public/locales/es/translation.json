@@ -187,38 +187,47 @@
     "1": {
       "question": "¿Está de acuerdo con esta afirmación? *",
       "description": "(si la respuesta es, depende, responda con su respuesta más común o más probable)",
-      "possibleAnswers": ["Sí", "No"],
+      "possibleAnswers": {
+        "1": "Sí",
+        "2": "No"
+      },
       "tooltip": "Si cree que la afirmación es verdadera o falsa."
     },
     "2": {
       "question": "¿Por qué respondió de la manera que lo hizo sobre <b>usted mismo?</b> *",
-      "possibleAnswers": [
-        "Es obvio",
-        "Es algo que aprendí",
-        "Es mi opinión",
-        "No lo sé"
-      ],
+      "possibleAnswers": {
+        "1": "Es obvio",
+        "2": "Es algo que aprendí",
+        "3": "Es mi opinión",
+        "4": "No lo sé"
+      },
       "tooltip": "Por qué eligió la respuesta específica, buscamos entender los factores que influyeron en su decisión. Por favor, proporcione una explicación o justificación para su respuesta."
     },
     "3": {
       "question": "¿Cree que la mayoría de las demás personas estarían de acuerdo con esta afirmación? *",
       "description": "(si la respuesta es, depende, responda con su respuesta más común o más probable)",
-      "possibleAnswers": ["Sí", "No"],
+      "possibleAnswers": {
+        "1": "Sí",
+        "2": "No"
+      },
       "tooltip": "Esta pregunta busca recopilar información sobre el consenso percibido entre las personas respecto a la afirmación dada. Nos interesa entender su opinión sobre si cree que la mayoría de las demás personas estarían de acuerdo con la afirmación presentada."
     },
     "4": {
       "question": "¿Por qué respondió de la manera que lo hizo sobre la mayoría de <b>las demás personas?</b> *",
-      "possibleAnswers": [
-        "Creo que la mayoría de las personas tienen buen juicio respecto a este tema",
-        "Creo que la mayoría de las personas carecen de buen juicio respecto a este tema",
-        "Creo que es mayormente una cuestión de opinión",
-        "No lo sé"
-      ],
+      "possibleAnswers": {
+        "1": "Creo que la mayoría de las personas tienen buen juicio respecto a este tema",
+        "2": "Creo que la mayoría de las personas carecen de buen juicio respecto a este tema",
+        "3": "Creo que es mayormente una cuestión de opinión",
+        "4": "No lo sé"
+      },
       "tooltip": "Esta pregunta tiene como objetivo explorar el razonamiento detrás de su respuesta respecto al acuerdo percibido de la mayoría de las personas con la afirmación dada. Nos interesa entender los factores que influyeron en su decisión y su perspectiva sobre cómo otras personas podrían interpretar o responder a la afirmación."
     },
     "5": {
       "question": "En general, ¿cree que esta afirmación es un ejemplo de sentido común?",
-      "possibleAnswers": ["Sí", "No"],
+      "possibleAnswers": {
+        "1": "Sí",
+        "2": "No"
+      },
       "tooltip": "Esta pregunta busca recopilar información sobre el consenso percibido entre las personas respecto a la afirmación dada. Nos interesa entender su opinión sobre si cree que la mayoría de las demás personas estarían de acuerdo con la afirmación presentada."
     },
     "6": {

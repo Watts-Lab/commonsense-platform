@@ -181,38 +181,47 @@
     "1": {
       "question": "Você concorda com esta declaração? *",
       "description": "(se a resposta for depende, responda com a sua resposta mais comum ou mais provável)",
-      "possibleAnswers": ["Sim", "Não"],
+      "possibleAnswers": {
+        "1": "Sim",
+        "2": "Não"
+      },
       "tooltip": "Se você acha que a declaração é verdadeira ou falsa."
     },
     "2": {
       "question": "Por que você respondeu da maneira que respondeu sobre <b>você mesmo?</b> *",
-      "possibleAnswers": [
-        "É óbvio",
-        "É algo que aprendi",
-        "É a minha opinião",
-        "Eu não sei"
-      ],
+      "possibleAnswers": {
+        "1": "É óbvio",
+        "2": "É algo que aprendi",
+        "3": "É a minha opinião",
+        "4": "Eu não sei"
+      },
       "tooltip": "Por que você escolheu a resposta específica, nós buscamos entender os fatores que influenciaram sua decisão. Por favor, forneça uma explicação ou justificativa para sua resposta."
     },
     "3": {
       "question": "Você acha que a maioria das outras pessoas concordaria com esta declaração? *",
       "description": "(se a resposta for depende, responda com a sua resposta mais comum ou mais provável)",
-      "possibleAnswers": ["Sim", "Não"],
+      "possibleAnswers": {
+        "1": "Sim",
+        "2": "Não"
+      },
       "tooltip": "Esta pergunta busca coletar percepções sobre o consenso percebido entre os indivíduos em relação à declaração dada. Estamos interessados em entender sua opinião sobre se você acredita que a maioria das outras pessoas concordaria com a declaração apresentada."
     },
     "4": {
       "question": "Por que você respondeu da maneira que respondeu sobre a maioria das <b>outras pessoas?</b> *",
-      "possibleAnswers": [
-        "Eu acho que a maioria das pessoas tem bom julgamento em relação a este tópico",
-        "Eu acho que a maioria das pessoas não tem bom julgamento em relação a este tópico",
-        "Eu acho que é principalmente uma questão de opinião",
-        "Eu não sei"
-      ],
+      "possibleAnswers": {
+        "1": "Eu acho que a maioria das pessoas tem bom julgamento em relação a este tópico",
+        "2": "Eu acho que a maioria das pessoas não tem bom julgamento em relação a este tópico",
+        "3": "Eu acho que é principalmente uma questão de opinião",
+        "4": "Eu não sei"
+      },
       "tooltip": "Esta pergunta visa explorar o raciocínio por trás de sua resposta em relação ao acordo percebido da maioria das outras pessoas com a declaração dada. Estamos interessados em entender os fatores que influenciaram sua decisão e sua perspectiva sobre como outros podem interpretar ou responder à declaração."
     },
     "5": {
       "question": "No geral, você acha que esta declaração é um exemplo de senso comum?",
-      "possibleAnswers": ["Sim", "Não"],
+      "possibleAnswers": {
+        "1": "Sim",
+        "2": "Não"
+      },
       "tooltip": "Esta pergunta busca coletar percepções sobre o consenso percebido entre os indivíduos em relação à declaração dada. Estamos interessados em entender sua opinião sobre se você acredita que a maioria das outras pessoas concordaria com a declaração apresentada."
     },
     "6": {

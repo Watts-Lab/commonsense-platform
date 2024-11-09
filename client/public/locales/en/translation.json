@@ -154,7 +154,7 @@
     "of-100": "of 100",
     "score-description": "This score is based on a calculation of how similar your beliefs are to others (yours are {{awareness}}% similar), and how accurately you rated what others think (you were {{consensus}}% accurate).",
     "score-calculation": "This is calculated by comparing your answers to others' answers, so it will become more accurate if you answer more questions and it will become more accurate as others answer more questions. If you log in below you can continue to see this score as it updates over time.",
-    "score-crt-rmet" :"You have also completed the Cognitive Reflection Test (CRT) and the Reading the Mind in the Eyes Test (RMET). You scored {{CRT}}/6 on the CRT and {{RME}}/10 on the RME. These scores do not affect your common sense score but measure different aspects of your thinking.",
+    "score-crt-rmet": "You have also completed the Cognitive Reflection Test (CRT) and the Reading the Mind in the Eyes Test (RMET). You scored {{CRT}}/6 on the CRT and {{RME}}/10 on the RME. These scores do not affect your common sense score but measure different aspects of your thinking.",
     "create-account-1": "Create an account (optional)",
     "your-email": "Your email",
     "placeholder": "name@company.com",
@@ -183,38 +183,47 @@
     "1": {
       "question": "Do you agree with this statement? *",
       "description": "(if the answer is, it depends, respond with your most common or most likely answer)",
-      "possibleAnswers": ["Yes", "No"],
+      "possibleAnswers": {
+        "1": "Yes",
+        "2": "No"
+      },
       "tooltip": "If you think the statement is true or false."
     },
     "2": {
       "question": "Why did you answer the way you did about <b>yourself?</b> *",
-      "possibleAnswers": [
-        "It's obvious",
-        "It's something I learned",
-        "It's my opinion",
-        "I don't know"
-      ],
+      "possibleAnswers": {
+        "1": "It's obvious",
+        "2": "It's something I learned",
+        "3": "It's my opinion",
+        "4": "I don't know"
+      },
       "tooltip": "Why you chose the specific answer, we aim to understand the factors that influenced your decision. Please provide an explanation or rationale for your response."
     },
     "3": {
       "question": "Do you think most other people would agree with this statement? *",
       "description": "(if the answer is, it depends, respond with your most common or most likely answer)",
-      "possibleAnswers": ["Yes", "No"],
+      "possibleAnswers": {
+        "1": "Yes",
+        "2": "No"
+      },
       "tooltip": "This question seeks to gather insights on the perceived consensus among individuals regarding the given statement. We are interested in understanding your opinion about whether you believe that the majority of other people would agree with the statement presented."
     },
     "4": {
       "question": "Why did you answer the way you did about most <b>other people?</b> *",
-      "possibleAnswers": [
-        "I think most people have good judgement with regard to this topic",
-        "I think most people lack good judgment with regard to this topic",
-        "I think it's mostly a matter of opinion",
-        "I don't know"
-      ],
+      "possibleAnswers": {
+        "1": "I think most people have good judgement with regard to this topic",
+        "2": "I think most people lack good judgment with regard to this topic",
+        "3": "I think it's mostly a matter of opinion",
+        "4": "I don't know"
+      },
       "tooltip": "This question aims to explore the reasoning behind your response regarding the perceived agreement of most other people with the given statement. We are interested in understanding the factors that influenced your decision and your perspective on how others might interpret or respond to the statement."
     },
     "5": {
       "question": "Overall, do you think this statement is an example of common sense?",
-      "possibleAnswers": ["Yes", "No"],
+      "possibleAnswers": {
+        "1": "Yes",
+        "2": "No"
+      },
       "tooltip": "This question seeks to gather insights on the perceived consensus among individuals regarding the given statement. We are interested in understanding your opinion about whether you believe that the majority of other people would agree with the statement presented."
     },
     "6": {
