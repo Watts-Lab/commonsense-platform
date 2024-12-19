@@ -24,6 +24,7 @@ import Finish from "./pages/Finish";
 // components
 import Consent from "./components/Consent";
 import Enter from "./components/Enter";
+import Demo from "./pages/Demo";
 
 const App = () => {
   useEffect(() => {
@@ -53,6 +54,7 @@ const App = () => {
           <Route path="/finish" element={<Finish />} />
           <Route path="/welcome" element={<Welcome />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/demo" element={<Demo />} />
         </Routes>
       </div>
     </div>
