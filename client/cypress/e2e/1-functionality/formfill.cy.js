@@ -144,10 +144,10 @@ describe("fill out the survay", () => {
       force: true,
     });
 
-    cy.get(`input[type="button"][value="Complete"]`).click({ force: true });
-
     // Check if the form is submitted
     cy.intercept("http://localhost:4000/api/results").as("resultData");
+
+    cy.get(`input[type="button"][value="Complete"]`).click({ force: true });
 
     cy.wait("@resultData").its("response.statusCode").should("equal", 200);
 
