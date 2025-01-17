@@ -149,8 +149,6 @@ describe("fill out the survay", () => {
     // Check if the form is submitted
     cy.intercept("http://localhost:4000/api/results").as("resultData");
 
-    cy.get("input[type='button'][value='Complete']").click();
-
     cy.wait("@resultData").its("response.statusCode").should("equal", 200);
 
     cy.wait(2000); // Wait for 1 second before selecting the radio button
