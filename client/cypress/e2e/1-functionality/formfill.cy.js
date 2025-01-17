@@ -23,9 +23,7 @@ describe("fill out the survay", () => {
       cy.get("input[type='radio'][id*='question3-2']")
         .check({ force: true })
         .should("be.checked");
-      cy.get(
-        "input[type='radio'][id*=\"question4-1\"]"
-      )
+      cy.get("input[type='radio'][id*=\"question4-1\"]")
         .check({ force: true })
         .should("be.checked");
       cy.get("input[type='radio'][id*='question5-1']")
@@ -86,32 +84,67 @@ describe("fill out the survay", () => {
 
     // Fill the demographic form
     // Birth year
-    cy.get("input[type='text'][id*='sq_126i']").type("1990");
+    cy.get(`[data-name="birth_year"] input`).click().type("1990");
 
     // Gender
-    cy.get("input[type='radio'][id*='sq_127i_0']")
-      .check({ force: true })
-      .should("be.checked");
+    cy.get(`[data-name="gender"] input[value="other"]`).click({ force: true });
 
-    cy.get("input[type='text'][id*='sq_129i_0']").type("Other\n", {
+    cy.get(`[data-name="gender_other"] input`).click().type("Other gender");
+
+    cy.get(`[data-name="marital_status"] input`).click({ force: true });
+
+    cy.contains("Married or Domestic Partnership").click({ force: true });
+
+    cy.get(`[data-name="language_primary"] input`).click({ force: true });
+    cy.contains("French").click({ force: true });
+
+    cy.get(`[data-name="english_written"] input[value="4"]`).click({
       force: true,
     });
 
-    cy.get("input[type='text'][id*='sq_130i_0']").type("English\n", {
+    cy.get(`[data-name="english_spoken"] input[value="4"]`).click({
       force: true,
     });
 
-    cy.get("input[type='radio'][id*='sq_132i_0']")
-      .check({ force: true })
-      .should("be.checked");
-
-    cy.get("input[type='radio'][id*='sq_133i_0']")
-      .check({ force: true })
-      .should("be.checked");
-
-    cy.get("input[type='text'][id*='sq_135i_0']").type("Algeria\n", {
+    cy.get(`[data-name="employment_status"] input[value="employed"]`).click({
       force: true,
     });
+
+    cy.get(
+      `[data-name="employment_industry"] input[value="Agriculture, Forestry, Fishing, and Hunting"]`
+    ).click({
+      force: true,
+    });
+
+    cy.get(`[data-name="job_title"] input`).click().type("Survey Developer");
+
+    cy.get(`[data-name="country_reside"] input`).click({ force: true });
+    cy.contains("United States").click({ force: true });
+
+    cy.get(`input[type="button"][value="Next"]`).click({ force: true });
+
+    cy.get(`[data-name="education_US"] input[value="Doctorate"]`).click({
+      force: true,
+    });
+
+    cy.get(`[data-name="latin_US"] input[value="Yes"]`)
+      .next()
+      .click({ force: true });
+
+    cy.get(`[data-name="zipcode_US"] input`).click().type("52066");
+
+    cy.get(`[data-name="race_US"] input[value="White"]`)
+      .next()
+      .click({ force: true });
+    cy.get(`[data-name="race_US"] input[value="Other"]`)
+      .next()
+      .click({ force: true });
+
+    cy.get(`[data-name="income_US"] input[value="$50,000-$74,999"]`).click({
+      force: true,
+    });
+
+    cy.get(`input[type="button"][value="Complete"]`).click({ force: true });
 
     // Check if the form is submitted
     cy.intercept("http://localhost:4000/api/results").as("resultData");
