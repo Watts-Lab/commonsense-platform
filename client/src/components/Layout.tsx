@@ -2,7 +2,7 @@ import { ReactNode, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 // @ts-expect-error no types available
-import { CRT, RmeTen, Demographics } from "@watts-lab/surveys";
+import { CRT, RmeTen, DemographicsLongInternational } from "@watts-lab/surveys";
 import Statement from "./Statement";
 import MultiStepForm from "./MultiStepForm";
 import Result from "./Result";
@@ -66,10 +66,21 @@ function Layout() {
   const pushResultComponent = (experimentId: number) => {
     setStatementArray((oldArray) => [
       ...oldArray,
-      <CRT key="crt" onComplete={onCompleteCallback} language={language} />,
-      <RmeTen key="rmet" onComplete={onCompleteCallback} language={language} />,
-      <Demographics
+      <CRT
+        key="crt"
+        storageName="crt"
+        onComplete={onCompleteCallback}
+        language={language}
+      />,
+      <RmeTen
+        key="rmet"
+        storageName="rmeten"
+        onComplete={onCompleteCallback}
+        language={language}
+      />,
+      <DemographicsLongInternational
         key="demographic"
+        storageName="demographics"
         onComplete={onCompleteCallback}
         language={language}
       />,
