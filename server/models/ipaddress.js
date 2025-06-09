@@ -78,7 +78,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         {
           unique: true,
-          fields: ["sessionId"],
+          fields: ["sessionId", "ipAddress"],
         },
       ],
     }
