@@ -25,6 +25,8 @@ import Finish from "./pages/Finish";
 import Consent from "./components/Consent";
 import Enter from "./components/Enter";
 import Demo from "./pages/Demo";
+import GDPRNotice from "./components/GDPRNotice";
+import Privacy from "./pages/Privacy";
 
 const App = () => {
   useEffect(() => {
@@ -55,7 +57,9 @@ const App = () => {
           <Route path="/welcome" element={<Welcome />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/demo" element={<Demo />} />
+          <Route path="/privacy" element={<Privacy />} />
         </Routes>
+        <GDPRNotice />
       </div>
     </div>
   );
