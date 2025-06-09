@@ -19,7 +19,7 @@ app.use(express.json());
 app.use(express.static("./survey/public"));
 app.use(require("./config/sessionConfig")(session, sessionStore));
 
-// IP Recording Middleware (place this AFTER session middleware)
+// IP Recording Middleware
 app.use(async (req, res, next) => {
   try {
     // Only record IP once per session
