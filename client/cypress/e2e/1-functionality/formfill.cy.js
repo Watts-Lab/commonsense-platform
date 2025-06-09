@@ -3,7 +3,12 @@
 describe("fill out the survay", () => {
   beforeEach(() => {
     // go to the url
-    cy.visit("http://localhost:5173/statements");
+    cy.visit("http://localhost:5173/statements", {
+      onBeforeLoad(win) {
+        // Pretend the user already accepted GDPR
+        win.localStorage.setItem("gdpr-consent", "accepted");
+      },
+    });
   });
 
   it("Select radio and click 'Next' in a loop", () => {

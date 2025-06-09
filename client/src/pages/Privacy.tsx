@@ -20,9 +20,7 @@ const Privacy: FC = () => {
               <h1 className="text-3xl font-bold text-gray-900 mb-2">
                 Privacy Policy
               </h1>
-              <p className="text-gray-600">
-                Last updated: {new Date().toLocaleDateString()}
-              </p>
+              <p className="text-gray-600">Last updated: 6/9/2025</p>
             </div>
 
             <div className="prose max-w-none">
@@ -38,8 +36,6 @@ const Privacy: FC = () => {
                     <ul className="list-disc list-inside space-y-2">
                       <li>IP address and location data</li>
                       <li>Browser type and version</li>
-                      <li>Device information</li>
-                      <li>Pages visited and time spent</li>
                       <li>Session data and cookies</li>
                     </ul>
                   </div>
@@ -48,9 +44,13 @@ const Privacy: FC = () => {
                       Information You Provide
                     </h3>
                     <ul className="list-disc list-inside space-y-2">
-                      <li>Email address (for account creation)</li>
-                      <li>Survey responses and feedback</li>
+                      <li>
+                        Survey responses and feedback (Common sense statement
+                        ratings)
+                      </li>
+                      <li>Demographic information</li>
                       <li>Any other information you voluntarily provide</li>
+                      <li>Email address (only for account creation)</li>
                     </ul>
                   </div>
                 </div>
@@ -61,11 +61,11 @@ const Privacy: FC = () => {
                   How We Use Your Information
                 </h2>
                 <ul className="list-disc list-inside space-y-2 text-gray-700">
+                  <li>Ensure security and prevent fraud</li>
                   <li>Provide and improve our services</li>
                   <li>Analyze website usage and performance</li>
                   <li>Send important updates and communications</li>
                   <li>Conduct research and analytics</li>
-                  <li>Ensure security and prevent fraud</li>
                 </ul>
               </section>
 
@@ -94,10 +94,7 @@ const Privacy: FC = () => {
                 <div className="space-y-4 text-gray-700">
                   <p>We use cookies and similar technologies to:</p>
                   <ul className="list-disc list-inside space-y-2">
-                    <li>Maintain your session and preferences</li>
-                    <li>Analyze how you use our website</li>
-                    <li>Improve user experience</li>
-                    <li>Provide personalized content</li>
+                    <li>Maintain your session and responses</li>
                   </ul>
                   <p>
                     You can control cookie settings through your browser, but
@@ -147,7 +144,8 @@ const Privacy: FC = () => {
                 <div className="space-y-4 text-gray-700">
                   <p>
                     We do not sell, trade, or share your personal information
-                    with third parties.
+                    with third parties. All data is anonymized and used solely
+                    for research and analysis purposes.
                   </p>
                 </div>
               </section>
