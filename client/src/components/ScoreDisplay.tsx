@@ -32,6 +32,7 @@ function ScoreDisplay({ score, currentStepIndex }: ScoreDisplayProps) {
     prevScoreRef.current = score.commonsense;
   }, [score.commonsense, controls]);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const scoreColor = useMemo(() => {
     const percent = Math.max(0, Math.min(100, score.commonsense));
     let r, g, b;
@@ -67,10 +68,6 @@ function ScoreDisplay({ score, currentStepIndex }: ScoreDisplayProps) {
         <h3 className="text-lg font-semibold">Your score so far:</h3>
         <motion.span
           className="text-2xl font-bold"
-          style={{
-            color: scoreColor,
-            textShadow: "0 5px 4px rgba(0,0,0,0.15)",
-          }}
           animate={controls}
         >
           {score.commonsense}/100
@@ -79,24 +76,9 @@ function ScoreDisplay({ score, currentStepIndex }: ScoreDisplayProps) {
           <Tooltip
             className="order-last"
             placement="bottom"
-            text="This is your commonsense score based on the answers provided so far. This is calculated by comparing your answers to others answers."
+            text="This is your commonsense score based on the answers you provided so far. This is calculated by comparing your answers to other people's answers."
           />
         </span>
-      </div>
-      <div className="flex justify-center space-x-4 mt-2">
-        <div className="text-sm bg-blue-100 p-1 rounded relative group cursor-help">
-          Awareness: {score.awareness}%
-          <span className="absolute left-1/2 -translate-x-1/2 mt-2 z-10 hidden group-hover:block bg-white border border-gray-300 text-gray-700 text-xs rounded px-2 py-1 shadow-lg whitespace-pre-line w-56">
-            Awareness is how similar your beliefs are to others.
-          </span>
-        </div>
-        <div className="text-sm bg-green-100 p-1 rounded relative group cursor-help">
-          Consensus: {score.consensus}%
-          <span className="absolute left-1/2 -translate-x-1/2 mt-2 z-10 hidden group-hover:block bg-white border border-gray-300 text-gray-700 text-xs rounded px-2 py-1 shadow-lg whitespace-pre-line w-56">
-            Consensus is how accurately you are at guessing other beliefs of
-            common sense.
-          </span>
-        </div>
       </div>
     </div>
   );
