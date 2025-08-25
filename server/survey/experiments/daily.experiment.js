@@ -12,7 +12,7 @@ async function getOrCreateDailyExperiment() {
     return daily.statementIds;
   }
 
-  const [results] = await sequelize.query(
+  const results = await sequelize.query(
     `
     SELECT
         s.id AS statementId,
