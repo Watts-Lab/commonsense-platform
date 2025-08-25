@@ -121,7 +121,7 @@ const returnStatements = async (req, res) => {
 
   const experiment = await createExperiment(experimentData);
 
-  res.json({ statements: result.answer, experimentId: experiment.id });
+  res.json({ statements: result.answer, experimentId: experiment.id, experimentType: experiment.experimentType });
 };
 
 const saveIndividual = async (req, res) => {
