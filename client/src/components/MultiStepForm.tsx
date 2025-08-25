@@ -12,6 +12,7 @@ type MultiStepFormProps = {
   handleAnswerSaving: (tid: number, answerState: boolean) => void;
   getNextStatement?: (sessionId: string) => void;
   pushNewStatement: (id: number, statement: string) => void;
+  updateScore: () => Promise<void>;
 };
 
 function getEnglishTextForAnswer(questionId: number, answerId: number) {
@@ -20,7 +21,11 @@ function getEnglishTextForAnswer(questionId: number, answerId: number) {
   return question.possibleAnswers[answerId];
 }
 
-function MultiStepForm({ steps, handleAnswerSaving }: MultiStepFormProps) {
+function MultiStepForm({
+  steps,
+  handleAnswerSaving,
+  updateScore,
+}: MultiStepFormProps) {
   const { i18n } = useTranslation();
   const language = i18n.language;
 
@@ -70,6 +75,7 @@ function MultiStepForm({ steps, handleAnswerSaving }: MultiStepFormProps) {
         }).then(() => {
           handleAnswerSaving(steps[currentStepIndex].id, true);
           steps[currentStepIndex].answereSaved = true;
+          updateScore();
         });
       }
     }

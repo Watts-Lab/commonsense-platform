@@ -1413,7 +1413,7 @@ const defaultTreatment = [
 const experiment = {
   experimentName: "design-design_point-old-statements",
   treatments: defaultTreatment,
-  treatmentAssigner: (treatments) => {
+  treatmentAssigner: (treatments, req) => {
     return treatments[Math.floor(Math.random() * treatments.length)];
   },
 };

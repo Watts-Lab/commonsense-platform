@@ -84,3 +84,5 @@ terraform.rc
 # cypress
 client/cypress/videos
 client/cypress/screenshots
+
+server-ts/

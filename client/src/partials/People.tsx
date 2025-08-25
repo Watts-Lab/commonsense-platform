@@ -34,7 +34,7 @@ const people: PersonProps[] = [
   // },
   {
     name: "Josh Nguyen",
-    image: "https://joshnguyen.net/images/avatar.jpeg",
+    image: "https://joshnguyen.net/images/avatar.jpg",
     twitter: "https://twitter.com/joshnguyen99",
     github: "https://github.com/joshnguyen99",
     website: "https://joshnguyen.net",

@@ -13,6 +13,7 @@ import Backend from "../apis/backend";
 import "./style.css";
 import ProgressBar from "./ProgressBar";
 import { useSession } from "../context/SessionContext";
+import ScoreDisplay from "./ScoreDisplay";
 
 export type statementStorageData = {
   id: number;
@@ -32,6 +33,11 @@ function Layout() {
   const [statementsData, setStatementsData] = useStickyState<
     statementStorageData[]
   >([], "statementsData");
+  const [currentScore, setCurrentScore] = useState({
+    commonsense: 0,
+    awareness: 0,
+    consensus: 0,
+  });
 
   const [surveyLength, setSurveyLength] = useState(0);
 
@@ -116,10 +122,32 @@ function Layout() {
     ]);
   };
 
+  const updateScore = async () => {
+    try {
+      const response = await Backend.post("/results", { sessionId });
+      if (response.data.commonsensicality !== 0) {
+        setCurrentScore({
+          commonsense: Math.round(
+            Number(response.data.commonsensicality.toFixed(2)) * 100
+          ),
+          awareness: Math.round(
+            Number(response.data.awareness.toFixed(2)) * 100
+          ),
+          consensus: Math.round(
+            Number(response.data.consensus.toFixed(2)) * 100
+          ),
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching updated score:", error);
+    }
+  };
+
   const { setCurrentStepIndex, currentStepIndex, back, next } = MultiStepForm({
     steps: statementsData,
     handleAnswerSaving: handleAnswerSaving,
     pushNewStatement: pushNewStatement,
+    updateScore,
   });
 
   const handleStatementChange = (tid: number, updatedData: string[]) => {
@@ -226,48 +254,57 @@ function Layout() {
         </>
       ) : (
         <form id="main-survey" onSubmit={submitHandler}>
-          {currentStepIndex !== surveyLength ? (
+          {currentStepIndex !== surveyLength && (
             <ProgressBar
               currentStep={currentStepIndex}
               totalSteps={surveyLength}
             />
-          ) : null}
+          )}
           {statementArray[currentStepIndex]}
 
           {currentStepIndex < surveyLength - 3 && (
-            <div className="flex justify-between">
-              <button
-                onClick={back}
-                type="button"
-                className="order-1 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-              >
-                {(() => {
-                  if (currentStepIndex === 0) {
-                    return (
-                      <Link to="/consent">
-                        {/* Start */}
-                        {t("layout.start")}
-                      </Link>
-                    );
-                  } else {
-                    return t("layout.previous");
-                  }
-                })()}
-              </button>
+            <div className="flex flex-col space-y-4">
+              <div className="flex justify-between">
+                <button
+                  onClick={back}
+                  type="button"
+                  className="order-1 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                >
+                  {(() => {
+                    if (currentStepIndex === 0) {
+                      return (
+                        <Link to="/consent">
+                          {/* Start */}
+                          {t("layout.start")}
+                        </Link>
+                      );
+                    } else {
+                      return t("layout.previous");
+                    }
+                  })()}
+                </button>
 
-              <button
-                type="submit"
-                className="order-last text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-              >
-                {(() => {
-                  if (currentStepIndex === surveyLength - 3) {
-                    // return <Link to="/finish">Finish</Link>;
-                    return t("layout.continue");
-                  } else {
-                    return t("layout.next");
-                  }
-                })()}
-              </button>
+                <button
+                  type="submit"
+                  className="order-last text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                >
+                  {(() => {
+                    if (currentStepIndex === surveyLength - 3) {
+                      // return <Link to="/finish">Finish</Link>;
+                      return t("layout.continue");
+                    } else {
+                      return t("layout.next");
+                    }
+                  })()}
+                </button>
+              </div>
+
+              <div className="flex justify-center">
+                <ScoreDisplay
+                  score={currentScore}
+                  currentStepIndex={currentStepIndex}
+                />
+              </div>
             </div>
           )}
         </form>

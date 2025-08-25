@@ -47,15 +47,20 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "18.x"
+          node-version: "22.x"
 
       - name: Install server dependencies
         working-directory: server
         run: npm install
 
-      - name: Start backend server
+      - name: Start backend server with logging
         working-directory: server
-        run: node server.js &
+        run: |
+          echo "Starting server..."
+          node server.js > ../server-output.log 2>&1 &
+          SERVER_PID=$!
+          echo "Server started with PID: $SERVER_PID"
+          echo $SERVER_PID > ../server.pid
         env:
           DB_USER: ${{ env.MYSQL_USER }}
           DB_PASSWORD: ${{ env.MYSQL_PWD }}
@@ -66,7 +71,11 @@ jobs:
           SESSION_SECRET: ${{ env.SESSION_SECRET }}
 
       - name: Wait for backend server to be ready
-        run: sleep 10
+        run: |
+          echo "Waiting for server to start..."
+          sleep 10
+          echo "Checking if server is responding..."
+          curl -f http://localhost:4000/health || echo "Server health check failed"
 
       - name: Run Cypress tests
         uses: cypress-io/github-action@v6
@@ -76,3 +85,22 @@ jobs:
           record: true
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+      - name: Show server logs
+        if: always()
+        run: |
+          echo "=== Server Output ==="
+          cat server-output.log || echo "No server output found"
+          echo "=== Server Process Status ==="
+          if [ -f server.pid ]; then
+            PID=$(cat server.pid)
+            ps -p $PID || echo "Server process $PID not running"
+          fi
+
+      - name: Cleanup
+        if: always()
+        run: |
+          if [ -f server.pid ]; then
+            PID=$(cat server.pid)
+            kill $PID || echo "Could not kill server process $PID"
+          fi

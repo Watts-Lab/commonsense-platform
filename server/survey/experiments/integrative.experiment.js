@@ -303,7 +303,7 @@ const designPoints = [
 const experiment = {
   experimentName: "design-point",
   treatments: designPoints,
-  treatmentAssigner: async (treatments) => {
+  treatmentAssigner: async (treatments, req) => {
     const experiment_count = await FindLeastFrequentFinishedExperiment(
       treatments.map((treatment) => {
         return treatment.params;

@@ -3,10 +3,19 @@ import { useState } from "react";
 type TooltipProps = {
   className?: string;
   text: string;
+  placement?: 'top' | 'bottom';
 };
 
-const Tooltip = ({ className, text }: TooltipProps) => {
+const Tooltip = ({ className, text, placement = 'top' }: TooltipProps) => {
   const [hover, setHover] = useState(false);
+
+  // Placement logic
+  const tooltipPosition = placement === 'bottom'
+    ? 'top-full mt-2'
+    : 'bottom-0 mb-10';
+  const arrowPosition = placement === 'bottom'
+    ? 'top-0 right-0 w-5 h-5 -mt-2 transform rotate-45 bg-gray-600'
+    : 'bottom-0 right-0 w-5 h-5 -mb-1 transform rotate-45 bg-gray-600';
 
   return (
     <div className={className}>
@@ -31,10 +40,10 @@ const Tooltip = ({ className, text }: TooltipProps) => {
           ></path>
         </svg>
         {hover && (
-          <div className="absolute bottom-0 inline-block w-80 px-4 py-3 mb-10 -ml-72 text-white bg-gray-600 rounded-lg z-10">
+          <div className={`absolute inline-block w-80 px-4 py-3 -ml-72 text-white bg-gray-600 rounded-lg z-10 ${tooltipPosition}`}>
             <span className="inline-block text-sm leading-tight">{text}</span>
             <span
-              className="absolute bottom-0 right-0 w-5 h-5 -mb-1 transform rotate-45 bg-gray-600"
+              className={`absolute ${arrowPosition}`}
               style={{ left: "92%" }}
             ></span>
           </div>
