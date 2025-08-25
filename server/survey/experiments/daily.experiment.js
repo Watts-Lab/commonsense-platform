@@ -18,12 +18,12 @@ async function getOrCreateDailyExperiment() {
         s.statement,
         COUNT(a.id) AS "answerCount"
     FROM statements s
-    INNER JOIN answers a
+    LEFT JOIN answers a
         ON a.statement_number = s.id
     GROUP BY s.id, s.statement
     ORDER BY "answerCount" ASC
     LIMIT 15;
-  `);
+    `);
 
   const lowestRatedStatements = results.map((r) => r.statementId);
 
