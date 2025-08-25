@@ -59,7 +59,8 @@ const returnStatements = async (req, res) => {
   for (const experiment_name of Object.keys(grouped_experiments)) {
     const experiment = grouped_experiments[experiment_name];
     const assigned_treatment = await experiment.experiment_assigner(
-      experiment.experiment_valid_treatments
+      experiment.experiment_valid_treatments,
+      req
     );
 
     // If a treatment was assigned, add it to the experiment

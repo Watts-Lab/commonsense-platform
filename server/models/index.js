@@ -45,6 +45,155 @@ Object.keys(db).forEach((modelName) => {
   }
 });
 
+// Flag to prevent multiple initializations
+let isInitialized = false;
+
+// Database initialization function
+const initializeDatabase = async () => {
+  if (isInitialized) {
+    console.log("🔄 Database already initialized, skipping...");
+    return;
+  }
+
+  try {
+    console.log("🔄 Initializing database...");
+    isInitialized = true;
+
+    // Test database connection
+    await sequelize.authenticate();
+    console.log("✅ Database connection established successfully");
+
+    // Create stored procedures
+    await createStoredProcedures();
+
+    // Create indexes for better performance
+    await createIndexes();
+
+    console.log("🎉 Database initialization completed successfully");
+  } catch (error) {
+    console.error("💥 Database initialization failed:", error);
+    isInitialized = false; // Reset flag on failure
+    // Don't throw here - let the application decide how to handle this
+  }
+};
+
+const createStoredProcedures = async () => {
+  try {
+    console.log("📝 Creating stored procedures...");
+
+    // Check if we're in development to decide whether to recreate
+    const isDevelopment = process.env.NODE_ENV === "development";
+
+    if (isDevelopment) {
+      // In development, always recreate to get latest version
+      await sequelize.query(
+        `DROP PROCEDURE IF EXISTS update_statement_median;`
+      );
+    }
+
+    // Check if procedure exists (for production safety)
+    const [results] = await sequelize.query(`
+      SELECT COUNT(*) as count 
+      FROM information_schema.ROUTINES 
+      WHERE ROUTINE_SCHEMA = DATABASE() 
+      AND ROUTINE_NAME = 'update_statement_median' 
+      AND ROUTINE_TYPE = 'PROCEDURE';
+    `);
+
+    const procedureExists = results[0].count > 0;
+
+    if (!procedureExists || isDevelopment) {
+      await sequelize.query(`
+        CREATE PROCEDURE update_statement_median()
+        BEGIN
+          UPDATE statements s
+          JOIN (
+            SELECT
+              statement_number,
+              CASE
+                WHEN SUM(CASE WHEN I_agree THEN 1 ELSE 0 END) * 2 >= COUNT(*) THEN 1
+                ELSE 0
+              END AS computed_median
+            FROM answers
+            GROUP BY statement_number
+          ) AS c ON s.id = c.statement_number
+          SET s.statementMedian = c.computed_median
+          WHERE s.id = c.statement_number;
+        END
+      `);
+
+      console.log(
+        "✅ Stored procedure 'update_statement_median' created successfully"
+      );
+    } else {
+      console.log(
+        "✅ Stored procedure 'update_statement_median' already exists"
+      );
+    }
+  } catch (error) {
+    console.error("❌ Error creating stored procedures:", error);
+    throw error;
+  }
+};
+
+const createIndexes = async () => {
+  try {
+    console.log("🔍 Creating database indexes...");
+
+    // Define indexes we want to create
+    const indexes = [
+      {
+        name: "idx_answers_session_created",
+        table: "answers",
+        columns: "sessionId, createdAt DESC",
+      },
+      {
+        name: "idx_answers_statement_session",
+        table: "answers",
+        columns: "statementId, sessionId",
+      },
+      {
+        name: "idx_answers_statement_number",
+        table: "answers",
+        columns: "statement_number",
+      },
+    ];
+
+    for (const index of indexes) {
+      try {
+        // Check if index already exists
+        const [existingIndexes] = await sequelize.query(`
+          SHOW INDEX FROM ${index.table} WHERE Key_name = '${index.name}';
+        `);
+
+        if (existingIndexes.length === 0) {
+          // Index doesn't exist, create it
+          await sequelize.query(`
+            CREATE INDEX ${index.name} ON ${index.table}(${index.columns});
+          `);
+          console.log(`✅ Index '${index.name}' created successfully`);
+        } else {
+          console.log(`✅ Index '${index.name}' already exists`);
+        }
+      } catch (error) {
+        // Index creation is not critical, so just warn
+        console.warn(
+          `⚠️  Warning: Could not create index '${index.name}':`,
+          error.message
+        );
+      }
+    }
+  } catch (error) {
+    console.error("❌ Error creating indexes:", error);
+    // Don't throw - indexes are performance optimization, not critical
+  }
+};
+
+// setImmediate to ensure all models are loaded first
+setImmediate(() => {
+  initializeDatabase();
+});
+
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
