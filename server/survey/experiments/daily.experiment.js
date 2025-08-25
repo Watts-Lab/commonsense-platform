@@ -33,7 +33,7 @@ async function getOrCreateDailyExperiment() {
         15;
     `,
     {
-      type: sequelize.QueryTypes.RAW,
+      type: sequelize.QueryTypes.SELECT,
     }
   );
 
