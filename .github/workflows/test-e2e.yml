@@ -75,7 +75,7 @@ jobs:
           echo "Waiting for server to start..."
           sleep 10
           echo "Checking if server is responding..."
-          curl -f http://localhost:3000/health || echo "Server health check failed"
+          curl -f http://localhost:4000/health || echo "Server health check failed"
 
       - name: Run Cypress tests
         uses: cypress-io/github-action@v6
