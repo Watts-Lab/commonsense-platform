@@ -1,12 +1,6 @@
 const { Op } = require("sequelize");
 const { GetStatementById } = require("../treatments/statement-by-id.treatment");
-const {
-  dailyexperiment,
-  experiments,
-  statements,
-  answers,
-  sequelize,
-} = require("../../models");
+const { dailyexperiment, experiments, sequelize } = require("../../models");
 
 // helper: pick or generate daily experiment
 async function getOrCreateDailyExperiment() {
@@ -18,24 +12,30 @@ async function getOrCreateDailyExperiment() {
     return daily.statementIds;
   }
 
-  const results = await statements.findAll({
-    attributes: [
-      ["id", "statementId"],
-      "statement",
-      [sequelize.fn("COUNT", sequelize.col("answers.id")), "answerCount"],
-    ],
-    include: [
-      {
-        model: answers,
-        as: "answers",
-        attributes: [],
-        required: false,
-      },
-    ],
-    group: ["statements.id", "statements.statement"],
-    order: [[sequelize.literal("answerCount"), "ASC"]],
-    limit: 15,
-  });
+  const [results] = await sequelize.query(
+    `
+    SELECT
+        s.id AS statementId,
+        s.statement,
+        COUNT(a.id) AS answerCount
+    FROM
+        statements s
+        LEFT JOIN answers a ON a.statement_number = s.id
+    WHERE
+        s.published = 1
+    GROUP BY
+        s.id,
+        s.statement
+    ORDER BY
+        answerCount ASC,
+        s.id ASC
+    LIMIT
+        15;
+    `,
+    {
+      type: sequelize.QueryTypes.RAW,
+    }
+  );
 
   const lowestRatedStatements = results.map((r) => r.statementId);
 
