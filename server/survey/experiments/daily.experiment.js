@@ -30,13 +30,6 @@ async function getOrCreateDailyExperiment() {
         as: "answers",
         attributes: [],
         required: false,
-        on: {
-          statement_number: sequelize.where(
-            sequelize.col("answers.statement_number"),
-            "=",
-            sequelize.col("statements.id")
-          ),
-        },
       },
     ],
     group: ["statements.id", "statements.statement"],
