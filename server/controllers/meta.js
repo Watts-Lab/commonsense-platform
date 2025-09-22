@@ -1,4 +1,4 @@
-import bizSdk from "facebook-nodejs-business-sdk";
+const bizSdk = require("facebook-nodejs-business-sdk");
 const { ServerEvent, EventRequest, UserData, CustomData } = bizSdk;
 
 /**
@@ -8,7 +8,7 @@ const { ServerEvent, EventRequest, UserData, CustomData } = bizSdk;
  * @param {string} fbc - _fbc cookie value (optional)
  * @param {string} eventId - Unique event ID for deduplication (optional)
  */
-export async function sendMetaEvent({ eventName, fbp, fbc, eventId }) {
+async function sendMetaEvent({ eventName, fbp, fbc, eventId }) {
   const pixelId = process.env.META_PIXEL_ID;
   const accessToken = process.env.META_ACCESS_TOKEN;
   bizSdk.FacebookAdsApi.init(accessToken);
@@ -40,3 +40,5 @@ export async function sendMetaEvent({ eventName, fbp, fbc, eventId }) {
     throw err;
   }
 }
+
+module.exports = { sendMetaEvent };
