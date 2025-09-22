@@ -167,12 +167,13 @@ const saveExperiment = async (req, res) => {
 
   // Send Meta event for survey completion
   try {
-    await sendMetaEvent({
+    const eventResult = await sendMetaEvent({
       eventName: "SurveyCompleted",
       fbp,
       fbc,
       eventId: experimentId,
     });
+    console.log("Meta event sent successfully:", eventResult);
   } catch (err) {
     console.error("Error sending Meta event:", err);
   }
