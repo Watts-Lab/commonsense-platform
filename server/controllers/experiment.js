@@ -1,4 +1,5 @@
 const experiments = require("../survey/experiments");
+const { sendMetaEvent } = require("./meta");
 const {
   createExperiment,
   updateExperiment,
@@ -7,12 +8,9 @@ const {
   saveIndividualDB,
 } = require("../survey/experiments/utils/save-individual");
 const {
-  FindLeastFrequentExperiment,
-} = require("../survey/experiments/utils/reverse-weight-selector");
-const {
   GetStatementsWeighted,
 } = require("../survey/treatments/weighted-random.treatment");
-const { body, query, validationResult } = require("express-validator");
+const { validationResult } = require("express-validator");
 
 const { stringy } = require("../survey/treatments/utils/id-generator");
 
@@ -121,7 +119,11 @@ const returnStatements = async (req, res) => {
 
   const experiment = await createExperiment(experimentData);
 
-  res.json({ statements: result.answer, experimentId: experiment.id, experimentType: experiment.experimentType });
+  res.json({
+    statements: result.answer,
+    experimentId: experiment.id,
+    experimentType: experiment.experimentType,
+  });
 };
 
 const saveIndividual = async (req, res) => {
@@ -145,19 +147,35 @@ const saveIndividual = async (req, res) => {
 };
 
 const saveExperiment = async (req, res) => {
+  const fbp = req.cookies._fbp;
+  const fbc = req.cookies._fbc;
+
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
   const experimentId = req.body.experimentId;
 
-  await updateExperiment(experimentId, { finished: true })
-    .then((updatedExperiment) => {
-      console.log("Experiment saved:", updatedExperiment);
-    })
-    .catch((error) => {
-      console.error("Error saving experiment:", error);
+  try {
+    const updatedExperiment = await updateExperiment(experimentId, {
+      finished: true,
     });
+    console.log("Experiment saved:", updatedExperiment);
+  } catch (error) {
+    console.error("Error saving experiment:", error);
+  }
+
+  // Send Meta event for survey completion
+  try {
+    await sendMetaEvent({
+      eventName: "SurveyCompleted",
+      fbp,
+      fbc,
+      eventId: experimentId,
+    });
+  } catch (err) {
+    console.error("Error sending Meta event:", err);
+  }
 
   res.json({ ok: true });
 };

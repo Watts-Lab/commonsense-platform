@@ -2,6 +2,7 @@
 const express = require("express");
 const session = require("express-session");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 const mysql = require("mysql2");
 const MySQLStore = require("express-mysql-session")(session);
 const { ipaddress } = require("./models");
@@ -15,6 +16,7 @@ const app = express();
 
 // Middleware
 app.use(cors({ credentials: true, origin: true }));
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.static("./survey/public"));
 app.use(require("./config/sessionConfig")(session, sessionStore));
