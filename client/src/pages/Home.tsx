@@ -1,41 +1,60 @@
 import React, { useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import Navbar from "../partials/NavBar";
 import Banner from "../partials/Banner";
 import Footer from "../partials/Footer";
 import { useSession } from "../context/SessionContext";
+import { setMetaCookies } from "../utils/metaCookies";
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
+  const { shareLink } = useParams();
+  const [searchParams] = useSearchParams();
   const {
-    state: { urlParams },
-    actions: { setUrlParams },
+    actions: { captureUrlParams },
   } = useSession();
 
-  const { shareLink } = useParams();
-
   useEffect(() => {
+    const paramsToCapture: { key: string; value: string }[] = [];
+
+    // Handle shareLink from route param
     if (shareLink) {
-      const newParams = [...urlParams, { key: "shareLink", value: shareLink }];
-      setUrlParams(newParams);
-      // Now navigate to the root path, replacing the current entry
-      navigate("/", { replace: true });
+      paramsToCapture.push({ key: "shareLink", value: shareLink });
+      console.log("Capturing shareLink:", shareLink);
     }
-  }, [shareLink]);
+
+    // Handle query params (like fbclid)
+    searchParams.forEach((value, key) => {
+      paramsToCapture.push({ key, value });
+
+      // Handle fbclid for Meta cookies
+      if (key === "fbclid") {
+        setMetaCookies(value);
+      }
+    });
+
+    // Save all params if any exist
+    if (paramsToCapture.length > 0) {
+      captureUrlParams(paramsToCapture);
+
+      // If we have shareLink, redirect to home
+      if (shareLink) {
+        setTimeout(() => {
+          navigate("/", { replace: true });
+        }, 100);
+      }
+    } else {
+      // Ensure _fbp cookie exists even without fbclid
+      setMetaCookies();
+    }
+  }, [shareLink, searchParams.toString()]);
 
   return (
     <div className="flex flex-col min-h-screen overflow-hidden">
-      {/*  Site header */}
       <Navbar />
-
-      {/*  Page content */}
       <main className="flex-grow bg-gray-100">
-        {/*  Page sections */}
         <Banner />
       </main>
-
-      {/*  Site footer */}
       <Footer />
     </div>
   );

@@ -1,10 +1,16 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import Backend from "../apis/backend";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 interface User {
   email: string;
   token: string;
+}
+
+interface UrlParam {
+  key: string;
+  value: string;
+  timestamp?: number;
 }
 
 interface SessionContextProps {
@@ -12,17 +18,19 @@ interface SessionContextProps {
     sessionId: string;
     user: User | null;
     loading: boolean;
-    urlParams: { key: string; value: string }[];
+    urlParams: UrlParam[];
   };
   actions: {
     setSessionId: React.Dispatch<React.SetStateAction<string>>;
     setUser: React.Dispatch<React.SetStateAction<User | null>>;
     signIn: (email: string, magicLink?: string) => Promise<void>;
     signUp: (email: string) => Promise<void>;
-    setUrlParams: React.Dispatch<
-      React.SetStateAction<{ key: string; value: string }[]>
-    >;
+    captureUrlParams: (params: { key: string; value: string }[]) => void;
   };
+}
+
+interface SessionProviderProps {
+  children: React.ReactNode;
 }
 
 const SessionContext = createContext<SessionContextProps | undefined>(
@@ -37,36 +45,56 @@ export const useSession = () => {
   return context;
 };
 
-interface SessionProviderProps {
-  children: React.ReactNode;
-}
-
 export const SessionProvider = ({ children }: SessionProviderProps) => {
   const [sessionId, setSessionIdState] = useState<string>(() => {
     const storedSessionId = localStorage.getItem("sessionId");
-    if (storedSessionId === "undefined") {
-      return "";
-    }
-    return storedSessionId || "";
+    return storedSessionId === "undefined" ? "" : storedSessionId || "";
   });
 
   const [user, setUserState] = useState<User | null>(() =>
     JSON.parse(localStorage.getItem("user") || "null")
   );
+
   const [loading, setLoading] = useState(true);
 
-  const [urlParams, setUrlParams] = useState<{ key: string; value: string }[]>(
-    () => {
-      const storedParams = localStorage.getItem("urlParams");
-      if (storedParams === "undefined") {
-        return [];
-      }
-      return JSON.parse(storedParams || "[]");
+  const [urlParams, setUrlParamsState] = useState<UrlParam[]>(() => {
+    const storedParams = localStorage.getItem("urlParams");
+    if (!storedParams || storedParams === "undefined") return [];
+    try {
+      return JSON.parse(storedParams);
+    } catch {
+      return [];
     }
-  );
+  });
 
   const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
+
+  const captureUrlParams = (newParams: { key: string; value: string }[]) => {
+    setUrlParamsState((prevParams) => {
+      const merged = [...prevParams];
+
+      newParams.forEach((newParam) => {
+        const existingIndex = merged.findIndex((p) => p.key === newParam.key);
+        if (existingIndex >= 0) {
+          merged[existingIndex] = {
+            ...newParam,
+            timestamp: Date.now(),
+          };
+        } else {
+          merged.push({
+            ...newParam,
+            timestamp: Date.now(),
+          });
+        }
+      });
+
+      localStorage.setItem("urlParams", JSON.stringify(merged));
+
+      console.log("URL params captured and saved:", merged);
+
+      return merged;
+    });
+  };
 
   useEffect(() => {
     const initializeSession = async () => {
@@ -77,70 +105,24 @@ export const SessionProvider = ({ children }: SessionProviderProps) => {
           });
           const incomingSessionId = sessionResponse.data;
           setSessionId(incomingSessionId);
-
-          // Optionally fetch user data if needed
         } catch (error) {
           console.error("Error fetching sessionId:", error);
         } finally {
           setLoading(false);
         }
       } else {
-        // Optionally fetch user data if needed
         setLoading(false);
       }
     };
 
     initializeSession();
-  }, []);
-
-  useEffect(() => {
-    // scroll to top on route change
-    const htmlElement = document.querySelector("html");
-    if (htmlElement) {
-      htmlElement.style.scrollBehavior = "auto";
-      window.scroll({ top: 0 });
-      htmlElement.style.scrollBehavior = "";
-    }
-
-    // Get the current URL parameters
-    const currentParams = searchParams.entries();
-    const URLParams = [...currentParams].reduce((acc, [key, value]) => {
-      if (
-        !urlParams.some((param) => param.key === key && param.value === value)
-      ) {
-        acc.push({ key, value });
-      }
-      return acc;
-    }, [] as { key: string; value: string }[]);
-
-    if (location.pathname.startsWith("/s/")) {
-      const shareLink = location.pathname.substring(3);
-      URLParams.push({ key: "shareLink", value: shareLink });
-      location.pathname = "/";
-    }
-
-    // Dispatch the updated parameters
-    if (URLParams.length > 0) {
-      setUrlParams((prev) => [...prev, ...URLParams]);
-      localStorage.setItem(
-        "urlParams",
-        JSON.stringify([...urlParams, ...URLParams])
-      );
-      setSearchParams();
-    } else {
-      setSearchParams();
-    }
-  }, [location.pathname]);
+  }, [sessionId]);
 
   const setSessionId: React.Dispatch<React.SetStateAction<string>> = (
     value
   ) => {
     setSessionIdState(value);
-
-    const newSessionId =
-      typeof value === "function"
-        ? (value as (prevState: string) => string)(sessionId)
-        : value;
+    const newSessionId = typeof value === "function" ? value(sessionId) : value;
 
     if (newSessionId !== "") {
       localStorage.setItem("sessionId", newSessionId);
@@ -152,8 +134,9 @@ export const SessionProvider = ({ children }: SessionProviderProps) => {
   const setUser: React.Dispatch<React.SetStateAction<User | null>> = (
     value
   ) => {
-    setUserState(value);
-    localStorage.setItem("user", JSON.stringify(value));
+    const newUser = typeof value === "function" ? value(user) : value;
+    setUserState(newUser);
+    localStorage.setItem("user", JSON.stringify(newUser));
   };
 
   const signIn = async (email: string, magicLink?: string) => {
@@ -168,82 +151,54 @@ export const SessionProvider = ({ children }: SessionProviderProps) => {
         if (response.data.token) {
           setSessionId(response.data.sessionId);
           setUser({ email, token: response.data.token });
-          // wait for state to update and then navigate
-          setTimeout(() => {
-            navigate("/dashboard");
-          }, 1000);
+          setTimeout(() => navigate("/dashboard"), 1000);
         } else {
           alert(response.data.message);
         }
-      } else {
-        if (!response.data.ok) {
-          console.error("Error during sign-in:", response.data.message);
-        }
+      } else if (!response.data.ok) {
+        console.error("Error during sign-in:", response.data.message);
       }
     } catch (error) {
       console.error("Error during sign-in:", error);
     }
   };
 
-  useEffect(() => {
-    const verify_token = async () => {
-      if (user === null) return;
-      try {
-        Backend.defaults.headers.common["Authorization"] = user.token;
-        const response = await Backend.post("/users/verify");
-        if (!response.data.ok) {
-          setUser(null);
-        }
-      } catch {
-        setUser(null);
-      }
-    };
-    verify_token();
-  }, []);
-
   const signUp = async (email: string) => {
     try {
       const response = await Backend.post("/users/enter", { email, sessionId });
-      const newSessionId = response.data.sessionId || sessionId;
-      const userData = response.data.user;
-      setSessionId(newSessionId);
-      setUser(userData);
+      setSessionId(response.data.sessionId || sessionId);
+      setUser(response.data.user);
     } catch (error) {
       console.error("Error during sign-up:", error);
     }
   };
 
-  // Listen for changes to localStorage (e.g., from other tabs)
+  useEffect(() => {
+    if (user) {
+      Backend.defaults.headers.common["Authorization"] = user.token;
+      Backend.post("/users/verify").catch(() => setUser(null));
+    }
+  }, [user]);
+
   useEffect(() => {
     const handleStorage = (event: StorageEvent) => {
-      if (event.key === "sessionId") {
-        if (event.newValue) {
-          setSessionIdState(event.newValue);
-        }
+      if (event.key === "sessionId" && event.newValue) {
+        setSessionIdState(event.newValue);
+      } else if (event.key === "urlParams" && event.newValue) {
+        try {
+          setUrlParamsState(JSON.parse(event.newValue));
+        } catch {}
       }
     };
     window.addEventListener("storage", handleStorage);
-    return () => {
-      window.removeEventListener("storage", handleStorage);
-    };
+    return () => window.removeEventListener("storage", handleStorage);
   }, []);
 
   return (
     <SessionContext.Provider
       value={{
-        state: {
-          user,
-          sessionId,
-          urlParams,
-          loading,
-        },
-        actions: {
-          setSessionId,
-          setUser,
-          signUp,
-          signIn,
-          setUrlParams,
-        },
+        state: { user, sessionId, urlParams, loading },
+        actions: { setSessionId, setUser, signUp, signIn, captureUrlParams },
       }}
     >
       {children}

@@ -45,7 +45,7 @@ const App = () => {
       <div className="mx-auto">
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/:shareLink" element={<Home />} />
+          <Route path="/s/:shareLink" element={<Home />} />
           <Route path="/people" element={<People />} />
           <Route path="/research" element={<Research />} />
           <Route path="login/:email/:link" element={<Enter />} />

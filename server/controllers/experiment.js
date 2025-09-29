@@ -147,8 +147,8 @@ const saveIndividual = async (req, res) => {
 };
 
 const saveExperiment = async (req, res) => {
-  const fbp = req.cookies._fbp;
-  const fbc = req.cookies._fbc;
+  const fbp = req.cookies._fbp || undefined;
+  const fbc = req.cookies._fbc || undefined;
 
   const errors = validationResult(req);
   if (!errors.isEmpty()) {

@@ -73,7 +73,6 @@ const TwitterText = ({ sessionId, percentage }: TwitterTextProps) => {
   };
 
   useEffect(() => {
-    // Call the function to generate blocks array
     const blocks = generateBlocksArray();
     const percentagetext = t("twitter-text.percentage", {
       percentage: percentage,
@@ -84,7 +83,7 @@ const TwitterText = ({ sessionId, percentage }: TwitterTextProps) => {
     const newValue = `${percentagetext}\n${blocks.join("")}\n${checkYoursText}`;
 
     setTextareaValue(newValue);
-  }, [percentage, sessionId]); // Update dependencies array
+  }, [percentage, sessionId]);
 
   return (
     <div className="flex flex-col items-center pt-3">

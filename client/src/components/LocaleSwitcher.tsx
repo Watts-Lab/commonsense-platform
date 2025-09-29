@@ -33,19 +33,17 @@ export default function LocaleSwitcher() {
         className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-200 rounded-box w-52 text-white-900"
       >
         {Object.entries(supportedLngs).map(([code, name]) => (
-          <>
-            <li key={code}>
-              <button
-                className={i18n.resolvedLanguage === code ? "active" : ""}
-                onClick={() => i18n.changeLanguage(code)}
-              >
-                <span className="badge badge-sm badge-outline !pl-1.5 !pr-1 pt-px font-mono !text-[.6rem] font-bold tracking-widest opacity-50">
-                  {code}
-                </span>
-                <span className="font-[sans-serif]">{name}</span>
-              </button>
-            </li>
-          </>
+          <li key={code}>
+            <button
+              className={i18n.resolvedLanguage === code ? "active" : ""}
+              onClick={() => i18n.changeLanguage(code)}
+            >
+              <span className="badge badge-sm badge-outline !pl-1.5 !pr-1 pt-px font-mono !text-[.6rem] font-bold tracking-widest opacity-50">
+                {code}
+              </span>
+              <span className="font-[sans-serif]">{name}</span>
+            </button>
+          </li>
         ))}
       </ul>
     </div>
