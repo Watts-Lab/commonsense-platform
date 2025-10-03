@@ -27,6 +27,7 @@ import Enter from "./components/Enter";
 import Demo from "./pages/Demo";
 import GDPRNotice from "./components/GDPRNotice";
 import Privacy from "./pages/Privacy";
+import UrlParamCapture from "./components/UrlParamCapture";
 
 const App = () => {
   useEffect(() => {
@@ -43,6 +44,8 @@ const App = () => {
   return (
     <div className="App">
       <div className="mx-auto">
+        <UrlParamCapture />
+
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/s/:shareLink" element={<Home />} />

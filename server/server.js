@@ -21,71 +21,109 @@ app.use(express.json());
 app.use(express.static("./survey/public"));
 app.use(require("./config/sessionConfig")(session, sessionStore));
 
-// IP Recording Middleware
-app.use(async (req, res, next) => {
-  try {
-    // Only record IP once per session
-    if (!req.session.ipRecorded) {
-      const forwardedFor = req.headers["x-forwarded-for"];
-      const ip = forwardedFor
-        ? forwardedFor.split(",")[0].trim()
-        : req.socket.remoteAddress;
+// Create an in-memory cache for IP tracking
+const ipCache = new Map();
+const IP_FLUSH_INTERVAL = 60000; // Flush every 60 seconds
+const MAX_CACHE_SIZE = 1000; // Maximum IPs to cache
 
-      const userAgent = req.headers["user-agent"] || "";
+// Batch update function
+const flushIpCache = async () => {
+  if (ipCache.size === 0) return;
 
-      console.log("Recording IP Address: ", ip, "Session:", req.sessionID);
+  const batch = Array.from(ipCache.entries());
+  ipCache.clear();
 
-      // First, try to find existing record
+  for (const [ip, data] of batch) {
+    try {
       let ipRecord = await ipaddress.findOne({
-        where: {
-          sessionId: req.sessionID,
-          ipAddress: ip,
-        },
+        where: { ipAddress: ip },
       });
 
       if (ipRecord) {
-        // Update existing record
         await ipRecord.update({
-          lastSeen: new Date(),
-          visitCount: ipRecord.visitCount + 1,
-          userAgent: userAgent,
-          metadata: {
-            headers: {
-              "x-forwarded-for": req.headers["x-forwarded-for"],
-              "x-real-ip": req.headers["x-real-ip"],
-              "cf-connecting-ip": req.headers["cf-connecting-ip"],
-            },
-            timestamp: new Date().toISOString(),
-          },
+          lastSeen: data.lastSeen,
+          visitCount: ipRecord.visitCount + data.visits,
+          userAgent: data.userAgent,
+          lastSessionId: data.lastSessionId,
         });
-        console.log("Updated IP record, visit count:", ipRecord.visitCount + 1);
       } else {
-        // Create new record
-        ipRecord = await ipaddress.create({
-          sessionId: req.sessionID,
+        await ipaddress.create({
           ipAddress: ip,
-          userAgent: userAgent,
-          firstSeen: new Date(),
-          lastSeen: new Date(),
-          visitCount: 1,
-          metadata: {
-            headers: {
-              "x-forwarded-for": req.headers["x-forwarded-for"],
-              "x-real-ip": req.headers["x-real-ip"],
-              "cf-connecting-ip": req.headers["cf-connecting-ip"],
-            },
-            timestamp: new Date().toISOString(),
-          },
+          sessionId: data.lastSessionId,
+          userAgent: data.userAgent,
+          firstSeen: data.firstSeen,
+          lastSeen: data.lastSeen,
+          visitCount: data.visits,
+          metadata: data.metadata,
         });
-        console.log("Created new IP record with visit count: 1");
+      }
+    } catch (error) {
+      console.error(`Error flushing IP ${ip}:`, error);
+    }
+  }
+};
+
+// Schedule periodic flushes
+setInterval(flushIpCache, IP_FLUSH_INTERVAL);
+
+// Graceful shutdown
+process.on("SIGTERM", async () => {
+  await flushIpCache();
+  process.exit(0);
+});
+
+// Optimized middleware
+app.use(async (req, res, next) => {
+  // Skip non-essential paths
+  const skipPaths = ["/favicon.ico", "/robots.txt", "/health", "/static"];
+  if (skipPaths.some((path) => req.path.startsWith(path))) {
+    return next();
+  }
+
+  // Skip if already processed in this session
+  if (req.session.ipProcessed) {
+    return next();
+  }
+
+  try {
+    const forwardedFor = req.headers["x-forwarded-for"];
+    const ip = forwardedFor
+      ? forwardedFor.split(",")[0].trim()
+      : req.socket.remoteAddress;
+
+    // Update cache instead of database
+    if (ipCache.has(ip)) {
+      const cached = ipCache.get(ip);
+      cached.visits += 1;
+      cached.lastSeen = new Date();
+      cached.lastSessionId = req.sessionID;
+    } else {
+      // Check cache size
+      if (ipCache.size >= MAX_CACHE_SIZE) {
+        await flushIpCache(); // Force flush if cache is full
       }
 
-      req.session.ipRecorded = true;
-      req.session.ip = ip;
+      ipCache.set(ip, {
+        visits: 1,
+        firstSeen: new Date(),
+        lastSeen: new Date(),
+        lastSessionId: req.sessionID,
+        userAgent: req.headers["user-agent"] || "",
+        metadata: {
+          headers: {
+            "x-forwarded-for": req.headers["x-forwarded-for"],
+            "x-real-ip": req.headers["x-real-ip"],
+            "cf-connecting-ip": req.headers["cf-connecting-ip"],
+          },
+          timestamp: new Date().toISOString(),
+        },
+      });
     }
+
+    req.session.ipProcessed = true;
+    req.session.ip = ip;
   } catch (error) {
-    // Don't block the request if IP recording fails
-    console.error("Error recording IP address:", error);
+    console.error("Error caching IP:", error);
   }
 
   next();

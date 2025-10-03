@@ -2,20 +2,20 @@ version: "3.8"
 
 services:
   db:
-    image: mysql:latest
-    container_name: test_mysql
+    image: mariadb:12.0
+    container_name: test_mariadb
     ports:
       - "3306:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: CommonsenseDB
+      MARIADB_ROOT_PASSWORD: password
+      MARIADB_DATABASE: CommonsenseDB
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-ppassword"]
+      test: ["CMD", "mariadb-admin", "ping", "-ppassword"]
       interval: 10s
       timeout: 5s
       retries: 5
     volumes:
-      - db_data:/var/lib/mysql
+      - db_data_2:/var/lib/mysql
 
 volumes:
-  db_data:
+  db_data_2:
