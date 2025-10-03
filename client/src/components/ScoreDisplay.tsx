@@ -17,18 +17,29 @@ function ScoreDisplay({ score, currentStepIndex }: ScoreDisplayProps) {
 
   useEffect(() => {
     if (score.commonsense > prevScoreRef.current) {
+      // Score increased → bounce up
       controls.start({
         scale: [1, 1.3, 0.95, 1.1, 1],
         rotate: [0, 5, -5, 0],
-        transition: { duration: 0.8, type: "spring", stiffness: 300 },
+        transition: {
+          duration: 0.8,
+          type: "keyframes",
+          ease: "easeInOut",
+        },
       });
     } else if (score.commonsense < prevScoreRef.current) {
+      // Score decreased → bounce down
       controls.start({
         scale: [1, 0.9, 1.05, 1],
         rotate: [0, -5, 5, 0],
-        transition: { duration: 0.8, type: "spring", stiffness: 300 },
+        transition: {
+          duration: 0.8,
+          type: "keyframes",
+          ease: "easeInOut",
+        },
       });
     }
+
     prevScoreRef.current = score.commonsense;
   }, [score.commonsense, controls]);
 
@@ -66,10 +77,7 @@ function ScoreDisplay({ score, currentStepIndex }: ScoreDisplayProps) {
     <div className="py-4">
       <div className="flex items-center justify-center space-x-2">
         <h3 className="text-lg font-semibold">Your score so far:</h3>
-        <motion.span
-          className="text-2xl font-bold"
-          animate={controls}
-        >
+        <motion.span className="text-2xl font-bold" animate={controls}>
           {score.commonsense}/100
         </motion.span>
         <span className="relative inline-block cursor-help text-blue-500">

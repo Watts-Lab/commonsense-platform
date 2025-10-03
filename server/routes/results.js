@@ -14,7 +14,6 @@ router.post(
   "/",
   [body("sessionId").notEmpty().withMessage("sessionId is required")],
   async (req, res) => {
-    // Check for validation errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
@@ -29,15 +28,14 @@ router.post(
           {
             model: statements,
             as: "statement",
-            attributes: ["statementMedian"], // Only select what we need
+            attributes: ["statementMedian"],
           },
         ],
         attributes: ["statementId", "I_agree", "perceived_commonsense"],
         raw: true,
-        nest: true, // Better structure for includes
+        nest: true,
       });
 
-      // Process the query results
       const processed = results
         .map((row) => ({
           awareness: Number(
@@ -63,7 +61,6 @@ router.post(
 
       res.json(finalData);
 
-      // Update median asynchronously after response
       setImmediate(async () => {
         try {
           await sequelize.query("CALL update_statement_median;", {
@@ -83,8 +80,7 @@ router.post(
 
 router.get("/all", async (req, res) => {
   try {
-    // Use a more efficient query with proper joins and aggregation
-    const [results] = await sequelize.query(
+    const results = await sequelize.query(
       `
       SELECT 
         a.sessionId,
@@ -131,26 +127,32 @@ router.get("/all", async (req, res) => {
   }
 });
 
-// Helper function to calculate agreement percentages - optimized
 const calculateAgreementPercentage = async (statementIds) => {
   const result = {};
 
-  // Use a single optimized query instead of multiple findAll calls
-  const [answersForStatementAll] = await sequelize.query(
+  const answersForStatementAll = await sequelize.query(
     `
     SELECT 
-      a.sessionId,
-      a.createdAt,
-      a.statementId,
-      a.I_agree,
-      a.others_agree,
-      ROW_NUMBER() OVER (
-        PARTITION BY a.sessionId, a.statementId 
-        ORDER BY a.createdAt DESC
-      ) as rn
-    FROM answers a
-    WHERE a.statementId IN (${statementIds.map(() => "?").join(",")})
-    HAVING rn = 1
+      sessionId,
+      createdAt,
+      statementId,
+      I_agree,
+      others_agree
+    FROM (
+      SELECT 
+        a.sessionId,
+        a.createdAt,
+        a.statementId,
+        a.I_agree,
+        a.others_agree,
+        ROW_NUMBER() OVER (
+          PARTITION BY a.sessionId, a.statementId 
+          ORDER BY a.createdAt DESC
+        ) as rn
+      FROM answers a
+      WHERE a.statementId IN (${statementIds.map(() => "?").join(",")})
+    ) AS ranked
+    WHERE rn = 1
   `,
     {
       replacements: statementIds,
@@ -158,7 +160,6 @@ const calculateAgreementPercentage = async (statementIds) => {
     }
   );
 
-  // Group by statementId for processing
   const groupedAnswers = {};
   answersForStatementAll.forEach((answer) => {
     if (!groupedAnswers[answer.statementId]) {
@@ -176,7 +177,6 @@ const calculateAgreementPercentage = async (statementIds) => {
       continue;
     }
 
-    // Hardcoded values for single user
     if (totalAnswers === 1) {
       const answer = answersForStatement[0];
       if (answer.I_agree == 1 && answer.others_agree == 1) {
@@ -189,7 +189,6 @@ const calculateAgreementPercentage = async (statementIds) => {
         result[statementId] = { I_agree: 0, others_agree: 0 };
       }
     } else {
-      // Multiple users case
       const actualIAgree = answersForStatement.reduce(
         (acc, answer) => acc + (answer.I_agree ? 1 : 0),
         0
@@ -198,7 +197,7 @@ const calculateAgreementPercentage = async (statementIds) => {
 
       result[statementId] = {
         I_agree: actualIAgreePercentage,
-        others_agree: actualIAgreePercentage, // This seems to be the same calculation
+        others_agree: actualIAgreePercentage,
       };
     }
   }
