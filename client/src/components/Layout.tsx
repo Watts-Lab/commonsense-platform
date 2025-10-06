@@ -233,7 +233,7 @@ function Layout() {
         setLoading(false);
       }
     })();
-  }, [language, sessionId, urlParams]); // retrieve new statements when language changes
+  }, [language, sessionId]); // retrieve new statements when language changes
 
   const submitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
