@@ -163,6 +163,9 @@ function Layout() {
   useEffect(() => {
     (async () => {
       // Only fetch if sessionId is not set
+      // Wait a tick to ensure URL params are captured
+      await new Promise((resolve) => setTimeout(resolve, 0));
+
       try {
         setLoading(true);
         // Then, get the experiments data
@@ -230,7 +233,7 @@ function Layout() {
         setLoading(false);
       }
     })();
-  }, [language, sessionId]); // retrieve new statements when language changes
+  }, [language, sessionId, urlParams]); // retrieve new statements when language changes
 
   const submitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
