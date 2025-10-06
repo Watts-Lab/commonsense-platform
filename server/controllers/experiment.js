@@ -156,29 +156,35 @@ const saveExperiment = async (req, res) => {
   }
   const experimentId = req.body.experimentId;
 
-  try {
-    const updatedExperiment = await updateExperiment(experimentId, {
-      finished: true,
-    });
-    console.log("Experiment saved:", updatedExperiment);
-  } catch (error) {
-    console.error("Error saving experiment:", error);
-  }
+  // Determine IP and user agent
+  const clientIp =
+    req.session?.ip ||
+    req.headers["x-forwarded-for"]?.split(",")[0]?.trim() ||
+    req.socket?.remoteAddress;
+  const userAgent = req.headers["user-agent"];
+  const eventSourceUrl = req.headers.referer || req.body.eventSourceUrl;
 
-  // Send Meta event for survey completion
   try {
-    const eventResult = await sendMetaEvent({
+    await updateExperiment(experimentId, { finished: true });
+    console.log("Experiment saved:", experimentId);
+
+    // Send Meta CAPI event
+    const result = await sendMetaEvent({
       eventName: "SurveyCompleted",
       fbp,
       fbc,
       eventId: experimentId,
+      clientIp,
+      userAgent,
+      eventSourceUrl,
     });
-    console.log("Meta event sent successfully:", eventResult);
-  } catch (err) {
-    console.error("Error sending Meta event:", err);
-  }
 
-  res.json({ ok: true });
+    console.log("Meta event result:", result);
+    res.json({ ok: true });
+  } catch (error) {
+    console.error("Error saving experiment or sending event:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 };
 
 module.exports = {
