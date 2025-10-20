@@ -16,7 +16,6 @@ const Home: React.FC = () => {
     // Only handle shareLink redirect logic here
     if (shareLink) {
       captureUrlParams([{ key: "shareLink", value: shareLink }]);
-      console.log("Capturing shareLink:", shareLink);
 
       setTimeout(() => {
         navigate("/", { replace: true });

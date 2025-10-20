@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 // @ts-expect-error no types available
 import { CRT, RmeTen, DemographicsLongInternational } from "@watts-lab/surveys";
@@ -23,6 +23,8 @@ export type statementStorageData = {
 
 function Layout() {
   const [loading, setLoading] = useState(false);
+  const [searchParams] = useSearchParams();
+
   // get the current language
   const {
     t,
@@ -43,6 +45,7 @@ function Layout() {
 
   const {
     state: { sessionId, urlParams },
+    actions: { captureUrlParams },
   } = useSession();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -162,17 +165,29 @@ function Layout() {
 
   useEffect(() => {
     (async () => {
-      // Only fetch if sessionId is not set
-      // Wait a tick to ensure URL params are captured
-      await new Promise((resolve) => setTimeout(resolve, 0));
+      const paramsToCapture: { key: string; value: string }[] = [];
+      searchParams.forEach((value, key) => {
+        paramsToCapture.push({ key, value });
+      });
+
+      const allParams = [...urlParams, ...paramsToCapture];
+
+      const uniqueParams = allParams.reduce((acc, param) => {
+        acc.push(param);
+        return acc;
+      }, [] as { key: string; value: string }[]);
+
+      if (paramsToCapture.length > 0) {
+        captureUrlParams(paramsToCapture);
+      }
 
       try {
         setLoading(true);
-        // Then, get the experiments data
+
         const experimentsResponse = await Backend.get("/experiments", {
           params: {
             sessionId: sessionId,
-            ...urlParams.reduce(
+            ...uniqueParams.reduce(
               (
                 acc: Record<string, string>,
                 param: { key: string; value: string }
@@ -182,7 +197,7 @@ function Layout() {
               },
               {}
             ),
-            language: language, // add language parameter
+            language: language,
           },
         });
 
@@ -227,13 +242,12 @@ function Layout() {
         // Finally, push the result component
         pushResultComponent(experimentsResponse.data.experimentId);
       } catch (error) {
-        // Handle errors if any of the above operations fail
         console.error("An error occurred:", error);
       } finally {
         setLoading(false);
       }
     })();
-  }, [language, sessionId]); // retrieve new statements when language changes
+  }, [language, sessionId, searchParams.toString()]); // retrieve new statements when language changes
 
   const submitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -275,12 +289,7 @@ function Layout() {
                 >
                   {(() => {
                     if (currentStepIndex === 0) {
-                      return (
-                        <Link to="/consent">
-                          {/* Start */}
-                          {t("layout.start")}
-                        </Link>
-                      );
+                      return <Link to="/consent">{t("layout.start")}</Link>;
                     } else {
                       return t("layout.previous");
                     }
@@ -293,7 +302,6 @@ function Layout() {
                 >
                   {(() => {
                     if (currentStepIndex === surveyLength - 3) {
-                      // return <Link to="/finish">Finish</Link>;
                       return t("layout.continue");
                     } else {
                       return t("layout.next");
