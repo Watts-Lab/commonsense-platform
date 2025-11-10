@@ -145,6 +145,7 @@
   "result": {
     "thanks": "感谢您完成我们的调查！",
     "copy-code-text": "复制下面的代码并将其粘贴到HIT中以进行完成验证：",
+    "copy-code-text-besample": "复制下面的代码并粘贴到Besample中作为完成验证，任务ID为<strong>{{assignmentId}}</strong>：",
     "copy-code-button": "复制代码",
     "scroll-down": "向下滚动查看您的结果 — 不需要。",
     "completed-trial": "您已完成常识试验。您可以随时通过登录回答更多问题。",
