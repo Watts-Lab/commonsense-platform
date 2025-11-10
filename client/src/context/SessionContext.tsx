@@ -90,8 +90,6 @@ export const SessionProvider = ({ children }: SessionProviderProps) => {
 
       localStorage.setItem("urlParams", JSON.stringify(merged));
 
-      console.log("URL params captured and saved:", merged);
-
       return merged;
     });
   };

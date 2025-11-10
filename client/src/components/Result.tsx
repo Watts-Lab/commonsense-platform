@@ -45,6 +45,8 @@ interface RmeTen {
   };
 }
 import { useTranslation } from "react-i18next";
+import ATurk from "./Reward/ATurk";
+import BeSample from "./Reward/BeSample";
 
 type ResultProps = {
   experimentId?: number;
@@ -73,6 +75,8 @@ function Result({ experimentId }: ResultProps) {
 
   const [notifBox, setNotifBox] = useState(false);
   const [aTurkBox, setATurkBox] = useState(false);
+  const [aTurkType, setATurkType] = useState<"mturk" | "besample" | null>(null);
+  const [copySuccess, setCopySuccess] = useState(false);
 
   // CRT and rmeTen
   const [individualCRT] = useState<CRT | null>(() => {
@@ -119,11 +123,20 @@ function Result({ experimentId }: ResultProps) {
 
   useEffect(() => {
     setStatementsData([]);
-    urlParams.forEach((obj) => {
-      if (obj.key === "source" && obj.value === "mturk") {
-        setATurkBox(true);
-      }
-    });
+    if (
+      urlParams.find((obj) => obj.key === "source" && obj.value === "mturk")
+    ) {
+      setATurkBox(true);
+      setATurkType("mturk");
+    }
+    const hasResponseId = urlParams.find((obj) => obj.key === "response_id");
+    const hasAssignmentId = urlParams.find(
+      (obj) => obj.key === "assignment_id"
+    );
+    if (hasResponseId && hasAssignmentId) {
+      setATurkBox(true);
+      setATurkType("besample");
+    }
   }, []);
 
   // TODO: use the one from context
@@ -243,7 +256,22 @@ function Result({ experimentId }: ResultProps) {
 
   async function handleCopy() {
     try {
-      await navigator.clipboard.writeText(sessionId);
+      if (aTurkType === "besample") {
+        const responseId =
+          urlParams.find((obj) => obj.key === "response_id")?.value || "";
+        const BeSampleId = 97816;
+        await navigator.clipboard.writeText(
+          String(Number(responseId) * BeSampleId)
+        );
+        setCopySuccess(true);
+        setTimeout(() => setCopySuccess(false), 3000);
+        return;
+      } else if (aTurkType === "mturk") {
+        await navigator.clipboard.writeText(sessionId);
+        setCopySuccess(true);
+        setTimeout(() => setCopySuccess(false), 3000);
+        return;
+      }
     } catch (error) {
       console.error("Failed to copy text:", error);
     }
@@ -254,34 +282,24 @@ function Result({ experimentId }: ResultProps) {
   return (
     <div className="text-justify leading-relaxed">
       {aTurkBox ? (
-        <>
-          <div className="flex flex-col items-center py-7">
-            <p className="pb-2 text-3xl">
-              {/* Thanks for completing our survey! */}
-              {t("result.thanks")}
-            </p>
-            <p className="pb-2">
-              {/* Copy the code below and paste it in the HIT as a completion
-              verification: */}
-              {t("result.copy-code-text")}
-            </p>
-            <p className="pb-2 mb-3 font-semibold border-2 rounded py-1 px-3">
-              {sessionId}
-            </p>
-            <button
-              onClick={handleCopy}
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-            >
-              {/* Copy code */}
-              {t("result.copy-code-button")}
-            </button>
-            <p className="text-2xl mt-3 pt-2 px-3">
-              {/* Scroll down to see your results — not required. */}
-              {t("result.scroll-down")}
-            </p>
-          </div>
-          <hr />
-        </>
+        aTurkType === "mturk" ? (
+          <ATurk
+            sessionId={sessionId}
+            handleCopy={handleCopy}
+            copySuccess={copySuccess}
+          />
+        ) : aTurkType === "besample" ? (
+          <BeSample
+            responseId={
+              urlParams.find((obj) => obj.key === "response_id")?.value || ""
+            }
+            assignmentId={
+              urlParams.find((obj) => obj.key === "assignment_id")?.value || ""
+            }
+            handleCopy={handleCopy}
+            copySuccess={copySuccess}
+          />
+        ) : null
       ) : null}
       <p className="py-4">
         {/* You&apos;ve completed the common sense trial. At any point you can

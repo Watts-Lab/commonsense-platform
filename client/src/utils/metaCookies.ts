@@ -44,7 +44,6 @@ export const setMetaCookies = (fbclid?: string) => {
     if (!existingFbc) {
       const fbcValue = constructFbc(fbclid);
       Cookies.set("_fbc", fbcValue, cookieOptions);
-      console.log("Set _fbc cookie:", fbcValue);
     }
   }
 
@@ -53,7 +52,6 @@ export const setMetaCookies = (fbclid?: string) => {
   if (!existingFbp) {
     const fbpValue = constructFbp();
     Cookies.set("_fbp", fbpValue, cookieOptions);
-    console.log("Set _fbp cookie:", fbpValue);
   }
 };
 

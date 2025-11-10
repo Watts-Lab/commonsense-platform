@@ -147,6 +147,7 @@
   "result": {
     "thanks": "Thanks for completing our survey!",
     "copy-code-text": "Copy the code below and paste it in the HIT as a completion verification:",
+    "copy-code-text-besample": "Copy the code below and paste it in the Besample as a completion verification for assignment id <strong>{{assignmentId}}</strong>:",
     "copy-code-button": "Copy code",
     "scroll-down": "Scroll down to see your results — not required.",
     "completed-trial": "You've completed the common sense trial. At any point you can answer more questions by logging in.",

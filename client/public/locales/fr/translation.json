@@ -145,6 +145,7 @@
   "result": {
     "thanks": "Merci d'avoir complété notre enquête !",
     "copy-code-text": "Copiez le code ci-dessous et collez-le dans le HIT comme vérification de la complétion :",
+    "copy-code-text-besample": "Copiez le code ci-dessous et collez-le dans Besample comme vérification de la complétion pour l'identifiant d'affectation <strong>{{assignmentId}}</strong>:",
     "copy-code-button": "Copier le code",
     "scroll-down": "Faites défiler vers le bas pour voir vos résultats — non requis.",
     "completed-trial": "Vous avez terminé l'essai de bon sens. Vous pouvez répondre à plus de questions à tout moment en vous connectant.",

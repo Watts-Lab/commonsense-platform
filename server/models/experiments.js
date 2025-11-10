@@ -28,8 +28,11 @@ module.exports = (sequelize, DataTypes) => {
       },
 
       urlParams: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: true,
+        validate: {
+          len: [0, 1000],
+        },
       },
 
       finished: {

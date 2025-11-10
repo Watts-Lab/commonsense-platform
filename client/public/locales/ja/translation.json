@@ -145,6 +145,7 @@
   "result": {
     "thanks": "アンケートにご協力いただきありがとうございます！",
     "copy-code-text": "下記のコードをコピーし、HITに完了確認として貼り付けてください：",
+    "copy-code-text-besample": "下記のコードをコピーしてBesampleに貼り付け、完了確認として提出してください（アサインメントID <strong>{{assignmentId}}</strong> 用）：",
     "copy-code-button": "コードをコピー",
     "scroll-down": "結果を見るには下にスクロールしてください — 必須ではありません。",
     "completed-trial": "常識トライアルを完了しました。ログインすることで、いつでもさらに多くの質問に回答できます。",

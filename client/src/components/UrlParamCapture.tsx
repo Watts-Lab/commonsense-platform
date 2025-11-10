@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useSession } from "../context/SessionContext";
 import { setMetaCookies } from "../utils/metaCookies";
@@ -8,6 +8,8 @@ const UrlParamCapture = () => {
   const {
     actions: { captureUrlParams },
   } = useSession();
+
+  const previousParamsRef = useRef<string | null>(null);
 
   useEffect(() => {
     const paramsToCapture: { key: string; value: string }[] = [];
@@ -22,10 +24,15 @@ const UrlParamCapture = () => {
       }
     });
 
-    // Save params if any exist
-    if (paramsToCapture.length > 0) {
+    const currentParams = JSON.stringify(paramsToCapture);
+
+    // Save params if any exist and are different from the previous ones
+    if (
+      paramsToCapture.length > 0 &&
+      previousParamsRef.current !== currentParams
+    ) {
       captureUrlParams(paramsToCapture);
-      console.log("URL params captured:", paramsToCapture);
+      previousParamsRef.current = currentParams;
     } else {
       // Ensure _fbp cookie exists even without fbclid
       setMetaCookies();

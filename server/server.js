@@ -136,7 +136,6 @@ const routers = [
   { path: "/api/results", router: require("./routes/results") },
   { path: "/api/users", router: require("./routes/users") },
   { path: "/api/treatments", router: require("./routes/treatments") },
-  { path: "/api/feedbacks", router: require("./routes/feedbacks") },
   { path: "/api/userstatements", router: require("./routes/userstatements") },
   { path: "/api/experiments", router: require("./routes/experiment") },
 ];
