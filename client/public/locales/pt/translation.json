@@ -145,6 +145,7 @@
   "result": {
     "thanks": "Obrigado por completar nossa pesquisa!",
     "copy-code-text": "Copie o código abaixo e cole-o no HIT como verificação de conclusão:",
+    "copy-code-text-besample": "Copie o código abaixo e cole no Besample como verificação de conclusão para o id de atribuição <strong>{{assignmentId}}</strong>:",
     "copy-code-button": "Copiar código",
     "scroll-down": "Desça para ver seus resultados — não é necessário.",
     "completed-trial": "Você completou o teste de bom senso. A qualquer momento, você pode responder a mais perguntas fazendo login.",
