@@ -5,21 +5,46 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const mysql = require("mysql2");
 const MySQLStore = require("express-mysql-session")(session);
+
 const { ipaddress } = require("./models");
+const rateLimit = require("express-rate-limit");
 
 // Configuration and Initialization
 require("dotenv").config();
 const { dboptions } = require("./config/config.js");
 const pool = mysql.createPool(dboptions);
 const sessionStore = new MySQLStore(dboptions, pool);
+
 const app = express();
+const helmet = require("helmet");
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        scriptSrc: ["'self'"],
+        imgSrc: ["'self'", "data:", "https:"],
+      },
+    },
+  })
+);
 
 // Middleware
 app.use(cors({ credentials: true, origin: true }));
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.static("./survey/public"));
+
 app.use(require("./config/sessionConfig")(session, sessionStore));
+
+const feedbackLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5, // Max 5 requests per windowMs
+  message: "Too many feedback submissions, please try again later",
+  standardHeaders: true,
+  legacyHeaders: false,
+});
 
 // Create an in-memory cache for IP tracking
 const ipCache = new Map();
@@ -130,17 +155,29 @@ app.use(async (req, res, next) => {
 });
 
 // Routers
+
 const routers = [
   { path: "/api/statements", router: require("./routes/statements") },
   { path: "/api/answers", router: require("./routes/answers") },
   { path: "/api/results", router: require("./routes/results") },
   { path: "/api/users", router: require("./routes/users") },
   { path: "/api/treatments", router: require("./routes/treatments") },
+  {
+    path: "/api/feedbacks",
+    router: require("./routes/feedbacks"),
+    limiter: feedbackLimiter,
+  },
   { path: "/api/userstatements", router: require("./routes/userstatements") },
   { path: "/api/experiments", router: require("./routes/experiment") },
 ];
 
-routers.forEach(({ path, router }) => app.use(path, router));
+routers.forEach(({ path, router, limiter }) => {
+  if (limiter) {
+    app.use(path, limiter, router);
+  } else {
+    app.use(path, router);
+  }
+});
 
 // Static Files and Catch-all Routes
 app.get("/api/images/*", (req, res) => {

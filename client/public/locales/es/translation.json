@@ -89,7 +89,7 @@
   },
   "landing": {
     "acknowledgement": "Al avanzar, das tu consentimiento para participar en este proyecto de investigación.",
-    "button": "Verifica Tu Sentido Común",
+    "button": "Participa en la encuesta",
     "subtitle": "Estás a punto de completar una encuesta para medir tu sentido común. A la mayoría de las personas les toma menos de 15 minutos.",
     "title": "Plataforma de Sentido Común"
   },
@@ -152,6 +152,7 @@
     "thanks": "¡Gracias por completar nuestra encuesta!",
     "copy-code-text": "Copia el código a continuación y pégalo en el HIT como verificación de finalización:",
     "copy-code-text-besample": "Copia el código de abajo y pégalo en Besample como verificación de finalización para el id de asignación <strong>{{assignmentId}}</strong>:",
+    "copy-code-text-besample-noassignid": "Copia el código de abajo y pégalo en Besample como verificación de finalización:",
     "copy-code-button": "Copiar código",
     "scroll-down": "Desplázate hacia abajo para ver tus resultados — no es obligatorio.",
     "completed-trial": "Has completado la prueba de sentido común. En cualquier momento puedes responder más preguntas iniciando sesión.",

@@ -25,11 +25,15 @@ function BeSample({
         </p>
         <p className="pb-2">
           {/* Copy the code below and paste it in the HIT as a completion verification: */}
-          <Trans
-            i18nKey="result.copy-code-text-besample"
-            values={{ assignmentId }}
-            components={{ strong: <strong /> }}
-          />
+          {false && (
+            // placeholder in case we want to conditionally show assignmentId later
+            <Trans
+              i18nKey="result.copy-code-text-besample"
+              values={{ assignmentId }}
+              components={{ strong: <strong /> }}
+            />
+          )}
+          {t("result.copy-code-text-besample-noassignid")}
         </p>
         <p className="pb-2 mb-3 font-semibold border-2 rounded py-1 px-3">
           {Number(responseId) * BeSampleId}

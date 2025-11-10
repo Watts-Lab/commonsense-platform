@@ -1,54 +1,54 @@
 const nodemailer = require("nodemailer");
 const process = require("process");
 
-const aws = require("@aws-sdk/client-ses");
+const { SESv2Client, SendEmailCommand } = require("@aws-sdk/client-sesv2");
 
 require("dotenv").config();
 
-const ses = new aws.SES({
-  apiVersion: "2010-12-01",
+const sesClient = new SESv2Client({
   region: process.env.AWS_REGION,
   credentials: {
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   },
 });
 
 //create Nodemailer SES transporter
-let transporter = nodemailer.createTransport({
-  SES: { ses, aws },
+const transporter = nodemailer.createTransport({
+  SES: { sesClient, SendEmailCommand },
 });
 
+// Base URL logic
 const URL =
-  process.env.NODE_ENV != "development"
-    ? process.env.SITE_URL + "/login/"
+  process.env.NODE_ENV !== "development"
+    ? `${process.env.SITE_URL}/login/`
     : "http://localhost:5173/login/";
 
+// Magic link sender
 const send_magic_link = async (email, link, which) => {
-  if (which === "signup") {
-    var subj = "Sign Up Common Sense Platform",
-      body =
-        "<p>Thank you for registering with the Common Sense Platform. We're excited to have you on board! To get started, please confirm your account by clicking on the link below:</p><p>" +
-        (URL + email + "/" + link) +
-        "</p><p>Please ensure that you do not share this link with anyone, as it is unique to your account.</p>" +
-        "<p>We look forward to your active participation on the Common Sense Platform.</p>";
-  } else {
-    var subj = "Common Sense Platform sign in link",
-      body =
-        "<p>Welcome back to the Common Sense Platform. Please click on the link below to login: </p><p>" +
-        (URL + email + "/" + link) +
-        "</p><p>Please ensure that you do not share this link with anyone, as it is unique to your account.</p>" +
-        "<p>We look forward to your active participation on the Common Sense Platform.</p>";
-  }
+  const subj =
+    which === "signup"
+      ? "Sign Up Common Sense Platform"
+      : "Common Sense Platform sign in link";
+
+  const messageBody =
+    which === "signup"
+      ? `<p>Thank you for registering with the Common Sense Platform. We're excited to have you on board! To get started, please confirm your account by clicking the link below:</p>
+         <p>${URL + email + "/" + link}</p>
+         <p>Please ensure that you do not share this link with anyone, as it is unique to your account.</p>
+         <p>We look forward to your active participation on the Common Sense Platform.</p>`
+      : `<p>Welcome back to the Common Sense Platform. Please click the link below to login:</p>
+         <p>${URL + email + "/" + link}</p>
+         <p>Please ensure that you do not share this link with anyone, as it is unique to your account.</p>
+         <p>We look forward to your active participation on the Common Sense Platform.</p>`;
 
   const mailOptions = {
     from: "no-reply@commonsensicality.org",
     to: email,
     subject: subj,
-    html: body,
+    html: messageBody,
     ses: {
-      // optional extra arguments for SendRawEmail
-      Tags: [
+      EmailTags: [
         {
           Name: "Project",
           Value: "commonsense",
@@ -58,25 +58,23 @@ const send_magic_link = async (email, link, which) => {
   };
 
   try {
-    const response = await transporter.sendMail(mailOptions, (err, info) => {
-      console.log(info.envelope);
-      console.log(info.messageId);
-    });
+    const info = await transporter.sendMail(mailOptions);
+    console.log(info.envelope);
+    console.log(info.messageId);
     return { ok: true, message: "email sent" };
   } catch (err) {
-    console.log("Something didn't work out", err);
-    return { ok: false, message: err };
+    console.error("Email send failed:", err);
+    return { ok: false, message: err.message || err };
   }
 };
 
+// Report sender
 const send_report = async (email, comment, type) => {
-  var subj = "Commonsense platfrom feedback",
-    body =
-      "<p>Here is the comment report from the Common Sense Platform:</p><p>" +
-      type +
-      " : " +
-      comment +
-      "</p>";
+  const subj = "Commonsense platform feedback";
+  const body = `
+    <p>Here is the comment report from the Common Sense Platform:</p>
+    <p>${type} : ${comment}</p>
+  `;
 
   const mailOptions = {
     from: "no-reply@commonsensicality.org",
@@ -84,8 +82,7 @@ const send_report = async (email, comment, type) => {
     subject: subj,
     html: body,
     ses: {
-      // optional extra arguments for SendRawEmail
-      Tags: [
+      EmailTags: [
         {
           Name: "Project",
           Value: "commonsense",
@@ -95,14 +92,13 @@ const send_report = async (email, comment, type) => {
   };
 
   try {
-    const response = await transporter.sendMail(mailOptions, (err, info) => {
-      console.log(info.envelope);
-      console.log(info.messageId);
-    });
+    const info = await transporter.sendMail(mailOptions);
+    console.log(info.envelope);
+    console.log(info.messageId);
     return { ok: true, message: "email sent" };
   } catch (err) {
-    console.log("Something didn't work out", err);
-    return { ok: false, message: err };
+    console.error("Email send failed:", err);
+    return { ok: false, message: err.message || err };
   }
 };
 

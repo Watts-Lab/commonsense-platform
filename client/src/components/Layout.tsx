@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 // @ts-expect-error no types available
 import { CRT, RmeTen, DemographicsLongInternational } from "@watts-lab/surveys";
@@ -22,6 +22,8 @@ export type statementStorageData = {
 };
 
 function Layout() {
+  const navigate = useNavigate();
+
   const [loading, setLoading] = useState(false);
   const [searchParams] = useSearchParams();
 
@@ -179,6 +181,13 @@ function Layout() {
 
       if (paramsToCapture.length > 0) {
         captureUrlParams(paramsToCapture);
+      }
+
+      // Check consent and redirect if not given after capturing params
+      const consent = localStorage.getItem("consent");
+      if (consent !== "true") {
+        navigate("/survey", { replace: true });
+        return;
       }
 
       try {

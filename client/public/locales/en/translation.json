@@ -91,7 +91,7 @@
   },
   "landing": {
     "acknowledgement": "By moving forward you consent to participate in this research project.",
-    "button": "Check Your Common Sense",
+    "button": "Participate in the survey",
     "subtitle": "You are about to complete a survey to measure your common sense. It takes less than 15 minutes for most people.",
     "title": "Common Sense Platform"
   },
@@ -148,6 +148,7 @@
     "thanks": "Thanks for completing our survey!",
     "copy-code-text": "Copy the code below and paste it in the HIT as a completion verification:",
     "copy-code-text-besample": "Copy the code below and paste it in the Besample as a completion verification for assignment id <strong>{{assignmentId}}</strong>:",
+    "copy-code-text-besample-noassignid": "Copy the code below and paste it in Besample as completion verification:",
     "copy-code-button": "Copy code",
     "scroll-down": "Scroll down to see your results — not required.",
     "completed-trial": "You've completed the common sense trial. At any point you can answer more questions by logging in.",

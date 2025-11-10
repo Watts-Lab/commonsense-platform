@@ -89,7 +89,7 @@
   },
   "landing": {
     "acknowledgement": "Ao prosseguir, você concorda em participar deste projeto de pesquisa.",
-    "button": "Verifique seu Senso Comum",
+    "button": "Participe da pesquisa",
     "subtitle": "Você está prestes a completar uma pesquisa para medir seu senso comum. Para a maioria das pessoas, leva menos de 15 minutos.",
     "title": "Plataforma de Senso Comum"
   },
@@ -146,6 +146,7 @@
     "thanks": "Obrigado por completar nossa pesquisa!",
     "copy-code-text": "Copie o código abaixo e cole-o no HIT como verificação de conclusão:",
     "copy-code-text-besample": "Copie o código abaixo e cole no Besample como verificação de conclusão para o id de atribuição <strong>{{assignmentId}}</strong>:",
+    "copy-code-text-besample-noassignid": "Copie o código abaixo e cole no Besample como verificação de conclusão:",
     "copy-code-button": "Copiar código",
     "scroll-down": "Desça para ver seus resultados — não é necessário.",
     "completed-trial": "Você completou o teste de bom senso. A qualquer momento, você pode responder a mais perguntas fazendo login.",

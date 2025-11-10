@@ -89,7 +89,7 @@
   },
   "landing": {
     "acknowledgement": "En continuant, vous consentez à participer à ce projet de recherche.",
-    "button": "Vérifiez Votre Bon Sens",
+    "button": "Participez à l'enquête",
     "subtitle": "Vous êtes sur le point de compléter une enquête pour mesurer votre bon sens. Cela prend moins de 15 minutes pour la plupart des gens.",
     "title": "Plateforme de Bon Sens"
   },
@@ -146,6 +146,7 @@
     "thanks": "Merci d'avoir complété notre enquête !",
     "copy-code-text": "Copiez le code ci-dessous et collez-le dans le HIT comme vérification de la complétion :",
     "copy-code-text-besample": "Copiez le code ci-dessous et collez-le dans Besample comme vérification de la complétion pour l'identifiant d'affectation <strong>{{assignmentId}}</strong>:",
+    "copy-code-text-besample-noassignid": "Copiez le code ci-dessous et collez-le dans Besample comme vérification de la complétion :",
     "copy-code-button": "Copier le code",
     "scroll-down": "Faites défiler vers le bas pour voir vos résultats — non requis.",
     "completed-trial": "Vous avez terminé l'essai de bon sens. Vous pouvez répondre à plus de questions à tout moment en vous connectant.",
