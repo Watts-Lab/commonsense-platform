@@ -7,6 +7,8 @@ describe("fill out the survay", () => {
       onBeforeLoad(win) {
         // Pretend the user already accepted GDPR
         win.localStorage.setItem("gdpr-consent", "accepted");
+        // Pretend the user already accepted consent
+        win.localStorage.setItem("consent", "true");
       },
     });
   });
