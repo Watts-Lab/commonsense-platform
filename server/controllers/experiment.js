@@ -117,13 +117,17 @@ const returnStatements = async (req, res) => {
     finished: false,
   };
 
-  const experiment = await createExperiment(experimentData);
-
-  res.json({
-    statements: result.answer,
-    experimentId: experiment.id,
-    experimentType: experiment.experimentType,
-  });
+  try {
+    const experiment = await createExperiment(experimentData);
+    res.json({
+      statements: result.answer,
+      experimentId: experiment.id,
+      experimentType: experiment.experimentType,
+    });
+  } catch (error) {
+    console.error("Error creating experiment:", error);
+    return res.status(500).json({ error: "Failed to create experiment" });
+  }
 };
 
 const saveIndividual = async (req, res) => {
