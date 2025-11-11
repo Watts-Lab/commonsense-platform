@@ -257,8 +257,10 @@ function Result({ experimentId }: ResultProps) {
   async function handleCopy() {
     try {
       if (aTurkType === "besample") {
-        const responseId =
-          urlParams.find((obj) => obj.key === "response_id")?.value || "";
+        const responseId = urlParams.find(
+          (obj) => obj.key === "response_id"
+        )?.value;
+
         const BeSampleId = 97816;
         await navigator.clipboard.writeText(
           String(Number(responseId) * BeSampleId)
@@ -291,10 +293,10 @@ function Result({ experimentId }: ResultProps) {
         ) : aTurkType === "besample" ? (
           <BeSample
             responseId={
-              urlParams.find((obj) => obj.key === "response_id")?.value || ""
+              urlParams.find((obj) => obj.key === "response_id")?.value || "0"
             }
             assignmentId={
-              urlParams.find((obj) => obj.key === "assignment_id")?.value || ""
+              urlParams.find((obj) => obj.key === "assignment_id")?.value || "0"
             }
             handleCopy={handleCopy}
             copySuccess={copySuccess}
