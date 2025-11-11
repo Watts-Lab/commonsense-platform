@@ -31,7 +31,7 @@
     "nodemailer": "^7.0.10",
     "sequelize": "^6.37.3",
     "sequelize-cli": "^6.6.2",
-    "supertest": "^6.3.4",
+    "supertest": "^7.1.4",
     "xss": "^1.0.15"
   },
   "devDependencies": {
