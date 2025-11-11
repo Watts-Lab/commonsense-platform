@@ -261,7 +261,7 @@ function Result({ experimentId }: ResultProps) {
           (obj) => obj.key === "response_id"
         )?.value;
 
-        const BeSampleId = 97816;
+        const BeSampleId = 97819;
         await navigator.clipboard.writeText(
           String(Number(responseId) * BeSampleId)
         );

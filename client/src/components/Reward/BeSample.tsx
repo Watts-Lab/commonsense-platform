@@ -14,7 +14,7 @@ function BeSample({
   copySuccess,
 }: BeSampleProps) {
   const { t } = useTranslation();
-  const BeSampleId = 97816;
+  const BeSampleId = 97819;
 
   return (
     <>
