@@ -62,31 +62,55 @@ describe("survey persistence and session robustness", () => {
   });
 
   it("should maintain session after refresh", () => {
-    // 1. Let frontend initiate session + set cookie
     cy.visit("http://localhost:5173/statements");
 
-    // 2. Optional: force a request that requires/creates session
+    // Optional: trigger something that should set/create the session cookie
     cy.request({
-      url: "http://localhost:4000/api/whoami", // or any protected endpoint
-      credentials: "include", // modern name, same as withCredentials: true
-    })
-      .its("body")
-      .as("initialSessionData");
+      url: "http://localhost:4000/api/whoami", // or /api/session or whatever returns session info
+      credentials: "include",
+    });
 
-    // 3. Log visible cookies for debug
-    cy.logCookies(); // custom command or just cy.getCookies().then(cy.log)
+    // Debug: see what cookies actually exist right now
+    cy.getCookies().then((cookies) => {
+      cy.log("Cookies after visit:", cookies);
+      console.log("Full cookies object:", cookies);
+    });
 
-    // 4. Refresh → frontend should re-use cookie
+    // Most reliable: specifically check YOUR session cookie exists
+    cy.getCookie("survey-session")
+      .should("exist") // fails test if missing → good for debugging
+      .should("have.property", "value") // has a non-empty value
+      .then((cookie) => {
+        cy.log("Session cookie value before reload:", cookie.value);
+        // optional: save it for later comparison
+        cy.wrap(cookie.value).as("originalSessionValue");
+      });
+
     cy.reload();
 
-    // 5. Compare again
+    cy.wait(1500); // or better: wait for your app's loading spinner/data fetch
+
+    // After reload: cookie should still be there with same value
+    cy.getCookie("survey-session")
+      .should("exist")
+      .should("have.property", "value")
+      .then((cookieAfter) => {
+        cy.log("Session cookie value after reload:", cookieAfter.value);
+      });
+
+    // Optional strict check
+    cy.get("@originalSessionValue").then((original) => {
+      cy.getCookie("survey-session").its("value").should("equal", original);
+    });
+
+    // If you want to also compare session data from API
     cy.request({
       url: "http://localhost:4000/api/whoami",
       credentials: "include",
     })
       .its("body")
-      .then((newData) => {
-        cy.get("@initialSessionData").should("deep.equal", newData);
-      });
+      .should(
+        "deep.equal" /* expected session shape or use alias from earlier */,
+      );
   });
 });
