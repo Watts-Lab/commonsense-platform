@@ -61,56 +61,62 @@ describe("survey persistence and session robustness", () => {
       });
   });
 
-  it("should maintain session after refresh", () => {
+  it("should maintain session cookie after refresh", () => {
+    // 1. Visit the statements page — this should create/set the session cookie if not already present
     cy.visit("http://localhost:5173/statements");
 
-    // Optional: trigger something that should set/create the session cookie
-    cy.request({
-      url: "http://localhost:4000/api/whoami", // or /api/session or whatever returns session info
-      credentials: "include",
-    });
+    cy.wait(1500); // give time for any initial fetches / session init
 
-    // Debug: see what cookies actually exist right now
+    // 2. Debug: show all cookies the browser has right now
     cy.getCookies().then((cookies) => {
-      cy.log("Cookies after visit:", cookies);
-      console.log("Full cookies object:", cookies);
+      cy.log("Cookies after initial visit:", cookies);
+      console.log("Full cookies:", cookies); // also appears in browser console
     });
 
-    // Most reliable: specifically check YOUR session cookie exists
+    // 3. Specifically verify YOUR session cookie exists and has a value
     cy.getCookie("survey-session")
-      .should("exist") // fails test if missing → good for debugging
-      .should("have.property", "value") // has a non-empty value
+      .should("exist") // ← fails test if missing — great for spotting the issue early
+      .should("have.property", "value")
+      .should("not.be.empty")
       .then((cookie) => {
-        cy.log("Session cookie value before reload:", cookie.value);
-        // optional: save it for later comparison
-        cy.wrap(cookie.value).as("originalSessionValue");
+        cy.log(`Session cookie value before reload: ${cookie.value}`);
+        // Save for comparison after reload
+        cy.wrap(cookie.value).as("originalSessionCookieValue");
       });
 
+    // 4. Reload the page
     cy.reload();
 
-    cy.wait(1500); // or better: wait for your app's loading spinner/data fetch
+    cy.wait(2000); // or intercept your app's data-load request if you know it
 
-    // After reload: cookie should still be there with same value
+    // 5. Check the cookie again — should be identical
     cy.getCookie("survey-session")
       .should("exist")
-      .should("have.property", "value")
-      .then((cookieAfter) => {
-        cy.log("Session cookie value after reload:", cookieAfter.value);
+      .its("value")
+      .then((newValue) => {
+        cy.log(`Session cookie value after reload: ${newValue}`);
       });
 
-    // Optional strict check
-    cy.get("@originalSessionValue").then((original) => {
-      cy.getCookie("survey-session").its("value").should("equal", original);
+    cy.get("@originalSessionCookieValue").then((originalValue) => {
+      cy.getCookie("survey-session")
+        .its("value")
+        .should("equal", originalValue);
     });
 
-    // If you want to also compare session data from API
     cy.request({
-      url: "http://localhost:4000/api/whoami",
-      credentials: "include",
-    })
-      .its("body")
-      .should(
-        "deep.equal" /* expected session shape or use alias from earlier */,
+      method: "GET",
+      url: "http://localhost:4000/api",
+      failOnStatusCode: false,
+    }).then((response) => {
+      cy.log(
+        "Response from session-aware endpoint after reload:",
+        response.status,
+        response.body,
       );
+      expect(response.status).to.eq(200);
+      // response.body should be the sessionID string
+      expect(response.body).to.be.a("string");
+      expect(response.body).to.not.equal("");
+    });
   });
 });
