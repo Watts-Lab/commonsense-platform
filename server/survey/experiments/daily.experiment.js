@@ -87,6 +87,7 @@ const newdailyexperiment = {
       ...treatments[0],
       params: {
         ids: statementIds,
+        sessionId: sessionId, // Pass sessionId for deterministic shuffling
       },
     };
   },

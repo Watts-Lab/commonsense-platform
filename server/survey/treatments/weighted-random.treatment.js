@@ -1,5 +1,6 @@
 const { sequelize } = require("../../models");
 const { stringy } = require("./utils/id-generator");
+const { seededShuffle } = require("./utils/seeded-shuffle");
 
 /**
  * Retrieves weighted statements based on the provided parameters.
@@ -85,6 +86,13 @@ const GetStatementsWeighted = async ({
       type: sequelize.QueryTypes.SELECT,
     });
 
+    // Apply deterministic shuffle based on sessionId
+    // The SQL query already does weighted selection, but the order within
+    // that selection should be deterministic per session
+    const shuffledResults = sessionId
+      ? seededShuffle(results, sessionId)
+      : results;
+
     return {
       id: stringy({
         sessionId,
@@ -93,7 +101,7 @@ const GetStatementsWeighted = async ({
         language,
       }),
       description: "GetStatementsWeighted",
-      answer: results.map((result) => ({
+      answer: shuffledResults.map((result) => ({
         id: result.id,
         statement: result.statement,
       })),

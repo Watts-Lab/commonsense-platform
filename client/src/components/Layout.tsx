@@ -23,6 +23,8 @@ export type statementStorageData = {
 
 function Layout() {
   const navigate = useNavigate();
+  const [isAuxSaving, setIsAuxSaving] = useState(false);
+  const [initialStepIndex, setInitialStepIndex] = useState(0);
 
   const [loading, setLoading] = useState(false);
   const [searchParams] = useSearchParams();
@@ -51,17 +53,28 @@ function Layout() {
   } = useSession();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const onCompleteCallback = (record: any) => {
-    Backend.post("/experiments/individual", {
-      sessionId: sessionId,
-      informationType: record.surveyName,
-      experimentInfo: record,
-    }).finally(() => {
+  const onCompleteCallback = async (record: any) => {
+    setIsAuxSaving(true);
+    try {
+      await Backend.post("/experiments/individual", {
+        sessionId: sessionId,
+        informationType: record.surveyName,
+        experimentInfo: record,
+      });
+
       setCurrentStepIndex((i) => i + 1);
       if (record.surveyName !== "demographics") {
         localStorage.setItem(record.surveyName, JSON.stringify(record));
       }
-    });
+    } catch (error) {
+      console.error("Failed to save survey results:", error);
+      alert(
+        "Failed to save results. Please check your connection and try again.",
+      );
+      throw error;
+    } finally {
+      setIsAuxSaving(false);
+    }
   };
 
   const handleAnswerSaving = (tid: number, answerState: boolean) => {
@@ -69,8 +82,8 @@ function Layout() {
       prevState.map((data) =>
         data.id === tid
           ? { id: tid, answers: data.answers, answereSaved: answerState }
-          : data
-      )
+          : data,
+      ),
     );
   };
 
@@ -133,13 +146,13 @@ function Layout() {
       if (response.data.commonsensicality !== 0) {
         setCurrentScore({
           commonsense: Math.round(
-            Number(response.data.commonsensicality.toFixed(2)) * 100
+            Number(response.data.commonsensicality.toFixed(2)) * 100,
           ),
           awareness: Math.round(
-            Number(response.data.awareness.toFixed(2)) * 100
+            Number(response.data.awareness.toFixed(2)) * 100,
           ),
           consensus: Math.round(
-            Number(response.data.consensus.toFixed(2)) * 100
+            Number(response.data.consensus.toFixed(2)) * 100,
           ),
         });
       }
@@ -148,11 +161,18 @@ function Layout() {
     }
   };
 
-  const { setCurrentStepIndex, currentStepIndex, back, next } = MultiStepForm({
+  const {
+    setCurrentStepIndex,
+    currentStepIndex,
+    back,
+    next,
+    loading: isSaving,
+  } = MultiStepForm({
     steps: statementsData,
     handleAnswerSaving: handleAnswerSaving,
     pushNewStatement: pushNewStatement,
     updateScore,
+    initialStep: initialStepIndex,
   });
 
   const handleStatementChange = (tid: number, updatedData: string[]) => {
@@ -160,8 +180,8 @@ function Layout() {
       prevState.map((data) =>
         data.id === tid
           ? { id: tid, answers: updatedData, answereSaved: data.answereSaved }
-          : data
-      )
+          : data,
+      ),
     );
   };
 
@@ -174,10 +194,13 @@ function Layout() {
 
       const allParams = [...urlParams, ...paramsToCapture];
 
-      const uniqueParams = allParams.reduce((acc, param) => {
-        acc.push(param);
-        return acc;
-      }, [] as { key: string; value: string }[]);
+      const uniqueParams = allParams.reduce(
+        (acc, param) => {
+          acc.push(param);
+          return acc;
+        },
+        [] as { key: string; value: string }[],
+      );
 
       if (paramsToCapture.length > 0) {
         captureUrlParams(paramsToCapture);
@@ -199,12 +222,12 @@ function Layout() {
             ...uniqueParams.reduce(
               (
                 acc: Record<string, string>,
-                param: { key: string; value: string }
+                param: { key: string; value: string },
               ) => {
                 acc[param.key] = param.value;
                 return acc;
               },
-              {}
+              {},
             ),
             language: language,
           },
@@ -212,13 +235,54 @@ function Layout() {
 
         // Process the experiments data
         const initialAnswers = experimentsResponse.data.statements.map(
-          (statement: { id: number }) => ({
+          (statement: { id: number; answereSaved?: boolean }) => ({
             id: statement.id,
             answers: new Array(questionData.length).fill(""),
-            answereSaved: false,
-          })
+            answereSaved: statement.answereSaved || false,
+          }),
         );
-        setStatementsData(initialAnswers);
+
+        // Check if we have matching saved data and preserve it
+        const mergedAnswers = initialAnswers.map(
+          (initial: statementStorageData) => {
+            const saved = statementsData.find((s) => s.id === initial.id);
+            // If either backend or frontend says it's saved, mark it as saved.
+            // This allows backend-driven recovery to work across devices.
+            if (saved) {
+              return {
+                ...saved,
+                answereSaved: saved.answereSaved || initial.answereSaved,
+              };
+            }
+            return initial;
+          },
+        );
+
+        setStatementsData(mergedAnswers);
+
+        // Calculate initial step index based on first unsaved answer
+        let startStep = 0;
+        for (let i = 0; i < mergedAnswers.length; i++) {
+          if (!mergedAnswers[i].answereSaved) {
+            startStep = i;
+            break;
+          }
+          // If all valid statements are saved, move past them
+          if (i === mergedAnswers.length - 1 && mergedAnswers[i].answereSaved) {
+            startStep = i + 1;
+
+            // Check if external surveys are completed (stored in localStorage)
+            // The order is: [Statements, CRT, RMET, Demographics, Result]
+            if (localStorage.getItem("crt")) {
+              startStep++; // Move past CRT
+            }
+            if (localStorage.getItem("rmeten")) {
+              startStep++; // Move past RMET
+            }
+            // Note: Demographics has special handling - not saved to localStorage per line 66
+            // So we can't check for it here
+          }
+        }
 
         setSurveyLength(experimentsResponse.data.statements.length + 3);
 
@@ -226,7 +290,7 @@ function Layout() {
           experimentsResponse.data.statements.map(
             (
               statement: { statement: string; image?: string; id: number },
-              index: number
+              index: number,
             ) => {
               return (
                 <Statement
@@ -236,7 +300,7 @@ function Layout() {
                   statementId={statement.id}
                   onChange={handleStatementChange}
                   data={
-                    statementsData[index] || {
+                    mergedAnswers[index] || {
                       id: statement.id,
                       answers: ["", "", "", "", "", ""],
                       answereSaved: false,
@@ -244,12 +308,15 @@ function Layout() {
                   }
                 />
               );
-            }
-          )
+            },
+          ),
         );
 
         // Finally, push the result component
         pushResultComponent(experimentsResponse.data.experimentId);
+
+        // Set the initial step index for restoration
+        setInitialStepIndex(startStep);
       } catch (error) {
         console.error("An error occurred:", error);
       } finally {
@@ -307,15 +374,20 @@ function Layout() {
 
                 <button
                   type="submit"
-                  className="order-last text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                  disabled={isSaving}
+                  className={`order-last text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 ${
+                    isSaving ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
                 >
-                  {(() => {
-                    if (currentStepIndex === surveyLength - 3) {
-                      return t("layout.continue");
-                    } else {
-                      return t("layout.next");
-                    }
-                  })()}
+                  {isSaving
+                    ? "Saving..."
+                    : (() => {
+                        if (currentStepIndex === surveyLength - 3) {
+                          return t("layout.continue");
+                        } else {
+                          return t("layout.next");
+                        }
+                      })()}
                 </button>
               </div>
 
@@ -328,6 +400,11 @@ function Layout() {
             </div>
           )}
         </form>
+      )}
+      {isAuxSaving && (
+        <div className="fixed inset-0 bg-white/80 z-50 flex items-center justify-center">
+          <div className="text-xl font-black uppercase">Saving...</div>
+        </div>
       )}
     </>
   );

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Backend from "../apis/backend";
 import { useTranslation } from "react-i18next";
 
@@ -13,6 +13,7 @@ type MultiStepFormProps = {
   getNextStatement?: (sessionId: string) => void;
   pushNewStatement: (id: number, statement: string) => void;
   updateScore: () => Promise<void>;
+  initialStep?: number;
 };
 
 function getEnglishTextForAnswer(questionId: number, answerId: number) {
@@ -25,11 +26,20 @@ function MultiStepForm({
   steps,
   handleAnswerSaving,
   updateScore,
+  initialStep,
 }: MultiStepFormProps) {
   const { i18n } = useTranslation();
   const language = i18n.language;
 
-  const [currentStepIndex, setCurrentStepIndex] = useState(0);
+  const [currentStepIndex, setCurrentStepIndex] = useState(initialStep || 0);
+  const [loading, setLoading] = useState(false);
+
+  // Update step index when initialStep changes (e.g., after data loads)
+  useEffect(() => {
+    if (initialStep !== undefined && initialStep > 0) {
+      setCurrentStepIndex(initialStep);
+    }
+  }, [initialStep]);
 
   const {
     state: { sessionId },
@@ -43,39 +53,51 @@ function MultiStepForm({
     }
   }
 
-  function next() {
+  async function next() {
     if (checkAnswers(steps[currentStepIndex].answers.slice(0, 5))) {
-      setCurrentStepIndex((i) => {
-        if (i > steps.length - 1) return i;
-        return i + 1;
-      });
-
       // if the user answered the statement, then save the answer and set the answerSaved flag to true
       if (!steps[currentStepIndex].answereSaved) {
-        Backend.post("/answers", {
-          statementId: steps[currentStepIndex].id,
-          I_agree:
-            steps[currentStepIndex].answers[0].split("-")[1] === "1" ? 1 : 0,
-          I_agree_reason: getEnglishTextForAnswer(
-            2,
-            Number(steps[currentStepIndex].answers[1].split("-")[1])
-          ),
-          others_agree:
-            steps[currentStepIndex].answers[2].split("-")[1] === "1" ? 1 : 0,
-          others_agree_reason: getEnglishTextForAnswer(
-            4,
-            Number(steps[currentStepIndex].answers[3].split("-")[1])
-          ),
-          perceived_commonsense:
-            steps[currentStepIndex].answers[4].split("-")[1] === "1" ? 1 : 0,
-          clarity: steps[currentStepIndex].answers[5],
-          origLanguage: language || "en",
-          sessionId: sessionId,
-          withCredentials: true,
-        }).then(() => {
+        setLoading(true);
+        try {
+          await Backend.post("/answers", {
+            statementId: steps[currentStepIndex].id,
+            I_agree:
+              steps[currentStepIndex].answers[0].split("-")[1] === "1" ? 1 : 0,
+            I_agree_reason: getEnglishTextForAnswer(
+              2,
+              Number(steps[currentStepIndex].answers[1].split("-")[1]),
+            ),
+            others_agree:
+              steps[currentStepIndex].answers[2].split("-")[1] === "1" ? 1 : 0,
+            others_agree_reason: getEnglishTextForAnswer(
+              4,
+              Number(steps[currentStepIndex].answers[3].split("-")[1]),
+            ),
+            perceived_commonsense:
+              steps[currentStepIndex].answers[4].split("-")[1] === "1" ? 1 : 0,
+            clarity: steps[currentStepIndex].answers[5],
+            origLanguage: language || "en",
+            sessionId: sessionId,
+            withCredentials: true,
+          });
+
           handleAnswerSaving(steps[currentStepIndex].id, true);
           steps[currentStepIndex].answereSaved = true;
-          updateScore();
+          await updateScore();
+
+          setCurrentStepIndex((i) => {
+            if (i > steps.length - 1) return i;
+            return i + 1;
+          });
+        } catch (error) {
+          console.error("Failed to save answer:", error);
+        } finally {
+          setLoading(false);
+        }
+      } else {
+        setCurrentStepIndex((i) => {
+          if (i > steps.length - 1) return i;
+          return i + 1;
         });
       }
     }
@@ -105,6 +127,7 @@ function MultiStepForm({
     next,
     back,
     steps: steps,
+    loading,
   };
 }
 
