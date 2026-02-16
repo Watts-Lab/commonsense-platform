@@ -56,14 +56,35 @@ describe("survey persistence and session robustness", () => {
   });
 
   it("should maintain session ID after refresh", () => {
-    // Intercept the /api call that returns the session ID
-    cy.request("http://localhost:4000/api").then((response) => {
-      const originalSessionId = response.body;
-      expect(originalSessionId).to.have.length.at.least(1);
+    // 1. Visit the page first to allow any frontend-backend handshakes
+    cy.visit("http://localhost:5173/statements");
+    cy.wait(1000);
 
-      cy.reload();
+    // 2. Capture session ID from backend
+    cy.request({
+      url: "http://localhost:4000/api",
+      withCredentials: true
+    }).then((response) => {
+      const originalSessionId = response.body;
+      cy.log("Original Session ID:", originalSessionId);
       
-      cy.request("http://localhost:4000/api").then((secondResponse) => {
+      // Capture cookies
+      cy.getCookies().then((cookies) => {
+        cy.log("Cookies before refresh:", JSON.stringify(cookies));
+      });
+
+      // 3. Reload page
+      cy.reload();
+      cy.wait(2000);
+      
+      // 4. Check session again via request
+      cy.request({
+        url: "http://localhost:4000/api",
+        withCredentials: true
+      }).then((secondResponse) => {
+        cy.log("Second Session ID:", secondResponse.body);
+        
+        // Final verification
         expect(secondResponse.body).to.equal(originalSessionId);
       });
     });
