@@ -2,8 +2,7 @@ module.exports = (session, sessionStore) => {
   return session({
     name: "survey-session",
     secret: process.env.SESSION_SECRET,
-    resave: true, // Force session to be saved back to the session store
-    rolling: true, // Force the session identifier cookie to be set on every response
+    resave: false,
     saveUninitialized: true,
     store: sessionStore,
     cookie: {

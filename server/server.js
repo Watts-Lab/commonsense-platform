@@ -97,12 +97,6 @@ process.on("SIGTERM", async () => {
   process.exit(0);
 });
 
-// Debugging session middleware
-app.use((req, res, next) => {
-  console.log(`[Session Debug] Path: ${req.path}, SessionID: ${req.sessionID}, Cookies:`, req.cookies);
-  next();
-});
-
 // Optimized middleware
 app.use(async (req, res, next) => {
   // Skip non-essential paths
