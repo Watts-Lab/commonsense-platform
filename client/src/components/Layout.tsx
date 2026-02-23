@@ -12,9 +12,10 @@ import Backend from "../apis/backend";
 import ProgressBar from "./ProgressBar";
 import { useSession } from "../context/SessionContext";
 import ScoreDisplay from "./ScoreDisplay";
-import "./style.css";
+import { LoadingSkeleton } from "./LoadingSkeleton";
 import { toast } from "sonner";
 
+import "./style.css";
 // ─── Types ───────────────────────────────────────────────
 
 export type StatementData = {
@@ -137,7 +138,9 @@ export default function Layout() {
       }
     } catch (error) {
       console.error("Failed to save survey:", error);
-      toast.error("Failed to save. Please check your connection and try again.");
+      toast.error(
+        "Failed to save. Please check your connection and try again.",
+      );
       // alert("Failed to save. Please check your connection and try again.");
     } finally {
       setIsAuxSaving(false);
@@ -308,21 +311,7 @@ export default function Layout() {
   // ─── JSX ───────────────────────────────────────────────
 
   if (loading) {
-    return (
-      <main className="min-h-screen bg-gray-50 dark:bg-gray-950 px-4 pb-20 pt-4">
-        <div className="max-w-3xl mx-auto">
-          <ProgressBar currentStep={0} totalSteps={10} />
-          <div className="animate-pulse">
-            <div className="h-48 bg-gray-200 dark:bg-gray-800 rounded-2xl mb-6"></div>
-            <div className="space-y-4">
-              <div className="h-10 bg-gray-200 dark:bg-gray-800 rounded-xl w-3/4"></div>
-              <div className="h-20 bg-gray-200 dark:bg-gray-800 rounded-xl"></div>
-              <div className="h-20 bg-gray-200 dark:bg-gray-800 rounded-xl"></div>
-            </div>
-          </div>
-        </div>
-      </main>
-    );
+    return <LoadingSkeleton />;
   }
 
   return (
@@ -342,13 +331,14 @@ export default function Layout() {
             />
           )}
 
-          <div className="mt-4">
-            {renderStep()}
-          </div>
+          <div className="mt-4">{renderStep()}</div>
 
           {isStatementStep && (
             <div className="flex flex-col space-y-8 mt-12 pb-10">
-              <nav className="flex items-center justify-between gap-4" aria-label="Survey navigation">
+              <nav
+                className="flex items-center justify-between gap-4"
+                aria-label="Survey navigation"
+              >
                 <button
                   onClick={back}
                   type="button"
@@ -361,7 +351,12 @@ export default function Layout() {
                     transition-all duration-150 active:scale-95"
                 >
                   {currentStepIndex === 0 ? (
-                    <Link to="/consent" className="w-full h-full flex items-center justify-center">{t("layout.start")}</Link>
+                    <Link
+                      to="/consent"
+                      className="w-full h-full flex items-center justify-center"
+                    >
+                      {t("layout.start")}
+                    </Link>
                   ) : (
                     t("layout.previous")
                   )}
