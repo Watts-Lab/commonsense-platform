@@ -1,12 +1,12 @@
 import React from "react";
 
-import Landing from "../components/Landing";
+import ConsentGate from "../components/ConsentGate";
 
 const ConsentPage: React.FC = () => {
   return (
-    <div className="flex flex-col min-h-screen overflow-hidden">
-      <main className="mx-auto p-3 max-w-3xl pb-14">
-        <Landing />
+    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-950">
+      <main className="mx-auto p-3 max-w-4xl w-full">
+        <ConsentGate />
       </main>
     </div>
   );

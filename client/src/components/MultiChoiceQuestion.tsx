@@ -1,10 +1,7 @@
 import React from "react";
 import Option from "./Option";
 import Tooltip from "./Tooltip";
-
 import "./style.css";
-
-// Assuming this is defined in `questions.ts`
 import { MultipleChoiceQuestionType } from "../data/questions";
 
 interface QuestionProps {
@@ -23,29 +20,33 @@ function MultiChoiceQuestion({
   const { id, question, description, possibleAnswers, tooltip, required } =
     questionInfo;
   const questionIdentifier = `${statementId}question${id}`;
+  const tooltipId = `tooltip-mc-${questionIdentifier}`;
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setAnswer(id, event.target.value);
   };
 
   return (
-    <div className="py-3" onChange={onChange}>
-      <div className="flex flex-row justify-between">
-        <h4
-          className="order-1 font-bold required-field dark:text-gray-200"
+    <fieldset className="py-4 border-none">
+      <div className="flex flex-row justify-between items-start gap-4 mb-2">
+        <legend
+          aria-describedby={tooltip ? tooltipId : undefined}
+          className="font-bold text-gray-900 dark:text-gray-200 leading-tight required-field"
           dangerouslySetInnerHTML={{ __html: question }}
         />
-        <Tooltip className="order-last" text={tooltip} />
+        {tooltip && (
+          <Tooltip id={tooltipId} className="mt-0.5" text={tooltip} />
+        )}
       </div>
 
       {description && (
         <p
-          className="text-gray-600 dark:text-gray-200"
+          className="text-sm text-gray-500 dark:text-gray-400 mb-3 leading-relaxed"
           dangerouslySetInnerHTML={{ __html: description }}
         ></p>
       )}
 
-      <ul className="grid w-full gap-2 md:grid-cols-2 py-2">
+      <ul className="grid w-full gap-3 grid-cols-1 md:grid-cols-2">
         {Object.entries(possibleAnswers).map(([key, value]) => {
           const optionIdentifier = `${questionIdentifier}-${key}`;
 
@@ -62,7 +63,7 @@ function MultiChoiceQuestion({
           );
         })}
       </ul>
-    </div>
+    </fieldset>
   );
 }
 

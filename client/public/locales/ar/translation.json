@@ -158,12 +158,32 @@
     "create-account-1": "إنشاء حساب (اختياري)",
     "your-email": "بريدك الإلكتروني",
     "placeholder": "name@company.com",
-    "create-account-2": "إنشاء حساب"
+    "create-account-2": "إنشاء حساب",
+    "your-score-title": "نتيجة الحس السليم الخاصة بك",
+    "additional-tests": "الاختبارات الإضافية المكتملة",
+    "how-you-compare": "كيف تقارن نفسك بالآخرين",
+    "highlighted-distribution": "نتيجمتك مميزة. التوزيع يعتمد على جميع المشاركين.",
+    "track-score-updates": "تتبع نتيجتك وهي تتحدث بمرور الوقت",
+    "show-crt": "إظهار تفاصيل أسئلة CRT",
+    "hide-crt": "إخفاء تفاصيل أسئلة CRT",
+    "your-answer": "إجابتك",
+    "correct-answer": "صحيح",
+    "belief": "الاعتقاد",
+    "similarity": "التشابه",
+    "consensus-label": "الإجماع",
+    "accuracy": "الدقة",
+    "cognitive-reflection-test": "اختبار التفكير المعرفي",
+    "reading-the-mind-in-the-eyes": "اختبار قراءة العقل في العيون",
+    "email-required": "البريد الإلكتروني مطلوب.",
+    "invalid-email": "يرجى إدخال عنوان بريد إلكتروني صحيح.",
+    "copy-code-success": "تم نسخ الكود بنجاح!",
+    "you": "أنت"
   },
   "twitter-text": {
     "share-button": "نسخ ومشاركة!",
     "percentage": "حساسي العام هو {{percentage}}%",
-    "check-yours": "تحقق من حساسيتك: commonsensicality.org/s/{{sessionId}}"
+    "check-yours": "تحقق من حساسيتك: commonsensicality.org/s/{{sessionId}}",
+    "copied": "تم النسخ!"
   },
   "notification": {
     "welcome": "مرحبا",
@@ -289,6 +309,32 @@
     "reasoning": {
       "text": "التفكير",
       "description": "هل يقدم الادعاء استنتاجاً يتم الوصول إليه عن طريق دمج المعرفة والمنطق؟"
+    }
+  },
+  "crt": {
+    "drill_hammer": {
+      "question": "يكلف مثقاب ومطرقة 330 دولاراً في المجموع. يكلف المثقاب 300 دولار أكثر من المطرقة. كم تكلف المطرقة؟",
+      "intuitiveExplanation": "330 دولاراً - 300 دولار = 30 دولاراً يبدو بديهياً"
+    },
+    "rachel": {
+      "question": "راشيل هي العاشرة في ترتيب الطول والعاشرة في ترتيب القصر في فصلها. كم عدد الفتيات في فصلها؟",
+      "intuitiveExplanation": "10 + 10 = 20 يبدو بديهياً"
+    },
+    "toaster": {
+      "question": "عندما يكون هناك عرض خصم بنسبة 20%، تكلف محمصة الخبز 100 دولار. كم تكلفتها عندما لا تكون في العرض؟",
+      "intuitiveExplanation": "100 دولار + 20% = 120 دولاراً يبدو بديهياً"
+    },
+    "apples": {
+      "question": "في سطل يحتوي على 60 تفاحة، التفاح الأحمر أكثر شيوعاً بـ 3 مرات من التفاح الأخضر. كم عدد التفاح الأخضر؟",
+      "intuitiveExplanation": "60 ÷ 3 = 20 يبدو بديهياً"
+    },
+    "eggs": {
+      "question": "بعد الفقس من بيضته، يتضاعف وزن طائر صغير كل يوم. بحلول اليوم 12 يزن رطلاً واحداً. في أي يوم كان وزن الطائر نصف رطل؟",
+      "intuitiveExplanation": "12 ÷ 2 = 6 يبدو بديهياً"
+    },
+    "dog_cat": {
+      "question": "يزن كلب وقطة 100 رطل في المجموع. يزن الكلب 86 رطلاً. ما هو الفرق في الوزن بين الكلب والقطة؟",
+      "intuitiveExplanation": "86 رطلاً (وزن الكلب) يبدو بديهياً"
     }
   }
 }

@@ -160,12 +160,32 @@
     "create-account-1": "Create an account (optional)",
     "your-email": "Your email",
     "placeholder": "name@company.com",
-    "create-account-2": "Create an account"
+    "create-account-2": "Create an account",
+    "your-score-title": "Your Common Sense Score",
+    "additional-tests": "Additional Tests Completed",
+    "how-you-compare": "How You Compare",
+    "highlighted-distribution": "Your score is highlighted. Distribution based on all participants.",
+    "track-score-updates": "Track your score as it updates over time",
+    "show-crt": "Show CRT question breakdown",
+    "hide-crt": "Hide CRT question breakdown",
+    "your-answer": "Your answer",
+    "correct-answer": "Correct",
+    "belief": "Belief",
+    "similarity": "Similarity",
+    "consensus-label": "Consensus",
+    "accuracy": "Accuracy",
+    "cognitive-reflection-test": "Cognitive Reflection Test",
+    "reading-the-mind-in-the-eyes": "Reading the Mind in the Eyes",
+    "email-required": "Email is required.",
+    "invalid-email": "Please enter a valid email address.",
+    "copy-code-success": "Code copied successfully!",
+    "you": "You"
   },
   "twitter-text": {
     "share-button": "Copy & Share!",
     "percentage": "My common sense is {{percentage}}%",
-    "check-yours": "Check yours: commonsensicality.org/s/{{sessionId}}"
+    "check-yours": "Check yours: commonsensicality.org/s/{{sessionId}}",
+    "copied": "Copied!"
   },
   "notification": {
     "welcome": "Welcome",
@@ -291,6 +311,32 @@
     "reasoning": {
       "text": "Reasoning",
       "description": "Does the claim present a conclusion that is arrived at by combining knowledge and logic?"
+    }
+  },
+  "crt": {
+    "drill_hammer": {
+      "question": "A drill and a hammer cost $330 in total. The drill costs $300 more than the hammer. How much does the hammer cost?",
+      "intuitiveExplanation": "$330 − $300 = $30 feels obvious"
+    },
+    "rachel": {
+      "question": "Rachel is the 10th tallest and the 10th shortest girl in her class. How many girls are in her class?",
+      "intuitiveExplanation": "10 + 10 = 20 feels obvious"
+    },
+    "toaster": {
+      "question": "When on sale for 20% off, a toaster costs $100. What does it cost when not on sale?",
+      "intuitiveExplanation": "$100 + 20% = $120 feels obvious"
+    },
+    "apples": {
+      "question": "In a pail of 60 apples, red apples are 3 times more common than green ones. How many are green?",
+      "intuitiveExplanation": "60 ÷ 3 = 20 feels obvious"
+    },
+    "eggs": {
+      "question": "After hatching from its egg, a baby bird doubles in weight every day. By day 12 it weighs a pound. On what day does the bird weigh half a pound?",
+      "intuitiveExplanation": "12 ÷ 2 = 6 feels obvious"
+    },
+    "dog_cat": {
+      "question": "A dog and a cat weigh 100 pounds in total. The dog weighs 86 pounds. What is the difference in weight between the dog and the cat?",
+      "intuitiveExplanation": "86 lbs (the dog's weight) feels obvious"
     }
   }
 }

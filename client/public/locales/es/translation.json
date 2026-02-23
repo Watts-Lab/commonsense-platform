@@ -164,12 +164,32 @@
     "create-account-1": "Crear una cuenta (opcional)",
     "your-email": "Tu correo electrónico",
     "placeholder": "nombre@empresa.com",
-    "create-account-2": "Crear una cuenta"
+    "create-account-2": "Crear una cuenta",
+    "your-score-title": "Tu Puntuación de Sentido Común",
+    "additional-tests": "Pruebas Adicionales Completadas",
+    "how-you-compare": "Cómo te comparas",
+    "highlighted-distribution": "Tu puntuación está resaltada. Distribución basada en todos los participantes.",
+    "track-score-updates": "Sigue tu puntuación a medida que se actualiza con el tiempo",
+    "show-crt": "Mostrar desglose de preguntas CRT",
+    "hide-crt": "Ocultar desglose de preguntas CRT",
+    "your-answer": "Tu respuesta",
+    "correct-answer": "Correcto",
+    "belief": "Creencia",
+    "similarity": "Similitud",
+    "consensus-label": "Consenso",
+    "accuracy": "Precisión",
+    "cognitive-reflection-test": "Prueba de Reflexión Cognitiva",
+    "reading-the-mind-in-the-eyes": "Lectura de la Mente en los Ojos",
+    "email-required": "El correo electrónico es obligatorio.",
+    "invalid-email": "Por favor, introduce una dirección de correo electrónico válida.",
+    "copy-code-success": "¡Código copiado con éxito!",
+    "you": "Tú"
   },
   "twitter-text": {
     "share-button": "¡Copiar y Compartir!",
     "percentage": "Mi sentido común es del {{percentage}}%",
-    "check-yours": "Comprueba el tuyo: commonsensicality.org/s/{{sessionId}}"
+    "check-yours": "Comprueba el tuyo: commonsensicality.org/s/{{sessionId}}",
+    "copied": "¡Copiado!"
   },
   "notification": {
     "welcome": "Bienvenido",
@@ -295,6 +315,32 @@
     "reasoning": {
       "text": "Razonamiento",
       "description": "¿La declaración presenta una conclusión que se obtiene combinando conocimiento y lógica?"
+    }
+  },
+  "crt": {
+    "drill_hammer": {
+      "question": "Un taladro y un martillo cuestan $330 en total. El taladro cuesta $300 más que el martillo. ¿Cuánto cuesta el martillo?",
+      "intuitiveExplanation": "$330 − $300 = $30 parece obvio"
+    },
+    "rachel": {
+      "question": "Raquel es la décima chica más alta y la décima más baja de su clase. ¿Cuántas chicas hay en su clase?",
+      "intuitiveExplanation": "10 + 10 = 20 parece obvio"
+    },
+    "toaster": {
+      "question": "En oferta con un 20% de descuento, una tostadora cuesta $100. ¿Cuál es su precio sin oferta?",
+      "intuitiveExplanation": "$100 + 20% = $120 parece obvio"
+    },
+    "apples": {
+      "question": "En un cubo de 60 manzanas, las rojas son 3 veces más comunes que las verdes. ¿Cuántas son verdes?",
+      "intuitiveExplanation": "60 ÷ 3 = 20 parece obvio"
+    },
+    "eggs": {
+      "question": "Después de salir del cascarón, un polluelo duplica su peso cada día. Al día 12 pesa una libra. ¿En qué día pesaba media libra?",
+      "intuitiveExplanation": "12 ÷ 2 = 6 parece obvio"
+    },
+    "dog_cat": {
+      "question": "Un perro y un gato pesan 100 libras en total. El perro pesa 86 libras. ¿Cuál es la diferencia de peso entre el perro y el gato?",
+      "intuitiveExplanation": "86 lbs (el peso del perro) parece obvio"
     }
   }
 }

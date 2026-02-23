@@ -158,12 +158,32 @@
     "create-account-1": "创建账户（可选）",
     "your-email": "你的电子邮件",
     "placeholder": "name@company.com",
-    "create-account-2": "创建账户"
+    "create-account-2": "创建账户",
+    "your-score-title": "您的常识得分",
+    "additional-tests": "已完成的附加测试",
+    "how-you-compare": "您的得分比较",
+    "highlighted-distribution": "您的分数已突出显示。分布基于所有参与者。",
+    "track-score-updates": "跟踪随时间更新的分数",
+    "show-crt": "显示 CRT 题目解析",
+    "hide-crt": "隐藏 CRT 题目解析",
+    "your-answer": "您的回答",
+    "correct-answer": "正确",
+    "belief": "信念",
+    "similarity": "相似度",
+    "consensus-label": "共识",
+    "accuracy": "准确度",
+    "cognitive-reflection-test": "认知反思测试",
+    "reading-the-mind-in-the-eyes": "眼读心测试",
+    "email-required": "电子邮箱是必填项。",
+    "invalid-email": "请输入有效的电子邮箱地址。",
+    "copy-code-success": "代码复制成功！",
+    "you": "您"
   },
   "twitter-text": {
     "share-button": "复制并分享！",
     "percentage": "我的常识是{{percentage}}%",
-    "check-yours": "检查你的：commonsensicality.org/s/{{sessionId}}"
+    "check-yours": "检查你的：commonsensicality.org/s/{{sessionId}}",
+    "copied": "已复制！"
   },
   "notification": {
     "welcome": "欢迎",
@@ -289,6 +309,32 @@
     "reasoning": {
       "text": "推理",
       "description": "声明是否提出了通过结合知识和逻辑得出的结论？"
+    }
+  },
+  "crt": {
+    "drill_hammer": {
+      "question": "一把电钻和一个锤子的总价是 330 元。电钻比锤子贵 300 元。锤子多少钱？",
+      "intuitiveExplanation": "330 - 300 = 30 元 看起来很直观"
+    },
+    "rachel": {
+      "question": "瑞秋在班里的身高排名中，既是正数第十，也是倒数第十。班里一共有多少个女生？",
+      "intuitiveExplanation": "10 + 10 = 20 看起来很直观"
+    },
+    "toaster": {
+      "question": "在一个打八折（20% off）的活动中，一个烤面包机的价格是 100 元。活动前的原价是多少？",
+      "intuitiveExplanation": "100 + 20% = 120 元 看起来很直观"
+    },
+    "apples": {
+      "question": "一桶 60 个苹果中，红苹果的数量是绿苹果的 3 倍。绿苹果有多少个？",
+      "intuitiveExplanation": "60 ÷ 3 = 20 看起来很直观"
+    },
+    "eggs": {
+      "question": "小鸟孵化后，体重每天翻一倍。到第 12 天时，它的体重是一磅。在哪一天它的体重是半磅？",
+      "intuitiveExplanation": "12 ÷ 2 = 6 看起来很直观"
+    },
+    "dog_cat": {
+      "question": "一只狗和一只猫的总重量是 100 磅。狗的重量是 86 磅。狗和猫的重量差是多少？",
+      "intuitiveExplanation": "86 磅（狗的重量） 看起来很直观"
     }
   }
 }

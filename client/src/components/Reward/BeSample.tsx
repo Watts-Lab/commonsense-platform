@@ -56,7 +56,7 @@ function BeSample({
                 clipRule="evenodd"
               />
             </svg>
-            <span className="font-medium">Code copied successfully!</span>
+            <span className="font-medium">{t("result.copy-code-success")}</span>
           </div>
         )}
 

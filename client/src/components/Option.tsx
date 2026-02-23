@@ -1,45 +1,68 @@
 import React from "react";
-
 import "./style.css";
 
 interface OptionProps {
   id_v: string;
-  statementClass: string;
   text: string;
+  statementClass: string;
   checked: boolean;
   required: boolean;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-function Option(props: OptionProps) {
+function Option({
+  id_v,
+  text,
+  statementClass,
+  checked,
+  required,
+  onChange,
+}: OptionProps) {
   return (
-    //  peer opacity-0 h-px w-px absolute
-    <li>
+    <li className="relative">
       <input
         type="radio"
-        id={props.id_v}
-        name={props.statementClass}
-        value={props.id_v}
-        className="peer opacity-0 h-px w-px absolute"
-        checked={props.checked}
-        onChange={props.onChange}
-        required={props.required}
+        id={id_v}
+        name={statementClass}
+        value={id_v}
+        className="sr-only peer"
+        required={required}
+        onChange={onChange}
+        checked={checked}
       />
       <label
-        htmlFor={props.id_v}
+        htmlFor={id_v}
         className="
-      inline-flex items-center justify-between w-full h-20 p-5 cursor-pointer rounded-md
-      text-sm text-gray-800 bg-gray-200 border border-gray-200
-      hover:bg-gray-300 hover:text-gray-600
-      peer-checked:bg-blue-600 peer-checked:border-blue-600 peer-checked:text-white
-      peer-focus:ring-2 peer-focus:ring-blue-300
-      dark:text-gray-100 dark:bg-gray-800 dark:border-gray-600
-      dark:hover:bg-gray-700 dark:hover:text-white
-      dark:peer-checked:bg-blue-500 dark:peer-checked:border-blue-500 dark:peer-checked:text-white
-      dark:peer-focus:ring-2 dark:peer-focus:ring-blue-800
-    "
+          inline-flex items-center justify-between w-full min-h-[5rem] p-4 cursor-pointer rounded-2xl
+          text-sm font-semibold
+          bg-white text-gray-700 border-2 border-gray-200
+          hover:bg-indigo-50/30 hover:border-indigo-300 hover:text-indigo-900
+
+          peer-checked:bg-gradient-to-br
+          peer-checked:from-sky-600
+          peer-checked:to-indigo-700
+          peer-checked:border-indigo-500
+          peer-checked:text-white
+          peer-checked:shadow-lg
+
+          peer-focus-visible:ring-4 peer-focus-visible:ring-indigo-300
+
+          dark:bg-gray-900 dark:text-gray-200 dark:border-gray-700
+          dark:hover:bg-indigo-900/20 dark:hover:border-indigo-500 dark:hover:text-white
+
+          dark:peer-checked:from-sky-600
+          dark:peer-checked:to-indigo-700
+          dark:peer-checked:border-indigo-500
+          dark:peer-checked:text-white
+
+          dark:peer-focus-visible:ring-indigo-900/60
+
+          transition-all duration-200 active:scale-[0.98] shadow-md hover:shadow-lg
+  "
       >
-        <div className="block w-full text-md">{props.text}</div>
+        <div className="flex flex-col w-full">
+          <div className="w-full text-md leading-snug">{text}</div>
+        </div>
       </label>
     </li>
   );
