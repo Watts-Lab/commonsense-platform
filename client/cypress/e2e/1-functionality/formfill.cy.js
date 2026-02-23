@@ -43,9 +43,9 @@ describe("fill out the survay", () => {
       //   .check({ force: true })
       //   .should("be.checked");
 
-      // Check if it's the 15th iteration and select the "Finish" button
+      // Check if it's the 15th iteration and select the "Finish" button (it says "Continue")
       if (i === numberOfIterations - 1) {
-        cy.contains("button", "Next →").click({ force: true });
+        cy.contains("button", "Continue").click({ force: true });
       } else {
         // Otherwise, click the "Next" button (modify the selector as needed)
         cy.contains("button", "Next →").click({ force: true });
@@ -64,30 +64,33 @@ describe("fill out the survay", () => {
     cy.get("input[type='button'][value='Complete']").click();
 
     // Go through RME questions
+    // SurveyJS IDs are dynamic, so we use the stable name prefix 'rme_item'
+    const rmeItemPrefixes = [
+      "rme_item_2",    // Just examples or generic matching if we know the names, 
+      "rme_item_4",    // but better to just find the visible radio on the page.
+      "rme_item_6",    
+      "rme_item_11",   
+      "rme_item_15",   
+      "rme_item_17",   
+      "rme_item_22",   
+      "rme_item_24",   
+      "rme_item_27",   
+      "rme_item_28",   
+    ]; // There are 10 questions in RmeTen normally, but it could be 10 iterations
 
-    const list_of_ids = [
-      "sq_107i_0",
-      "sq_109i_0",
-      "sq_111i_0",
-      "sq_113i_0",
-      "sq_115i_0",
-      "sq_117i_0",
-      "sq_119i_0",
-      "sq_121i_0",
-      "sq_123i_0",
-      "sq_125i_0",
-    ];
-
-    list_of_ids.forEach((id, index) => {
-      cy.get(`input[type='radio'][id*='${id}']`)
+    for (let j = 0; j < 10; j++) {
+      // Find the first radio input on the current page and check it
+      cy.get("input[type='radio'][name*='rme_item_']")
+        .first()
         .check({ force: true })
         .should("be.checked");
-      if (index !== list_of_ids.length - 1) {
+
+      if (j !== 9) {
         cy.get("input[type='button'][value='Next']").click();
       } else {
         cy.get("input[type='button'][value='Complete']").click();
       }
-    });
+    }
 
     // Fill the demographic form
     // Birth year

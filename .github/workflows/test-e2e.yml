@@ -15,6 +15,9 @@ jobs:
       CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
       COMMIT_INFO_BRANCH: ${{ github.ref_name }}
 
+      META_PIXEL_ID: "some_pixel_id"
+      META_ACCESS_TOKEN: "some_access_token"
+
     runs-on: ubuntu-latest
 
     services:

@@ -5,8 +5,10 @@ import Backend from "../apis/backend";
 import TwitterText from "../utils/TwitterText";
 import NotificationBox from "../utils/NotificationBox";
 import useStickyState from "../hooks/useStickyState";
-
-import { statementStorageData } from "./Layout";
+import { useTranslation } from "react-i18next";
+import ATurk from "./Reward/ATurk";
+import BeSample from "./Reward/BeSample";
+import { StatementData } from "./Layout";
 import { useSession } from "../context/SessionContext";
 import { rawData } from "../partials/Scores";
 
@@ -44,9 +46,6 @@ interface RmeTen {
     normScore: number;
   };
 }
-import { useTranslation } from "react-i18next";
-import ATurk from "./Reward/ATurk";
-import BeSample from "./Reward/BeSample";
 
 type ResultProps = {
   experimentId?: number;
@@ -54,9 +53,10 @@ type ResultProps = {
 
 function Result({ experimentId }: ResultProps) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_statementsData, setStatementsData] = useStickyState<
-    statementStorageData[]
-  >([], "statementsData");
+  const [_statementsData, setStatementsData] = useStickyState<StatementData[]>(
+    [],
+    "statementsData",
+  );
 
   const {
     state: { sessionId, urlParams },
@@ -105,13 +105,13 @@ function Result({ experimentId }: ResultProps) {
         if (response.data.commonsensicality !== 0) {
           setCommonSenseScore({
             commonsense: Math.round(
-              Number(Number(response.data.commonsensicality).toFixed(2)) * 100
+              Number(Number(response.data.commonsensicality).toFixed(2)) * 100,
             ),
             awareness: Math.round(
-              Number(Number(response.data.awareness).toFixed(2)) * 100
+              Number(Number(response.data.awareness).toFixed(2)) * 100,
             ),
             consensus: Math.round(
-              Number(Number(response.data.consensus).toFixed(2)) * 100
+              Number(Number(response.data.consensus).toFixed(2)) * 100,
             ),
           });
         }
@@ -131,7 +131,7 @@ function Result({ experimentId }: ResultProps) {
     }
     const hasResponseId = urlParams.find((obj) => obj.key === "response_id");
     const hasAssignmentId = urlParams.find(
-      (obj) => obj.key === "assignment_id"
+      (obj) => obj.key === "assignment_id",
     );
     if (hasResponseId && hasAssignmentId) {
       setATurkBox(true);
@@ -149,7 +149,7 @@ function Result({ experimentId }: ResultProps) {
   };
 
   const enterEmail = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     setUserEmail(e.target.value);
     if (emailError) {
@@ -183,7 +183,7 @@ function Result({ experimentId }: ResultProps) {
     useState(
       rawData
         .sort((a, b) => a.commonsensicality - b.commonsensicality)
-        .map((value) => ({ ...value, count: 1 }))
+        .map((value) => ({ ...value, count: 1 })),
     );
 
   useEffect(() => {
@@ -233,15 +233,15 @@ function Result({ experimentId }: ResultProps) {
                   sessionId: string;
                   commonsensicality: number;
                   count: number;
-                }[]
+                }[],
               ) => (bin.some((r) => r.sessionId === "You") ? 1 : 0.3),
             },
             {
               thresholds: 20,
               // stroke: "black",
               x: "commonsensicality",
-            }
-          )
+            },
+          ),
         ),
         Plot.ruleY([0]),
       ],
@@ -258,12 +258,12 @@ function Result({ experimentId }: ResultProps) {
     try {
       if (aTurkType === "besample") {
         const responseId = urlParams.find(
-          (obj) => obj.key === "response_id"
+          (obj) => obj.key === "response_id",
         )?.value;
 
         const BeSampleId = 97819;
         await navigator.clipboard.writeText(
-          String(Number(responseId) * BeSampleId)
+          String(Number(responseId) * BeSampleId),
         );
         setCopySuccess(true);
         setTimeout(() => setCopySuccess(false), 3000);

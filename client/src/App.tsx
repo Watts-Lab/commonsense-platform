@@ -28,6 +28,7 @@ import Demo from "./pages/Demo";
 import GDPRNotice from "./components/GDPRNotice";
 import Privacy from "./pages/Privacy";
 import UrlParamCapture from "./components/UrlParamCapture";
+import { Toaster } from "sonner";
 
 const App = () => {
   useEffect(() => {
@@ -45,6 +46,8 @@ const App = () => {
     <div className="App">
       <div className="mx-auto">
         <UrlParamCapture />
+        <Toaster position="bottom-right" richColors />
+
 
         <Routes>
           <Route path="/" element={<Home />} />

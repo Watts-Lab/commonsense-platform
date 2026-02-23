@@ -9,8 +9,8 @@ module.exports = (session, sessionStore) => {
       path: "/",
       maxAge: null, // Session will not expire based on time
       httpOnly: true,
-      sameSite: 'None',
-      secure: true, // remove in production
+      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+      secure: process.env.NODE_ENV === "production", // only use secure in production
     },
   });
 };

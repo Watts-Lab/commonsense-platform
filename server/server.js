@@ -186,6 +186,8 @@ app.get("/api/images/*", (req, res) => {
 });
 
 app.get("/api", (req, res) => {
+  // Touching the session ensures the cookie is sent even if it's a new session
+  req.session.initialized = true;
   res.send(req.sessionID);
 });
 

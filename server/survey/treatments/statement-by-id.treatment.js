@@ -1,6 +1,7 @@
 const { Sequelize } = require("sequelize");
 const { statements } = require("../../models");
 const { stringy } = require("./utils/id-generator");
+const { seededShuffle } = require("./utils/seeded-shuffle");
 
 /**
  * Retrieves statements by their IDs.
@@ -9,10 +10,11 @@ const { stringy } = require("./utils/id-generator");
  * @param {Array<number>} params.ids - The IDs of the statements to retrieve.
  * @param {string} [params.language] - The language code of the statements to retrieve.
  * @param {number} [params.limit] - The maximum number of statements to return.
+ * @param {string} [params.sessionId] - The session ID for deterministic shuffling.
  * @returns {Promise<{ id: string, description: string, answer: Array<{ id: number, statement: string }> }>}
  * - A promise that resolves to an object containing the statements.
  */
-const GetStatementById = async ({ ids, language, limit }) => {
+const GetStatementById = async ({ ids, language, limit, sessionId }) => {
   const languageMap = {
     en: "statement",
     zh: "statement_zh",
@@ -37,15 +39,23 @@ const GetStatementById = async ({ ids, language, limit }) => {
       id: ids,
     },
     attributes: ["id", [selectedColumn, "statement"]], // Alias the selected column to 'statement'
-    order: Sequelize.literal("rand()"),
+    // No ORDER BY - we'll shuffle deterministically below
   });
+
+  // Convert to plain objects for shuffling
+  const plainStatements = statementsText.map((s) => s.toJSON());
+
+  // Apply deterministic shuffle based on sessionId
+  const shuffledStatements = sessionId
+    ? seededShuffle(plainStatements, sessionId)
+    : plainStatements;
 
   return {
     id: stringy({
       ids,
     }),
     description: "GetStatementById",
-    answer: statementsText,
+    answer: shuffledStatements,
   };
 };
 

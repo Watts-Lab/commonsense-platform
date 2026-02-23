@@ -1,4 +1,5 @@
 const experiments = require("../survey/experiments");
+const db = require("../models");
 const { sendMetaEvent } = require("./meta");
 const {
   createExperiment,
@@ -33,7 +34,7 @@ const returnStatements = async (req, res) => {
           validity: () => true,
           ...treatment,
         };
-      })
+      }),
     )
     .filter((treatment) => {
       return treatment.validity({ ...req }, treatment.params);
@@ -48,7 +49,7 @@ const returnStatements = async (req, res) => {
       };
     }
     acc[experiment.experiment_name].experiment_valid_treatments.push(
-      experiment
+      experiment,
     );
     return acc;
   }, {});
@@ -58,7 +59,7 @@ const returnStatements = async (req, res) => {
     const experiment = grouped_experiments[experiment_name];
     const assigned_treatment = await experiment.experiment_assigner(
       experiment.experiment_valid_treatments,
-      req
+      req,
     );
 
     // If a treatment was assigned, add it to the experiment
@@ -72,6 +73,64 @@ const returnStatements = async (req, res) => {
     }
   }
 
+  // 1. Check for an existing unfinished experiment for this session
+  const user_session_id = req.query.sessionId;
+  try {
+    const unfinishedExperiment = await db.experiments.findOne({
+      where: {
+        userSessionId: user_session_id,
+        finished: false,
+      },
+      order: [["createdAt", "DESC"]], // Get the most recent one
+    });
+
+    if (unfinishedExperiment) {
+      console.log("Found unfinished experiment for session:", user_session_id);
+
+      // Fetch all answers submitted after this experiment started
+      const experimentAnswers = await db.answers.findAll({
+        where: {
+          sessionId: user_session_id,
+          createdAt: {
+            [db.Sequelize.Op.gte]: unfinishedExperiment.createdAt,
+          },
+        },
+      });
+
+      // Merge answers into the statement list
+      const statementsWithAnswers = unfinishedExperiment.statementList.map(
+        (statement) => {
+          const answersForThisStatement = experimentAnswers.filter(
+            (ans) => ans.statementId === statement.id,
+          );
+
+          // If we found any answers, we consider it "answereSaved"
+          // We can also populate the answer array if the frontend needs it
+          // Note: The frontend expects an `answers` array matching the questionData length
+          // Here we just mark it saved; the frontend can still use localStorage for the actual values if it wants
+          // but marking it saved in the backend-driven list is the key for step calculation.
+          return {
+            ...statement,
+            answereSaved: answersForThisStatement.length > 0,
+            // If you want to merge actual column data, you'd need the question mapping here too
+            // For now, setting answereSaved based on backend truth is the primary requirement.
+          };
+        },
+      );
+
+      return res.json({
+        statements: statementsWithAnswers,
+        experimentId: unfinishedExperiment.id,
+        experimentType: unfinishedExperiment.experimentType,
+        isResumed: true,
+      });
+    }
+  } catch (error) {
+    console.error("Error checking for unfinished experiment:", error);
+    // Continue with creating a new one if lookup fails
+  }
+
+  // Define random_experiment variable
   let random_experiment = {};
 
   // if grouped_experiments is empty, asign a default treatment
@@ -80,7 +139,7 @@ const returnStatements = async (req, res) => {
       assigned_treatment: {
         experiment_name: "default",
         params: {
-          sessionId: req.query.sessionId,
+          sessionId: user_session_id,
           validStatementList: [],
           numberOfStatements: 15,
         },
@@ -101,9 +160,9 @@ const returnStatements = async (req, res) => {
   const result = await random_experiment.assigned_treatment.function({
     ...random_experiment.assigned_treatment.params,
     language,
+    sessionId: user_session_id, // Ensure sessionId is passed for deterministic shuffle
   });
 
-  const user_session_id = req.query.sessionId;
   // Remove sessionId from req.query
   delete req.query.sessionId;
 
@@ -172,22 +231,26 @@ const saveExperiment = async (req, res) => {
     await updateExperiment(experimentId, { finished: true });
     console.log("Experiment saved:", experimentId);
 
-    // Send Meta CAPI event
-    const result = await sendMetaEvent({
-      eventName: "SurveyCompleted",
-      fbp,
-      fbc,
-      eventId: experimentId,
-      clientIp,
-      userAgent,
-      eventSourceUrl,
-    });
+    // Send Meta CAPI event, catch errors separately so it doesn't break the user flow
+    try {
+      const result = await sendMetaEvent({
+        eventName: "SurveyCompleted",
+        fbp,
+        fbc,
+        eventId: experimentId,
+        clientIp,
+        userAgent,
+        eventSourceUrl,
+      });
+      console.log("Meta event result:", result);
+    } catch (metaError) {
+      console.error("Error sending Meta event (non-fatal):", metaError);
+    }
 
-    console.log("Meta event result:", result);
     res.json({ ok: true });
   } catch (error) {
-    console.error("Error saving experiment or sending event:", error);
-    res.status(500).json({ error: "Internal Server Error" });
+    console.error("Error saving experiment:", error);
+    res.status(400).json({ error: "Failed to save experiment" });
   }
 };
 
