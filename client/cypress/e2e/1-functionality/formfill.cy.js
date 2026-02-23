@@ -43,9 +43,9 @@ describe("fill out the survay", () => {
       //   .check({ force: true })
       //   .should("be.checked");
 
-      // Check if it's the 15th iteration and select the "Finish" button
+      // Check if it's the 15th iteration and select the "Finish" button (it says "Continue")
       if (i === numberOfIterations - 1) {
-        cy.contains("button", "Next →").click({ force: true });
+        cy.contains("button", "Continue").click({ force: true });
       } else {
         // Otherwise, click the "Next" button (modify the selector as needed)
         cy.contains("button", "Next →").click({ force: true });
