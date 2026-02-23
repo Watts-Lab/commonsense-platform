@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 // @ts-expect-error no types available
@@ -9,206 +9,173 @@ import Result from "./Result";
 import { questionData } from "../data/questions";
 import useStickyState from "../hooks/useStickyState";
 import Backend from "../apis/backend";
-
-import "./style.css";
 import ProgressBar from "./ProgressBar";
 import { useSession } from "../context/SessionContext";
 import ScoreDisplay from "./ScoreDisplay";
+import "./style.css";
+import { toast } from "sonner";
 
-export type statementStorageData = {
+// ─── Types ───────────────────────────────────────────────
+
+export type StatementData = {
   id: number;
   answers: string[];
-  answereSaved: boolean;
+  answerSaved: boolean;
 };
 
-function Layout() {
+type StatementStep = {
+  type: "statement";
+  id: number;
+  text: string;
+  image?: string;
+};
+
+type SurveyStep = {
+  type: "crt" | "rmet" | "demographics";
+};
+
+type ResultStep = {
+  type: "result";
+  experimentId: number;
+};
+
+type Step = StatementStep | SurveyStep | ResultStep;
+
+// Surveys to append after statements — skip if already completed
+const SURVEY_CONFIGS = [
+  { type: "crt" as const, localStorageKey: "CRT" },
+  { type: "rmet" as const, localStorageKey: "rmeTen" },
+  {
+    type: "demographics" as const,
+    localStorageKey: "demographicsLongInternational",
+  },
+];
+
+// ─── Component ───────────────────────────────────────────
+
+export default function Layout() {
   const navigate = useNavigate();
-  const [isAuxSaving, setIsAuxSaving] = useState(false);
-  const [initialStepIndex, setInitialStepIndex] = useState(0);
-
-  const [loading, setLoading] = useState(false);
   const [searchParams] = useSearchParams();
-
-  // get the current language
   const {
     t,
     i18n: { language },
   } = useTranslation();
+  const {
+    state: { sessionId, urlParams },
+    actions: { captureUrlParams },
+  } = useSession();
 
-  const [statementArray, setStatementArray] = useState<ReactNode[]>([]);
-  const [statementsData, setStatementsData] = useStickyState<
-    statementStorageData[]
-  >([], "statementsData");
+  // ─── State ─────────────────────────────────────────────
+
+  const [loading, setLoading] = useState(true);
+  const [isAuxSaving, setIsAuxSaving] = useState(false);
+  const [initialStepIndex, setInitialStepIndex] = useState(0);
+
+  // Data-driven step list (not ReactNode[])
+  const [steps, setSteps] = useState<Step[]>([]);
+
+  // Answer data for statement steps only
+  const [statementsData, setStatementsData] = useStickyState<StatementData[]>(
+    [],
+    "statementsData",
+  );
+
   const [currentScore, setCurrentScore] = useState({
     commonsense: 0,
     awareness: 0,
     consensus: 0,
   });
 
-  const [surveyLength, setSurveyLength] = useState(0);
+  // ─── Derived values ────────────────────────────────────
 
-  const {
-    state: { sessionId, urlParams },
-    actions: { captureUrlParams },
-  } = useSession();
+  const statementCount = useMemo(
+    () => steps.filter((s) => s.type === "statement").length,
+    [steps],
+  );
+
+  // ─── Handlers ──────────────────────────────────────────
+
+  const handleStatementChange = (id: number, updatedAnswers: string[]) => {
+    setStatementsData((prev) =>
+      prev.map((d) => (d.id === id ? { ...d, answers: updatedAnswers } : d)),
+    );
+  };
+
+  const handleAnswerSaved = (id: number, saved: boolean) => {
+    setStatementsData((prev) =>
+      prev.map((d) => (d.id === id ? { ...d, answerSaved: saved } : d)),
+    );
+  };
+
+  const updateScore = async () => {
+    try {
+      const { data } = await Backend.post("/results", { sessionId });
+      if (data.commonsensicality !== 0) {
+        setCurrentScore({
+          commonsense: Math.round(data.commonsensicality * 100),
+          awareness: Math.round(data.awareness * 100),
+          consensus: Math.round(data.consensus * 100),
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching score:", error);
+    }
+  };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const onCompleteCallback = async (record: any) => {
+  const onSurveyComplete = async (record: any) => {
     setIsAuxSaving(true);
     try {
       await Backend.post("/experiments/individual", {
-        sessionId: sessionId,
+        sessionId,
         informationType: record.surveyName,
         experimentInfo: record,
       });
-
-      setCurrentStepIndex((i) => i + 1);
+      setCurrentStepIndex((i: number) => i + 1);
       if (record.surveyName !== "demographics") {
         localStorage.setItem(record.surveyName, JSON.stringify(record));
       }
     } catch (error) {
-      console.error("Failed to save survey results:", error);
-      alert(
-        "Failed to save results. Please check your connection and try again.",
-      );
-      throw error;
+      console.error("Failed to save survey:", error);
+      toast.error("Failed to save. Please check your connection and try again.");
+      // alert("Failed to save. Please check your connection and try again.");
     } finally {
       setIsAuxSaving(false);
     }
   };
 
-  const handleAnswerSaving = (tid: number, answerState: boolean) => {
-    setStatementsData((prevState) =>
-      prevState.map((data) =>
-        data.id === tid
-          ? { id: tid, answers: data.answers, answereSaved: answerState }
-          : data,
-      ),
-    );
-  };
-
-  const pushResultComponent = (experimentId: number) => {
-    setStatementArray((oldArray) => [
-      ...oldArray,
-      <CRT
-        key="crt"
-        storageName="crt"
-        onComplete={onCompleteCallback}
-        language={language}
-      />,
-      <RmeTen
-        key="rmet"
-        storageName="rmeten"
-        onComplete={onCompleteCallback}
-        language={language}
-      />,
-      <DemographicsLongInternational
-        key="demographic"
-        storageName="demographics"
-        onComplete={onCompleteCallback}
-        language={language}
-      />,
-      <Result key={oldArray.length} experimentId={experimentId} />,
-    ]);
-  };
-
-  const pushNewStatement = (statementId: number, statementText: string) => {
-    setStatementsData((oldArray) => [
-      ...oldArray,
-      {
-        id: statementId,
-        answers: ["", "", "", "", "", ""],
-        answereSaved: false,
-      },
-    ]);
-
-    setStatementArray((oldArray) => [
-      ...oldArray,
-      <Statement
-        key={oldArray.length}
-        statementText={statementText}
-        statementId={statementId}
-        onChange={handleStatementChange}
-        data={
-          statementsData[oldArray.length] || {
-            id: statementId,
-            answers: ["", "", "", "", "", ""],
-            answereSaved: false,
-          }
-        }
-      />,
-    ]);
-  };
-
-  const updateScore = async () => {
-    try {
-      const response = await Backend.post("/results", { sessionId });
-      if (response.data.commonsensicality !== 0) {
-        setCurrentScore({
-          commonsense: Math.round(
-            Number(response.data.commonsensicality.toFixed(2)) * 100,
-          ),
-          awareness: Math.round(
-            Number(response.data.awareness.toFixed(2)) * 100,
-          ),
-          consensus: Math.round(
-            Number(response.data.consensus.toFixed(2)) * 100,
-          ),
-        });
-      }
-    } catch (error) {
-      console.error("Error fetching updated score:", error);
-    }
-  };
+  // ─── Multi-step navigation ─────────────────────────────
 
   const {
-    setCurrentStepIndex,
     currentStepIndex,
+    setCurrentStepIndex,
     back,
     next,
     loading: isSaving,
   } = MultiStepForm({
-    steps: statementsData,
-    handleAnswerSaving: handleAnswerSaving,
-    pushNewStatement: pushNewStatement,
+    statementsData,
+    handleAnswerSaved,
     updateScore,
     initialStep: initialStepIndex,
   });
 
-  const handleStatementChange = (tid: number, updatedData: string[]) => {
-    setStatementsData((prevState) =>
-      prevState.map((data) =>
-        data.id === tid
-          ? { id: tid, answers: updatedData, answereSaved: data.answereSaved }
-          : data,
-      ),
-    );
-  };
+  const currentStep = steps[currentStepIndex];
+  const isStatementStep = currentStep?.type === "statement";
+  const isLastStatement = currentStepIndex === statementCount - 1;
+
+  // ─── Data fetching ─────────────────────────────────────
 
   useEffect(() => {
+    let cancelled = false;
+
     (async () => {
-      const paramsToCapture: { key: string; value: string }[] = [];
-      searchParams.forEach((value, key) => {
-        paramsToCapture.push({ key, value });
-      });
+      // Capture URL params
+      const newParams: { key: string; value: string }[] = [];
+      searchParams.forEach((value, key) => newParams.push({ key, value }));
+      if (newParams.length > 0) captureUrlParams(newParams);
 
-      const allParams = [...urlParams, ...paramsToCapture];
-
-      const uniqueParams = allParams.reduce(
-        (acc, param) => {
-          acc.push(param);
-          return acc;
-        },
-        [] as { key: string; value: string }[],
-      );
-
-      if (paramsToCapture.length > 0) {
-        captureUrlParams(paramsToCapture);
-      }
-
-      // Check consent and redirect if not given after capturing params
-      const consent = localStorage.getItem("consent");
-      if (consent !== "true") {
+      // Require consent
+      if (localStorage.getItem("consent") !== "true") {
         navigate("/survey", { replace: true });
         return;
       }
@@ -216,191 +183,203 @@ function Layout() {
       try {
         setLoading(true);
 
-        const experimentsResponse = await Backend.get("/experiments", {
-          params: {
-            sessionId: sessionId,
-            ...uniqueParams.reduce(
-              (
-                acc: Record<string, string>,
-                param: { key: string; value: string },
-              ) => {
-                acc[param.key] = param.value;
-                return acc;
-              },
-              {},
-            ),
-            language: language,
-          },
+        const allParams = [...urlParams, ...newParams];
+        const paramObj = allParams.reduce<Record<string, string>>(
+          (acc, { key, value }) => ({ ...acc, [key]: value }),
+          {},
+        );
+
+        const { data } = await Backend.get("/experiments", {
+          params: { sessionId, ...paramObj, language },
         });
 
-        // Process the experiments data
-        const initialAnswers = experimentsResponse.data.statements.map(
-          (statement: { id: number; answereSaved?: boolean }) => ({
-            id: statement.id,
+        if (cancelled) return;
+
+        const { statements, experimentId } = data;
+
+        // ── Merge statement data with saved answers ──
+
+        const freshData: StatementData[] = statements.map(
+          (s: { id: number; answereSaved?: boolean }) => ({
+            id: s.id,
             answers: new Array(questionData.length).fill(""),
-            answereSaved: statement.answereSaved || false,
+            answerSaved: s.answereSaved || false,
           }),
         );
 
-        // Check if we have matching saved data and preserve it
-        const mergedAnswers = initialAnswers.map(
-          (initial: statementStorageData) => {
-            const saved = statementsData.find((s) => s.id === initial.id);
-            // If either backend or frontend says it's saved, mark it as saved.
-            // This allows backend-driven recovery to work across devices.
-            if (saved) {
-              return {
-                ...saved,
-                answereSaved: saved.answereSaved || initial.answereSaved,
-              };
-            }
-            return initial;
-          },
+        const mergedData = freshData.map((fresh) => {
+          const saved = statementsData.find((s) => s.id === fresh.id);
+          return saved
+            ? { ...saved, answerSaved: saved.answerSaved || fresh.answerSaved }
+            : fresh;
+        });
+
+        setStatementsData(mergedData);
+
+        // ── Build step list ──
+
+        const statementSteps: StatementStep[] = statements.map(
+          (s: { id: number; statement: string; image?: string }) => ({
+            type: "statement" as const,
+            id: s.id,
+            text: s.statement,
+            image: s.image,
+          }),
         );
 
-        setStatementsData(mergedAnswers);
+        // Only include surveys that haven't been completed
+        const surveySteps: SurveyStep[] = SURVEY_CONFIGS.filter(
+          ({ localStorageKey }) => !localStorage.getItem(localStorageKey),
+        ).map(({ type }) => ({ type }));
 
-        // Calculate initial step index based on first unsaved answer
-        let startStep = 0;
-        for (let i = 0; i < mergedAnswers.length; i++) {
-          if (!mergedAnswers[i].answereSaved) {
-            startStep = i;
-            break;
-          }
-          // If all valid statements are saved, move past them
-          if (i === mergedAnswers.length - 1 && mergedAnswers[i].answereSaved) {
-            startStep = i + 1;
+        const resultStep: ResultStep = { type: "result", experimentId };
 
-            // Check if external surveys are completed (stored in localStorage)
-            // The order is: [Statements, CRT, RMET, Demographics, Result]
-            if (localStorage.getItem("crt")) {
-              startStep++; // Move past CRT
-            }
-            if (localStorage.getItem("rmeten")) {
-              startStep++; // Move past RMET
-            }
-            // Note: Demographics has special handling - not saved to localStorage per line 66
-            // So we can't check for it here
-          }
-        }
+        setSteps([...statementSteps, ...surveySteps, resultStep]);
 
-        setSurveyLength(experimentsResponse.data.statements.length + 3);
+        // ── Find starting step (first unanswered statement) ──
 
-        setStatementArray(
-          experimentsResponse.data.statements.map(
-            (
-              statement: { statement: string; image?: string; id: number },
-              index: number,
-            ) => {
-              return (
-                <Statement
-                  key={index}
-                  statementText={statement.statement}
-                  imageUrl={statement.image}
-                  statementId={statement.id}
-                  onChange={handleStatementChange}
-                  data={
-                    mergedAnswers[index] || {
-                      id: statement.id,
-                      answers: ["", "", "", "", "", ""],
-                      answereSaved: false,
-                    }
-                  }
-                />
-              );
-            },
-          ),
+        const firstUnanswered = mergedData.findIndex((d) => !d.answerSaved);
+        setInitialStepIndex(
+          firstUnanswered === -1 ? mergedData.length : firstUnanswered,
         );
-
-        // Finally, push the result component
-        pushResultComponent(experimentsResponse.data.experimentId);
-
-        // Set the initial step index for restoration
-        setInitialStepIndex(startStep);
       } catch (error) {
-        console.error("An error occurred:", error);
+        console.error("Failed to load experiment:", error);
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     })();
-  }, [language, sessionId, searchParams.toString()]); // retrieve new statements when language changes
 
-  const submitHandler = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    next();
+    return () => {
+      cancelled = true;
+    };
+  }, [language, sessionId, searchParams.toString()]);
+
+  // ─── Render current step by type ───────────────────────
+
+  const renderStep = () => {
+    if (!currentStep) return null;
+
+    switch (currentStep.type) {
+      case "statement": {
+        const data = statementsData.find((d) => d.id === currentStep.id) ?? {
+          id: currentStep.id,
+          answers: new Array(questionData.length).fill(""),
+          answerSaved: false,
+        };
+        return (
+          <Statement
+            statementText={currentStep.text}
+            imageUrl={currentStep.image}
+            statementId={currentStep.id}
+            onChange={handleStatementChange}
+            data={data}
+          />
+        );
+      }
+      case "crt":
+        return (
+          <CRT
+            storageName="crt"
+            onComplete={onSurveyComplete}
+            language={language}
+          />
+        );
+      case "rmet":
+        return (
+          <RmeTen
+            storageName="rmeten"
+            onComplete={onSurveyComplete}
+            language={language}
+          />
+        );
+      case "demographics":
+        return (
+          <DemographicsLongInternational
+            storageName="demographics"
+            onComplete={onSurveyComplete}
+            language={language}
+          />
+        );
+      case "result":
+        return <Result experimentId={currentStep.experimentId} />;
+    }
   };
+
+  // ─── JSX ───────────────────────────────────────────────
+
+  if (loading) {
+    return (
+      <>
+        <ProgressBar currentStep={0} totalSteps={0} />
+        <Statement
+          statementText="Loading statement..."
+          statementId={0}
+          onChange={() => {}}
+          data={{ answers: new Array(questionData.length).fill("") }}
+          loading
+        />
+      </>
+    );
+  }
 
   return (
     <>
-      {loading ? (
-        <>
-          <ProgressBar currentStep={0} totalSteps={0} />
-          <Statement
-            statementText={"Loading statement..."}
-            statementId={0}
-            onChange={() => {}}
-            data={{
-              answers: ["", "", "", "", "", ""],
-            }}
-            loading={true}
+      <form
+        id="main-survey"
+        onSubmit={(e) => {
+          e.preventDefault();
+          next();
+        }}
+      >
+        {currentStep?.type !== "result" && (
+          <ProgressBar
+            currentStep={currentStepIndex + 1} // 1-based
+            totalSteps={steps.length - 1} // exclude result step
           />
-        </>
-      ) : (
-        <form id="main-survey" onSubmit={submitHandler}>
-          {currentStepIndex !== surveyLength && (
-            <ProgressBar
-              currentStep={currentStepIndex}
-              totalSteps={surveyLength}
-            />
-          )}
-          {statementArray[currentStepIndex]}
+        )}
 
-          {currentStepIndex < surveyLength - 3 && (
-            <div className="flex flex-col space-y-4">
-              <div className="flex justify-between">
-                <button
-                  onClick={back}
-                  type="button"
-                  className="order-1 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                >
-                  {(() => {
-                    if (currentStepIndex === 0) {
-                      return <Link to="/consent">{t("layout.start")}</Link>;
-                    } else {
-                      return t("layout.previous");
-                    }
-                  })()}
-                </button>
+        {renderStep()}
 
-                <button
-                  type="submit"
-                  disabled={isSaving}
-                  className={`order-last text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 ${
-                    isSaving ? "opacity-50 cursor-not-allowed" : ""
-                  }`}
-                >
-                  {isSaving
-                    ? "Saving..."
-                    : (() => {
-                        if (currentStepIndex === surveyLength - 3) {
-                          return t("layout.continue");
-                        } else {
-                          return t("layout.next");
-                        }
-                      })()}
-                </button>
-              </div>
+        {isStatementStep && (
+          <div className="flex flex-col space-y-4">
+            <div className="flex justify-between">
+              <button
+                onClick={back}
+                type="button"
+                className="order-1 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              >
+                {currentStepIndex === 0 ? (
+                  <Link to="/consent">{t("layout.start")}</Link>
+                ) : (
+                  t("layout.previous")
+                )}
+              </button>
 
-              <div className="flex justify-center">
-                <ScoreDisplay
-                  score={currentScore}
-                  currentStepIndex={currentStepIndex}
-                />
-              </div>
+              <button
+                type="submit"
+                disabled={isSaving}
+                className={`order-last text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 ${
+                  isSaving ? "opacity-50 cursor-not-allowed" : ""
+                }`}
+              >
+                {isSaving
+                  ? "Saving..."
+                  : isLastStatement
+                    ? t("layout.continue")
+                    : t("layout.next")}
+              </button>
             </div>
-          )}
-        </form>
-      )}
+
+            <div className="flex justify-center">
+              <ScoreDisplay
+                score={currentScore}
+                currentStepIndex={currentStepIndex}
+              />
+            </div>
+          </div>
+        )}
+      </form>
+
       {isAuxSaving && (
         <div className="fixed inset-0 bg-white/80 z-50 flex items-center justify-center">
           <div className="text-xl font-black uppercase">Saving...</div>
@@ -409,5 +388,3 @@ function Layout() {
     </>
   );
 }
-
-export default Layout;

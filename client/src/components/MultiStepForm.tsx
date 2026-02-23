@@ -1,17 +1,13 @@
 import { useState, useEffect } from "react";
 import Backend from "../apis/backend";
 import { useTranslation } from "react-i18next";
-
-import "./style.css";
-import { statementStorageData } from "./Layout";
+import type { StatementData } from "./Layout";
 import { useSession } from "../context/SessionContext";
 import { questionData } from "../data/questions";
 
-type MultiStepFormProps = {
-  steps: statementStorageData[];
-  handleAnswerSaving: (tid: number, answerState: boolean) => void;
-  getNextStatement?: (sessionId: string) => void;
-  pushNewStatement: (id: number, statement: string) => void;
+type Props = {
+  statementsData: StatementData[];
+  handleAnswerSaved: (id: number, saved: boolean) => void;
   updateScore: () => Promise<void>;
   initialStep?: number;
 };
@@ -22,113 +18,77 @@ function getEnglishTextForAnswer(questionId: number, answerId: number) {
   return question.possibleAnswers[answerId];
 }
 
-function MultiStepForm({
-  steps,
-  handleAnswerSaving,
+export default function MultiStepForm({
+  statementsData,
+  handleAnswerSaved,
   updateScore,
-  initialStep,
-}: MultiStepFormProps) {
+  initialStep = 0,
+}: Props) {
   const { i18n } = useTranslation();
-  const language = i18n.language;
-
-  const [currentStepIndex, setCurrentStepIndex] = useState(initialStep || 0);
-  const [loading, setLoading] = useState(false);
-
-  // Update step index when initialStep changes (e.g., after data loads)
-  useEffect(() => {
-    if (initialStep !== undefined && initialStep > 0) {
-      setCurrentStepIndex(initialStep);
-    }
-  }, [initialStep]);
-
   const {
     state: { sessionId },
   } = useSession();
 
-  function checkAnswers(answerList: string[]) {
-    if (answerList.includes("")) {
-      return false;
-    } else {
-      return true;
-    }
-  }
+  const [currentStepIndex, setCurrentStepIndex] = useState(initialStep);
+  const [loading, setLoading] = useState(false);
+
+  // Sync when initialStep resolves after data fetch
+  useEffect(() => {
+    if (initialStep > 0) setCurrentStepIndex(initialStep);
+  }, [initialStep]);
 
   async function next() {
-    if (checkAnswers(steps[currentStepIndex].answers.slice(0, 5))) {
-      // if the user answered the statement, then save the answer and set the answerSaved flag to true
-      if (!steps[currentStepIndex].answereSaved) {
-        setLoading(true);
-        try {
-          await Backend.post("/answers", {
-            statementId: steps[currentStepIndex].id,
-            I_agree:
-              steps[currentStepIndex].answers[0].split("-")[1] === "1" ? 1 : 0,
-            I_agree_reason: getEnglishTextForAnswer(
-              2,
-              Number(steps[currentStepIndex].answers[1].split("-")[1]),
-            ),
-            others_agree:
-              steps[currentStepIndex].answers[2].split("-")[1] === "1" ? 1 : 0,
-            others_agree_reason: getEnglishTextForAnswer(
-              4,
-              Number(steps[currentStepIndex].answers[3].split("-")[1]),
-            ),
-            perceived_commonsense:
-              steps[currentStepIndex].answers[4].split("-")[1] === "1" ? 1 : 0,
-            clarity: steps[currentStepIndex].answers[5],
-            origLanguage: language || "en",
-            sessionId: sessionId,
-            withCredentials: true,
-          });
+    const current = statementsData[currentStepIndex];
+    if (!current) return;
 
-          handleAnswerSaving(steps[currentStepIndex].id, true);
-          steps[currentStepIndex].answereSaved = true;
-          await updateScore();
+    // Require first 5 answers
+    if (!current.answers.slice(0, 5).every(Boolean)) return;
 
-          setCurrentStepIndex((i) => {
-            if (i > steps.length - 1) return i;
-            return i + 1;
-          });
-        } catch (error) {
-          console.error("Failed to save answer:", error);
-        } finally {
-          setLoading(false);
-        }
-      } else {
-        setCurrentStepIndex((i) => {
-          if (i > steps.length - 1) return i;
-          return i + 1;
-        });
-      }
+    // Already saved → just advance
+    if (current.answerSaved) {
+      setCurrentStepIndex((i) => i + 1);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
     }
 
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
+    // Save to backend
+    setLoading(true);
+    try {
+      await Backend.post("/answers", {
+        statementId: current.id,
+        I_agree: current.answers[0].split("-")[1] === "1" ? 1 : 0,
+        I_agree_reason: getEnglishTextForAnswer(
+          2,
+          Number(current.answers[1].split("-")[1]),
+        ),
+        others_agree: current.answers[2].split("-")[1] === "1" ? 1 : 0,
+        others_agree_reason: getEnglishTextForAnswer(
+          4,
+          Number(current.answers[3].split("-")[1]),
+        ),
+        perceived_commonsense: current.answers[4].split("-")[1] === "1" ? 1 : 0,
+        clarity: current.answers[5],
+        origLanguage: i18n.language || "en",
+        sessionId,
+        withCredentials: true,
+      });
+
+      handleAnswerSaved(current.id, true);
+      await updateScore();
+      setCurrentStepIndex((i) => i + 1);
+    } catch (error) {
+      console.error("Failed to save answer:", error);
+    } finally {
+      setLoading(false);
+    }
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   function back() {
-    setCurrentStepIndex((i) => {
-      if (i <= 0) return i;
-      return i - 1;
-    });
-
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
+    setCurrentStepIndex((i) => Math.max(0, i - 1));
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  return {
-    currentStepIndex,
-    setCurrentStepIndex,
-    step: steps[currentStepIndex],
-    next,
-    back,
-    steps: steps,
-    loading,
-  };
+  return { currentStepIndex, setCurrentStepIndex, back, next, loading };
 }
-
-export default MultiStepForm;

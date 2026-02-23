@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import SurveyImage from "./SurveyImage";
 import "./style.css";
 import MultiChoiceQuestion from "./MultiChoiceQustion";
@@ -26,20 +25,12 @@ function Statement({
   onChange,
   loading,
 }: StatementProps) {
-  const [answers, setAnswers] = useState<string[]>(data.answers);
   const { t, i18n } = useTranslation();
 
-  useEffect(() => {
-    onChange(statementId, answers);
-  }, [answers, onChange]);
-
   const handleAnswerChange = (id: number, value: string) => {
-    setAnswers((prevAnswers) => {
-      const newAnswers = [...prevAnswers];
-      newAnswers[id - 1] = value;
-      data.answers[id - 1] = value;
-      return newAnswers;
-    });
+    const newAnswers = [...data.answers];
+    newAnswers[id - 1] = value;
+    onChange(statementId, newAnswers);
   };
 
   return (
@@ -58,7 +49,7 @@ function Statement({
         <>
           {questionData.map((question, index) => {
             const description = i18n.exists(
-              `questions.${question.id}.description`
+              `questions.${question.id}.description`,
             );
             if (question.type === "multipleChoice") {
               const translatedQuestion = {
@@ -70,7 +61,6 @@ function Statement({
                 }) as { [key: number]: string },
                 tooltip: t(`questions.${question.id}.tooltip`),
                 required: question.required,
-                // Only add description if it exists
                 ...(description && {
                   description: t(`questions.${question.id}.description`),
                 }),
@@ -80,7 +70,7 @@ function Statement({
                   key={`${question.type}-${index}`}
                   statementId={statementId}
                   questionInfo={translatedQuestion}
-                  answerValue={answers[index]}
+                  answerValue={data.answers[index]}
                   setAnswer={handleAnswerChange}
                 />
               );
@@ -91,7 +81,6 @@ function Statement({
                 question: t(`questions.${question.id}.question`),
                 tooltip: t(`questions.${question.id}.tooltip`),
                 required: question.required,
-                // Only add description if it exists
                 ...(description && {
                   description: t(`questions.${question.id}.description`),
                 }),
@@ -101,7 +90,7 @@ function Statement({
                   key={`${question.type}-${index}`}
                   statementId={statementId}
                   questionInfo={translatedQuestion}
-                  answerValue={answers[index]}
+                  answerValue={data.answers[index]}
                   setAnswer={handleAnswerChange}
                 />
               );
