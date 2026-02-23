@@ -34,7 +34,7 @@ const returnStatements = async (req, res) => {
           validity: () => true,
           ...treatment,
         };
-      })
+      }),
     )
     .filter((treatment) => {
       return treatment.validity({ ...req }, treatment.params);
@@ -49,7 +49,7 @@ const returnStatements = async (req, res) => {
       };
     }
     acc[experiment.experiment_name].experiment_valid_treatments.push(
-      experiment
+      experiment,
     );
     return acc;
   }, {});
@@ -59,7 +59,7 @@ const returnStatements = async (req, res) => {
     const experiment = grouped_experiments[experiment_name];
     const assigned_treatment = await experiment.experiment_assigner(
       experiment.experiment_valid_treatments,
-      req
+      req,
     );
 
     // If a treatment was assigned, add it to the experiment
@@ -101,7 +101,7 @@ const returnStatements = async (req, res) => {
       const statementsWithAnswers = unfinishedExperiment.statementList.map(
         (statement) => {
           const answersForThisStatement = experimentAnswers.filter(
-            (ans) => ans.statementId === statement.id
+            (ans) => ans.statementId === statement.id,
           );
 
           // If we found any answers, we consider it "answereSaved"
@@ -115,7 +115,7 @@ const returnStatements = async (req, res) => {
             // If you want to merge actual column data, you'd need the question mapping here too
             // For now, setting answereSaved based on backend truth is the primary requirement.
           };
-        }
+        },
       );
 
       return res.json({
@@ -231,22 +231,26 @@ const saveExperiment = async (req, res) => {
     await updateExperiment(experimentId, { finished: true });
     console.log("Experiment saved:", experimentId);
 
-    // Send Meta CAPI event
-    const result = await sendMetaEvent({
-      eventName: "SurveyCompleted",
-      fbp,
-      fbc,
-      eventId: experimentId,
-      clientIp,
-      userAgent,
-      eventSourceUrl,
-    });
+    // Send Meta CAPI event, catch errors separately so it doesn't break the user flow
+    try {
+      const result = await sendMetaEvent({
+        eventName: "SurveyCompleted",
+        fbp,
+        fbc,
+        eventId: experimentId,
+        clientIp,
+        userAgent,
+        eventSourceUrl,
+      });
+      console.log("Meta event result:", result);
+    } catch (metaError) {
+      console.error("Error sending Meta event (non-fatal):", metaError);
+    }
 
-    console.log("Meta event result:", result);
     res.json({ ok: true });
   } catch (error) {
-    console.error("Error saving experiment or sending event:", error);
-    res.status(500).json({ error: "Internal Server Error" });
+    console.error("Error saving experiment:", error);
+    res.status(400).json({ error: "Failed to save experiment" });
   }
 };
 

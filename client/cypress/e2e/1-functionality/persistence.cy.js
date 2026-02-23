@@ -76,12 +76,12 @@ describe("survey persistence and session robustness", () => {
     // 3. Specifically verify YOUR session cookie exists and has a value
     cy.getCookie("survey-session")
       .should("exist") // ← fails test if missing — great for spotting the issue early
-      .should("have.property", "value")
+      .its("value")
       .should("not.be.empty")
-      .then((cookie) => {
-        cy.log(`Session cookie value before reload: ${cookie.value}`);
+      .then((cookieValue) => {
+        cy.log(`Session cookie value before reload: ${cookieValue}`);
         // Save for comparison after reload
-        cy.wrap(cookie.value).as("originalSessionCookieValue");
+        cy.wrap(cookieValue).as("originalSessionCookieValue");
       });
 
     // 4. Reload the page
