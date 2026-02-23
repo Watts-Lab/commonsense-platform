@@ -158,12 +158,32 @@
     "create-account-1": "खाता बनाएँ (वैकल्पिक)",
     "your-email": "आपका ईमेल",
     "placeholder": "name@company.com",
-    "create-account-2": "खाता बनाएँ"
+    "create-account-2": "खाता बनाएँ",
+    "your-score-title": "आपका सामान्य ज्ञान स्कोर",
+    "additional-tests": "अतिरिक्त परीक्षण पूरे हुए",
+    "how-you-compare": "आप दूसरों की तुलना में कहाँ हैं",
+    "highlighted-distribution": "आपका स्कोर हाइलाइट किया गया है। वितरण सभी प्रतिभागियों पर आधारित है।",
+    "track-score-updates": "समय के साथ अपने स्कोर के अपडेट ट्रैक करें",
+    "show-crt": "CRT प्रश्न विवरण दिखाएं",
+    "hide-crt": "CRT प्रश्न विवरण छुपाएं",
+    "your-answer": "आपका उत्तर",
+    "correct-answer": "सही",
+    "belief": "विश्वास",
+    "similarity": "समानता",
+    "consensus-label": "सहमति",
+    "accuracy": "सटीकता",
+    "cognitive-reflection-test": "संज्ञानात्मक प्रतिबिंब परीक्षण",
+    "reading-the-mind-in-the-eyes": "आंखों में मन पढ़ना",
+    "email-required": "ईमेल आवश्यक है।",
+    "invalid-email": "कृपया एक मान्य ईमेल पता दर्ज करें।",
+    "copy-code-success": "कोड सफलतापूर्वक कॉपी किया गया!",
+    "you": "आप"
   },
   "twitter-text": {
     "share-button": "कॉपी करें और साझा करें!",
     "percentage": "मेरा सामान्य ज्ञान {{percentage}}% है",
-    "check-yours": "अपना जांचें: commonsensicality.org/s/{{sessionId}}"
+    "check-yours": "अपना जांचें: commonsensicality.org/s/{{sessionId}}",
+    "copied": "कॉपी हो गया!"
   },
   "notification": {
     "welcome": "स्वागत है",
@@ -289,6 +309,32 @@
     "reasoning": {
       "text": "तर्क",
       "description": "क्या दावा ज्ञान और तर्क को मिलाकर प्राप्त निष्कर्ष प्रस्तुत करता है?"
+    }
+  },
+  "crt": {
+    "drill_hammer": {
+      "question": "एक ड्रिल और एक हथौड़े की कुल कीमत $330 है। ड्रिल हथौड़े से $300 अधिक महंगी है। हथौड़े की कीमत क्या है?",
+      "intuitiveExplanation": "$330 - $300 = $30 स्पष्ट लगता है"
+    },
+    "rachel": {
+      "question": "राहेल अपनी कक्षा की 10वीं सबसे लंबी और 10वीं सबसे छोटी लड़की है। उसकी कक्षा में कुल कितनी लड़कियां हैं?",
+      "intuitiveExplanation": "10 + 10 = 20 स्पष्ट लगता है"
+    },
+    "toaster": {
+      "question": "20% छूट वाले सेल में एक टोस्टर की कीमत $100 है। सेल के बिना इसकी कीमत क्या है?",
+      "intuitiveExplanation": "$100 + 20% = $120 स्पष्ट लगता है"
+    },
+    "apples": {
+      "question": "60 सेबों की एक टोकरी में, लाल सेब हरे सेबों की तुलना में 3 गुना अधिक हैं। हरे सेबों की संख्या कितनी है?",
+      "intuitiveExplanation": "60 ÷ 3 = 20 स्पष्ट लगता है"
+    },
+    "eggs": {
+      "question": "अंडे से निकलने के बाद, एक चूजे का वजन हर दिन दोगुना हो जाता है। 12वें दिन इसका वजन एक पाउंड होता है। किस दिन चूजे का वजन आधा पाउंड था?",
+      "intuitiveExplanation": "12 ÷ 2 = 6 स्पष्ट लगता है"
+    },
+    "dog_cat": {
+      "question": "एक कुत्ते और एक बिल्ली का कुल वजन 100 पाउंड है। कुत्ते का वजन 86 पाउंड है। कुत्ते और बिल्ली के वजन में कितना अंतर है?",
+      "intuitiveExplanation": "86 पाउंड (कुत्ते का वजन) स्पष्ट लगता है"
     }
   }
 }

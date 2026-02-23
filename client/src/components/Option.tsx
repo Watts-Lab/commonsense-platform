@@ -1,5 +1,4 @@
 import React from "react";
-
 import "./style.css";
 
 interface OptionProps {
@@ -13,14 +12,13 @@ interface OptionProps {
 
 function Option(props: OptionProps) {
   return (
-    //  peer opacity-0 h-px w-px absolute
     <li>
       <input
         type="radio"
         id={props.id_v}
         name={props.statementClass}
         value={props.id_v}
-        className="peer opacity-0 h-px w-px absolute"
+        className="sr-only peer"
         checked={props.checked}
         onChange={props.onChange}
         required={props.required}
@@ -28,18 +26,19 @@ function Option(props: OptionProps) {
       <label
         htmlFor={props.id_v}
         className="
-      inline-flex items-center justify-between w-full h-20 p-5 cursor-pointer rounded-md
-      text-sm text-gray-800 bg-gray-200 border border-gray-200
-      hover:bg-gray-300 hover:text-gray-600
-      peer-checked:bg-blue-600 peer-checked:border-blue-600 peer-checked:text-white
-      peer-focus:ring-2 peer-focus:ring-blue-300
-      dark:text-gray-100 dark:bg-gray-800 dark:border-gray-600
-      dark:hover:bg-gray-700 dark:hover:text-white
-      dark:peer-checked:bg-blue-500 dark:peer-checked:border-blue-500 dark:peer-checked:text-white
-      dark:peer-focus:ring-2 dark:peer-focus:ring-blue-800
-    "
+          inline-flex items-center justify-between w-full min-h-[5rem] p-4 cursor-pointer rounded-xl
+          text-sm text-gray-700 bg-gray-100 border-2 border-transparent
+          hover:bg-gray-200 hover:text-gray-800
+          peer-checked:bg-indigo-600 peer-checked:border-indigo-600 peer-checked:text-white
+          peer-focus-visible:ring-4 peer-focus-visible:ring-indigo-300
+          dark:text-gray-200 dark:bg-gray-800 dark:border-transparent
+          dark:hover:bg-gray-700 dark:hover:text-white
+          dark:peer-checked:bg-indigo-600 dark:peer-checked:border-indigo-500 dark:peer-checked:text-white
+          dark:peer-focus-visible:ring-4 dark:peer-focus-visible:ring-indigo-700
+          transition-all duration-150
+        "
       >
-        <div className="block w-full text-md">{props.text}</div>
+        <div className="block w-full text-md leading-snug">{props.text}</div>
       </label>
     </li>
   );

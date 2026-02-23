@@ -158,12 +158,32 @@
     "create-account-1": "アカウントを作成する（任意）",
     "your-email": "あなたのメール",
     "placeholder": "name@company.com",
-    "create-account-2": "アカウントを作成する"
+    "create-account-2": "アカウントを作成する",
+    "your-score-title": "あなたの常識スコア",
+    "additional-tests": "完了した追加テスト",
+    "how-you-compare": "他の参加者との比較",
+    "highlighted-distribution": "あなたのスコアを強調表示しています。分布は全参加者に基づいています。",
+    "track-score-updates": "時間の経過とともに更新されるスコアを追跡する",
+    "show-crt": "CRT問題の内訳を表示",
+    "hide-crt": "CRT問題の内訳を非表示",
+    "your-answer": "あなたの回答",
+    "correct-answer": "正解",
+    "belief": "信念",
+    "similarity": "類似性",
+    "consensus-label": "合意",
+    "accuracy": "正確性",
+    "cognitive-reflection-test": "認知反省テスト",
+    "reading-the-mind-in-the-eyes": "目で心を読むテスト",
+    "email-required": "メールアドレスは必須です。",
+    "invalid-email": "有効なメールアドレスを入力してください。",
+    "copy-code-success": "コードを正常にコピーしました！",
+    "you": "あなた"
   },
   "twitter-text": {
     "share-button": "コピー＆シェア！",
     "percentage": "私の常識は{{percentage}}%です",
-    "check-yours": "あなたの常識を確認する: commonsensicality.org/s/{{sessionId}}"
+    "check-yours": "あなたの常識を確認する: commonsensicality.org/s/{{sessionId}}",
+    "copied": "コピーしました！"
   },
   "notification": {
     "welcome": "ようこそ",
@@ -289,6 +309,32 @@
     "reasoning": {
       "text": "推論",
       "description": "その主張は、知識と論理を組み合わせることで得られた結論を提示していますか？"
+    }
+  },
+  "crt": {
+    "drill_hammer": {
+      "question": "ドリルとハンマーの合計金額は330ドルです。ドリルはハンマーよりも300ドル高いです。ハンマーはいくらですか？",
+      "intuitiveExplanation": "330ドル − 300ドル = 30ドル 正解に見えてしまいます"
+    },
+    "rachel": {
+      "question": "レイチェルはクラスで10番目に背が高く、同時に10番目に背が低いです。彼女のクラスには何人の女の子がいますか？",
+      "intuitiveExplanation": "10 + 10 = 20 正解に見えてしまいます"
+    },
+    "toaster": {
+      "question": "20%引きのセールで、トースターは100ドルです。セールでない時の価格はいくらですか？",
+      "intuitiveExplanation": "100ドル + 20% = 120ドル 正解に見えてしまいます"
+    },
+    "apples": {
+      "question": "60個のリンゴが入ったバケツの中で、赤いリンゴは緑のリンゴよりも3倍多く入っています。緑のリンゴは何個ありますか？",
+      "intuitiveExplanation": "60 ÷ 3 = 20 正解に見えてしまいます"
+    },
+    "eggs": {
+      "question": "卵から孵った後、小鳥の体重は毎日2倍になります。12日目には、体重は1ポンドになります。体重が0.5ポンドだったのは何日目ですか？",
+      "intuitiveExplanation": "12 ÷ 2 = 6 正解に見えてしまいます"
+    },
+    "dog_cat": {
+      "question": "犬と猫の合計体重は100ポンドです。犬の体重は86ポンドです。犬と猫の体重差はいくらですか？",
+      "intuitiveExplanation": "86ポンド（犬の体重） 正解に見えてしまいます"
     }
   }
 }

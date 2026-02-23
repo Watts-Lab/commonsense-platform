@@ -158,12 +158,32 @@
     "create-account-1": "Créer un compte (optionnel)",
     "your-email": "Votre email",
     "placeholder": "name@company.com",
-    "create-account-2": "Créer un compte"
+    "create-account-2": "Créer un compte",
+    "your-score-title": "Votre Score de Bon Sens",
+    "additional-tests": "Tests Additionnels Complétés",
+    "how-you-compare": "Comment vous vous situez",
+    "highlighted-distribution": "Votre score est mis en évidence. Distribution basée sur tous les participants.",
+    "track-score-updates": "Suivez votre score au fil du temps",
+    "show-crt": "Afficher le détail des questions CRT",
+    "hide-crt": "Masquer le détail des questions CRT",
+    "your-answer": "Votre réponse",
+    "correct-answer": "Correct",
+    "belief": "Croyance",
+    "similarity": "Similitude",
+    "consensus-label": "Consensus",
+    "accuracy": "Précision",
+    "cognitive-reflection-test": "Test de Réflexion Cognitive",
+    "reading-the-mind-in-the-eyes": "Lecture de l'Esprit dans les Yeux",
+    "email-required": "L'e-mail est requis.",
+    "invalid-email": "Veuillez entrer une adresse e-mail valide.",
+    "copy-code-success": "Code copié avec succès !",
+    "you": "Vous"
   },
   "twitter-text": {
     "share-button": "Copier et partager !",
     "percentage": "Mon bon sens est de {{percentage}}%",
-    "check-yours": "Vérifiez le vôtre : commonsensicality.org/s/{{sessionId}}"
+    "check-yours": "Vérifiez le vôtre : commonsensicality.org/s/{{sessionId}}",
+    "copied": "Copié !"
   },
   "notification": {
     "welcome": "Bienvenue",
@@ -289,6 +309,32 @@
     "reasoning": {
       "text": "Raisonnement",
       "description": "La déclaration présente-t-elle une conclusion obtenue en combinant connaissances et logique?"
+    }
+  },
+  "crt": {
+    "drill_hammer": {
+      "question": "Une perceuse et un marteau coûtent 330 $ au total. La perceuse coûte 300 $ de plus que le marteau. Combien coûte le marteau ?",
+      "intuitiveExplanation": "330 $ − 300 $ = 30 $ semble évident"
+    },
+    "rachel": {
+      "question": "Rachel est la 10ème plus grande et la 10ème plus petite fille de sa classe. Combien y a-t-il de filles dans sa classe ?",
+      "intuitiveExplanation": "10 + 10 = 20 semble évident"
+    },
+    "toaster": {
+      "question": "Lors d'une promotion de 20%, un grille-pain coûte 100 $. Quel est son prix hors promotion ?",
+      "intuitiveExplanation": "100 $ + 20% = 120 $ semble évident"
+    },
+    "apples": {
+      "question": "Dans un seau de 60 pommes, les pommes rouges sont 3 fois plus fréquentes que les vertes. Combien y a-t-il de pommes vertes ?",
+      "intuitiveExplanation": "60 ÷ 3 = 20 semble évident"
+    },
+    "eggs": {
+      "question": "Après avoir éclos, un oisillon double de poids chaque jour. Au 12ème jour, il pèse une livre. Quel jour pesait-il une demi-livre ?",
+      "intuitiveExplanation": "12 ÷ 2 = 6 semble évident"
+    },
+    "dog_cat": {
+      "question": "Un chien et un chat pèsent 100 livres au total. Le chien pèse 86 livres. Quelle est la différence de poids entre le chien et le chat ?",
+      "intuitiveExplanation": "86 lbs (le poids du chien) semble évident"
     }
   }
 }

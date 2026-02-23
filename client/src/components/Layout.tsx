@@ -309,82 +309,105 @@ export default function Layout() {
 
   if (loading) {
     return (
-      <>
-        <ProgressBar currentStep={0} totalSteps={0} />
-        <Statement
-          statementText="Loading statement..."
-          statementId={0}
-          onChange={() => {}}
-          data={{ answers: new Array(questionData.length).fill("") }}
-          loading
-        />
-      </>
+      <main className="min-h-screen bg-gray-50 dark:bg-gray-950 px-4 pb-20 pt-4">
+        <div className="max-w-3xl mx-auto">
+          <ProgressBar currentStep={0} totalSteps={10} />
+          <div className="animate-pulse">
+            <div className="h-48 bg-gray-200 dark:bg-gray-800 rounded-2xl mb-6"></div>
+            <div className="space-y-4">
+              <div className="h-10 bg-gray-200 dark:bg-gray-800 rounded-xl w-3/4"></div>
+              <div className="h-20 bg-gray-200 dark:bg-gray-800 rounded-xl"></div>
+              <div className="h-20 bg-gray-200 dark:bg-gray-800 rounded-xl"></div>
+            </div>
+          </div>
+        </div>
+      </main>
     );
   }
 
   return (
-    <>
-      <form
-        id="main-survey"
-        onSubmit={(e) => {
-          e.preventDefault();
-          next();
-        }}
-      >
-        {currentStep?.type !== "result" && (
-          <ProgressBar
-            currentStep={currentStepIndex + 1} // 1-based
-            totalSteps={steps.length - 1} // exclude result step
-          />
-        )}
+    <main className="min-h-screen bg-gray-50 dark:bg-gray-950 px-4 pb-20 pt-4">
+      <div className="max-w-3xl mx-auto">
+        <form
+          id="main-survey"
+          onSubmit={(e) => {
+            e.preventDefault();
+            next();
+          }}
+        >
+          {currentStep?.type !== "result" && (
+            <ProgressBar
+              currentStep={currentStepIndex + 1}
+              totalSteps={steps.length - 1}
+            />
+          )}
 
-        {renderStep()}
-
-        {isStatementStep && (
-          <div className="flex flex-col space-y-4">
-            <div className="flex justify-between">
-              <button
-                onClick={back}
-                type="button"
-                className="order-1 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-              >
-                {currentStepIndex === 0 ? (
-                  <Link to="/consent">{t("layout.start")}</Link>
-                ) : (
-                  t("layout.previous")
-                )}
-              </button>
-
-              <button
-                type="submit"
-                disabled={isSaving}
-                className={`order-last text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 ${
-                  isSaving ? "opacity-50 cursor-not-allowed" : ""
-                }`}
-              >
-                {isSaving
-                  ? "Saving..."
-                  : isLastStatement
-                    ? t("layout.continue")
-                    : t("layout.next")}
-              </button>
-            </div>
-
-            <div className="flex justify-center">
-              <ScoreDisplay
-                score={currentScore}
-                currentStepIndex={currentStepIndex}
-              />
-            </div>
+          <div className="mt-4">
+            {renderStep()}
           </div>
-        )}
-      </form>
+
+          {isStatementStep && (
+            <div className="flex flex-col space-y-8 mt-12 pb-10">
+              <nav className="flex items-center justify-between gap-4" aria-label="Survey navigation">
+                <button
+                  onClick={back}
+                  type="button"
+                  className="flex-1 max-w-[140px] text-white bg-gradient-to-r from-sky-500 to-indigo-600
+                    hover:from-sky-600 hover:to-indigo-700
+                    focus:ring-4 focus:outline-none focus:ring-indigo-300
+                    dark:focus:ring-indigo-800
+                    font-semibold rounded-xl text-sm px-6 py-3.5 text-center
+                    inline-flex items-center justify-center shadow-lg shadow-indigo-200 dark:shadow-indigo-900/30
+                    transition-all duration-150 active:scale-95"
+                >
+                  {currentStepIndex === 0 ? (
+                    <Link to="/consent" className="w-full h-full flex items-center justify-center">{t("layout.start")}</Link>
+                  ) : (
+                    t("layout.previous")
+                  )}
+                </button>
+
+                <button
+                  type="submit"
+                  disabled={isSaving}
+                  className={`flex-1 max-w-[200px] text-white bg-gradient-to-r from-sky-500 to-indigo-600
+                    hover:from-sky-600 hover:to-indigo-700
+                    focus:ring-4 focus:outline-none focus:ring-indigo-300
+                    dark:focus:ring-indigo-800
+                    font-semibold rounded-xl text-sm px-6 py-3.5 text-center
+                    inline-flex items-center justify-center shadow-lg shadow-indigo-200 dark:shadow-indigo-900/30
+                    transition-all duration-150 active:scale-95
+                    ${isSaving ? "opacity-50 cursor-not-allowed" : ""}`}
+                >
+                  {isSaving
+                    ? "Saving..."
+                    : isLastStatement
+                      ? t("layout.continue")
+                      : t("layout.next")}
+                </button>
+              </nav>
+
+              <div className="flex justify-center pt-4">
+                <ScoreDisplay
+                  score={currentScore}
+                  currentStepIndex={currentStepIndex}
+                />
+              </div>
+            </div>
+          )}
+        </form>
+      </div>
 
       {isAuxSaving && (
-        <div className="fixed inset-0 bg-white/80 z-50 flex items-center justify-center">
-          <div className="text-xl font-black uppercase">Saving...</div>
+        <div className="fixed inset-0 bg-white/70 dark:bg-gray-900/70 backdrop-blur-sm z-50 flex items-center justify-center">
+          <div className="flex flex-col items-center gap-3">
+            <div className="w-10 h-10 border-4 border-indigo-400 border-t-transparent rounded-full animate-spin" />
+            <p className="text-sm font-semibold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">
+              Saving…
+            </p>
+          </div>
         </div>
       )}
-    </>
+    </main>
   );
 }

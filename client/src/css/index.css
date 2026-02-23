@@ -10,169 +10,45 @@
   width: 100%;
 }
 
+/* ─── SurveyJS button ──────────────────────────────────────────────────────── */
+
 .sv-root-modern .sv-btn {
-  --tw-text-opacity: 1;
-  color: rgb(255 255 255 / var(--tw-text-opacity));
+  color: #ffffff;
   font-weight: 500;
   font-size: 0.875rem;
   line-height: 1.25rem;
-  padding-top: 0.625rem;
-  padding-bottom: 0.625rem;
-  padding-left: 1.25rem;
-  padding-right: 1.25rem;
-  --tw-bg-opacity: 1;
-  background-color: rgb(29 78 216 / var(--tw-bg-opacity)) !important;
-  border-radius: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  background: linear-gradient(
+    to right,
+    #38bdf8,
+    #6366f1
+  ) !important; /* sky-400 → indigo-500 */
+  border-radius: 0.75rem;
+  border: none;
   display: inline-flex;
   order: 9999;
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.25);
+  transition:
+    background 0.15s ease,
+    box-shadow 0.15s ease;
+  cursor: pointer;
 }
 
-/* // sv-title sv-question__title
-// sv-title sv-question__title sv-question__title--answer */
-
-@media (prefers-color-scheme: dark) {
-  .sv-question__title {
-    color: #f3f4f6; /* Tailwind's gray-100 */
-  }
+.sv-root-modern .sv-btn:hover {
+  background: linear-gradient(
+    to right,
+    #0ea5e9,
+    #4f46e5
+  ) !important; /* sky-500 → indigo-600 */
+  box-shadow: 0 4px 18px rgba(79, 70, 229, 0.35);
 }
 
-/* Light Mode Styles */
-input.sv-text {
-  color: #000000;
-  background-color: #ffffff;
-  border: 1px solid #d1d5db;
-}
-
-/* Placeholder Text Color */
-input.sv-text::placeholder {
-  color: #6b7280; /* Tailwind's gray-500 */
-}
-
-/* Dark Mode Styles */
-@media (prefers-color-scheme: dark) {
-  input.sv-text {
-    color: #f9fafb !important;
-    background-color: #1f2937 !important;
-    border: 1px solid #374151 !important;
-  }
-
-  input.sv-text::placeholder {
-    color: #9ca3af !important;
-  }
-}
-
-.sv-string-viewer {
-  color: #1f2937; /* Tailwind's gray-800 */
-}
-
-/* Dark Mode */
-@media (prefers-color-scheme: dark) {
-  .sv-string-viewer {
-    color: #f9fafb !important; /* Tailwind's gray-100 */
-  }
-}
-
-/* Light Mode */
-.sv-radio__decorator {
-  background-color: #ffffff;
-  border: 1px solid #d1d5db; /* Tailwind's gray-300 */
-}
-
-.sv-radio__svg {
-  fill: #1f2937; /* Tailwind's gray-800 */
-}
-
-/* Dark Mode */
-@media (prefers-color-scheme: dark) {
-  .sv-radio__decorator {
-    background-color: #1f2937 !important; /* Tailwind's gray-800 */
-    border: 1px solid #374151 !important; /* Tailwind's gray-700 */
-  }
-
-  .sv-radio__svg {
-    fill: #f9fafb !important; /* Tailwind's gray-100 */
-  }
-}
-
-/* Light Mode - Checked State */
-input.sv-item__control:checked + .sv-radio__decorator {
-  background-color: #3b82f6; /* Tailwind's blue-500 */
-  border-color: #3b82f6;
-}
-
-input.sv-item__control:checked + .sv-radio__decorator .sv-radio__svg {
-  fill: #ffffff; /* White */
-}
-
-/* Dark Mode - Checked State */
-@media (prefers-color-scheme: dark) {
-  input.sv-item__control:checked + .sv-radio__decorator {
-    background-color: #3b82f6 !important; /* Tailwind's blue-500 */
-    border-color: #3b82f6 !important;
-  }
-
-  input.sv-item__control:checked + .sv-radio__decorator .sv-radio__svg {
-    fill: #ffffff !important; /* White */
-  }
-}
-
-/* Light Mode - Hover State */
-.sv-selectbase__item:hover .sv-string-viewer {
-  color: #111827; /* Tailwind's gray-900 */
-}
-
-/* Dark Mode - Hover State */
-@media (prefers-color-scheme: dark) {
-  .sv-selectbase__item:hover .sv-string-viewer {
-    color: #ffffff !important; /* White */
-  }
-}
-
-/* Demographic */
-/* Dark Mode */
-@media (prefers-color-scheme: dark) {
-  /* Dropdown menu background */
-  .sv-popup__shadow,
-  .sv-popup__body-content {
-    background-color: #1f2937 !important; /* Tailwind's gray-800 */
-  }
-}
-/* Dark Mode */
-@media (prefers-color-scheme: dark) {
-  /* List items */
-  .sv-list__item {
-    background-color: transparent;
-    border-bottom: 1px solid #374151; /* Tailwind's gray-700 */
-  }
-
-  /* List items text */
-  .sv-list__item .sv-string-viewer {
-    color: #587da3 !important; /* Tailwind's gray-100 */
-  }
-
-  /* Hover state */
-  .sv-list__item:hover {
-    background-color: #374151 !important; /* Slightly lighter gray */
-  }
-
-  /* Selected item */
-  .sv-list__item[aria-selected="true"] {
-    background-color: #2563eb !important; /* Tailwind's blue-600 */
-  }
-
-  .sv-list__item[aria-selected="true"] .sv-string-viewer {
-    color: #ffffff !important; /* White */
-  }
-
-  /* .sv-list__item.sv-list__item--selected */
-  .sv-list__item[aria-selected="true"] {
-    background-color: #2563eb !important; /* Tailwind's blue-600 */
-  }
-}
+/* ─── Question title ───────────────────────────────────────────────────────── */
 
 .sv-title {
-  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
-    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;
+  font-family:
+    ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol", "Noto Color Emoji" !important;
   font-feature-settings: normal !important;
   font-variation-settings: normal !important;
   font-weight: 600;
@@ -189,6 +65,156 @@ input.sv-item__control:checked + .sv-radio__decorator .sv-radio__svg {
   word-break: break-word;
 }
 
+/* Answered question gets a soft indigo tint */
 .sv-root-modern .sv-question__title--answer {
-  background-color: rgba(37, 100, 235, 0.213) !important;
+  background-color: rgba(99, 102, 241, 0.12) !important; /* indigo-500 @ 12% */
+}
+
+@media (prefers-color-scheme: dark) {
+  .sv-question__title {
+    color: #f3f4f6; /* gray-100 */
+  }
+}
+
+/* ─── Text input ───────────────────────────────────────────────────────────── */
+
+input.sv-text {
+  color: #111827;
+  background-color: #ffffff;
+  border: 1px solid #d1d5db; /* gray-300 */
+  border-radius: 0.5rem;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
+}
+
+input.sv-text:focus {
+  border-color: #6366f1 !important; /* indigo-500 */
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15) !important;
+  outline: none !important;
+}
+
+input.sv-text::placeholder {
+  color: #6b7280; /* gray-500 */
+}
+
+@media (prefers-color-scheme: dark) {
+  input.sv-text {
+    color: #f9fafb !important;
+    background-color: #1f2937 !important; /* gray-800 */
+    border: 1px solid #374151 !important; /* gray-700 */
+  }
+
+  input.sv-text:focus {
+    border-color: #818cf8 !important; /* indigo-400 — slightly lighter for dark */
+    box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.2) !important;
+  }
+
+  input.sv-text::placeholder {
+    color: #9ca3af !important; /* gray-400 */
+  }
+}
+
+/* ─── String viewer ────────────────────────────────────────────────────────── */
+
+.sv-string-viewer {
+  color: #1f2937; /* gray-800 */
+}
+
+@media (prefers-color-scheme: dark) {
+  .sv-string-viewer {
+    color: #f9fafb !important; /* gray-50 */
+  }
+}
+
+/* ─── Radio buttons ────────────────────────────────────────────────────────── */
+
+.sv-radio__decorator {
+  background-color: #ffffff;
+  border: 1px solid #d1d5db; /* gray-300 */
+  transition:
+    background-color 0.15s,
+    border-color 0.15s;
+}
+
+.sv-radio__svg {
+  fill: #1f2937; /* gray-800 */
+}
+
+@media (prefers-color-scheme: dark) {
+  .sv-radio__decorator {
+    background-color: #1f2937 !important; /* gray-800 */
+    border: 1px solid #374151 !important; /* gray-700 */
+  }
+
+  .sv-radio__svg {
+    fill: #f9fafb !important; /* gray-50 */
+  }
+}
+
+/* Checked state — indigo-600 */
+input.sv-item__control:checked + .sv-radio__decorator {
+  background-color: #4f46e5 !important; /* indigo-600 */
+  border-color: #4f46e5 !important;
+}
+
+input.sv-item__control:checked + .sv-radio__decorator .sv-radio__svg {
+  fill: #ffffff !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  input.sv-item__control:checked + .sv-radio__decorator {
+    background-color: #4f46e5 !important; /* indigo-600 */
+    border-color: #4f46e5 !important;
+  }
+
+  input.sv-item__control:checked + .sv-radio__decorator .sv-radio__svg {
+    fill: #ffffff !important;
+  }
+}
+
+/* Hover state */
+.sv-selectbase__item:hover .sv-string-viewer {
+  color: #111827; /* gray-900 */
+}
+
+@media (prefers-color-scheme: dark) {
+  .sv-selectbase__item:hover .sv-string-viewer {
+    color: #ffffff !important;
+  }
+}
+
+/* ─── Demographics dropdown ────────────────────────────────────────────────── */
+
+@media (prefers-color-scheme: dark) {
+  .sv-popup__shadow,
+  .sv-popup__body-content {
+    background-color: #1f2937 !important; /* gray-800 */
+  }
+
+  /* List items */
+  .sv-list__item {
+    background-color: transparent;
+    border-bottom: 1px solid #374151; /* gray-700 */
+    transition: background-color 0.1s;
+  }
+
+  /* List item text — was a weird #587da3, now proper gray */
+  .sv-list__item .sv-string-viewer {
+    color: #e5e7eb !important; /* gray-200 */
+  }
+
+  /* Hover */
+  .sv-list__item:hover {
+    background-color: #374151 !important; /* gray-700 */
+  }
+
+  /* Selected — indigo-600 */
+  .sv-list__item[aria-selected="true"] {
+    background-color: #4f46e5 !important; /* indigo-600 */
+  }
+
+  .sv-list__item[aria-selected="true"] .sv-string-viewer {
+    color: #ffffff !important;
+  }
 }

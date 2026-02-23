@@ -158,12 +158,32 @@
     "create-account-1": "Criar uma conta (opcional)",
     "your-email": "Seu email",
     "placeholder": "name@company.com",
-    "create-account-2": "Criar uma conta"
+    "create-account-2": "Criar uma conta",
+    "your-score-title": "Sua Pontuação de Senso Comum",
+    "additional-tests": "Testes Adicionais Concluídos",
+    "how-you-compare": "Como você se compara",
+    "highlighted-distribution": "Sua pontuação está destacada. Distribuição baseada em todos os participantes.",
+    "track-score-updates": "Acompanhe sua pontuação à medida que ela é atualizada ao longo do tempo",
+    "show-crt": "Mostrar detalhamento das questões CRT",
+    "hide-crt": "Ocultar detalhamento das questões CRT",
+    "your-answer": "Sua resposta",
+    "correct-answer": "Correto",
+    "belief": "Crença",
+    "similarity": "Similaridade",
+    "consensus-label": "Consenso",
+    "accuracy": "Precisão",
+    "cognitive-reflection-test": "Teste de Reflexão Cognitiva",
+    "reading-the-mind-in-the-eyes": "Leitura da Mente nos Olhos",
+    "email-required": "O e-mail é obrigatório.",
+    "invalid-email": "Por favor, insira um endereço de e-mail válido.",
+    "copy-code-success": "Código copiado com sucesso!",
+    "you": "Você"
   },
   "twitter-text": {
     "share-button": "Copiar e Compartilhar!",
     "percentage": "Meu bom senso é de {{percentage}}%",
-    "check-yours": "Verifique o seu: commonsensicality.org/s/{{sessionId}}"
+    "check-yours": "Verifique o seu: commonsensicality.org/s/{{sessionId}}",
+    "copied": "Copiado!"
   },
   "notification": {
     "welcome": "Bem-vindo",
@@ -289,6 +309,32 @@
     "reasoning": {
       "text": "Raciocínio",
       "description": "A declaração apresenta uma conclusão que é alcançada combinando conhecimento e lógica?"
+    }
+  },
+  "crt": {
+    "drill_hammer": {
+      "question": "Uma furadeira e um martelo custam $330 no total. A furadeira custa $300 a mais que o martelo. Quanto custa o martelo?",
+      "intuitiveExplanation": "$330 − $300 = $30 parece óbvio"
+    },
+    "rachel": {
+      "question": "Rachel é a 10ª menina mais alta e a 10ª mais baixa de sua classe. Quantas meninas há em sua classe?",
+      "intuitiveExplanation": "10 + 10 = 20 parece óbvio"
+    },
+    "toaster": {
+      "question": "Em promoção com 20% de desconto, uma torradeira custa $100. Qual é o preço sem a promoção?",
+      "intuitiveExplanation": "$100 + 20% = $120 parece óbvio"
+    },
+    "apples": {
+      "question": "Em um balde com 60 maçãs, as vermelhas são 3 vezes mais comuns que as verdes. Quantas são verdes?",
+      "intuitiveExplanation": "60 ÷ 3 = 20 parece óbvio"
+    },
+    "eggs": {
+      "question": "Após sair do ovo, um pássaro dobra de peso a cada dia. No dia 12 ele pesa uma libra. Em que dia o pássaro pesava meia libra?",
+      "intuitiveExplanation": "12 ÷ 2 = 6 parece óbvio"
+    },
+    "dog_cat": {
+      "question": "Um cão e um gato pesam 100 libras no total. O cão pesa 86 libras. Qual é a diferença de peso entre o cão e o gato?",
+      "intuitiveExplanation": "86 lbs (o peso do cão) parece óbvio"
     }
   }
 }

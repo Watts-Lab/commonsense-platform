@@ -1,7 +1,6 @@
 import React from "react";
 import Tooltip from "./Tooltip";
 import "./style.css";
-// Assuming this is defined in `questions.ts`
 import { TextQuestionType } from "../data/questions";
 
 interface QuestionProps {
@@ -11,35 +10,51 @@ interface QuestionProps {
   setAnswer: (questionId: number, value: string) => void;
 }
 
-function TextQuestion({ questionInfo, answerValue, setAnswer }: QuestionProps) {
+function TextQuestion({
+  statementId,
+  questionInfo,
+  answerValue,
+  setAnswer,
+}: QuestionProps) {
   const { id, question, description, tooltip } = questionInfo;
+  const textareaId = `text-question-${statementId}-${id}`;
+
   const onChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setAnswer(id, event.target.value);
   };
 
   return (
-    <div className="py-3">
-      <div className="flex flex-row justify-between">
-        <h4
-          className="order-1 font-bold required-field dark:text-gray-200"
+    <div className="py-4">
+      <div className="flex flex-row justify-between items-start gap-4 mb-2">
+        <label
+          htmlFor={textareaId}
+          className="font-bold text-gray-900 dark:text-gray-200 leading-tight required-field cursor-pointer"
           dangerouslySetInnerHTML={{ __html: question }}
         />
-        <Tooltip className="order-last" text={tooltip} />
+        <Tooltip className="mt-0.5" text={tooltip} />
       </div>
 
-      {/* Wrap the textarea and counter in a relative container */}
-      <div className="relative mt-2">
+      <div className="relative mt-1">
         <textarea
-          className="w-full p-2 pb-8 border-2 border-gray-300 rounded-md dark:text-gray-200"
+          id={textareaId}
+          className="
+            w-full p-3 pb-10 rounded-xl border-2 border-gray-200 bg-white
+            dark:bg-gray-800 dark:border-gray-600 dark:text-gray-200
+            focus:outline-none focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100
+            dark:focus:border-indigo-500 dark:focus:ring-indigo-900/40
+            transition-all duration-150 resize-none text-md
+          "
           placeholder={description}
           value={answerValue}
           onChange={onChange}
-          rows={2}
-          maxLength={255} // Optional: Enforce max character length
+          rows={3}
+          maxLength={255}
         />
-        {/* Character counter */}
-        <div className="absolute bottom-2 right-2 p-1 text-xs text-gray-500 dark:text-gray-400">
-          {`${answerValue.length}/255`}
+        <div 
+          className="absolute bottom-3 right-3 p-1 text-xs text-gray-400 dark:text-gray-500 tabular-nums font-medium"
+          aria-hidden="true"
+        >
+          {answerValue.length}/255
         </div>
       </div>
     </div>
