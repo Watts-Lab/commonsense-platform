@@ -36,8 +36,7 @@ function ScoreDisplay({ score, currentStepIndex }: ScoreDisplayProps) {
   if (typeof currentStepIndex === "number" && currentStepIndex < 5) {
     return (
       <div className="py-3">
-        <div className="inline-flex items-center gap-2 rounded-full border border-indigo-100 bg-indigo-50 px-4 py-2 text-sm text-indigo-600 dark:border-indigo-800 dark:bg-indigo-900/20 dark:text-indigo-400">
-          {/* bar-chart icon */}
+        <div className="inline-flex items-center gap-2 rounded-full border border-indigo-100 bg-indigo-50 px-4 py-2 text-sm text-indigo-600 dark:border-indigo-800 dark:bg-indigo-900/20 dark:text-indigo-400 font-medium">
           <svg
             className="h-4 w-4 shrink-0"
             fill="none"
@@ -52,8 +51,8 @@ function ScoreDisplay({ score, currentStepIndex }: ScoreDisplayProps) {
             />
           </svg>
           <span>
-            Live <span className="font-semibold">commonsense score</span>{" "}
-            unlocks after 5 statements
+            Live <span className="font-bold">commonsense score</span> unlocks
+            after 5 statements
           </span>
         </div>
       </div>
@@ -74,7 +73,7 @@ function ScoreDisplay({ score, currentStepIndex }: ScoreDisplayProps) {
         <div className="relative z-10 flex items-center justify-between gap-4">
           {/* Main score */}
           <div>
-            <p className="text-xs font-semibold uppercase tracking-widest text-white/60">
+            <p className="text-xs font-semibold uppercase tracking-widest text-white/90">
               Score so far
             </p>
             <motion.div
@@ -84,26 +83,22 @@ function ScoreDisplay({ score, currentStepIndex }: ScoreDisplayProps) {
               <span className="text-4xl font-black leading-none tabular-nums text-white">
                 {score.commonsense}
               </span>
-              <span className="text-base font-light text-white/50">/100</span>
+              <span className="text-base font-bold text-white/70">/100</span>
             </motion.div>
           </div>
 
           {/* Sub-scores + tooltip */}
           <div className="flex flex-col items-end gap-1.5 text-right">
             <div className="text-xs">
-              <span className="font-semibold text-white">
-                {score.awareness}%
-              </span>
-              <span className="ml-1 text-white/50">similar</span>
+              <span className="font-semibold text-white">{score.awareness}%</span>
+              <span className="ml-1 text-white/80 font-medium">similar</span>
             </div>
             <div className="text-xs">
-              <span className="font-semibold text-white">
-                {score.consensus}%
-              </span>
-              <span className="ml-1 text-white/50">accurate</span>
+              <span className="font-semibold text-white">{score.consensus}%</span>
+              <span className="ml-1 text-white/80 font-medium">accurate</span>
             </div>
             <Tooltip
-              className="order-last mt-0.5 text-white/50 transition-colors hover:text-white"
+              className="order-last mt-0.5 text-white/70 transition-colors hover:text-white"
               placement="top"
               text="This is your commonsense score based on the answers you provided so far. Calculated by comparing your answers to other people's answers."
             />
@@ -113,7 +108,7 @@ function ScoreDisplay({ score, currentStepIndex }: ScoreDisplayProps) {
         {/* Progress bar */}
         <div className="relative z-10 mt-3.5 h-1.5 overflow-hidden rounded-full bg-white/20">
           <div
-            className="h-full rounded-full bg-white/70 transition-all duration-700 ease-out"
+            className="h-full rounded-full bg-white transition-all duration-700 ease-out"
             style={{ width: `${score.commonsense}%` }}
           />
         </div>
