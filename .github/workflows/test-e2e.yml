@@ -36,7 +36,7 @@ jobs:
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Create database
         run: |
@@ -48,7 +48,7 @@ jobs:
           mysql --protocol=tcp -h ${{ env.MYSQL_HOST }} --port ${{ env.MYSQL_PORT }} -u${{ env.MYSQL_USER }} -p${{ env.MYSQL_PWD }} ${{ env.MYSQL_DB }} < test/init.sql
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: "22.x"
 
@@ -81,7 +81,7 @@ jobs:
           curl -f http://localhost:4000/health || echo "Server health check failed"
 
       - name: Run Cypress tests
-        uses: cypress-io/github-action@v6
+        uses: cypress-io/github-action@v7
         with:
           start: npm run dev
           working-directory: client
