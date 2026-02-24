@@ -11,9 +11,13 @@ const rateLimit = require("express-rate-limit");
 
 // Configuration and Initialization
 require("dotenv").config();
-const { dboptions } = require("./config/config.js");
-const pool = mysql.createPool(dboptions);
-const sessionStore = new MySQLStore(dboptions, pool);
+
+const { dboptions, dbSessionSchema } = require("./config/config.js");
+let sessionStore;
+if (process.env.NODE_ENV !== "test") {
+  const pool = mysql.createPool(dboptions);
+  sessionStore = new MySQLStore({ schema: dbSessionSchema }, pool);
+}
 
 const app = express();
 const helmet = require("helmet");
@@ -27,7 +31,7 @@ app.use(
         imgSrc: ["'self'", "data:", "https:"],
       },
     },
-  })
+  }),
 );
 
 // Middleware
