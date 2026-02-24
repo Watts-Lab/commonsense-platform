@@ -11,9 +11,13 @@ const rateLimit = require("express-rate-limit");
 
 // Configuration and Initialization
 require("dotenv").config();
-const { dboptions } = require("./config/config.js");
-const pool = mysql.createPool(dboptions);
-const sessionStore = new MySQLStore(dboptions, pool);
+
+const { dboptions, dbSessionSchema } = require("./config/config.js");
+let sessionStore;
+if (process.env.NODE_ENV !== "test") {
+  const pool = mysql.createPool(dboptions);
+  sessionStore = new MySQLStore({ schema: dbSessionSchema }, pool);
+}
 
 const app = express();
 const helmet = require("helmet");
@@ -27,7 +31,7 @@ app.use(
         imgSrc: ["'self'", "data:", "https:"],
       },
     },
-  })
+  }),
 );
 
 // Middleware
@@ -89,7 +93,10 @@ const flushIpCache = async () => {
 };
 
 // Schedule periodic flushes
-setInterval(flushIpCache, IP_FLUSH_INTERVAL);
+let flushInterval;
+if (process.env.NODE_ENV !== "test") {
+  flushInterval = setInterval(flushIpCache, IP_FLUSH_INTERVAL);
+}
 
 // Graceful shutdown
 process.on("SIGTERM", async () => {
@@ -193,11 +200,14 @@ app.get("/api", (req, res) => {
 
 // Database Sync and Server Initialization
 const db = require("./models");
-db.sequelize.sync().then(() => {
-  app.listen(4000, () => {
-    console.log("Server running on port 4000");
-    console.log("Github Commit Hash: ", process.env.GITHUB_HASH);
+
+if (require.main === module) {
+  db.sequelize.sync().then(() => {
+    app.listen(4000, () => {
+      console.log("Server running on port 4000");
+      console.log("Github Commit Hash: ", process.env.GITHUB_HASH);
+    });
   });
-});
+}
 
 module.exports = app;
