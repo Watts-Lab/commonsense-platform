@@ -1,5 +1,5 @@
 const request = require("supertest");
-const app = require("../../server"); // Imports the app
+const app = require("../../server");
 const db = require("../../models");
 
 // ------------------------------------------------------------------------------------
@@ -15,6 +15,13 @@ jest.mock("../../survey/treatments/weighted-random.treatment", () => ({
   GetStatementsWeighted: jest.fn().mockResolvedValue({
     answer: [{ id: 1, statement: "Mock random statement" }],
   }),
+}));
+
+// We mock the daily experiment's treatment assigner to return null to avoid complexity around date-based logic in our tests
+jest.mock("../../survey/experiments/daily.experiment", () => ({
+  experimentName: "daily-experiment",
+  treatments: [{ params: {}, function: jest.fn(), validity: () => true }],
+  treatmentAssigner: jest.fn().mockResolvedValue(null),
 }));
 
 describe("Experiment Route API Tests", () => {
@@ -36,9 +43,10 @@ describe("Experiment Route API Tests", () => {
   // Testing a route with specific mock DB state verification!
   // ------------------------------------------------------------------------------------
   describe("POST /api/experiments/save", () => {
-    
     it("should fail validation if experimentId is missing or invalid", async () => {
-      const response = await request(app).post("/api/experiments/save").send({});
+      const response = await request(app)
+        .post("/api/experiments/save")
+        .send({});
       expect(response.status).toBe(400);
       expect(response.body.errors).toBeDefined();
     });
@@ -66,8 +74,10 @@ describe("Experiment Route API Tests", () => {
       expect(response.body.ok).toBe(true);
 
       // 3. VERIFY DB STATE: Re-query the test database specifically to check if the change persisted!
-      const updatedExp = await db.experiments.findOne({ where: { id: newExp.id } });
-      
+      const updatedExp = await db.experiments.findOne({
+        where: { id: newExp.id },
+      });
+
       expect(updatedExp).not.toBeNull();
       expect(updatedExp.finished).toBe(true); // <--- BOOM! The API successfully flipped the database bit!
     });
@@ -82,19 +92,21 @@ describe("Experiment Route API Tests", () => {
       await db.experiments.destroy({ where: {} });
 
       const sessionId = "session-that-has-not-been-seen-yet";
-      
+
       // Fire the request and catch response
-      const response = await request(app).get(`/api/experiments?sessionId=${sessionId}`);
+      const response = await request(app).get(
+        `/api/experiments?sessionId=${sessionId}`,
+      );
 
       expect(response.status).toBe(200);
       expect(response.body).toHaveProperty("experimentId");
       expect(response.body.isResumed).toBeUndefined(); // It isn't resuming anything
 
       // Check the DB to see if `createExperiment` created a new record!
-      const createdExp = await db.experiments.findOne({ 
-        where: { userSessionId: sessionId } 
+      const createdExp = await db.experiments.findOne({
+        where: { userSessionId: sessionId },
       });
-      
+
       expect(createdExp).not.toBeNull();
       expect(createdExp.finished).toBe(false); // Starting off unfinished
     });
@@ -106,19 +118,53 @@ describe("Experiment Route API Tests", () => {
         experimentId: "params-123",
         experimentType: "default",
         experimentInfo: { data: "test" },
-        statementList: [{ id: 55, statement: "Previously generated test statement" }],
+        statementList: [
+          { id: 55, statement: "Previously generated test statement" },
+        ],
         urlParams: null,
         finished: false,
       });
 
       // Fire API Request with same session ID
-      const response = await request(app).get(`/api/experiments?sessionId=session-resume-123`);
-      
+      const response = await request(app).get(
+        `/api/experiments?sessionId=session-resume-123`,
+      );
+
       expect(response.status).toBe(200);
       // Let's assert that the returned experimentID matches the one we pre-inserted
       expect(response.body.experimentId).toBe(existingExp.id);
       expect(response.body.isResumed).toBe(true); // Should signal it was resumed!
     });
-  });
 
+    it("should assign default experiment when user already finished today's daily experiment", async () => {
+      await db.experiments.create({
+        userSessionId: "session-daily-done",
+        experimentType: "daily-experiment",
+        experimentId: "some-params",
+        experimentInfo: {},
+        statementList: [],
+        finished: true,
+        createdAt: new Date(),
+      });
+
+      const response = await request(app).get(
+        "/api/experiments?sessionId=session-daily-done",
+      );
+
+      expect(response.status).toBe(200);
+      expect(response.body.experimentType).toBe("default");
+      expect(response.body.statements).toEqual([
+        { id: 1, statement: "Mock random statement" },
+      ]);
+
+      const createdExp = await db.experiments.findOne({
+        where: {
+          userSessionId: "session-daily-done",
+          experimentType: "default",
+        },
+      });
+      expect(createdExp).not.toBeNull();
+      expect(createdExp.finished).toBe(false);
+    });
+  });
 });
