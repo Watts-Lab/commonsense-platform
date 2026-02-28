@@ -1,5 +1,5 @@
 # Stage 1: Build React frontend
-FROM --platform=linux/amd64 public.ecr.aws/bitnami/node:20 AS client-build
+FROM --platform=linux/amd64 public.ecr.aws/bitnami/node:24 AS client-build
 WORKDIR /app/client
 COPY client/package*.json ./
 RUN npm install
@@ -7,7 +7,7 @@ COPY client ./
 RUN npm run build
 
 # Stage 2: Build Express backend
-FROM --platform=linux/amd64 public.ecr.aws/bitnami/node:20 AS server-build
+FROM --platform=linux/amd64 public.ecr.aws/bitnami/node:24 AS server-build
 WORKDIR /app/server
 COPY server/package*.json ./
 RUN npm install
