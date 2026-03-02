@@ -14,6 +14,7 @@ import { useSession } from "../context/SessionContext";
 import ScoreDisplay from "./ScoreDisplay";
 import { LoadingSkeleton } from "./LoadingSkeleton";
 import { toast } from "sonner";
+import Feedback from "./Feedback/Feedback";
 
 import "./style.css";
 // ─── Types ───────────────────────────────────────────────
@@ -403,6 +404,15 @@ export default function Layout() {
           </div>
         </div>
       )}
+      <Feedback
+        context={
+          currentStep?.type === "statement"
+            ? `Statement (${currentStep.id}): ${currentStep.text}`
+            : currentStep?.type === "result"
+              ? "Results Page"
+              : `Survey: ${currentStep?.type}`
+        }
+      />
     </main>
   );
 }

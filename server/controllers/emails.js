@@ -69,11 +69,35 @@ const send_magic_link = async (email, link, which) => {
 };
 
 // Report sender
-const send_report = async (email, comment, type) => {
+const send_report = async (email, comment, type, extraInfo) => {
   const subj = "Commonsense platform feedback";
+
+  const { context, sessionId, userEmail } = extraInfo || {};
+
+  // Construct GitHub issue link
+  const githubRepo = "Watts-Lab/commonsense-platform";
+  const issueTitle = encodeURIComponent(`[${type}] Feedback`);
+  const issueBody = encodeURIComponent(`
+Feedback:
+${comment}
+
+Context: ${context || "N/A"}
+Session: ${sessionId || "N/A"}
+User Email: ${userEmail || "N/A"}
+  `.trim());
+
+  const githubLink = `https://github.com/${githubRepo}/issues/new?title=${issueTitle}&body=${issueBody}`;
+
   const body = `
     <p>Here is the comment report from the Common Sense Platform:</p>
-    <p>${type} : ${comment}</p>
+    <p><strong>Type:</strong> ${type}</p>
+    <p><strong>Feedback:</strong><br/>${comment.replace(/\n/g, "<br/>")}</p>
+    <hr/>
+    <p><strong>Context:</strong> ${context || "N/A"}</p>
+    <p><strong>Session:</strong> ${sessionId || "N/A"}</p>
+    <p><strong>User Email:</strong> ${userEmail || "N/A"}</p>
+    <hr/>
+    <p><a href="${githubLink}" style="display: inline-block; padding: 10px 20px; background-color: #24292e; color: white; text-decoration: none; border-radius: 5px;">Create GitHub Issue</a></p>
   `;
 
   const mailOptions = {

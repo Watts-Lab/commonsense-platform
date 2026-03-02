@@ -51,7 +51,9 @@ async function saveFeedBack(req, res) {
     const feedbackData = {
       type,
       comment,
-      sessionId: req.sessionID,
+      context: req.body.context,
+      userEmail: req.body.userEmail,
+      sessionId: req.body.sessionId || req.sessionID,
       ipAddress: req.session?.ip || "unknown",
       userAgent: req.headers["user-agent"] || "",
       createdAt: new Date(),
@@ -59,10 +61,16 @@ async function saveFeedBack(req, res) {
 
     const answer = await feedbacks.create(feedbackData);
 
+    const extraInfo = {
+      context: req.body.context,
+      sessionId: feedbackData.sessionId,
+      userEmail: req.body.userEmail,
+    };
+
     // Send emails asynchronously (don't wait for them)
     Promise.all([
-      send_report("markew@seas.upenn.edu", comment, type),
-      send_report("amirhossein.nakhaei@rwth-aachen.de", comment, type),
+      send_report("markew@seas.upenn.edu", comment, type, extraInfo),
+      send_report("amirhossein.nakhaei@rwth-aachen.de", comment, type, extraInfo),
     ]).catch((err) => console.error("Email sending failed:", err));
 
     res.json({ success: true, id: answer.id });

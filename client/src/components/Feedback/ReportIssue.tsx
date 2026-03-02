@@ -2,10 +2,14 @@ import { useState } from "react";
 import { Dialog } from "@headlessui/react";
 import Backend from "../../apis/backend";
 import { useTranslation } from "react-i18next";
+import { useSession } from "../../context/SessionContext";
 
 function ReportIssue() {
   const [isOpen, setIsOpen] = useState(false);
   const { t } = useTranslation();
+  const {
+    state: { sessionId, user },
+  } = useSession();
 
   function openModal() {
     setIsOpen(true);
@@ -25,6 +29,9 @@ function ReportIssue() {
     await Backend.post("/feedbacks", {
       type: "Bug",
       comment,
+      context: `Report Issue Modal (URL: ${window.location.href})`,
+      sessionId,
+      userEmail: user?.email,
     });
 
     setIsSendingFeedback(false);

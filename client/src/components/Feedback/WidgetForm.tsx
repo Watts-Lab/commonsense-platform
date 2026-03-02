@@ -46,7 +46,7 @@ const feedbackTypes = {
 
 export const feedbackType = Object.keys(feedbackTypes);
 
-function WidgetForm() {
+function WidgetForm({ context }: { context?: string }) {
   const [feedbackType, setFeedbackType] = useState<string | null>(null);
   const [feedbackSent, setFeedbackSent] = useState(false);
 
@@ -68,6 +68,7 @@ function WidgetForm() {
               feedbackType={feedbackType}
               onFeedbackRestartRequest={handleRestartFeedback}
               onFeedbackSent={() => setFeedbackSent(true)}
+              context={context}
             />
           )}
         </>

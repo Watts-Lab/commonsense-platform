@@ -3,19 +3,25 @@ import feedbackTypes from "../feedbackTypes";
 import CloseButton from "../CloseButton";
 
 import Backend from "../../../apis/backend";
+import { useSession } from "../../../context/SessionContext";
 
 export function FeedbackContentStep({
   feedbackType,
   onFeedbackRestartRequest,
   onFeedbackSent,
+  context,
 }: {
   feedbackType: string;
   onFeedbackRestartRequest: () => void;
   onFeedbackSent: () => void;
+  context?: string;
 }) {
   const feedbackTypeData = feedbackTypes[feedbackType];
   const [comment, setComment] = useState("");
   const [isSendingFeedback, setIsSendingFeedback] = useState(false);
+  const {
+    state: { sessionId, user },
+  } = useSession();
 
   async function handleSubmitFeedback(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -23,6 +29,9 @@ export function FeedbackContentStep({
     await Backend.post("/feedbacks", {
       type: feedbackType,
       comment,
+      context,
+      sessionId,
+      userEmail: user?.email,
     });
 
     setIsSendingFeedback(false);

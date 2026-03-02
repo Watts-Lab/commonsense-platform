@@ -10,6 +10,31 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.TEXT,
       allowNull: true,
     },
+
+    sessionId: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+
+    context: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
+
+    userEmail: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+
+    ipAddress: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+
+    userAgent: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
   });
 
   return Feedbacks;

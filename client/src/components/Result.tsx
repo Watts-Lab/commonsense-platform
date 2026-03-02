@@ -384,9 +384,12 @@ function Result({ experimentId }: ResultProps) {
 
   useEffect(() => {
     if (!experimentId) return;
-    Backend.post("/experiments/save", { sessionId, experimentId }).catch(
-      console.error,
-    );
+    Backend.post("/experiments/save", { sessionId, experimentId })
+      .catch(console.error)
+      .then(() => {
+        // Clear statements data to avoid stale data if user retakes the survey
+        localStorage.removeItem("statementsData");
+      });
   }, [sessionId, experimentId]);
 
   const [individualCommonsensicality, setIndividualCommonsensicality] =

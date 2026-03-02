@@ -4,14 +4,14 @@ import ChatIcon from "./ChatIcon";
 import { useTranslation } from "react-i18next";
 import WidgetForm from "./WidgetForm";
 
-function Feedback() {
+function Feedback({ context }: { context?: string }) {
   const { t } = useTranslation();
 
   return (
     <>
       <Popover className="lg:fixed bottom-0 left-0 w-full flex justify-center items-center md:bottom-4 md:right-2 md:w-auto md:left-auto md:justify-end">
         <Popover.Panel>
-          <WidgetForm />
+          <WidgetForm context={context} />
         </Popover.Panel>
         <Popover.Button className="bg-brand-500 rounded-full px-3 h-12 text-slate-600 flex items-center group mb-4 md:mb-0">
           <ChatIcon />
