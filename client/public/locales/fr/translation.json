@@ -104,11 +104,14 @@
   "publications": {
     "author1": "Whiting, Mark et Watts, Duncan",
     "author2": "Watts, Duncan",
+    "author4": "Nguyen, Tuan Dung, Watts, Duncan J et Whiting, Mark E",
     "journal1": "Un cadre pour quantifier le bon sens individuel et collectif",
     "journal2": "Le bon sens et les explications sociologiques",
     "journal3": "Tout est évident",
+    "journal4": "Une évaluation à grande échelle des connaissances de bon sens chez les humains et les grands modèles de langage",
     "publication1": "In: Proceedings of the National Academy of Sciences, vol. 121, no. 4, 2024.",
     "publication2": "In: American Journal of Sociology, vol. 120, no. 2, pp. 313-351, 2014.",
+    "publication4": "In: PNAS Nexus, vol. 5, no. 3, pgag029, 2026.",
     "title": "Publications de Recherche",
     "type1": "Article de Journal",
     "type2": "Livre"

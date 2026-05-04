@@ -104,11 +104,14 @@
   "publications": {
     "author1": "Whiting, Mark y Watts, Duncan",
     "author2": "Watts, Duncan",
+    "author4": "Nguyen, Tuan Dung, Watts, Duncan J y Whiting, Mark E",
     "journal1": "Un marco para cuantificar el sentido común individual y colectivo",
     "journal2": "Sentido común y explicaciones sociológicas",
     "journal3": "Todo es obvio",
+    "journal4": "Una evaluación a gran escala del conocimiento de sentido común en humanos y modelos de lenguaje grandes",
     "publication1": "En: Actas de la Academia Nacional de Ciencias, vol. 121, no. 4, 2024.",
     "publication2": "En: Revista Americana de Sociología, vol. 120, no. 2, pp. 313-351, 2014.",
+    "publication4": "En: PNAS Nexus, vol. 5, no. 3, pgag029, 2026.",
     "title": "Publicaciones de Investigación",
     "type1": "Artículo de Revista",
     "type2": "Libro"

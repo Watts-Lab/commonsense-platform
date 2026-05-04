@@ -104,11 +104,14 @@
   "publications": {
     "author1": "Whiting, Mark и Watts, Duncan",
     "author2": "Watts, Duncan",
+    "author4": "Nguyen, Tuan Dung, Watts, Duncan J и Whiting, Mark E",
     "journal1": "Рамки для количественной оценки индивидуального и коллективного здравого смысла",
     "journal2": "Здравый смысл и социологические объяснения",
     "journal3": "Все очевидно",
+    "journal4": "Масштабная оценка знаний здравого смысла у людей и больших языковых моделей",
     "publication1": "В: Proceedings of the National Academy of Sciences, том 121, № 4, 2024.",
     "publication2": "В: American Journal of Sociology, том 120, № 2, стр. 313-351, 2014.",
+    "publication4": "В: PNAS Nexus, т. 5, № 3, pgag029, 2026.",
     "title": "Научные публикации",
     "type1": "Статья в журнале",
     "type2": "Книга"

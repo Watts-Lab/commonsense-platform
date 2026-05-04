@@ -6,6 +6,14 @@ function Publications() {
 
   const publicationsList = [
     {
+      title: t("publications.journal4"),
+      type: t("publications.type1"),
+      authors: t("publications.author4"),
+      venue: t("publications.publication4"),
+      year: "2026",
+      link: "https://doi.org/10.1093/pnasnexus/pgag029",
+    },
+    {
       title:
         t("publications.journal1"),
       type: t('publications.type1'),

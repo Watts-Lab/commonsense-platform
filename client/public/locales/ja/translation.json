@@ -104,11 +104,14 @@
   "publications": {
     "author1": "Whiting, Mark と Watts, Duncan",
     "author2": "Watts, Duncan",
+    "author4": "Nguyen, Tuan Dung, Watts, Duncan J, および Whiting, Mark E",
     "journal1": "個人および集団の常識を定量化するためのフレームワーク",
     "journal2": "常識と社会学的説明",
     "journal3": "すべては明らか",
+    "journal4": "人間と大規模言語モデルにおける常識知識の大規模評価",
     "publication1": "プロシーディングス・オブ・ザ・ナショナル・アカデミー・オブ・サイエンシズ、121巻、4号、2024年。",
     "publication2": "アメリカ社会学ジャーナル、120巻、2号、313-351ページ、2014年。",
+    "publication4": "PNAS Nexus、5巻、3号、pgag029、2026年。",
     "title": "研究論文",
     "type1": "ジャーナル記事",
     "type2": "本"

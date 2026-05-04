@@ -106,11 +106,14 @@
   "publications": {
     "author1": "Whiting, Mark and Watts, Duncan",
     "author2": "Watts, Duncan",
+    "author4": "Nguyen, Tuan Dung, Watts, Duncan J, and Whiting, Mark E",
     "journal1": "A framework for quantifying individual and collective common sense",
     "journal2": "Common sense and sociological explanations",
     "journal3": "Everything is obvious",
+    "journal4": "A large-scale evaluation of commonsense knowledge in humans and large language models",
     "publication1": "In: Proceedings of the National Academy of Sciences, vol. 121, no. 4, 2024.",
     "publication2": "In: American Journal of Sociology, vol. 120, no. 2, pp. 313-351, 2014.",
+    "publication4": "In: PNAS Nexus, vol. 5, no. 3, pgag029, 2026.",
     "title": "Research Publications",
     "type1": "Journal Article",
     "type2": "Book"

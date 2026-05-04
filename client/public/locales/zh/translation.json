@@ -104,11 +104,14 @@
   "publications": {
     "author1": "Whiting, Mark 和 Watts, Duncan",
     "author2": "Watts, Duncan",
+    "author4": "Nguyen, Tuan Dung, Watts, Duncan J 和 Whiting, Mark E",
     "journal1": "量化个人和集体常识的框架",
     "journal2": "常识与社会学解释",
     "journal3": "一切都是显而易见的",
+    "journal4": "人类和大型语言模型中常识知识的大规模评估",
     "publication1": "发表于：《美国国家科学院院刊》，第121卷，第4期，2024年。",
     "publication2": "发表于：《美国社会学杂志》，第120卷，第2期，第313-351页，2014年。",
+    "publication4": "载于：PNAS Nexus，第 5 卷，第 3 期，pgag029，2026 年。",
     "title": "研究出版物",
     "type1": "期刊文章",
     "type2": "书籍"
