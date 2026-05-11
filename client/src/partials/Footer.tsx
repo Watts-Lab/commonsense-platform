@@ -74,7 +74,7 @@ function Footer() {
 
         <div className="flex items-center space-x-2 text-gray-300">
           <span>
-            {/* Copyright © 2023 - 2024 - All right reserved by CSSLab at UPenn */}
+            {/* Copyright © 2023 - 2026 - All right reserved by CSSLab at UPenn */}
             {t("footer.copyright")}
           </span>
           <span>|</span>
