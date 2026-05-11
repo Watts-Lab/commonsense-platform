@@ -98,7 +98,8 @@
     "dashboard": "ড্যাশবোর্ড",
     "people": "মানুষ",
     "research": "গবেষণা",
-    "signin": "প্রবেশ করুন"
+    "signin": "প্রবেশ করুন",
+    "llmEvals": "এলএলএম মূল্যায়ন"
   },
   "navbar.participate →": "অংশগ্রহণ করুন →",
   "publications": {
@@ -339,5 +340,53 @@
       "question": "একটি কুকুর এবং একটি বিড়ালের মোট ওজন ১০০ পাউন্ড। কুকুরের ওজন ৮৬ পাউন্ড। কুকুর এবং বিড়ালের ওজনের পার্থক্য কত?",
       "intuitiveExplanation": "৮৬ পাউন্ড (কুকুরের ওজন) স্পষ্ট মনে হয়"
     }
+  },
+  "llmEvals": {
+    "eyebrow": "সাধারণ বোধের বেঞ্চমার্ক",
+    "title": "এলএলএম সাধারণ বোধ মূল্যায়ন",
+    "intro": "এই টেবিলটি ভাষা মডেলগুলোকে তিনটি ব্যক্তি-স্তরের সাধারণ বোধ মাপে তুলনা করে: consensus, awareness এবং commonsensicality।",
+    "methodology": "Consensus মাপে একটি মডেল প্রতিটি বিবৃতিতে মানব majority-এর সঙ্গে একমত কিনা। Awareness মাপে মডেলটি অধিকাংশ মানুষ কী ভাববে তা সঠিকভাবে অনুমান করতে পারে কিনা। Commonsensicality এই দুই সংকেতকে একত্র করে।",
+    "detailsPrefix": "মূল্যায়ন কাঠামো এবং ফলাফল সম্পর্কে আরও বিস্তারিত জানতে দেখুন",
+    "detailsLink": "এলএলএম সাধারণ বোধ ডেমো পেজ",
+    "detailsSuffix": ".",
+    "modelsEvaluated": "মূল্যায়িত মডেল",
+    "topCommonsensicalityII": "সর্বোচ্চ commonsensicality (II)",
+    "scoreRank": "{{score}} স্কোর, rank {{rank}}",
+    "lastUpdated": "সর্বশেষ আপডেট",
+    "tableTitle": "মূল্যায়নের ফলাফল",
+    "tableHelp": "মডেল দিয়ে খুঁজুন, ন্যূনতম metric score দিয়ে ফিল্টার করুন, অথবা সাজাতে যেকোনো কলাম শিরোনামে ক্লিক করুন।",
+    "modelFilter": "মডেল",
+    "searchPlaceholder": "মডেল খুঁজুন",
+    "scoreMetric": "স্কোর মেট্রিক",
+    "minimumScore": "ন্যূনতম স্কোর",
+    "anyPlaceholder": "যেকোনো",
+    "caption": "এলএলএম সাধারণ বোধ মূল্যায়নের স্কোর",
+    "showing": "{{total}} মডেলের মধ্যে {{shown}}টি দেখানো হচ্ছে",
+    "scoreNote": "স্কোর মান হিসেবে দেখানো হয়েছে, আর rank বন্ধনীর মধ্যে।",
+    "columns": {
+      "model": "মডেল",
+      "added": "যোগ করা হয়েছে",
+      "consensusI": "Consensus (I)",
+      "consensusII": "Consensus (II)",
+      "awarenessI": "Awareness (I)",
+      "awarenessII": "Awareness (II)",
+      "commonsensicalityI": "Commonsensicality (I)",
+      "commonsensicalityII": "Commonsensicality (II)"
+    },
+    "variants": "প্রতিটি স্কোর দুটি variant-এ দেওয়া হয়েছে। Variant (I)-এ মানব majority শুধু মানব rating থেকে নির্ধারিত হয়। Variant (II)-এ মডেলের rating অন্তর্ভুক্ত করার পর majority পুনরায় গণনা করা হয়। স্কোরগুলো শতাংশ, এবং বন্ধনীর সংখ্যাগুলো সেই কলামের মধ্যে প্রতিটি মডেলের ranking দেখায়।",
+    "modelDetailsPrefix": "অতিরিক্ত মডেল তুলনার জন্য দেখুন",
+    "modelDetailsSuffix": ".",
+    "methodDetailsPrefix": "পদ্ধতি এবং formula-এর জন্য দেখুন",
+    "methodDetailsSuffix": ".",
+    "paperLink": "গবেষণা প্রবন্ধ",
+    "calculationTitle": "গণনার নোট",
+    "calculationIntro": "দুটি variant-এর জন্য টেবিলটি নিচের majority-rating সংজ্ঞা ব্যবহার করে।",
+    "variantIFormulaLabel": "Variant (I): শুধু মানব majority",
+    "variantIIFormulaLabel": "Variant (II): মডেল rating সহ majority",
+    "humanShareDefinition": "বিবৃতি i-এর সঙ্গে একমত মানব rater-এর অংশ।",
+    "omegaDefinition": "বিবৃতি i-তে নিযুক্ত মানব rater-দের সেট।",
+    "alphaDefinition": "বিবৃতি i-এর জন্য মডেলের rating।",
+    "ratingsDefinition": "বিবৃতি i-এর জন্য মানব rater j-এর rating।",
+    "indicatorDefinition": "একটি indicator function, যা শর্ত সত্য হলে 1 এবং অন্যথায় 0 ফেরত দেয়।"
   }
 }

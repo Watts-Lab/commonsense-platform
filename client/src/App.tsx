@@ -20,6 +20,7 @@ import SignIn from "./pages/SignIn";
 import Welcome from "./pages/Welcome";
 import Dashboard from "./pages/Dashboard";
 import Finish from "./pages/Finish";
+import LlmEvals from "./pages/LlmEvals";
 
 // components
 import Consent from "./components/Consent";
@@ -48,12 +49,12 @@ const App = () => {
         <UrlParamCapture />
         <Toaster position="bottom-right" richColors />
 
-
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/s/:shareLink" element={<Home />} />
           <Route path="/people" element={<People />} />
           <Route path="/research" element={<Research />} />
+          <Route path="/llm-evals" element={<LlmEvals />} />
           <Route path="login/:email/:link" element={<Enter />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/survey" element={<ConsentPage />} />

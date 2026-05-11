@@ -98,7 +98,8 @@
     "dashboard": "ダッシュボード",
     "people": "人々",
     "research": "研究",
-    "signin": "サインイン"
+    "signin": "サインイン",
+    "llmEvals": "LLM 評価"
   },
   "navbar.participate →": "参加する →",
   "publications": {
@@ -339,5 +340,53 @@
       "question": "犬と猫の合計体重は100ポンドです。犬の体重は86ポンドです。犬と猫の体重差はいくらですか？",
       "intuitiveExplanation": "86ポンド（犬の体重） 正解に見えてしまいます"
     }
+  },
+  "llmEvals": {
+    "eyebrow": "常識ベンチマーク",
+    "title": "LLM 常識評価",
+    "intro": "この表は、合意、認識、常識性という3つの個体レベルの常識指標で言語モデルを比較します。",
+    "methodology": "合意は、各文についてモデルが人間の多数派と一致するかを測ります。認識は、多くの人がどう考えるかをモデルが正しく予測できるかを測ります。常識性は、この2つの信号を組み合わせたものです。",
+    "detailsPrefix": "評価フレームワークと結果の詳細については、",
+    "detailsLink": "LLM 常識デモページ",
+    "detailsSuffix": "をご覧ください。",
+    "modelsEvaluated": "評価済みモデル",
+    "topCommonsensicalityII": "最高の常識性 (II)",
+    "scoreRank": "スコア {{score}}、順位 {{rank}}",
+    "lastUpdated": "最終更新",
+    "tableTitle": "評価結果",
+    "tableHelp": "モデルで検索し、最小メトリックスコアで絞り込み、または任意の列見出しをクリックして並べ替えます。",
+    "modelFilter": "モデル",
+    "searchPlaceholder": "モデルを検索",
+    "scoreMetric": "スコア指標",
+    "minimumScore": "最小スコア",
+    "anyPlaceholder": "指定なし",
+    "caption": "LLM 常識評価スコア",
+    "showing": "{{total}} 件中 {{shown}} 件のモデルを表示",
+    "scoreNote": "スコアは値として表示され、順位は括弧内に示されます。",
+    "columns": {
+      "model": "モデル",
+      "added": "追加日",
+      "consensusI": "合意 (I)",
+      "consensusII": "合意 (II)",
+      "awarenessI": "認識 (I)",
+      "awarenessII": "認識 (II)",
+      "commonsensicalityI": "常識性 (I)",
+      "commonsensicalityII": "常識性 (II)"
+    },
+    "variants": "各スコアは2つのバリアントで報告されています。バリアント (I) では、人間の多数派は人間の評価だけから決まります。バリアント (II) では、モデルの評価を含めたうえで多数派を再計算します。スコアはパーセントで、括弧内の数字はその列における各モデルの順位を示します。",
+    "modelDetailsPrefix": "追加のモデル比較については、",
+    "modelDetailsSuffix": "をご覧ください。",
+    "methodDetailsPrefix": "方法と数式については、",
+    "methodDetailsSuffix": "をご覧ください。",
+    "paperLink": "研究論文",
+    "calculationTitle": "計算メモ",
+    "calculationIntro": "この表では、2つのバリアントについて次の多数派評価の定義を使用しています。",
+    "variantIFormulaLabel": "バリアント (I)：人間のみの多数派",
+    "variantIIFormulaLabel": "バリアント (II)：モデル評価を含む多数派",
+    "humanShareDefinition": "文 i に同意した人間評価者の割合。",
+    "omegaDefinition": "文 i に割り当てられた人間評価者の集合。",
+    "alphaDefinition": "文 i に対するモデルの評価。",
+    "ratingsDefinition": "文 i に対する人間評価者 j の評価。",
+    "indicatorDefinition": "条件が真なら 1、そうでなければ 0 を返す指示関数。"
   }
 }
