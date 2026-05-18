@@ -98,7 +98,8 @@
     "dashboard": "Tableau de bord",
     "people": "Personnes",
     "research": "Recherche",
-    "signin": "Se connecter"
+    "signin": "Se connecter",
+    "llmEvals": "Evaluations LLM"
   },
   "navbar.participate →": "Participer →",
   "publications": {
@@ -339,5 +340,53 @@
       "question": "Un chien et un chat pèsent 100 livres au total. Le chien pèse 86 livres. Quelle est la différence de poids entre le chien et le chat ?",
       "intuitiveExplanation": "86 lbs (le poids du chien) semble évident"
     }
+  },
+  "llmEvals": {
+    "eyebrow": "Benchmark de sens commun",
+    "title": "Evaluations du sens commun des LLM",
+    "intro": "Ce tableau compare les modeles de langage selon trois mesures individuelles du sens commun : consensus, conscience et commonsensicalite.",
+    "methodology": "Le consensus mesure si un modele est d accord avec la majorite humaine pour chaque enonce. La conscience mesure s il predit correctement ce que la plupart des personnes penseraient. La commonsensicalite combine ces deux signaux.",
+    "detailsPrefix": "Pour plus de details sur le cadre d evaluation et les resultats, consultez",
+    "detailsLink": "la page de demonstration du sens commun des LLM",
+    "detailsSuffix": ".",
+    "modelsEvaluated": "Modeles evalues",
+    "topCommonsensicalityII": "Meilleure commonsensicalite (II)",
+    "scoreRank": "score {{score}}, rang {{rank}}",
+    "lastUpdated": "Derniere mise a jour",
+    "tableTitle": "Resultats de l evaluation",
+    "tableHelp": "Recherchez par modele, filtrez par score minimal de metrique ou cliquez sur un en-tete de colonne pour trier.",
+    "modelFilter": "Modele",
+    "searchPlaceholder": "Rechercher des modeles",
+    "scoreMetric": "Metrique de score",
+    "minimumScore": "Score minimal",
+    "anyPlaceholder": "Tous",
+    "caption": "Scores d evaluation du sens commun des LLM",
+    "showing": "{{shown}} modeles affiches sur {{total}}",
+    "scoreNote": "Le score est affiche sous forme de valeur avec le rang entre parentheses.",
+    "columns": {
+      "model": "Modele",
+      "added": "Ajoute",
+      "consensusI": "Consensus (I)",
+      "consensusII": "Consensus (II)",
+      "awarenessI": "Conscience (I)",
+      "awarenessII": "Conscience (II)",
+      "commonsensicalityI": "Commonsensicalite (I)",
+      "commonsensicalityII": "Commonsensicalite (II)"
+    },
+    "variants": "Chaque score est rapporte selon deux variantes. Dans la variante (I), la majorite humaine est determinee uniquement a partir des evaluations humaines. Dans la variante (II), la majorite est recalculee apres inclusion de l evaluation du modele. Les scores sont des pourcentages, et les nombres entre parentheses indiquent le rang de chaque modele dans cette colonne.",
+    "modelDetailsPrefix": "Pour des comparaisons supplementaires entre modeles, consultez",
+    "modelDetailsSuffix": ".",
+    "methodDetailsPrefix": "Pour la methodologie et les formules, consultez",
+    "methodDetailsSuffix": ".",
+    "paperLink": "l article de recherche",
+    "calculationTitle": "Notes de calcul",
+    "calculationIntro": "Le tableau utilise les definitions suivantes de la note majoritaire pour les deux variantes.",
+    "variantIFormulaLabel": "Variante (I) : majorite humaine uniquement",
+    "variantIIFormulaLabel": "Variante (II) : majorite incluant l evaluation du modele",
+    "humanShareDefinition": "La part des evaluateurs humains qui sont d accord avec l enonce i.",
+    "omegaDefinition": "L ensemble des evaluateurs humains assignes a l enonce i.",
+    "alphaDefinition": "L evaluation du modele pour l enonce i.",
+    "ratingsDefinition": "L evaluation de l evaluateur humain j pour l enonce i.",
+    "indicatorDefinition": "Une fonction indicatrice qui renvoie 1 lorsque la condition est vraie et 0 sinon."
   }
 }

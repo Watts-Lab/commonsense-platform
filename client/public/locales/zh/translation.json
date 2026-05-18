@@ -98,7 +98,8 @@
     "dashboard": "仪表板",
     "people": "人员",
     "research": "研究",
-    "signin": "登录"
+    "signin": "登录",
+    "llmEvals": "LLM 评测"
   },
   "navbar.participate →": "参与 →",
   "publications": {
@@ -339,5 +340,53 @@
       "question": "一只狗和一只猫的总重量是 100 磅。狗的重量是 86 磅。狗和猫的重量差是多少？",
       "intuitiveExplanation": "86 磅（狗的重量） 看起来很直观"
     }
+  },
+  "llmEvals": {
+    "eyebrow": "常识基准",
+    "title": "LLM 常识评测",
+    "intro": "本表从三个个体层面的常识指标比较语言模型：共识、认知和常识性。",
+    "methodology": "共识衡量模型是否在每个陈述上同意人类多数意见。认知衡量模型是否能正确预测大多数人的想法。常识性综合这两个信号。",
+    "detailsPrefix": "如需了解评估框架和结果的更多细节，请访问",
+    "detailsLink": "LLM 常识演示页面",
+    "detailsSuffix": "。",
+    "modelsEvaluated": "已评估模型",
+    "topCommonsensicalityII": "最高常识性 (II)",
+    "scoreRank": "{{score}} 分，排名 {{rank}}",
+    "lastUpdated": "最后更新",
+    "tableTitle": "评估结果",
+    "tableHelp": "按模型搜索，按最低指标分数筛选，或点击任意列标题排序。",
+    "modelFilter": "模型",
+    "searchPlaceholder": "搜索模型",
+    "scoreMetric": "分数指标",
+    "minimumScore": "最低分数",
+    "anyPlaceholder": "任意",
+    "caption": "LLM 常识评估分数",
+    "showing": "正在显示 {{total}} 个模型中的 {{shown}} 个",
+    "scoreNote": "分数显示为数值，括号中为排名。",
+    "columns": {
+      "model": "模型",
+      "added": "添加日期",
+      "consensusI": "共识 (I)",
+      "consensusII": "共识 (II)",
+      "awarenessI": "认知 (I)",
+      "awarenessII": "认知 (II)",
+      "commonsensicalityI": "常识性 (I)",
+      "commonsensicalityII": "常识性 (II)"
+    },
+    "variants": "每个分数都在两个变体下报告。在变体 (I) 中，人类多数意见只由人类评分决定。在变体 (II) 中，加入模型评分后重新计算多数意见。分数为百分比，括号中的数字表示每个模型在该列中的排名。",
+    "modelDetailsPrefix": "如需更多模型比较，请访问",
+    "modelDetailsSuffix": "。",
+    "methodDetailsPrefix": "如需方法和公式，请参见",
+    "methodDetailsSuffix": "。",
+    "paperLink": "研究论文",
+    "calculationTitle": "计算说明",
+    "calculationIntro": "本表对两个变体使用以下多数评分定义。",
+    "variantIFormulaLabel": "变体 (I)：仅人类多数意见",
+    "variantIIFormulaLabel": "变体 (II)：包含模型评分的多数意见",
+    "humanShareDefinition": "同意陈述 i 的人类评分者比例。",
+    "omegaDefinition": "被分配到陈述 i 的人类评分者集合。",
+    "alphaDefinition": "模型对陈述 i 的评分。",
+    "ratingsDefinition": "人类评分者 j 对陈述 i 的评分。",
+    "indicatorDefinition": "指示函数：条件为真时返回 1，否则返回 0。"
   }
 }

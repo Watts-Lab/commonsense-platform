@@ -100,7 +100,8 @@
     "dashboard": "Dashboard",
     "people": "People",
     "research": "Research",
-    "signin": "Signin"
+    "signin": "Signin",
+    "llmEvals": "LLM Evals"
   },
   "navbar.participate →": "Participate →",
   "publications": {
@@ -341,5 +342,53 @@
       "question": "A dog and a cat weigh 100 pounds in total. The dog weighs 86 pounds. What is the difference in weight between the dog and the cat?",
       "intuitiveExplanation": "86 lbs (the dog's weight) feels obvious"
     }
+  },
+  "llmEvals": {
+    "eyebrow": "Common sense benchmark",
+    "title": "LLM Commonsense Evals",
+    "intro": "This table compares language models on three individual-level common sense measures: consensus, awareness, and commonsensicality.",
+    "methodology": "Consensus measures whether a model agrees with the human majority for each statement. Awareness measures whether it correctly predicts what most people would think. Commonsensicality combines these two signals.",
+    "detailsPrefix": "For more details on the evaluation framework and results, visit",
+    "detailsLink": "LLM commonsense demo page",
+    "detailsSuffix": ".",
+    "modelsEvaluated": "Models evaluated",
+    "topCommonsensicalityII": "Top commonsensicality (II)",
+    "scoreRank": "{{score}} score, rank {{rank}}",
+    "lastUpdated": "Last updated",
+    "tableTitle": "Evaluation Results",
+    "tableHelp": "Search by model, filter by a minimum metric score, or click any column heading to sort.",
+    "modelFilter": "Model",
+    "searchPlaceholder": "Search models",
+    "scoreMetric": "Score metric",
+    "minimumScore": "Minimum score",
+    "anyPlaceholder": "Any",
+    "caption": "LLM commonsense evaluation scores",
+    "showing": "Showing {{shown}} of {{total}} models",
+    "scoreNote": "Score shown as value with rank in parentheses.",
+    "columns": {
+      "model": "Model",
+      "added": "Added",
+      "consensusI": "Consensus (I)",
+      "consensusII": "Consensus (II)",
+      "awarenessI": "Awareness (I)",
+      "awarenessII": "Awareness (II)",
+      "commonsensicalityI": "Commonsensicality (I)",
+      "commonsensicalityII": "Commonsensicality (II)"
+    },
+    "variants": "Each score is reported under two variants. In variant (I), the human majority is determined from human ratings only. In variant (II), the majority is recalculated after including the model rating. Scores are percentages, and numbers in parentheses show each model ranking within that column.",
+    "modelDetailsPrefix": "For additional model comparisons, visit",
+    "modelDetailsSuffix": ".",
+    "methodDetailsPrefix": "For methodology and formulas, see",
+    "methodDetailsSuffix": ".",
+    "paperLink": "the research paper",
+    "calculationTitle": "Calculation notes",
+    "calculationIntro": "The table uses the following majority-rating definitions for the two variants.",
+    "variantIFormulaLabel": "Variant (I): human-only majority",
+    "variantIIFormulaLabel": "Variant (II): majority including the model rating",
+    "humanShareDefinition": "The share of human raters who agree with statement i.",
+    "omegaDefinition": "The set of human raters assigned to statement i.",
+    "alphaDefinition": "The model rating for statement i.",
+    "ratingsDefinition": "The rating from human rater j for statement i.",
+    "indicatorDefinition": "An indicator function that returns 1 when the condition is true and 0 otherwise."
   }
 }

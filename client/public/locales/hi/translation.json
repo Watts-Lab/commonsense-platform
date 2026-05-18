@@ -98,7 +98,8 @@
     "dashboard": "डैशबोर्ड",
     "people": "लोग",
     "research": "शोध",
-    "signin": "साइन इन करें"
+    "signin": "साइन इन करें",
+    "llmEvals": "एलएलएम मूल्यांकन"
   },
   "navbar.participate →": "भाग लें →",
   "publications": {
@@ -339,5 +340,53 @@
       "question": "एक कुत्ते और एक बिल्ली का कुल वजन 100 पाउंड है। कुत्ते का वजन 86 पाउंड है। कुत्ते और बिल्ली के वजन में कितना अंतर है?",
       "intuitiveExplanation": "86 पाउंड (कुत्ते का वजन) स्पष्ट लगता है"
     }
+  },
+  "llmEvals": {
+    "eyebrow": "सामान्य-बोध बेंचमार्क",
+    "title": "एलएलएम सामान्य-बोध मूल्यांकन",
+    "intro": "यह तालिका भाषा मॉडलों की तीन व्यक्तिगत-स्तर की सामान्य-बोध मापों पर तुलना करती है: consensus, awareness और commonsensicality।",
+    "methodology": "Consensus मापता है कि कोई मॉडल हर कथन पर मानव बहुमत से सहमत है या नहीं। Awareness मापता है कि वह सही अनुमान लगाता है या नहीं कि अधिकतर लोग क्या सोचेंगे। Commonsensicality इन दोनों संकेतों को मिलाती है।",
+    "detailsPrefix": "मूल्यांकन framework और results के बारे में अधिक जानकारी के लिए देखें",
+    "detailsLink": "एलएलएम सामान्य-बोध डेमो पेज",
+    "detailsSuffix": ".",
+    "modelsEvaluated": "मूल्यांकित मॉडल",
+    "topCommonsensicalityII": "शीर्ष commonsensicality (II)",
+    "scoreRank": "{{score}} score, rank {{rank}}",
+    "lastUpdated": "अंतिम अपडेट",
+    "tableTitle": "मूल्यांकन परिणाम",
+    "tableHelp": "मॉडल से खोजें, न्यूनतम metric score से filter करें, या sort करने के लिए किसी भी column heading पर click करें।",
+    "modelFilter": "मॉडल",
+    "searchPlaceholder": "मॉडल खोजें",
+    "scoreMetric": "Score metric",
+    "minimumScore": "न्यूनतम score",
+    "anyPlaceholder": "कोई भी",
+    "caption": "एलएलएम सामान्य-बोध मूल्यांकन scores",
+    "showing": "{{total}} मॉडलों में से {{shown}} दिखाए जा रहे हैं",
+    "scoreNote": "Score को value के रूप में दिखाया गया है और rank को कोष्ठक में।",
+    "columns": {
+      "model": "मॉडल",
+      "added": "जोड़ा गया",
+      "consensusI": "Consensus (I)",
+      "consensusII": "Consensus (II)",
+      "awarenessI": "Awareness (I)",
+      "awarenessII": "Awareness (II)",
+      "commonsensicalityI": "Commonsensicality (I)",
+      "commonsensicalityII": "Commonsensicality (II)"
+    },
+    "variants": "हर score दो variants में report किया गया है। Variant (I) में मानव majority केवल मानव ratings से निर्धारित होती है। Variant (II) में model rating को शामिल करने के बाद majority फिर से calculate होती है। Scores percentage हैं, और parentheses में दिए नंबर उस column में हर model की ranking दिखाते हैं।",
+    "modelDetailsPrefix": "अतिरिक्त model comparisons के लिए देखें",
+    "modelDetailsSuffix": ".",
+    "methodDetailsPrefix": "Methodology और formulas के लिए देखें",
+    "methodDetailsSuffix": ".",
+    "paperLink": "research paper",
+    "calculationTitle": "Calculation notes",
+    "calculationIntro": "तालिका दोनों variants के लिए नीचे दी गई majority-rating definitions का उपयोग करती है।",
+    "variantIFormulaLabel": "Variant (I): केवल मानव majority",
+    "variantIIFormulaLabel": "Variant (II): model rating सहित majority",
+    "humanShareDefinition": "कथन i से सहमत मानव raters का share।",
+    "omegaDefinition": "कथन i को assigned मानव raters का set।",
+    "alphaDefinition": "कथन i के लिए model rating।",
+    "ratingsDefinition": "कथन i के लिए मानव rater j की rating।",
+    "indicatorDefinition": "एक indicator function जो condition true होने पर 1 और अन्यथा 0 लौटाता है।"
   }
 }

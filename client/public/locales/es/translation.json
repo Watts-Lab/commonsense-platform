@@ -98,7 +98,8 @@
     "dashboard": "Tablero",
     "people": "Gente",
     "research": "Investigación",
-    "signin": "Iniciar sesión"
+    "signin": "Iniciar sesión",
+    "llmEvals": "Evaluaciones LLM"
   },
   "navbar.participate →": "Participar →",
   "publications": {
@@ -345,5 +346,53 @@
       "question": "Un perro y un gato pesan 100 libras en total. El perro pesa 86 libras. ¿Cuál es la diferencia de peso entre el perro y el gato?",
       "intuitiveExplanation": "86 lbs (el peso del perro) parece obvio"
     }
+  },
+  "llmEvals": {
+    "eyebrow": "Benchmark de sentido comun",
+    "title": "Evaluaciones de sentido comun de LLM",
+    "intro": "Esta tabla compara modelos de lenguaje en tres medidas de sentido comun a nivel individual: consenso, conciencia y commonsensicalidad.",
+    "methodology": "El consenso mide si un modelo coincide con la mayoria humana para cada enunciado. La conciencia mide si predice correctamente lo que pensaria la mayoria de las personas. La commonsensicalidad combina estas dos senales.",
+    "detailsPrefix": "Para mas detalles sobre el marco de evaluacion y los resultados, visita",
+    "detailsLink": "la pagina de demostracion de sentido comun de LLM",
+    "detailsSuffix": ".",
+    "modelsEvaluated": "Modelos evaluados",
+    "topCommonsensicalityII": "Mayor commonsensicalidad (II)",
+    "scoreRank": "puntuacion {{score}}, rango {{rank}}",
+    "lastUpdated": "Ultima actualizacion",
+    "tableTitle": "Resultados de evaluacion",
+    "tableHelp": "Busca por modelo, filtra por una puntuacion minima de metrica o haz clic en cualquier encabezado de columna para ordenar.",
+    "modelFilter": "Modelo",
+    "searchPlaceholder": "Buscar modelos",
+    "scoreMetric": "Metrica de puntuacion",
+    "minimumScore": "Puntuacion minima",
+    "anyPlaceholder": "Cualquiera",
+    "caption": "Puntuaciones de evaluacion de sentido comun de LLM",
+    "showing": "Mostrando {{shown}} de {{total}} modelos",
+    "scoreNote": "La puntuacion se muestra como valor con el rango entre parentesis.",
+    "columns": {
+      "model": "Modelo",
+      "added": "Agregado",
+      "consensusI": "Consenso (I)",
+      "consensusII": "Consenso (II)",
+      "awarenessI": "Conciencia (I)",
+      "awarenessII": "Conciencia (II)",
+      "commonsensicalityI": "Commonsensicalidad (I)",
+      "commonsensicalityII": "Commonsensicalidad (II)"
+    },
+    "variants": "Cada puntuacion se presenta bajo dos variantes. En la variante (I), la mayoria humana se determina solo a partir de las calificaciones humanas. En la variante (II), la mayoria se recalcula despues de incluir la calificacion del modelo. Las puntuaciones son porcentajes, y los numeros entre parentesis muestran la clasificacion de cada modelo dentro de esa columna.",
+    "modelDetailsPrefix": "Para comparaciones adicionales de modelos, visita",
+    "modelDetailsSuffix": ".",
+    "methodDetailsPrefix": "Para metodologia y formulas, consulta",
+    "methodDetailsSuffix": ".",
+    "paperLink": "el articulo de investigacion",
+    "calculationTitle": "Notas de calculo",
+    "calculationIntro": "La tabla usa las siguientes definiciones de calificacion mayoritaria para las dos variantes.",
+    "variantIFormulaLabel": "Variante (I): mayoria solo humana",
+    "variantIIFormulaLabel": "Variante (II): mayoria que incluye la calificacion del modelo",
+    "humanShareDefinition": "La proporcion de evaluadores humanos que estan de acuerdo con el enunciado i.",
+    "omegaDefinition": "El conjunto de evaluadores humanos asignados al enunciado i.",
+    "alphaDefinition": "La calificacion del modelo para el enunciado i.",
+    "ratingsDefinition": "La calificacion del evaluador humano j para el enunciado i.",
+    "indicatorDefinition": "Una funcion indicadora que devuelve 1 cuando la condicion es verdadera y 0 en caso contrario."
   }
 }

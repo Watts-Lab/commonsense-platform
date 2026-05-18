@@ -19,7 +19,7 @@ const Navbar: React.FC = () => {
     debounce(() => {
       setTop(window.scrollY < 10);
     }, 100), // You can adjust the debounce time as needed
-    []
+    [],
   );
 
   useEffect(() => {
@@ -63,6 +63,9 @@ const Navbar: React.FC = () => {
                 <Link to="/research">{t("navbar.research")}</Link>
               </li>
               <li className="mb-2">
+                <Link to="/llm-evals">{t("navbar.llmEvals")}</Link>
+              </li>
+              <li className="mb-2">
                 {!user ? (
                   <Link to="/signin">{t("navbar.signin")}</Link>
                 ) : (
@@ -88,6 +91,11 @@ const Navbar: React.FC = () => {
             <li className="mb-2">
               <Link to="/research" className="button-long-text">
                 {t("navbar.research")}
+              </Link>
+            </li>
+            <li className="mb-2">
+              <Link to="/llm-evals" className="button-long-text">
+                {t("navbar.llmEvals")}
               </Link>
             </li>
             <li className="mb-2">
