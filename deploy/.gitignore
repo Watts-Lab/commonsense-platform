@@ -1,0 +1,19 @@
+# Local Terraform state — may contain sensitive values. Do NOT commit.
+*.tfstate
+*.tfstate.*
+.terraform.tfstate.lock.info
+
+# Provider plugins / modules cache
+.terraform/
+
+# Crash logs
+crash.log
+crash.*.log
+
+# Saved plan outputs (can contain secrets)
+*.tfplan
+
+# Var files with real identifiers/secrets. The .example is committed.
+*.tfvars
+*.auto.tfvars
+!*.tfvars.example
