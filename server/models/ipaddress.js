@@ -7,10 +7,17 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         autoIncrement: true,
       },
+      // The session first seen from this IP.
       sessionId: {
         type: DataTypes.STRING,
         allowNull: false,
         index: true,
+      },
+      // The most recent session seen from this IP. Updated on every flush; on
+      // first insert it equals sessionId.
+      lastSessionId: {
+        type: DataTypes.STRING,
+        allowNull: true,
       },
       ipAddress: {
         type: DataTypes.STRING,

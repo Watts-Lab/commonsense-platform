@@ -52,7 +52,9 @@ const feedbackLimiter = rateLimit({
 
 // Create an in-memory cache for IP tracking
 const ipCache = new Map();
-const IP_FLUSH_INTERVAL = 60000; // Flush every 60 seconds
+// Flush every 60s by default; overridable (e.g. shorter in e2e/CI so the
+// ipaddresses table is written promptly enough to assert against).
+const IP_FLUSH_INTERVAL = Number(process.env.IP_FLUSH_INTERVAL_MS) || 60000;
 const MAX_CACHE_SIZE = 1000; // Maximum IPs to cache
 
 // Batch update function
@@ -79,6 +81,7 @@ const flushIpCache = async () => {
         await ipaddress.create({
           ipAddress: ip,
           sessionId: data.lastSessionId,
+          lastSessionId: data.lastSessionId,
           userAgent: data.userAgent,
           firstSeen: data.firstSeen,
           lastSeen: data.lastSeen,
