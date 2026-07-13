@@ -1,20 +1,15 @@
-import { useTranslation, Trans } from "react-i18next";
+import { useTranslation } from "react-i18next";
 
 type BeSampleProps = {
-  responseId: string;
-  assignmentId: string;
+  bnum: string;
   handleCopy: () => void;
   copySuccess: boolean;
 };
 
-function BeSample({
-  responseId,
-  assignmentId,
-  handleCopy,
-  copySuccess,
-}: BeSampleProps) {
+function BeSample({ bnum, handleCopy, copySuccess }: BeSampleProps) {
   const { t } = useTranslation();
   const BeSampleId = 97819;
+  const completionCode = Number(bnum) * BeSampleId;
 
   return (
     <>
@@ -25,18 +20,13 @@ function BeSample({
         </p>
         <p className="pb-2">
           {/* Copy the code below and paste it in the HIT as a completion verification: */}
-          {false && (
-            // placeholder in case we want to conditionally show assignmentId later
-            <Trans
-              i18nKey="result.copy-code-text-besample"
-              values={{ assignmentId }}
-              components={{ strong: <strong /> }}
-            />
-          )}
           {t("result.copy-code-text-besample-noassignid")}
         </p>
-        <p className="pb-2 mb-3 font-semibold border-2 rounded py-1 px-3">
-          {Number(responseId) * BeSampleId}
+        <p
+          data-cy="besample-completion-code"
+          className="pb-2 mb-3 font-semibold border-2 rounded py-1 px-3"
+        >
+          {completionCode}
         </p>
         <button
           onClick={handleCopy}
