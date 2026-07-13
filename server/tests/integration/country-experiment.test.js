@@ -153,6 +153,39 @@ describe("Country-targeted bundle experiment", () => {
     expect(block).toBe(cb.block);
   });
 
+  it("does not bump assignedCount when resuming an unfinished experiment (refresh)", async () => {
+    const sessionId = "egypt-refresh";
+
+    // First request assigns a block and creates an unfinished experiment.
+    const first = await getStatements({ sessionId, tc: "818" });
+    expect(first.status).toBe(200);
+    expect(first.body.experimentType).toBe("country-bundle");
+
+    const row = await db.experiments.findOne({ where: { userSessionId: sessionId } });
+    const { countryBlockId } = row.experimentInfo;
+
+    const cbAfterFirst = await db.countryblock.findByPk(countryBlockId);
+    expect(cbAfterFirst.assignedCount).toBe(1);
+
+    // Simulate refreshing mid-survey several times. Each should RESUME the same
+    // experiment and must NOT increment assignedCount again.
+    for (let i = 0; i < 3; i++) {
+      const resumed = await getStatements({ sessionId, tc: "818" });
+      expect(resumed.status).toBe(200);
+      expect(resumed.body.isResumed).toBe(true);
+      expect(resumed.body.experimentId).toBe(row.id);
+    }
+
+    // Counter stays at 1, and no extra experiment rows were created.
+    const cbAfterRefresh = await db.countryblock.findByPk(countryBlockId);
+    expect(cbAfterRefresh.assignedCount).toBe(1);
+
+    const experimentCount = await db.experiments.count({
+      where: { userSessionId: sessionId },
+    });
+    expect(experimentCount).toBe(1);
+  });
+
   it("skips disabled blocks when selecting", async () => {
     // Disable blocks 1 and 2 for Egypt.
     await db.countryblock.update(

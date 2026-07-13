@@ -24,59 +24,14 @@ const returnStatements = async (req, res) => {
     return res.status(400).json({ errors: errors.array() });
   }
 
-  // Filter out invalid treatments
-  const valid_experiments = experiments
-    .flatMap((experiment) =>
-      experiment.treatments.map((treatment) => {
-        return {
-          experiment_name: experiment.experimentName,
-          experiment_assigner: experiment.treatmentAssigner,
-          experiment_priority: experiment.priority || 0,
-          validity: () => true,
-          ...treatment,
-        };
-      }),
-    )
-    .filter((treatment) => {
-      return treatment.validity({ ...req }, treatment.params);
-    });
-
-  // Group valid experiments by experiment name and treatment
-  const grouped_experiments = valid_experiments.reduce((acc, experiment) => {
-    if (!acc[experiment.experiment_name]) {
-      acc[experiment.experiment_name] = {
-        experiment_assigner: experiment.experiment_assigner,
-        experiment_priority: experiment.experiment_priority,
-        experiment_valid_treatments: [],
-      };
-    }
-    acc[experiment.experiment_name].experiment_valid_treatments.push(
-      experiment,
-    );
-    return acc;
-  }, {});
-
-  // Ensure async operations are handled correctly
-  for (const experiment_name of Object.keys(grouped_experiments)) {
-    const experiment = grouped_experiments[experiment_name];
-    const assigned_treatment = await experiment.experiment_assigner(
-      experiment.experiment_valid_treatments,
-      req,
-    );
-
-    // If a treatment was assigned, add it to the experiment
-    if (assigned_treatment) {
-      // Assign the treatment to the experiment
-      grouped_experiments[experiment_name].assigned_treatment =
-        assigned_treatment;
-    } else {
-      // Remove the experiment if no treatment was assigned
-      delete grouped_experiments[experiment_name];
-    }
-  }
-
-  // 1. Check for an existing unfinished experiment for this session
   const user_session_id = req.query.sessionId;
+
+  // 1. Resume any existing unfinished experiment for this session FIRST.
+  //
+  // This must happen before running treatment assigners: some assigners have
+  // side effects (e.g. the country-bundle assigner increments a block's
+  // assignedCount), so running them on a resume/refresh would wrongly bump
+  // counters and pick a treatment we then throw away.
   try {
     const unfinishedExperiment = await db.experiments.findOne({
       where: {
@@ -132,7 +87,59 @@ const returnStatements = async (req, res) => {
     // Continue with creating a new one if lookup fails
   }
 
-  // Pick which eligible experiment to run.
+  // 2. No experiment to resume: filter treatments down to those valid for this
+  // request.
+  const valid_experiments = experiments
+    .flatMap((experiment) =>
+      experiment.treatments.map((treatment) => {
+        return {
+          experiment_name: experiment.experimentName,
+          experiment_assigner: experiment.treatmentAssigner,
+          experiment_priority: experiment.priority || 0,
+          validity: () => true,
+          ...treatment,
+        };
+      }),
+    )
+    .filter((treatment) => {
+      return treatment.validity({ ...req }, treatment.params);
+    });
+
+  // Group valid experiments by experiment name and treatment
+  const grouped_experiments = valid_experiments.reduce((acc, experiment) => {
+    if (!acc[experiment.experiment_name]) {
+      acc[experiment.experiment_name] = {
+        experiment_assigner: experiment.experiment_assigner,
+        experiment_priority: experiment.experiment_priority,
+        experiment_valid_treatments: [],
+      };
+    }
+    acc[experiment.experiment_name].experiment_valid_treatments.push(
+      experiment,
+    );
+    return acc;
+  }, {});
+
+  // Run each experiment's assigner (may have side effects, e.g. counter bumps).
+  for (const experiment_name of Object.keys(grouped_experiments)) {
+    const experiment = grouped_experiments[experiment_name];
+    const assigned_treatment = await experiment.experiment_assigner(
+      experiment.experiment_valid_treatments,
+      req,
+    );
+
+    // If a treatment was assigned, add it to the experiment
+    if (assigned_treatment) {
+      // Assign the treatment to the experiment
+      grouped_experiments[experiment_name].assigned_treatment =
+        assigned_treatment;
+    } else {
+      // Remove the experiment if no treatment was assigned
+      delete grouped_experiments[experiment_name];
+    }
+  }
+
+  // 3. Pick which eligible experiment to run.
   let random_experiment;
 
   const eligible = Object.values(grouped_experiments);
