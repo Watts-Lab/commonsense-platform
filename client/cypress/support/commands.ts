@@ -25,13 +25,27 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 //
-// declare global {
-//   namespace Cypress {
-//     interface Chainable {
-//       login(email: string, password: string): Chainable<void>
-//       drag(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       dismiss(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       visit(originalFn: CommandOriginalFn, url: string, options: Partial<VisitOptions>): Chainable<Element>
-//     }
-//   }
-// }
+// Query the test database from a spec. Delegates to the `queryDb` node task
+// defined in cypress.config.ts (Cypress commands run in the browser, so DB
+// access has to happen in the Node process via a task).
+Cypress.Commands.add(
+  "queryDb",
+  (sql: string, params?: unknown[]) => {
+    return cy.task("queryDb", { sql, params });
+  }
+);
+
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace Cypress {
+    interface Chainable {
+      /**
+       * Run a SQL query against the test database and yield the resulting rows.
+       * @example cy.queryDb("SELECT * FROM answers WHERE sessionId = ?", [id])
+       */
+      queryDb(sql: string, params?: unknown[]): Chainable<any>;
+    }
+  }
+}
+
+export {};

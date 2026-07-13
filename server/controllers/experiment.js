@@ -31,6 +31,7 @@ const returnStatements = async (req, res) => {
         return {
           experiment_name: experiment.experimentName,
           experiment_assigner: experiment.treatmentAssigner,
+          experiment_priority: experiment.priority || 0,
           validity: () => true,
           ...treatment,
         };
@@ -45,6 +46,7 @@ const returnStatements = async (req, res) => {
     if (!acc[experiment.experiment_name]) {
       acc[experiment.experiment_name] = {
         experiment_assigner: experiment.experiment_assigner,
+        experiment_priority: experiment.experiment_priority,
         experiment_valid_treatments: [],
       };
     }
@@ -130,11 +132,13 @@ const returnStatements = async (req, res) => {
     // Continue with creating a new one if lookup fails
   }
 
-  // Define random_experiment variable
-  let random_experiment = {};
+  // Pick which eligible experiment to run.
+  let random_experiment;
 
-  // if grouped_experiments is empty, asign a default treatment
-  if (Object.keys(grouped_experiments).length === 0) {
+  const eligible = Object.values(grouped_experiments);
+
+  if (eligible.length === 0) {
+    // Nothing eligible: fall back to the default weighted-random treatment.
     random_experiment = {
       assigned_treatment: {
         experiment_name: "default",
@@ -150,11 +154,18 @@ const returnStatements = async (req, res) => {
       },
     };
   } else {
-    // Select a random experiment from grouped_experiments
-    const experiment_names = Object.keys(grouped_experiments);
-    const random_experiment_name =
-      experiment_names[Math.floor(Math.random() * experiment_names.length)];
-    random_experiment = grouped_experiments[random_experiment_name];
+    // Experiments can declare a `priority` (default 0). The highest priority
+    // wins; ties are broken randomly so equal-priority experiments stay evenly
+    // sampled. This keeps precedence rules in the experiment modules themselves
+    // rather than hardcoding experiment names here.
+    const highestPriority = Math.max(
+      ...eligible.map((e) => e.experiment_priority),
+    );
+    const topExperiments = eligible.filter(
+      (e) => e.experiment_priority === highestPriority,
+    );
+    random_experiment =
+      topExperiments[Math.floor(Math.random() * topExperiments.length)];
   }
 
   const result = await random_experiment.assigned_treatment.function({
@@ -230,6 +241,26 @@ const saveExperiment = async (req, res) => {
   try {
     await updateExperiment(experimentId, { finished: true });
     console.log("Experiment saved:", experimentId);
+
+    // For country-targeted bundles, bump the block's completedCount. Kept as a
+    // maintained counter (like assignedCount) so we never aggregate the large
+    // experiments table. Non-fatal: never block completion on a counter update.
+    try {
+      const experiment = await db.experiments.findByPk(experimentId, {
+        attributes: ["experimentType", "experimentInfo"],
+      });
+      const countryBlockId = experiment?.experimentInfo?.countryBlockId;
+      if (experiment?.experimentType === "country-bundle" && countryBlockId) {
+        await db.countryblock.increment("completedCount", {
+          where: { id: countryBlockId },
+        });
+      }
+    } catch (counterError) {
+      console.error(
+        "Error updating country block completedCount (non-fatal):",
+        counterError
+      );
+    }
 
     // Send Meta CAPI event, catch errors separately so it doesn't break the user flow
     try {

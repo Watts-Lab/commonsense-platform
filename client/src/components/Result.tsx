@@ -373,10 +373,9 @@ function Result({ experimentId }: ResultProps) {
       setATurkBox(true);
       setATurkType("mturk");
     }
-    if (
-      urlParams.find((o) => o.key === "response_id") &&
-      urlParams.find((o) => o.key === "assignment_id")
-    ) {
+    // BeSample participants arrive with a `bnum` (Besample Number Used Once),
+    // which is combined with our key to produce the completion code.
+    if (urlParams.find((o) => o.key === "bnum")) {
       setATurkBox(true);
       setATurkType("besample");
     }
@@ -470,8 +469,8 @@ function Result({ experimentId }: ResultProps) {
   async function handleCopy() {
     try {
       if (aTurkType === "besample") {
-        const rid = urlParams.find((o) => o.key === "response_id")?.value;
-        await navigator.clipboard.writeText(String(Number(rid) * 97819));
+        const bnum = urlParams.find((o) => o.key === "bnum")?.value;
+        await navigator.clipboard.writeText(String(Number(bnum) * 97819));
       } else if (aTurkType === "mturk") {
         await navigator.clipboard.writeText(sessionId);
       }
@@ -496,12 +495,7 @@ function Result({ experimentId }: ResultProps) {
           />
         ) : aTurkType === "besample" ? (
           <BeSample
-            responseId={
-              urlParams.find((o) => o.key === "response_id")?.value || "0"
-            }
-            assignmentId={
-              urlParams.find((o) => o.key === "assignment_id")?.value || "0"
-            }
+            bnum={urlParams.find((o) => o.key === "bnum")?.value || "0"}
             handleCopy={handleCopy}
             copySuccess={copySuccess}
           />
