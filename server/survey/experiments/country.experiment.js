@@ -1,51 +1,73 @@
 const { GetStatementById } = require("../treatments/statement-by-id.treatment");
+const { Op } = require("sequelize");
+const { stringy } = require("../treatments/utils/id-generator");
 const db = require("../../models");
 
-/**
- * Normalise the `tc` URL parameter into a zero-padded ISO 3166-1 numeric code.
- * `tc` is the participant's country, passed by BeSample (e.g. "818", or "76"
- * which we pad to "076").
- *
- * @param {Object} req - Express request (or a shallow copy of it).
- * @returns {string|null} - The zero-padded country code, or null if missing.
- */
+// Completed bundles a block collects before we advance to the next.
+const BLOCK_QUOTA = 10;
+
+// Grace period after which an unfinished survey is treated as abandoned and its
+// reserved slot freed (survey takes ~10-15 min, so 30 min is a safe margin).
+const INFLIGHT_TTL_MS = 30 * 60 * 1000;
+
+// Live reservations for a block: unfinished experiments sharing its experimentId
+// within the TTL. Uses the indexed experiments table; experimentType guards
+// against an id collision with another experiment (design-point also uses {ids}).
+async function countInFlight(statementIds) {
+  const experimentId = stringy({ ids: statementIds });
+  return db.experiments.count({
+    where: {
+      experimentType: "country-bundle",
+      experimentId,
+      finished: false,
+      createdAt: { [Op.gte]: new Date(Date.now() - INFLIGHT_TTL_MS) },
+    },
+  });
+}
+
+// Normalise the `tc` URL param (BeSample country) into a zero-padded ISO 3166-1
+// numeric code, e.g. "76" -> "076". Returns null if absent.
 function resolveCountryCode(req) {
   const tc = req && req.query ? req.query.tc : undefined;
   if (tc === undefined || tc === null || tc === "") return null;
   return String(tc).trim().padStart(3, "0");
 }
 
-/**
- * Pick the least-served enabled block for a country code, or null if the code
- * isn't configured / has no enabled blocks. The countryblock table is the single
- * source of truth (managed via CSV import), so support for a country is simply
- * "does it have enabled rows?".
- */
+// Serve the lowest-numbered enabled block whose completed + in-flight count is
+// under quota; null if all are full (country done -> controller uses default).
 async function pickBlock(code) {
   if (!code) return null;
-  return db.countryblock.findOne({
-    where: { countryCode: code, enabled: true },
-    order: [
-      ["assignedCount", "ASC"],
-      ["block", "ASC"],
-    ],
+
+  // Enabled blocks not yet completed to quota (~5 per country), lowest first.
+  const candidates = await db.countryblock.findAll({
+    where: {
+      countryCode: code,
+      enabled: true,
+      completedCount: { [Op.lt]: BLOCK_QUOTA },
+    },
+    order: [["block", "ASC"]],
   });
+
+  for (const block of candidates) {
+    const inFlight = await countInFlight(block.statementIds);
+    if (block.completedCount + inFlight < BLOCK_QUOTA) {
+      return block;
+    }
+  }
+
+  // Every candidate is full once in-flight reservations are counted.
+  return null;
 }
 
 const experiment = {
   experimentName: "country-bundle",
 
-  // Higher priority wins when multiple experiments are eligible for a request.
-  // Country-targeted participants (identified by the `tc` URL param) must always
-  // receive their country's bundle, so this outranks the default (priority 0)
-  // and any other experiment that doesn't opt into a higher value.
+  // Highest priority wins; country-targeted participants must always get their
+  // country's bundle over the default (0) or other experiments.
   priority: 100,
 
-  // A single gateway treatment. The controller runs `validity` synchronously to
-  // decide eligibility, so we keep it cheap: just "did the request carry a `tc`
-  // code?". The authoritative check (is that country configured with enabled
-  // blocks?) happens in treatmentAssigner via a DB read; if not, it returns null
-  // and the controller drops this experiment.
+  // Cheap sync eligibility gate (just "has a tc code?"); the real check (country
+  // configured with open blocks) happens in treatmentAssigner via pickBlock.
   treatments: [
     {
       params: {},
@@ -57,22 +79,16 @@ const experiment = {
   treatmentAssigner: async (validTreatments, req) => {
     const code = resolveCountryCode(req);
 
-    // The controller enriches the gateway treatment with `experiment_name` /
-    // `experiment_assigner`; carry that metadata onto whichever block we pick so
-    // the created experiment row is typed as "country-bundle".
+    // Carry the controller-injected metadata (experiment_name/assigner) onto the
+    // picked block so the created row is typed "country-bundle".
     const gateway = (validTreatments && validTreatments[0]) || {};
     const { params: _ignored, ...gatewayMeta } = gateway;
 
-    // Round-robin via a maintained counter, NOT by aggregating the (large)
-    // experiments table. We read the enabled blocks for this country ordered by
-    // how many times each has been assigned, pick the least-served one, and
-    // atomically bump its counter. This is a tiny indexed read over ~5 rows and
-    // a single-row update, so cost is constant regardless of how big the
-    // experiments table grows.
     const block = await pickBlock(code);
     if (!block) return null;
 
-    // Atomic increment so concurrent assignments still move the counter forward.
+    // Telemetry only (started vs completed); selection uses completedCount,
+    // bumped on finish in saveExperiment. Atomic for concurrent assignments.
     await block.increment("assignedCount");
 
     return {

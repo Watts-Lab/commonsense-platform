@@ -36,18 +36,19 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: true,
       },
 
-      // Running count of how many times this block has been assigned. This is the
-      // round-robin key: we serve the block with the lowest assignedCount. Kept
-      // as a maintained counter so selection never has to aggregate the (large)
-      // experiments table on the request hot path.
+      // Running count of how many participants have STARTED this block.
+      // Telemetry only (started vs completed); not used for selection. Kept as a
+      // maintained counter so nothing has to aggregate the (large) experiments
+      // table on the request hot path.
       assignedCount: {
         type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 0,
       },
 
-      // Running count of how many participants finished this block. Not used for
-      // selection, but lets us retire blocks based on completed bundles later.
+      // Running count of how many participants have COMPLETED this block. This is
+      // the selection key: we fill the lowest-numbered block up to the quota
+      // (default 10 completions) before moving on to the next block.
       completedCount: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -61,9 +62,9 @@ module.exports = (sequelize, DataTypes) => {
           unique: true,
           fields: ["countryCode", "block"],
         },
-        // Supports the selection query: enabled blocks for a country ordered by
-        // assignedCount.
-        { fields: ["countryCode", "enabled", "assignedCount"] },
+        // Supports the selection query: enabled blocks for a country, filtered
+        // by completedCount (quota) and ordered by block.
+        { fields: ["countryCode", "enabled", "completedCount", "block"] },
       ],
     }
   );

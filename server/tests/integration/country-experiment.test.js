@@ -58,10 +58,10 @@ describe("Country-targeted bundle experiment", () => {
   });
 
   beforeEach(async () => {
-    // Clean the assignment history so round-robin starts fresh each test.
+    // Clean the assignment history so each test starts fresh.
     await db.experiments.destroy({ where: {} });
     // Reset block state: re-enable any disabled blocks and zero the counters
-    // (round-robin is driven by assignedCount, which persists across tests).
+    // (counters persist across tests otherwise).
     await db.countryblock.update(
       { enabled: true, assignedCount: 0, completedCount: 0 },
       { where: {} }
@@ -78,18 +78,61 @@ describe("Country-targeted bundle experiment", () => {
     return row && row.experimentInfo ? row.experimentInfo.block : undefined;
   };
 
-  it("serves a country's blocks round-robin by ISO numeric code (tc)", async () => {
-    const served = [];
-    for (let i = 0; i < 6; i++) {
-      const sessionId = `egypt-session-${i}`;
-      const res = await getStatements({ sessionId, tc: "818" }); // Egypt
+  it("advances to the next block once completed + in-flight reaches quota", async () => {
+    // Simulate a nearly-full block via completedCount, leaving one slot. The
+    // next participant takes the last slot (still block 1); the one after that
+    // is now over quota (completed + in-flight) and advances to block 2.
+    await db.countryblock.update(
+      { completedCount: 9 },
+      { where: { countryCode: "818", block: 1 } }
+    );
+
+    // 9 completed + 0 in-flight < 10 -> last slot goes to block 1.
+    const a = await getStatements({ sessionId: "egypt-last-slot", tc: "818" });
+    expect(a.status).toBe(200);
+    expect(await blockFor("egypt-last-slot")).toBe(1);
+
+    // 9 completed + 1 in-flight (egypt-last-slot) = 10 -> block 1 full, advance.
+    const b = await getStatements({ sessionId: "egypt-overflow", tc: "818" });
+    expect(b.status).toBe(200);
+    expect(await blockFor("egypt-overflow")).toBe(2);
+  });
+
+  it("reserves slots for in-flight (started but unfinished) surveys", async () => {
+    // No completions yet, but fill block 1 to quota with unfinished assignments.
+    // The next participant must NOT get block 1 (all slots reserved).
+    for (let i = 0; i < 10; i++) {
+      const res = await getStatements({ sessionId: `egypt-live-${i}`, tc: "818" });
       expect(res.status).toBe(200);
-      expect(res.body.experimentType).toBe("country-bundle");
-      served.push(await blockFor(sessionId));
+      expect(await blockFor(`egypt-live-${i}`)).toBe(1);
     }
 
-    // Egypt has 5 blocks: first five participants get 1..5, the sixth wraps to 1.
-    expect(served).toEqual([1, 2, 3, 4, 5, 1]);
+    // 0 completed + 10 in-flight = 10 -> block 1 is fully reserved.
+    const res = await getStatements({ sessionId: "egypt-blocked", tc: "818" });
+    expect(res.status).toBe(200);
+    expect(await blockFor("egypt-blocked")).toBe(2);
+  });
+
+  it("reopens a slot when an in-flight survey is abandoned past the TTL", async () => {
+    // Fill block 1 with 10 in-flight assignments, then age them past the TTL so
+    // they no longer count as reservations. A fresh participant should get
+    // block 1 again (slots reopened).
+    for (let i = 0; i < 10; i++) {
+      const res = await getStatements({ sessionId: `egypt-stale-${i}`, tc: "818" });
+      expect(res.status).toBe(200);
+    }
+
+    // Age every existing unfinished assignment well beyond the 30-min TTL.
+    const longAgo = new Date(Date.now() - 60 * 60 * 1000);
+    await db.experiments.update(
+      { createdAt: longAgo },
+      { where: { experimentType: "country-bundle", finished: false } }
+    );
+
+    const res = await getStatements({ sessionId: "egypt-fresh", tc: "818" });
+    expect(res.status).toBe(200);
+    // 0 completed + 0 in-flight (all expired) -> block 1 available again.
+    expect(await blockFor("egypt-fresh")).toBe(1);
   });
 
   it("zero-pads the tc code so '76' and '076' both resolve (Brazil)", async () => {
@@ -196,8 +239,20 @@ describe("Country-targeted bundle experiment", () => {
     const res = await getStatements({ sessionId: "egypt-disabled", tc: "818" });
     expect(res.status).toBe(200);
     expect(res.body.experimentType).toBe("country-bundle");
-    // Only blocks 3, 4, 5 remain eligible.
-    expect([3, 4, 5]).toContain(await blockFor("egypt-disabled"));
+    // Blocks 1 and 2 are disabled, so the lowest eligible block is 3.
+    expect(await blockFor("egypt-disabled")).toBe(3);
+  });
+
+  it("falls back to the default experiment when every block is at quota", async () => {
+    // Mark all Egyptian blocks as full (>= quota completions).
+    await db.countryblock.update(
+      { completedCount: 999 },
+      { where: { countryCode: "818" } }
+    );
+
+    const res = await getStatements({ sessionId: "egypt-full", tc: "818" });
+    expect(res.status).toBe(200);
+    expect(res.body.experimentType).toBe("default");
   });
 
   it("falls back to the default experiment when tc is missing", async () => {
