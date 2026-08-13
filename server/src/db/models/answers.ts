@@ -9,10 +9,6 @@ export default function defineAnswers(
       type: dataTypes.INTEGER,
       allowNull: true,
     },
-    statement_number: {
-      type: dataTypes.INTEGER,
-      allowNull: true,
-    },
     I_agree: {
       type: dataTypes.BOOLEAN,
       allowNull: false,

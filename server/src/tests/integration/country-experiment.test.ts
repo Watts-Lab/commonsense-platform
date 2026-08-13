@@ -78,7 +78,7 @@ describe('Country-targeted bundle experiment', () => {
   // saved experiment row, so read them back from the DB.
   const blockFor = async (sessionId: string) => {
     const row = await db.experiments.findOne({
-      where: { userSessionId: sessionId },
+      where: { sessionId },
     });
     const info = row?.get('experimentInfo') as { block?: number } | null;
     return info ? info.block : undefined;
@@ -153,7 +153,7 @@ describe('Country-targeted bundle experiment', () => {
     expect(res.body.experimentType).toBe('country-bundle');
 
     const row = await db.experiments.findOne({
-      where: { userSessionId: 'brazil-a' },
+      where: { sessionId: 'brazil-a' },
     });
     const info = row?.get('experimentInfo') as { country?: string };
     expect(info.country).toBe('Brazil');
@@ -170,7 +170,7 @@ describe('Country-targeted bundle experiment', () => {
     expect(res.status).toBe(200);
 
     const row = await db.experiments.findOne({
-      where: { userSessionId: 'egypt-persist' },
+      where: { sessionId: 'egypt-persist' },
     });
     expect(row).not.toBeNull();
     const info = row?.get('experimentInfo') as {
@@ -192,7 +192,7 @@ describe('Country-targeted bundle experiment', () => {
     expect(res.status).toBe(200);
 
     const row = await db.experiments.findOne({
-      where: { userSessionId: 'egypt-counter' },
+      where: { sessionId: 'egypt-counter' },
     });
     const info = row?.get('experimentInfo') as {
       block?: number;
@@ -226,7 +226,7 @@ describe('Country-targeted bundle experiment', () => {
     expect(first.body.experimentType).toBe('country-bundle');
 
     const row = await db.experiments.findOne({
-      where: { userSessionId: sessionId },
+      where: { sessionId },
     });
     const info = row?.get('experimentInfo') as { countryBlockId?: number };
     const { countryBlockId } = info;
@@ -248,7 +248,7 @@ describe('Country-targeted bundle experiment', () => {
     expect(cbAfterRefresh?.get('assignedCount')).toBe(1);
 
     const experimentCount = await db.experiments.count({
-      where: { userSessionId: sessionId },
+      where: { sessionId },
     });
     expect(experimentCount).toBe(1);
   });

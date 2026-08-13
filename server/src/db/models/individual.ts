@@ -7,7 +7,7 @@ export default function defineIndividuals(
   return sequelize.define(
     'individuals',
     {
-      userSessionId: {
+      sessionId: {
         type: dataTypes.STRING,
         allowNull: false,
       },

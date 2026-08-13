@@ -7,7 +7,7 @@ export default function defineExperiments(
   return sequelize.define(
     'experiments',
     {
-      userSessionId: {
+      sessionId: {
         type: dataTypes.STRING,
         allowNull: false,
       },
@@ -44,7 +44,7 @@ export default function defineExperiments(
       indexes: [
         { fields: ['experimentType'] },
         { fields: ['experimentId'] },
-        { fields: ['userSessionId', 'experimentType'] },
+        { fields: ['sessionId', 'experimentType'] },
         { fields: ['finished'] },
       ],
     },

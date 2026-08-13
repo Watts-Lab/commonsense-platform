@@ -10,6 +10,7 @@
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "test": "DOTENV_CONFIG_QUIET=true jest --coverage",
     "test:coverage": "DOTENV_CONFIG_QUIET=true jest --coverage",
+    "migrate:deploy": "node scripts/migrate.cjs",
     "migration:generate": "sequelize-cli migration:generate --name",
     "migration:up": "sequelize-cli db:migrate",
     "migration:down": "sequelize-cli db:migrate:undo",

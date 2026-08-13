@@ -41,7 +41,7 @@ describe('Experiment Route API Tests', () => {
 
     it('should update an existing experiment and mark it finished in the database', async () => {
       const newExp = await db.experiments.create({
-        userSessionId: 'test-session-123',
+        sessionId: 'test-session-123',
         experimentId: 'params-123',
         experimentType: 'default',
         experimentInfo: { data: 'test' },
@@ -83,7 +83,7 @@ describe('Experiment Route API Tests', () => {
       expect(response.body.isResumed).toBeUndefined();
 
       const createdExp = await db.experiments.findOne({
-        where: { userSessionId: sessionId },
+        where: { sessionId },
       });
 
       expect(createdExp).not.toBeNull();
@@ -92,7 +92,7 @@ describe('Experiment Route API Tests', () => {
 
     it('should retrieve an unfinished experiment from the database instead of creating a new one', async () => {
       const existingExp = await db.experiments.create({
-        userSessionId: 'session-resume-123',
+        sessionId: 'session-resume-123',
         experimentId: 'params-123',
         experimentType: 'default',
         experimentInfo: { data: 'test' },
@@ -114,7 +114,7 @@ describe('Experiment Route API Tests', () => {
 
     it("should assign default experiment when user already finished today's daily experiment", async () => {
       await db.experiments.create({
-        userSessionId: 'session-daily-done',
+        sessionId: 'session-daily-done',
         experimentType: 'daily-experiment',
         experimentId: 'some-params',
         experimentInfo: {},
@@ -135,7 +135,7 @@ describe('Experiment Route API Tests', () => {
 
       const createdExp = await db.experiments.findOne({
         where: {
-          userSessionId: 'session-daily-done',
+          sessionId: 'session-daily-done',
           experimentType: 'default',
         },
       });

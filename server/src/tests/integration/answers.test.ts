@@ -48,7 +48,6 @@ describe('Answers Route Integration', () => {
 
     await db.answers.create({
       statementId: 501,
-      statement_number: 501,
       I_agree: 0,
       I_agree_reason: 'older',
       others_agree: 0,
@@ -61,7 +60,6 @@ describe('Answers Route Integration', () => {
 
     await db.answers.create({
       statementId: 501,
-      statement_number: 501,
       I_agree: 1,
       I_agree_reason: 'newer',
       others_agree: 1,
@@ -74,7 +72,6 @@ describe('Answers Route Integration', () => {
 
     await db.answers.create({
       statementId: 502,
-      statement_number: 502,
       I_agree: 1,
       I_agree_reason: 'zh',
       others_agree: 1,
@@ -117,7 +114,6 @@ describe('Answers Route Integration', () => {
 
     expect(response.status).toBe(200);
     expect(response.body.statementId).toBe(501);
-    expect(response.body.statement_number).toBe(501);
     expect(response.body.clarity).toBe('clear');
     expect(response.body).toHaveProperty('statementId', 501);
   });

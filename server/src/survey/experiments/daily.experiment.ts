@@ -65,7 +65,7 @@ const dailyExperiment = {
 
     const alreadyDone = await experiments.findOne({
       where: {
-        userSessionId: sessionId,
+        sessionId,
         experimentType: 'daily-experiment',
         finished: true,
         createdAt: {

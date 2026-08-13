@@ -91,8 +91,15 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      statementId: { type: Sequelize.INTEGER, allowNull: true },
-      statement_number: { type: Sequelize.INTEGER, allowNull: true },
+      // FK to statements is RESTRICT: answers are the core survey data and must
+      // never be deleted or orphaned when a statement is removed.
+      statementId: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        references: { model: 'statements', key: 'id' },
+        onDelete: 'RESTRICT',
+        onUpdate: 'CASCADE',
+      },
       I_agree: { type: Sequelize.BOOLEAN, allowNull: false },
       I_agree_reason: { type: Sequelize.STRING, allowNull: false },
       others_agree: { type: Sequelize.BOOLEAN, allowNull: false },
@@ -113,7 +120,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      userSessionId: { type: Sequelize.STRING, allowNull: false },
+      sessionId: { type: Sequelize.STRING, allowNull: false },
       experimentId: { type: Sequelize.STRING, allowNull: false },
       experimentType: { type: Sequelize.STRING, allowNull: false },
       experimentInfo: { type: Sequelize.JSON, allowNull: true },
@@ -135,10 +142,14 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      name: { type: Sequelize.STRING, allowNull: true },
+      name: {
+        type: Sequelize.STRING,
+        allowNull: true,
+        defaultValue: 'Anonymous',
+      },
       email: { type: Sequelize.STRING, allowNull: false, unique: true },
       magicLink: { type: Sequelize.STRING, allowNull: true },
-      sessionId: { type: Sequelize.STRING, allowNull: true },
+      sessionId: { type: Sequelize.STRING, allowNull: true, unique: true },
       magicLinkExpired: { type: Sequelize.BOOLEAN, allowNull: true },
       createdAt: { allowNull: false, type: Sequelize.DATE },
       updatedAt: { allowNull: false, type: Sequelize.DATE },
@@ -167,6 +178,9 @@ module.exports = {
       },
       type: { type: Sequelize.STRING, allowNull: false },
       comment: { type: Sequelize.TEXT, allowNull: true },
+      // NOTE: These three columns are missing from the legacy production
+      // `feedbacks` table (which predates the migration system). The
+      // 20260814000000-reconcile-production-schema migration adds them there.
       sessionId: { type: Sequelize.STRING, allowNull: true },
       ipAddress: { type: Sequelize.STRING, allowNull: true },
       userAgent: { type: Sequelize.TEXT, allowNull: true },
@@ -243,7 +257,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      userSessionId: { type: Sequelize.STRING, allowNull: false },
+      sessionId: { type: Sequelize.STRING, allowNull: false },
       informationType: { type: Sequelize.STRING, allowNull: false },
       experimentInfo: { type: Sequelize.JSON, allowNull: true },
       urlParams: { type: Sequelize.STRING, allowNull: true },
@@ -300,7 +314,7 @@ module.exports = {
     await queryInterface.addIndex('experiments', ['experimentType']);
     await queryInterface.addIndex('experiments', ['experimentId']);
     await queryInterface.addIndex('experiments', [
-      'userSessionId',
+      'sessionId',
       'experimentType',
     ]);
     await queryInterface.addIndex('experiments', ['finished']);
@@ -314,6 +328,11 @@ module.exports = {
     await queryInterface.addIndex('countryblocks', ['countryCode', 'block'], {
       unique: true,
     });
+    await queryInterface.addIndex('countryblocks', [
+      'countryCode',
+      'enabled',
+      'assignedCount',
+    ]);
     await queryInterface.addIndex('countryblocks', [
       'countryCode',
       'enabled',

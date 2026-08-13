@@ -55,14 +55,17 @@ statementproperties.belongsTo(statements, {
   foreignKey: 'statementId',
 });
 
+// Answers are the core survey data. The FK to statements uses RESTRICT on
+// delete so a statement that has answers can never be removed (and answers are
+// never orphaned).
 statements.hasMany(answers, {
-  foreignKey: 'statement_number',
+  foreignKey: 'statementId',
   onDelete: 'RESTRICT',
-  onUpdate: 'RESTRICT',
+  onUpdate: 'CASCADE',
 });
 
 answers.belongsTo(statements, {
-  foreignKey: 'statement_number',
+  foreignKey: 'statementId',
   as: 'statement',
 });
 

@@ -64,6 +64,9 @@ export default function defineCountryBlock(
       indexes: [
         // One row per (country, block); also guards against duplicate imports.
         { unique: true, fields: ['countryCode', 'block'] },
+        // Legacy telemetry index (kept to match production): enabled blocks for a
+        // country ordered by assignedCount.
+        { fields: ['countryCode', 'enabled', 'assignedCount'] },
         // Supports the selection query: enabled blocks for a country, filtered
         // by completedCount (quota) and ordered by block.
         { fields: ['countryCode', 'enabled', 'completedCount', 'block'] },

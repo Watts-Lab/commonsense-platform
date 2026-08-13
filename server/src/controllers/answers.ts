@@ -36,7 +36,6 @@ export async function createAnswer(req: Request, res: Response): Promise<void> {
 
   const answerData: Record<string, unknown> = {
     statementId: req.body.statementId,
-    statement_number: req.body.statementId,
     I_agree: req.body.I_agree,
     I_agree_reason: req.body.I_agree_reason,
     others_agree: req.body.others_agree,
@@ -154,7 +153,6 @@ export async function changeAnswers(
 
       const answerData = {
         statementId: req.body.statementId,
-        statement_number: req.body.statementId,
         I_agree: req.body.I_agree,
         I_agree_reason: req.body.I_agree_reason,
         others_agree: req.body.others_agree,

@@ -8,6 +8,7 @@ export default function defineUsers(
     name: {
       type: dataTypes.STRING,
       allowNull: true,
+      defaultValue: 'Anonymous',
     },
     email: {
       type: dataTypes.STRING,
@@ -21,6 +22,7 @@ export default function defineUsers(
     sessionId: {
       type: dataTypes.STRING,
       allowNull: true,
+      unique: true,
     },
     magicLinkExpired: {
       type: dataTypes.BOOLEAN,

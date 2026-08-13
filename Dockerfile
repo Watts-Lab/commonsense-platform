@@ -31,5 +31,8 @@ COPY --from=server-build /app/server /usr/src/app
 # Expose port 80
 EXPOSE 80
 
-# Start Nginx and Express server
-CMD apt-get update && echo "Y" | apt-get install nodejs && service nginx start && cd /usr/src/app && node dist/server.js
+# Start Nginx, run DB migrations, then the Express server.
+# migrate:deploy self-baselines the legacy prod DB and applies any pending
+# migrations; if it fails the container exits so the deploy circuit-breaker rolls
+# back rather than serving against an unmigrated schema.
+CMD apt-get update && echo "Y" | apt-get install nodejs && service nginx start && cd /usr/src/app && npm run migrate:deploy && node dist/server.js

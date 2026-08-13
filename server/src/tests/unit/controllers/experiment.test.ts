@@ -184,7 +184,7 @@ describe('experiment controller', () => {
     await saveIndividual(req, res);
 
     expect(saveIndividualDBMock).toHaveBeenCalledWith({
-      userSessionId: 'sx',
+      sessionId: 'sx',
       informationType: 'demographics',
       experimentInfo: { a: 1 },
       urlParams: 'newsletter',

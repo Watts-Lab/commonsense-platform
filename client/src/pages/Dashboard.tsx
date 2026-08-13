@@ -32,7 +32,6 @@ interface Answer {
   sessionId: string;
   createdAt: string;
   updatedAt: string;
-  statement_number: number;
   statementId: number;
   statement: Statement;
   agreement?: Agreement;

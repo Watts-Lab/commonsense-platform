@@ -28,7 +28,7 @@ export const returnStatements = async (
     return;
   }
 
-  const userSessionId = req.query.sessionId as string;
+  const sessionId = req.query.sessionId as string;
 
   // 1. Resume any existing unfinished experiment for this session FIRST.
   //
@@ -39,7 +39,7 @@ export const returnStatements = async (
   try {
     const unfinishedExperiment = await experimentModel.findOne({
       where: {
-        userSessionId,
+        sessionId,
         finished: false,
       },
       order: [['createdAt', 'DESC']],
@@ -48,7 +48,7 @@ export const returnStatements = async (
     if (unfinishedExperiment) {
       const experimentAnswers = await answers.findAll({
         where: {
-          sessionId: userSessionId,
+          sessionId,
           createdAt: {
             [Op.gte]: unfinishedExperiment.get('createdAt') as Date,
           },
@@ -137,7 +137,7 @@ export const returnStatements = async (
       assigned_treatment: {
         experiment_name: 'default',
         params: {
-          sessionId: userSessionId,
+          sessionId,
           validStatementList: [],
           numberOfStatements: 15,
         },
@@ -163,13 +163,13 @@ export const returnStatements = async (
   const result = await randomExperiment.assigned_treatment.function({
     ...randomExperiment.assigned_treatment.params,
     language,
-    sessionId: userSessionId,
+    sessionId,
   });
 
   delete req.query.sessionId;
 
   const experimentData = {
-    userSessionId,
+    sessionId,
     experimentId: stringy(randomExperiment.assigned_treatment.params),
     experimentType: randomExperiment.assigned_treatment.experiment_name,
     experimentInfo: randomExperiment.assigned_treatment,
@@ -198,7 +198,7 @@ export const saveIndividual = async (
   res: Response,
 ): Promise<void> => {
   const individualData = {
-    userSessionId: req.body.sessionId,
+    sessionId: req.body.sessionId,
     informationType: req.body.informationType,
     experimentInfo: req.body.experimentInfo,
     urlParams: req.query.source ? req.query.source : null,
