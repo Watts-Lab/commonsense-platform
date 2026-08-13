@@ -39,7 +39,6 @@ describe('Results Route Integration', () => {
 
     await db.answers.create({
       statementId: 777,
-      statement_number: 777,
       I_agree: 1,
       I_agree_reason: 'yes',
       others_agree: 1,
@@ -49,7 +48,6 @@ describe('Results Route Integration', () => {
     });
     await db.answers.create({
       statementId: 778,
-      statement_number: 778,
       I_agree: 1,
       I_agree_reason: 'mixed',
       others_agree: 1,
@@ -61,7 +59,6 @@ describe('Results Route Integration', () => {
     for (const sid of [777, 779, 780, 781, 782]) {
       await db.answers.create({
         statementId: sid,
-        statement_number: sid,
         I_agree: 1,
         I_agree_reason: 'good',
         others_agree: 1,
@@ -74,7 +71,6 @@ describe('Results Route Integration', () => {
     for (const sid of [777, 779, 780, 781, 782]) {
       await db.answers.create({
         statementId: sid,
-        statement_number: sid,
         I_agree: 0,
         I_agree_reason: 'other',
         others_agree: 0,
@@ -87,7 +83,6 @@ describe('Results Route Integration', () => {
     for (const sid of [777, 779, 780, 781]) {
       await db.answers.create({
         statementId: sid,
-        statement_number: sid,
         I_agree: 1,
         I_agree_reason: 'short',
         others_agree: 1,
@@ -99,7 +94,6 @@ describe('Results Route Integration', () => {
 
     await db.answers.create({
       statementId: 880,
-      statement_number: 880,
       I_agree: 0,
       others_agree: 1,
       I_agree_reason: 'single',
@@ -112,7 +106,6 @@ describe('Results Route Integration', () => {
 
     await db.answers.create({
       statementId: 881,
-      statement_number: 881,
       I_agree: 0,
       others_agree: 0,
       I_agree_reason: 'old-a',
@@ -125,7 +118,6 @@ describe('Results Route Integration', () => {
 
     await db.answers.create({
       statementId: 881,
-      statement_number: 881,
       I_agree: 1,
       others_agree: 1,
       I_agree_reason: 'new-a',
@@ -138,7 +130,6 @@ describe('Results Route Integration', () => {
 
     await db.answers.create({
       statementId: 881,
-      statement_number: 881,
       I_agree: 0,
       others_agree: 0,
       I_agree_reason: 'b',

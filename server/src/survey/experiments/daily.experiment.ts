@@ -18,7 +18,7 @@ async function getOrCreateDailyExperiment(): Promise<number[]> {
         COUNT(a.id) AS answerCount
       FROM
         statements s
-      LEFT JOIN answers a ON a.statement_number = s.id
+      LEFT JOIN answers a ON a.statementId = s.id
       WHERE
         s.published = 1
       GROUP BY
