@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import Backend from "../apis/backend";
 import TwitterText from "../utils/TwitterText";
 import { useSession } from "../context/SessionContext";
+import { rawData } from "./Scores";
 
 function DashboardChart() {
   const {
@@ -36,39 +37,30 @@ function DashboardChart() {
     });
   }, []);
 
-  const containerRef = useRef();
-  const [data, setData] = useState([]);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Seed the histogram with the same background distribution used on the
+  // results page, so the plot isn't empty while live data (which requires
+  // sessions with >=5 answers, see /results/all) is sparse.
   const [individualCommonsensicality, setIndividualCommonsensicality] =
-    useState([]);
+    useState(
+      rawData
+        .sort((a, b) => a.commonsensicality - b.commonsensicality)
+        .map((v) => ({ ...v, count: 1 }))
+    );
 
   useEffect(() => {
-    Backend.get("/results/all", {
-      withCredentials: true,
-      params: {
-        sessionId: sessionId,
-      },
-    })
-      .then((response) => {
-        setData(
-          response.data.sort(
-            (a, b) => a.commonsensicality - b.commonsensicality
-          )
-        );
-
-        return response.data;
-      })
-      .then((data) => {
-        setIndividualCommonsensicality(
-          data.map(
-            (value: { sessionId: string; commonsensicality: number }) => ({
-              sessionId: value.sessionId,
-              commonsensicality: value.commonsensicality,
-              count: 1,
-            })
-          )
-        );
-      });
-  }, []);
+    setIndividualCommonsensicality((prev) =>
+      [
+        ...prev.filter((r) => r.sessionId !== "You"),
+        {
+          sessionId: "You",
+          commonsensicality: commonSenseScore.commonsense / 100,
+          count: 1,
+        },
+      ].sort((a, b) => a.commonsensicality - b.commonsensicality)
+    );
+  }, [commonSenseScore]);
 
   useEffect(() => {
     const plot = Plot.plot({
@@ -82,23 +74,26 @@ function DashboardChart() {
             {
               y: "count",
               fill: "x",
-              fillOpacity: (bin) =>
-                bin.some((r) => r.sessionId === "You") ? 1 : 0.3,
+              fillOpacity: (
+                bin: {
+                  sessionId: string;
+                  commonsensicality: number;
+                  count: number;
+                }[]
+              ) => (bin.some((r) => r.sessionId === "You") ? 1 : 0.3),
             },
-            {
-              thresholds: 20,
-              // stroke: "black",
-              strokeOpacity: 0.2,
-              x: "commonsensicality",
-            }
+            { thresholds: 20, x: "commonsensicality" }
           )
         ),
         Plot.ruleY([0]),
       ],
     });
-    containerRef.current.append(plot);
+    if (containerRef.current) {
+      containerRef.current.innerHTML = "";
+      containerRef.current.appendChild(plot);
+    }
     return () => plot.remove();
-  }, [data]);
+  }, [individualCommonsensicality]);
 
   const { t } = useTranslation();
 
