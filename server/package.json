@@ -48,7 +48,7 @@
     "typescript": "^6.0.3"
   },
   "dependencies": {
-    "@aws-sdk/client-ses": "^3.1052.0",
+    "@aws-sdk/client-sesv2": "^3.927.0",
     "axios": "^1.16.1",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
@@ -58,11 +58,12 @@
     "express-rate-limit": "^8.5.2",
     "express-session": "^1.19.0",
     "express-validator": "^7.3.2",
+    "facebook-nodejs-business-sdk": "^23.0.1",
     "helmet": "^8.2.0",
     "jsonwebtoken": "^9.0.3",
     "mariadb": "^3.5.2",
     "mysql2": "^3.22.3",
-    "nodemailer": "^8.0.7",
+    "nodemailer": "^9.0.3",
     "sequelize": "^6.37.8",
     "xss": "^1.0.15"
   },

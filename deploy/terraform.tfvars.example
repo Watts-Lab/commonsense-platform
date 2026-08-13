@@ -1,0 +1,9 @@
+aws_account_id      = "000000000000"
+aws_region          = "us-east-1"
+vpc_id              = "vpc-xxxxxxxxxxxxxxxxx"
+public_subnet_ids   = ["subnet-xxxxxxxxxxxxxxxxx", "subnet-yyyyyyyyyyyyyyyyy"]
+acm_certificate_arn = "arn:aws:acm:us-east-1:000000000000:certificate/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+rds_kms_key_id      = "arn:aws:kms:us-east-1:000000000000:key/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+bastion_ami         = "ami-xxxxxxxxxxxxxxxxx"
+bastion_private_ip  = "10.0.0.10"
+bastion_key_name    = "your-ec2-keypair"
