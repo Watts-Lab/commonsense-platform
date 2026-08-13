@@ -35,4 +35,6 @@ EXPOSE 80
 # migrate:deploy self-baselines the legacy prod DB and applies any pending
 # migrations; if it fails the container exits so the deploy circuit-breaker rolls
 # back rather than serving against an unmigrated schema.
-CMD apt-get update && echo "Y" | apt-get install nodejs && service nginx start && cd /usr/src/app && npm run migrate:deploy && node dist/server.js
+# NOTE: run the migration script directly with `node` (not `npm run`) since
+# the base nginx image's `nodejs` apt package does not include `npm`.
+CMD apt-get update && echo "Y" | apt-get install nodejs && service nginx start && cd /usr/src/app && node scripts/migrate.cjs && node dist/server.js
