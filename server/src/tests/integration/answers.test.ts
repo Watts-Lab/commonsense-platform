@@ -181,6 +181,30 @@ describe('Answers Route Integration', () => {
     expect(response.body.message).toBe('No session ID found');
   });
 
+  it('POST /api/answers/getanswers should return an empty list for a user with no answers', async () => {
+    await db.users.create({
+      email: 'no-answers-user@example.com',
+      sessionId: 'no-answers-session',
+    });
+
+    const token = jwt.sign(
+      {
+        email: 'no-answers-user@example.com',
+        sessionId: 'no-answers-session',
+      },
+      process.env.JWT_SECRET as string,
+    );
+
+    const response = await request(app)
+      .post('/api/answers/getanswers')
+      .set('Authorization', token)
+      .send({ email: 'no-answers-user@example.com', language: 'en' });
+
+    // No answers yet is a valid empty state, not a 400 client error.
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual([]);
+  });
+
   it('POST /api/answers/changeanswers should add new answer for valid token', async () => {
     const token = jwt.sign(
       { email: 'answers-user@example.com', sessionId: 'answers-session-1' },

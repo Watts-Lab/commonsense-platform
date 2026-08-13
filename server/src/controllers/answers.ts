@@ -112,10 +112,18 @@ export async function getAnswers(req: Request, res: Response): Promise<void> {
         return true;
       });
 
+      // No answers yet is a valid empty state (e.g. a user who signed up but
+      // hasn't answered anything), not a client error -> return an empty list.
+      if (uniqueResults.length === 0) {
+        res.json([]);
+        return;
+      }
+
+      // A persisted answer with a null statementId is genuinely malformed data.
       const statementIds = uniqueResults.map((answer) =>
         answer.get('statementId'),
       );
-      if (statementIds.length === 0 || statementIds.some((id) => !id)) {
+      if (statementIds.some((id) => !id)) {
         res.status(400).json({ ok: false, message: 'Invalid statement IDs' });
         return;
       }
