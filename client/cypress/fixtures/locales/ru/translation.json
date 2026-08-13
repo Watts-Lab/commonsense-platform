@@ -137,7 +137,10 @@
     "required-fields": "Обязательные поля отмечены звездочкой *"
   },
   "enter": {
-    "enter-verifying-magic-link": "Проверка вашей волшебной ссылки"
+    "enter-verifying-magic-link": "Проверка вашей волшебной ссылки",
+    "enter-invalid-magic-link": "Недействительная или истёкшая ссылка",
+    "enter-invalid-magic-link-help": "Эта ссылка для входа недействительна или уже была использована. Запросите новую, чтобы продолжить.",
+    "enter-back-to-signin": "Назад к входу"
   },
   "feedback": {
     "feedback": "обратная связь"

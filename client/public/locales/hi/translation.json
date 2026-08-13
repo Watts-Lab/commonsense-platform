@@ -141,7 +141,10 @@
     "required-fields": "आवश्यक क्षेत्र चिह्नित हैं *"
   },
   "enter": {
-    "enter-verifying-magic-link": "आपका जादुई लिंक सत्यापित किया जा रहा है"
+    "enter-verifying-magic-link": "आपका जादुई लिंक सत्यापित किया जा रहा है",
+    "enter-invalid-magic-link": "अमान्य या समाप्त लिंक",
+    "enter-invalid-magic-link-help": "यह साइन-इन लिंक अमान्य है या पहले ही उपयोग किया जा चुका है। जारी रखने के लिए एक नया अनुरोध करें।",
+    "enter-back-to-signin": "साइन इन पर वापस जाएं"
   },
   "feedback": {
     "feedback": "प्रतिक्रिया"

@@ -28,12 +28,12 @@ export async function login(req: Request, res: Response): Promise<void> {
   };
 
   if (!email) {
-    res.json({ ok: false, message: 'All fields are required' });
+    res.status(400).json({ ok: false, message: 'All fields are required' });
     return;
   }
 
   if (!isEmail(email)) {
-    res.json({ ok: false, message: 'Invalid email provided' });
+    res.status(400).json({ ok: false, message: 'Invalid email provided' });
     return;
   }
 
@@ -82,9 +82,11 @@ export async function login(req: Request, res: Response): Promise<void> {
       return;
     }
 
-    res.json({ ok: false, message: 'Magic link expired or incorrect' });
+    res
+      .status(401)
+      .json({ ok: false, message: 'Magic link expired or incorrect' });
   } catch (error) {
-    res.json({ ok: false, error: (error as Error).message });
+    res.status(500).json({ ok: false, error: (error as Error).message });
   }
 }
 

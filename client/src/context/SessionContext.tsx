@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
+import axios from "axios";
 import Backend from "../apis/backend";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 
 interface User {
   email: string;
@@ -23,7 +24,10 @@ interface SessionContextProps {
   actions: {
     setSessionId: React.Dispatch<React.SetStateAction<string>>;
     setUser: React.Dispatch<React.SetStateAction<User | null>>;
-    signIn: (email: string, magicLink?: string) => Promise<void>;
+    signIn: (
+      email: string,
+      magicLink?: string
+    ) => Promise<{ ok: boolean; message?: string }>;
     signUp: (email: string) => Promise<void>;
     captureUrlParams: (params: { key: string; value: string }[]) => void;
   };
@@ -137,7 +141,10 @@ export const SessionProvider = ({ children }: SessionProviderProps) => {
     localStorage.setItem("user", JSON.stringify(newUser));
   };
 
-  const signIn = async (email: string, magicLink?: string) => {
+  const signIn = async (
+    email: string,
+    magicLink?: string
+  ): Promise<{ ok: boolean; message?: string }> => {
     try {
       const response = await Backend.post(
         "/users/enter",
@@ -150,14 +157,27 @@ export const SessionProvider = ({ children }: SessionProviderProps) => {
           setSessionId(response.data.sessionId);
           setUser({ email, token: response.data.token });
           setTimeout(() => navigate("/dashboard"), 1000);
-        } else {
-          alert(response.data.message);
+          return { ok: true };
         }
-      } else if (!response.data.ok) {
-        console.error("Error during sign-in:", response.data.message);
+        // No token but a 2xx response: treat as a failed verification.
+        return { ok: false, message: response.data.message };
       }
+
+      // Email-only sign-in/sign-up request (link will be emailed).
+      if (!response.data.ok) {
+        console.error("Error during sign-in:", response.data.message);
+        return { ok: false, message: response.data.message };
+      }
+      return { ok: true, message: response.data.message };
     } catch (error) {
-      console.error("Error during sign-in:", error);
+      // The backend returns a non-2xx status (e.g. 401) when a magic link is
+      // invalid/expired, which makes axios throw. Surface the server message.
+      const message =
+        axios.isAxiosError(error) && error.response?.data?.message
+          ? error.response.data.message
+          : "Something went wrong during sign-in";
+      console.error("Error during sign-in:", message);
+      return { ok: false, message };
     }
   };
 

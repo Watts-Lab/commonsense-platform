@@ -28,7 +28,7 @@ describe('Users Route Integration', () => {
       .post('/api/users/enter')
       .send({ email: 'bad-email', sessionId: 'user-session-1' });
 
-    expect(response.status).toBe(200);
+    expect(response.status).toBe(400);
     expect(response.body.ok).toBe(false);
   });
 
@@ -37,7 +37,7 @@ describe('Users Route Integration', () => {
       .post('/api/users/enter')
       .send({ sessionId: 'user-session-1' });
 
-    expect(response.status).toBe(200);
+    expect(response.status).toBe(400);
     expect(response.body.ok).toBe(false);
     expect(response.body.message).toBe('All fields are required');
   });
@@ -133,7 +133,7 @@ describe('Users Route Integration', () => {
       sessionId: 'expired-session',
     });
 
-    expect(response.status).toBe(200);
+    expect(response.status).toBe(401);
     expect(response.body.ok).toBe(false);
     expect(response.body.message).toBe('Magic link expired or incorrect');
   });

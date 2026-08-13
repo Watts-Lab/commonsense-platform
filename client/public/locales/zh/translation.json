@@ -141,7 +141,10 @@
     "required-fields": "必填字段标有星号 *"
   },
   "enter": {
-    "enter-verifying-magic-link": "正在验证您的魔法链接"
+    "enter-verifying-magic-link": "正在验证您的魔法链接",
+    "enter-invalid-magic-link": "链接无效或已过期",
+    "enter-invalid-magic-link-help": "此登录链接无效或已被使用。请重新获取一个以继续。",
+    "enter-back-to-signin": "返回登录"
   },
   "feedback": {
     "feedback": "反馈"

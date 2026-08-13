@@ -137,7 +137,10 @@
     "required-fields": "必須フィールドにはアスタリスク * が付いています"
   },
   "enter": {
-    "enter-verifying-magic-link": "あなたのマジックリンクを確認しています"
+    "enter-verifying-magic-link": "あなたのマジックリンクを確認しています",
+    "enter-invalid-magic-link": "無効または期限切れのリンク",
+    "enter-invalid-magic-link-help": "このログインリンクは無効であるか、すでに使用されています。続行するには新しいリンクをリクエストしてください。",
+    "enter-back-to-signin": "サインインに戻る"
   },
   "feedback": {
     "feedback": "フィードバック"

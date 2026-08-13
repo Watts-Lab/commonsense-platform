@@ -24,6 +24,11 @@ describe("magic-link authentication", () => {
 
   afterEach(() => {
     cy.queryDb("DELETE FROM users WHERE email = ?", [email]);
+    // Some tests attribute answers to these sessions; keep runs isolated.
+    cy.queryDb("DELETE FROM answers WHERE sessionId IN (?, ?)", [
+      "original-survey-session-AAA",
+      "new-browser-session-BBB",
+    ]);
   });
 
   it("signs a new user in via the emailed magic link", () => {
@@ -95,9 +100,12 @@ describe("magic-link authentication", () => {
       },
     });
 
-    // Give the verification attempt time to resolve, then confirm no session
-    // was created and we're not on the dashboard.
-    cy.wait(2000);
+    // The page shows a clear on-page error (no alert popup) and offers a way
+    // back to sign in -- it must NOT log the user in or redirect to dashboard.
+    cy.get('[data-cy="magic-link-error"]', { timeout: 10000 }).should(
+      "be.visible",
+    );
+    cy.contains("a", "Back to sign in").should("be.visible");
     cy.url().should("not.include", "/dashboard");
     cy.window()
       .its("localStorage")
@@ -105,5 +113,101 @@ describe("magic-link authentication", () => {
       .should((raw) => {
         expect(raw === null || raw === "null").to.be.true;
       });
+  });
+
+  // The whole point of accounts: a participant can take the survey anonymously,
+  // sign up (tying that survey session to their email), then return later in a
+  // different browser and log in. Logging in must adopt the account's ORIGINAL
+  // registered session -- not the current browser's throwaway session -- so
+  // their new answers merge with the old ones and their score accumulates.
+  it("adopts the account's registered session on login (merges past answers)", () => {
+    // The session tied to the account when they first signed up mid-survey.
+    const registeredSession = "original-survey-session-AAA";
+    // A different, throwaway session the returning browser currently holds.
+    const newBrowserSession = "new-browser-session-BBB";
+    const magicLink = "a".repeat(128); // deterministic, valid-shaped link
+    // A statement that exists in the seeded DB (answers.statementId is a
+    // RESTRICT foreign key, so it must reference a real statement).
+    const statementId = 1;
+
+    // Clean any leftover answers from a previous run for these sessions.
+    cy.queryDb("DELETE FROM answers WHERE sessionId IN (?, ?)", [
+      registeredSession,
+      newBrowserSession,
+    ]);
+
+    // Simulate "took survey under session A, then signed up": a user row whose
+    // sessionId is the registered survey session, with a fresh (unused) link...
+    cy.queryDb(
+      "INSERT INTO users (email, sessionId, magicLink, magicLinkExpired, createdAt, updatedAt) VALUES (?, ?, ?, 0, NOW(), NOW())",
+      [email, registeredSession, magicLink],
+    );
+    // ...and an answer they gave anonymously under session A (their history).
+    cy.queryDb(
+      "INSERT INTO answers (statementId, I_agree, I_agree_reason, others_agree, others_agree_reason, perceived_commonsense, sessionId, createdAt, updatedAt) VALUES (?, 1, 'past', 1, 'past', 1, ?, NOW(), NOW())",
+      [statementId, registeredSession],
+    );
+
+    // Open the magic link in a browser that currently has a DIFFERENT session.
+    cy.visit(`http://localhost:5173/login/${email}/${magicLink}`, {
+      onBeforeLoad(win) {
+        win.localStorage.setItem("gdpr-consent", "accepted");
+        win.localStorage.setItem("sessionId", newBrowserSession);
+      },
+    });
+
+    // Login succeeds and lands on the dashboard.
+    cy.url({ timeout: 15000 }).should("include", "/dashboard");
+
+    // The browser's session is now the REGISTERED one (A), so subsequent survey
+    // answers are attributed to the same account history -- not session B.
+    cy.window()
+      .its("localStorage")
+      .invoke("getItem", "sessionId")
+      .should("equal", registeredSession);
+
+    // And the DB still holds the original session (login didn't overwrite it).
+    cy.queryDb("SELECT sessionId FROM users WHERE email = ?", [email]).then(
+      (rows) => {
+        expect(rows[0].sessionId).to.equal(registeredSession);
+      },
+    );
+
+    // Prove the actual merge end to end: submit a NEW answer exactly how the app
+    // does (POST /answers with sessionId read from localStorage), then confirm
+    // it landed under session A alongside the pre-existing answer -- i.e. the
+    // new response accumulates into the account's history, not the throwaway B.
+    cy.window()
+      .its("localStorage")
+      .invoke("getItem", "sessionId")
+      .then((currentSessionId) => {
+        cy.request("POST", "http://localhost:4000/api/answers", {
+          statementId,
+          I_agree: 1,
+          I_agree_reason: "new",
+          others_agree: 1,
+          others_agree_reason: "new",
+          perceived_commonsense: 1,
+          origLanguage: "en",
+          sessionId: currentSessionId,
+        })
+          .its("status")
+          .should("eq", 200);
+      });
+
+    // Both the pre-existing (anonymous) answer and the brand-new one are keyed
+    // to session A; nothing was orphaned under the throwaway browser session B.
+    cy.queryDb("SELECT COUNT(*) AS n FROM answers WHERE sessionId = ?", [
+      registeredSession,
+    ]).then((rows) => {
+      expect(rows[0].n, "answers merged under registered session").to.equal(2);
+    });
+    cy.queryDb("SELECT COUNT(*) AS n FROM answers WHERE sessionId = ?", [
+      newBrowserSession,
+    ]).then((rows) => {
+      expect(rows[0].n, "no answers orphaned under throwaway session").to.equal(
+        0,
+      );
+    });
   });
 });

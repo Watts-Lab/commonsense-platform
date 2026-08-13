@@ -141,7 +141,10 @@
     "required-fields": "Os campos obrigatórios estão marcados com um asterisco *"
   },
   "enter": {
-    "enter-verifying-magic-link": "Verificando seu link mágico"
+    "enter-verifying-magic-link": "Verificando seu link mágico",
+    "enter-invalid-magic-link": "Link inválido ou expirado",
+    "enter-invalid-magic-link-help": "Este link de acesso é inválido ou já foi usado. Solicite um novo para continuar.",
+    "enter-back-to-signin": "Voltar para o login"
   },
   "feedback": {
     "feedback": "feedback"

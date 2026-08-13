@@ -3,7 +3,7 @@ import { useEffect } from "react";
 // i18n
 import useLocalizeDocumentAttributes from "./i18n/useLocalizeDocumentAttributes";
 
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router";
 
 import "aos/dist/aos.css";
 import "./css/style.css";
