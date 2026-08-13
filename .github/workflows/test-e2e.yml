@@ -22,17 +22,20 @@ jobs:
 
     services:
       db:
-        image: mysql:8
+        # MariaDB to match production (RDS MariaDB 10.6). The seed in
+        # test/init.sql is a copy of the production schema, so the engine must
+        # match too.
+        image: mariadb:10.6
         ports:
           - 33306:3306
         env:
-          MYSQL_ROOT_PASSWORD: password
-          MYSQL_DATABASE: CommonsenseDB
+          MARIADB_ROOT_PASSWORD: password
+          MARIADB_DATABASE: CommonsenseDB
         options: >-
-          --health-cmd "mysqladmin ping"
+          --health-cmd "healthcheck.sh --connect --innodb_initialized"
           --health-interval 10s
           --health-timeout 5s
-          --health-retries 5
+          --health-retries 10
 
     steps:
       - name: Checkout repo
@@ -60,6 +63,17 @@ jobs:
         working-directory: server
         run: npm run build
 
+      - name: Run database migrations
+        working-directory: server
+        run: npm run migrate:deploy
+        env:
+          DB_USER: ${{ env.MYSQL_USER }}
+          DB_PASSWORD: ${{ env.MYSQL_PWD }}
+          DB_NAME: ${{ env.MYSQL_DB }}
+          DB_HOST: ${{ env.MYSQL_HOST }}
+          DB_PORT: ${{ env.MYSQL_PORT }}
+          DB_DRIVER: "mysql"
+
       - name: Start backend server with logging
         working-directory: server
         run: |
@@ -76,10 +90,6 @@ jobs:
           DB_PORT: ${{ env.MYSQL_PORT }}
           DB_DRIVER: "mysql"
           SESSION_SECRET: ${{ env.SESSION_SECRET }}
-          # Create any tables missing from the seeded init.sql dump (e.g.
-          # dailyexperiments, countryblocks). Mirrors the pre-TS server, which
-          # always ran sequelize.sync() on startup.
-          DB_SYNC: "true"
           # Flush the IP cache every 2s so the ipaddresses table is written
           # promptly enough for the session-integrity e2e test to assert on it.
           IP_FLUSH_INTERVAL_MS: "2000"
