@@ -29,4 +29,7 @@ jobs:
         env:
           NODE_ENV: test
           SESSION_SECRET: ${{ secrets.SESSION_SECRET || 'test-secret' }}
+          # Auth controllers read JWT_SECRET at module load; tests sign/verify
+          # tokens with it, so it must be present or jsonwebtoken throws.
+          JWT_SECRET: ${{ secrets.JWT_SECRET || 'test-jwt-secret' }}
           # No real DB needed because tests use in-memory SQLite!
