@@ -143,7 +143,10 @@
     "required-fields": "Required fields are marked with an asterisk *"
   },
   "enter": {
-    "enter-verifying-magic-link": "Verifying your magic link"
+    "enter-verifying-magic-link": "Verifying your magic link",
+    "enter-invalid-magic-link": "Invalid or expired link",
+    "enter-invalid-magic-link-help": "This sign-in link is invalid or has already been used. Request a new one to continue.",
+    "enter-back-to-signin": "Back to sign in"
   },
   "feedback": {
     "feedback": "feedback"

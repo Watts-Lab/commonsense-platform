@@ -1,10 +1,9 @@
 /// <reference types="cypress" />
 
 // After a participant completes the whole survey, the same session identifier
-// must be recorded consistently across every table that stores it. The column
-// name differs by table (sessionId vs userSessionId), but the value must match.
-// We rely on the frontend to send the correct id, so this guards against that
-// contract silently breaking.
+// must be recorded consistently across every table that stores it (all use the
+// `sessionId` column). We rely on the frontend to send the correct id, so this
+// guards against that contract silently breaking.
 describe("session id integrity across tables", () => {
   beforeEach(() => {
     cy.visit("http://localhost:5173/statements", {
@@ -110,9 +109,9 @@ describe("session id integrity across tables", () => {
         expect(sessionId, "frontend sessionId").to.be.a("string").and.not.be
           .empty;
 
-        // experiments.userSessionId — the survey run itself.
+        // experiments.sessionId — the survey run itself.
         cy.queryDb(
-          "SELECT id, finished FROM experiments WHERE userSessionId = ?",
+          "SELECT id, finished FROM experiments WHERE sessionId = ?",
           [sessionId],
         ).then((rows) => {
           expect(rows.length, "experiments rows for session").to.be.greaterThan(
@@ -134,12 +133,12 @@ describe("session id integrity across tables", () => {
           );
         });
 
-        // individuals.userSessionId — the CRT / RME / demographics aux surveys.
+        // individuals.sessionId — the CRT / RME / demographics aux surveys.
         // Three distinct aux surveys are completed, so expect >= 3 rows recorded
         // under this session (exact informationType strings come from the
         // surveys package, so we don't hardcode them).
         cy.queryDb(
-          "SELECT COUNT(*) AS n FROM individuals WHERE userSessionId = ?",
+          "SELECT COUNT(*) AS n FROM individuals WHERE sessionId = ?",
           [sessionId],
         ).then((rows) => {
           expect(rows[0].n, "individuals rows for session").to.be.gte(3);

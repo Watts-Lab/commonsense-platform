@@ -141,7 +141,10 @@
     "required-fields": "الحقول المطلوبة معلمة بعلامة النجمة *"
   },
   "enter": {
-    "enter-verifying-magic-link": "جارٍ التحقق من رابط السحر الخاص بك"
+    "enter-verifying-magic-link": "جارٍ التحقق من رابط السحر الخاص بك",
+    "enter-invalid-magic-link": "رابط غير صالح أو منتهٍ الصلاحية",
+    "enter-invalid-magic-link-help": "رابط تسجيل الدخول هذا غير صالح أو تم استخدامه بالفعل. اطلب رابطًا جديدًا للمتابعة.",
+    "enter-back-to-signin": "العودة إلى تسجيل الدخول"
   },
   "feedback": {
     "feedback": "ملاحظات"

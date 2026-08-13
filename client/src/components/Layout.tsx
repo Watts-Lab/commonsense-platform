@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router";
 import { useTranslation } from "react-i18next";
 // @ts-expect-error no types available
 import { CRT, RmeTen, DemographicsLongInternational } from "@watts-lab/surveys";
