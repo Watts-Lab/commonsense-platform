@@ -1,7 +1,7 @@
-const { GetStatementById } = require("../treatments/statement-by-id.treatment");
-const { Op } = require("sequelize");
-const { stringy } = require("../treatments/utils/id-generator");
-const db = require("../../models");
+import { Model, Op } from 'sequelize';
+import { countryblock, experiments as experimentModel } from '../../db/models';
+import { GetStatementById } from '../treatments/statement-by-id.treatment';
+import { stringy } from '../treatments/utils/id-generator';
 
 // Completed bundles a block collects before we advance to the next.
 const BLOCK_QUOTA = 10;
@@ -10,14 +10,32 @@ const BLOCK_QUOTA = 10;
 // reserved slot freed (survey takes ~10-15 min, so 30 min is a safe margin).
 const INFLIGHT_TTL_MS = 30 * 60 * 1000;
 
+interface CountryBlockAttributes {
+  id: number;
+  country: string;
+  countryCode: string;
+  block: number;
+  statementIds: number[];
+  enabled: boolean;
+  assignedCount: number;
+  completedCount: number;
+}
+
+type CountryBlockInstance = Model<CountryBlockAttributes> &
+  CountryBlockAttributes;
+
+interface RequestLike {
+  query?: Record<string, unknown>;
+}
+
 // Live reservations for a block: unfinished experiments sharing its experimentId
 // within the TTL. Uses the indexed experiments table; experimentType guards
 // against an id collision with another experiment (design-point also uses {ids}).
-async function countInFlight(statementIds) {
+async function countInFlight(statementIds: number[]): Promise<number> {
   const experimentId = stringy({ ids: statementIds });
-  return db.experiments.count({
+  return experimentModel.count({
     where: {
-      experimentType: "country-bundle",
+      experimentType: 'country-bundle',
       experimentId,
       finished: false,
       createdAt: { [Op.gte]: new Date(Date.now() - INFLIGHT_TTL_MS) },
@@ -27,30 +45,32 @@ async function countInFlight(statementIds) {
 
 // Normalise the `tc` URL param (BeSample country) into a zero-padded ISO 3166-1
 // numeric code, e.g. "76" -> "076". Returns null if absent.
-function resolveCountryCode(req) {
+function resolveCountryCode(req: RequestLike): string | null {
   const tc = req && req.query ? req.query.tc : undefined;
-  if (tc === undefined || tc === null || tc === "") return null;
-  return String(tc).trim().padStart(3, "0");
+  if (tc === undefined || tc === null || tc === '') return null;
+  return String(tc).trim().padStart(3, '0');
 }
 
 // Serve the lowest-numbered enabled block whose completed + in-flight count is
 // under quota; null if all are full (country done -> controller uses default).
-async function pickBlock(code) {
+async function pickBlock(
+  code: string | null,
+): Promise<CountryBlockInstance | null> {
   if (!code) return null;
 
   // Enabled blocks not yet completed to quota (~5 per country), lowest first.
-  const candidates = await db.countryblock.findAll({
+  const candidates = (await countryblock.findAll({
     where: {
       countryCode: code,
       enabled: true,
       completedCount: { [Op.lt]: BLOCK_QUOTA },
     },
-    order: [["block", "ASC"]],
-  });
+    order: [['block', 'ASC']],
+  })) as CountryBlockInstance[];
 
   for (const block of candidates) {
-    const inFlight = await countInFlight(block.statementIds);
-    if (block.completedCount + inFlight < BLOCK_QUOTA) {
+    const inFlight = await countInFlight(block.get('statementIds'));
+    if ((block.get('completedCount') as number) + inFlight < BLOCK_QUOTA) {
       return block;
     }
   }
@@ -60,7 +80,7 @@ async function pickBlock(code) {
 }
 
 const experiment = {
-  experimentName: "country-bundle",
+  experimentName: 'country-bundle',
 
   // Highest priority wins; country-targeted participants must always get their
   // country's bundle over the default (0) or other experiments.
@@ -72,11 +92,14 @@ const experiment = {
     {
       params: {},
       function: GetStatementById,
-      validity: (req) => resolveCountryCode(req) !== null,
+      validity: (req: RequestLike) => resolveCountryCode(req) !== null,
     },
   ],
 
-  treatmentAssigner: async (validTreatments, req) => {
+  treatmentAssigner: async (
+    validTreatments: Array<Record<string, unknown>>,
+    req: RequestLike,
+  ) => {
     const code = resolveCountryCode(req);
 
     // Carry the controller-injected metadata (experiment_name/assigner) onto the
@@ -89,17 +112,17 @@ const experiment = {
 
     // Telemetry only (started vs completed); selection uses completedCount,
     // bumped on finish in saveExperiment. Atomic for concurrent assignments.
-    await block.increment("assignedCount");
+    await block.increment('assignedCount');
 
     return {
       ...gatewayMeta,
-      country: block.country,
-      block: block.block,
-      countryBlockId: block.id,
-      params: { ids: block.statementIds },
+      country: block.get('country'),
+      block: block.get('block'),
+      countryBlockId: block.get('id'),
+      params: { ids: block.get('statementIds') },
       function: GetStatementById,
     };
   },
 };
 
-module.exports = experiment;
+export default experiment;

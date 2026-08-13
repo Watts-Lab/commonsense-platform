@@ -12,6 +12,7 @@ WORKDIR /app/server
 COPY server/package*.json ./
 RUN npm install
 COPY server ./
+RUN npm run build
 
 # Stage 3: Setup Nginx
 FROM --platform=linux/amd64 public.ecr.aws/nginx/nginx:latest
@@ -31,4 +32,4 @@ COPY --from=server-build /app/server /usr/src/app
 EXPOSE 80
 
 # Start Nginx and Express server
-CMD apt-get update && echo "Y" | apt-get install nodejs && service nginx start && cd /usr/src/app && node server.js
+CMD apt-get update && echo "Y" | apt-get install nodejs && service nginx start && cd /usr/src/app && node dist/server.js

@@ -12,9 +12,16 @@ export default function defineIpAddress(
         primaryKey: true,
         autoIncrement: true,
       },
+      // The session first seen from this IP.
       sessionId: {
         type: dataTypes.STRING,
         allowNull: false,
+      },
+      // The most recent session seen from this IP. Updated on every flush; on
+      // first insert it equals sessionId.
+      lastSessionId: {
+        type: dataTypes.STRING,
+        allowNull: true,
       },
       ipAddress: {
         type: dataTypes.STRING,

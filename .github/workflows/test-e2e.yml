@@ -56,11 +56,15 @@ jobs:
         working-directory: server
         run: npm install
 
+      - name: Build server (TypeScript)
+        working-directory: server
+        run: npm run build
+
       - name: Start backend server with logging
         working-directory: server
         run: |
           echo "Starting server..."
-          node server.js > ../server-output.log 2>&1 &
+          node dist/server.js > ../server-output.log 2>&1 &
           SERVER_PID=$!
           echo "Server started with PID: $SERVER_PID"
           echo $SERVER_PID > ../server.pid

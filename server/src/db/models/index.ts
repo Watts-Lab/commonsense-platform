@@ -6,6 +6,7 @@ import defineAnswers from './answers';
 import defineUserStatements from './userstatements';
 import defineExperiments from './experiments';
 import defineIpAddress from './ipaddress';
+import defineCountryBlock from './countryblock';
 import defineIndividuals from './individual';
 import defineDailyExperiment from './dailyexperiment';
 import defineUsers from './users';
@@ -37,6 +38,7 @@ const answers = defineAnswers(sequelize, DataTypes);
 const userstatements = defineUserStatements(sequelize, DataTypes);
 const experiments = defineExperiments(sequelize, DataTypes);
 const ipaddress = defineIpAddress(sequelize, DataTypes);
+const countryblock = defineCountryBlock(sequelize, DataTypes);
 const individuals = defineIndividuals(sequelize, DataTypes);
 const dailyexperiment = defineDailyExperiment(sequelize, DataTypes);
 const users = defineUsers(sequelize, DataTypes);
@@ -84,6 +86,7 @@ export const db = {
   userstatements,
   experiments,
   ipaddress,
+  countryblock,
   individuals,
   dailyexperiment,
   users,
@@ -101,6 +104,7 @@ export {
   userstatements,
   experiments,
   ipaddress,
+  countryblock,
   individuals,
   dailyexperiment,
   users,

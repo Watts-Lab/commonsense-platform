@@ -216,6 +216,7 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       sessionId: { type: Sequelize.STRING, allowNull: false },
+      lastSessionId: { type: Sequelize.STRING, allowNull: true },
       ipAddress: { type: Sequelize.STRING, allowNull: false },
       userAgent: { type: Sequelize.TEXT, allowNull: true },
       country: { type: Sequelize.STRING(2), allowNull: true },
@@ -266,6 +267,36 @@ module.exports = {
       updatedAt: { allowNull: false, type: Sequelize.DATE },
     });
 
+    await queryInterface.createTable('countryblocks', {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: Sequelize.INTEGER,
+      },
+      country: { type: Sequelize.STRING, allowNull: false },
+      countryCode: { type: Sequelize.STRING(3), allowNull: false },
+      block: { type: Sequelize.INTEGER, allowNull: false },
+      statementIds: { type: Sequelize.JSON, allowNull: false },
+      enabled: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: true,
+      },
+      assignedCount: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+      },
+      completedCount: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+      },
+      createdAt: { allowNull: false, type: Sequelize.DATE },
+      updatedAt: { allowNull: false, type: Sequelize.DATE },
+    });
+
     await queryInterface.addIndex('experiments', ['experimentType']);
     await queryInterface.addIndex('experiments', ['experimentId']);
     await queryInterface.addIndex('experiments', [
@@ -280,9 +311,19 @@ module.exports = {
       unique: true,
     });
     await queryInterface.addIndex('dailyexperiments', ['date']);
+    await queryInterface.addIndex('countryblocks', ['countryCode', 'block'], {
+      unique: true,
+    });
+    await queryInterface.addIndex('countryblocks', [
+      'countryCode',
+      'enabled',
+      'completedCount',
+      'block',
+    ]);
   },
 
   async down(queryInterface) {
+    await queryInterface.dropTable('countryblocks');
     await queryInterface.dropTable('dailyexperiments');
     await queryInterface.dropTable('individuals');
     await queryInterface.dropTable('ipaddresses');
