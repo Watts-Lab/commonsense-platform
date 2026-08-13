@@ -33,7 +33,17 @@ resource "aws_ecs_task_definition" "main" {
           appProtocol   = "http"
         }
       ]
-      environment = []
+      # NODE_ENV must be set explicitly here: it's read by sequelize-cli (picks
+      # the config.js block to migrate against) and several controllers
+      # (secure cookies, email links). It is NOT reliably provided by
+      # server.env (S3 environmentFiles), which is why production logs showed
+      # "Using environment 'development'" during migrations.
+      environment = [
+        {
+          name  = "NODE_ENV"
+          value = "production"
+        }
+      ]
       environmentFiles = [
         {
           value = "arn:aws:s3:::commonsenseplatform/server.env"
