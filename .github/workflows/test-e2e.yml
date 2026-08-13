@@ -76,6 +76,10 @@ jobs:
           DB_PORT: ${{ env.MYSQL_PORT }}
           DB_DRIVER: "mysql"
           SESSION_SECRET: ${{ env.SESSION_SECRET }}
+          # Create any tables missing from the seeded init.sql dump (e.g.
+          # dailyexperiments, countryblocks). Mirrors the pre-TS server, which
+          # always ran sequelize.sync() on startup.
+          DB_SYNC: "true"
           # Flush the IP cache every 2s so the ipaddresses table is written
           # promptly enough for the session-integrity e2e test to assert on it.
           IP_FLUSH_INTERVAL_MS: "2000"
