@@ -141,6 +141,46 @@ inside `commonsense-platform` (the live matrix and the bootstrap script both alr
 `statements.published = true` directly from this repo's own DB — see §2 and §5), so no change to
 `commonsense-data` was needed after all.
 
+## 7. How to add more Besample countries later
+
+If Besample makes more countries available for recruitment, only one file needs a code change:
+`server/src/survey/experiments/utils/besample-countries.ts` — add `{ code, name }` entries to
+`BESAMPLE_COUNTRIES`. Every other piece of this feature (`besample-matrix.ts`'s `R(i)` computation,
+`besample.experiment.ts`'s validity/assignment, the `saveIndividual`/`saveExperiment` hooks, and
+`bootstrap-country-matrix.ts`) reads `BESAMPLE_COUNTRY_CODES`/the resolver functions generically, so
+nothing else needs to change.
+
+Two things to get right per new entry:
+
+1. **`code`** — ISO 3166-1 numeric, zero-padded to 3 digits (same convention `tc` already uses).
+   `server/scripts/lib/iso-country-codes.ts` has the full 249-country table if you need to look one
+   up.
+2. **`name`** — must match **exactly** (case-sensitive) how that country appears as a
+   `country_reside` answer option in `@watts-lab/surveys`' demographics question, since
+   `resolveCountryCodeFromName` does a plain string match against the self-reported value (used by
+   the organic/non-Besample path — see §4). Verify this against
+   `client/node_modules/@watts-lab/surveys/dist/index.js` (or the installed package's source) for
+   each new country; a name phrased differently there (accented, "official" form, etc.) would
+   silently never match self-report and only ever get counted via a Besample `tc` override.
+
+After editing the list:
+
+- **Re-run `npm run bootstrap:country-matrix`** — it fully deletes and recomputes
+  `statementcountryratings` for whatever's currently in `BESAMPLE_COUNTRY_CODES`, so re-running it
+  backfills historical ratings for the newly-added countries too (from existing self-reported/
+  Besample-tagged answers already in the DB), rather than letting them start from a cold empty
+  matrix.
+- **Update `besample-countries.test.ts`** — it currently asserts `BESAMPLE_COUNTRIES`/
+  `BESAMPLE_COUNTRY_CODES` have length 16; bump that to match.
+
+No migration, schema change, or client change is needed — `statementcountryratings.countryCode` is
+a plain `STRING(3)` column, not a fixed enum.
+
+Out of scope for this repo: `commonsense-data`'s `strategy.md` and `besample_costs.csv` describe the
+*campaign/budget* side (which countries actually get recruitment links and how a fixed budget
+splits across them) — this platform deliberately doesn't manage that. If the new countries should
+also be recruited from, those need updating separately over there.
+
 ---
 
 ## Testing
