@@ -13,6 +13,7 @@ import defineUsers from './users';
 import defineFeedbacks from './feedbacks';
 import defineTreatments from './treatments';
 import defineUserTreatments from './usertreatments';
+import defineStatementCountryRating from './statementcountryrating';
 
 const env = process.env.NODE_ENV || 'development';
 const config = database[env];
@@ -45,6 +46,10 @@ const users = defineUsers(sequelize, DataTypes);
 const feedbacks = defineFeedbacks(sequelize, DataTypes);
 const treatments = defineTreatments(sequelize, DataTypes);
 const usertreatments = defineUserTreatments(sequelize, DataTypes);
+const statementcountryratings = defineStatementCountryRating(
+  sequelize,
+  DataTypes,
+);
 
 statements.hasMany(statementproperties, {
   foreignKey: 'statementId',
@@ -80,6 +85,16 @@ usertreatments.belongsTo(treatments, {
   as: 'treatment',
 });
 
+statements.hasMany(statementcountryratings, {
+  foreignKey: 'statementId',
+  onDelete: 'RESTRICT',
+  onUpdate: 'CASCADE',
+});
+
+statementcountryratings.belongsTo(statements, {
+  foreignKey: 'statementId',
+});
+
 export const db = {
   Sequelize,
   sequelize,
@@ -96,6 +111,7 @@ export const db = {
   feedbacks,
   treatments,
   usertreatments,
+  statementcountryratings,
 };
 
 export {
@@ -114,6 +130,7 @@ export {
   feedbacks,
   treatments,
   usertreatments,
+  statementcountryratings,
 };
 
 export default db;

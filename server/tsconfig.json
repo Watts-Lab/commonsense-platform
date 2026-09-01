@@ -107,6 +107,16 @@
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
   },
-  "exclude": ["node_modules", "dist"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    // This test imports scripts/bootstrap-country-matrix.ts, which lives
+    // outside rootDir (server/scripts/, alongside migrate.cjs) -- excluding
+    // it here keeps `tsc`'s production build/typecheck from pulling that
+    // file into the rootDir-constrained program. Jest/ts-jest still runs it
+    // fine (test discovery goes through jest.config.js's testMatch, not this
+    // include/exclude).
+    "src/tests/integration/bootstrap-country-matrix.test.ts"
+  ],
   "include": ["src/**/*"]
 }

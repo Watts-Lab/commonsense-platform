@@ -3,12 +3,14 @@ export {};
 const validationResultMock = jest.fn();
 const answersFindAllMock = jest.fn();
 const experimentFindOneMock = jest.fn();
+const experimentFindByPkMock = jest.fn();
 const createExperimentMock = jest.fn();
 const updateExperimentMock = jest.fn();
 const saveIndividualDBMock = jest.fn();
 const getStatementsWeightedMock = jest.fn();
 const stringyMock = jest.fn((v) => JSON.stringify(v));
 const sendMetaEventMock = jest.fn();
+const bumpCountryRatingsMock = jest.fn();
 
 jest.mock('express-validator', () => ({
   validationResult: (...args: unknown[]) => validationResultMock(...args),
@@ -20,6 +22,7 @@ jest.mock('../../../db/models', () => ({
   },
   experiments: {
     findOne: (...args: unknown[]) => experimentFindOneMock(...args),
+    findByPk: (...args: unknown[]) => experimentFindByPkMock(...args),
   },
 }));
 
@@ -50,6 +53,10 @@ jest.mock('../../../controllers/meta', () => ({
   sendMetaEvent: (...args: unknown[]) => sendMetaEventMock(...args),
 }));
 
+jest.mock('../../../survey/experiments/utils/besample-matrix', () => ({
+  bumpCountryRatings: (...args: unknown[]) => bumpCountryRatingsMock(...args),
+}));
+
 describe('experiment controller', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -58,6 +65,7 @@ describe('experiment controller', () => {
       array: () => [],
     });
     experimentFindOneMock.mockResolvedValue(null);
+    experimentFindByPkMock.mockResolvedValue(null);
     getStatementsWeightedMock.mockResolvedValue({
       answer: [{ id: 1, statement: 'hello' }],
     });
@@ -67,6 +75,8 @@ describe('experiment controller', () => {
     updateExperimentMock.mockResolvedValue([1]);
     sendMetaEventMock.mockResolvedValue({ ok: true });
     saveIndividualDBMock.mockResolvedValue({});
+    bumpCountryRatingsMock.mockResolvedValue(undefined);
+    answersFindAllMock.mockResolvedValue([]);
   });
 
   it('returnStatements returns 400 for validation errors', async () => {
@@ -193,6 +203,77 @@ describe('experiment controller', () => {
     expect(res.json).toHaveBeenCalledWith({ ok: true });
   });
 
+  it('saveIndividual bumps country ratings for an organic participant self-reporting a tracked country', async () => {
+    const { saveIndividual } = await import('../../../controllers/experiment');
+
+    experimentFindOneMock.mockResolvedValueOnce(null); // no besample-sampling row for this session
+    answersFindAllMock.mockResolvedValueOnce([
+      { get: (k: string) => (k === 'statementId' ? 10 : null) },
+      { get: (k: string) => (k === 'statementId' ? 20 : null) },
+    ]);
+
+    const req: any = {
+      body: {
+        sessionId: 'organic-1',
+        informationType: 'demographics',
+        experimentInfo: { responses: { country_reside: 'Brazil' } },
+      },
+      query: {},
+    };
+    const res: any = { json: jest.fn() };
+
+    await saveIndividual(req, res);
+    // The country-bump logic is fire-and-forget; flush microtasks so it runs.
+    await new Promise((resolve) => setImmediate(resolve));
+
+    expect(experimentFindOneMock).toHaveBeenCalledWith({
+      where: { sessionId: 'organic-1', experimentType: 'besample-sampling' },
+    });
+    expect(bumpCountryRatingsMock).toHaveBeenCalledWith('076', [10, 20]);
+  });
+
+  it('saveIndividual skips the country bump when a besample-sampling row already exists for the session', async () => {
+    const { saveIndividual } = await import('../../../controllers/experiment');
+
+    experimentFindOneMock.mockResolvedValueOnce({ id: 1 });
+
+    const req: any = {
+      body: {
+        sessionId: 'already-besample',
+        informationType: 'demographics',
+        experimentInfo: { responses: { country_reside: 'Brazil' } },
+      },
+      query: {},
+    };
+    const res: any = { json: jest.fn() };
+
+    await saveIndividual(req, res);
+    await new Promise((resolve) => setImmediate(resolve));
+
+    expect(bumpCountryRatingsMock).not.toHaveBeenCalled();
+  });
+
+  it('saveIndividual does not bump ratings when self-reported country is untracked', async () => {
+    const { saveIndividual } = await import('../../../controllers/experiment');
+
+    experimentFindOneMock.mockResolvedValueOnce(null);
+
+    const req: any = {
+      body: {
+        sessionId: 'organic-2',
+        informationType: 'demographics',
+        experimentInfo: { responses: { country_reside: 'France' } },
+      },
+      query: {},
+    };
+    const res: any = { json: jest.fn() };
+
+    await saveIndividual(req, res);
+    await new Promise((resolve) => setImmediate(resolve));
+
+    expect(bumpCountryRatingsMock).not.toHaveBeenCalled();
+  });
+
   it('saveExperiment handles validation, success, and failure paths', async () => {
     const { saveExperiment } = await import('../../../controllers/experiment');
 
@@ -254,5 +335,37 @@ describe('experiment controller', () => {
     expect(failRes.json).toHaveBeenCalledWith({
       error: 'Failed to save experiment',
     });
+  });
+
+  it('saveExperiment bumps country ratings for a finished besample-sampling assignment', async () => {
+    const { saveExperiment } = await import('../../../controllers/experiment');
+
+    experimentFindByPkMock.mockResolvedValueOnce({
+      get: (key: string) => {
+        if (key === 'experimentType') return 'besample-sampling';
+        if (key === 'experimentInfo') {
+          return { countryCode: '818', params: { ids: [1, 2, 3] } };
+        }
+        return undefined;
+      },
+    });
+    validationResultMock.mockReturnValueOnce({
+      isEmpty: () => true,
+      array: () => [],
+    });
+
+    const req: any = {
+      body: { experimentId: 456 },
+      cookies: {},
+      headers: {},
+      session: {},
+      socket: {},
+    };
+    const res: any = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+
+    await saveExperiment(req, res);
+
+    expect(bumpCountryRatingsMock).toHaveBeenCalledWith('818', [1, 2, 3]);
+    expect(res.json).toHaveBeenCalledWith({ ok: true });
   });
 });
