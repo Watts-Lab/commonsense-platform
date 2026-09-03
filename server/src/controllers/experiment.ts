@@ -14,6 +14,8 @@ import {
 import { saveIndividualDB } from '../survey/experiments/utils/save-individual';
 import { GetStatementsWeighted } from '../survey/treatments/weighted-random.treatment';
 import { stringy } from '../survey/treatments/utils/id-generator';
+import { resolveCountryCodeFromName } from '../survey/experiments/utils/besample-countries';
+import { bumpCountryRatings } from '../survey/experiments/utils/besample-matrix';
 import { sendMetaEvent } from './meta';
 
 export const returnStatements = async (
@@ -207,6 +209,43 @@ export const saveIndividual = async (
 
   saveIndividualDB(individualData).catch(() => {});
 
+  // Organic (non-Besample) participants only reveal their country here, at
+  // the end of the survey. If it's one of the 16 Besample-tracked countries,
+  // this session's ratings should count toward the same live matrix that
+  // besample-sampling participants feed via saveExperiment below -- unless
+  // this session already went through besample-sampling (tc resolved the
+  // country there already; skip to avoid double-counting the same session).
+  if (
+    individualData.informationType === 'demographics' ||
+    individualData.informationType === 'demographicsLongInternational'
+  ) {
+    (async () => {
+      const sessionId = individualData.sessionId as string;
+
+      const alreadyBesample = await experimentModel.findOne({
+        where: { sessionId, experimentType: 'besample-sampling' },
+      });
+      if (alreadyBesample) return;
+
+      const responses = (
+        individualData.experimentInfo as
+          { responses?: { country_reside?: string } } | undefined
+      )?.responses;
+      const code = resolveCountryCodeFromName(responses?.country_reside);
+      if (!code) return;
+
+      const sessionAnswers = await answers.findAll({
+        where: { sessionId },
+        attributes: ['statementId'],
+      });
+      const statementIds = sessionAnswers
+        .map((row) => row.get('statementId') as number | null)
+        .filter((id): id is number => id !== null);
+
+      await bumpCountryRatings(code, statementIds);
+    })().catch(() => {});
+  }
+
   res.json({ ok: true });
 };
 
@@ -247,7 +286,13 @@ export const saveExperiment = async (
         attributes: ['experimentType', 'experimentInfo'],
       });
       const experimentInfo = experiment?.get('experimentInfo') as
-        { countryBlockId?: number } | null | undefined;
+        | {
+            countryBlockId?: number;
+            countryCode?: string;
+            params?: { ids?: number[] };
+          }
+        | null
+        | undefined;
       const countryBlockId = experimentInfo?.countryBlockId;
       if (
         experiment?.get('experimentType') === 'country-bundle' &&
@@ -256,6 +301,20 @@ export const saveExperiment = async (
         await countryblock.increment('completedCount', {
           where: { id: countryBlockId },
         });
+      }
+
+      // Besample dynamic-frontier assignments confirm their assigned
+      // statements' ratings for that country on completion -- this is what
+      // keeps the live n(i,j) matrix (statementcountryratings) up to date.
+      if (
+        experiment?.get('experimentType') === 'besample-sampling' &&
+        experimentInfo?.countryCode &&
+        experimentInfo.params?.ids?.length
+      ) {
+        await bumpCountryRatings(
+          experimentInfo.countryCode,
+          experimentInfo.params.ids,
+        );
       }
     } catch (_counterError) {}
 
