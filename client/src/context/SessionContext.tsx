@@ -1,7 +1,11 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import Backend from "../apis/backend";
 import { useNavigate } from "react-router";
+import {
+  getBesampleAttemptId,
+  resetStorageForNewBesampleAttempt,
+} from "../utils/besampleAttempt";
 
 interface User {
   email: string;
@@ -50,6 +54,16 @@ export const useSession = () => {
 };
 
 export const SessionProvider = ({ children }: SessionProviderProps) => {
+  // Must run before any of the localStorage reads below: if this URL carries
+  // a new Besample attempt id, wipe the previous participant's session/
+  // consent/CRT/RME/demographics flags first so this render picks up a clean
+  // slate rather than resuming a stranger's in-progress (or finished) run.
+  const hasCheckedBesampleAttempt = useRef(false);
+  if (!hasCheckedBesampleAttempt.current) {
+    resetStorageForNewBesampleAttempt();
+    hasCheckedBesampleAttempt.current = true;
+  }
+
   const [sessionId, setSessionIdState] = useState<string>(() => {
     const storedSessionId = localStorage.getItem("sessionId");
     return storedSessionId === "undefined" ? "" : storedSessionId || "";
@@ -102,8 +116,14 @@ export const SessionProvider = ({ children }: SessionProviderProps) => {
     const initializeSession = async () => {
       if (sessionId === "") {
         try {
+          // If this is a new Besample attempt, tell the server so it can
+          // regenerate the session (see server.ts's `/api` handler) instead
+          // of just handing back whatever session the browser's existing
+          // (httpOnly, so unreachable from here) cookie already points to.
+          const attemptId = getBesampleAttemptId();
           const sessionResponse = await Backend.get("/", {
             withCredentials: true,
+            params: attemptId ? { battempt: attemptId } : undefined,
           });
           const incomingSessionId = sessionResponse.data;
           setSessionId(incomingSessionId);

@@ -5,5 +5,6 @@ declare module 'express-session' {
     ipProcessed?: boolean;
     ip?: string;
     initialized?: boolean;
+    besampleAttemptId?: string;
   }
 }
