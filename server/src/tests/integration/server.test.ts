@@ -46,6 +46,45 @@ describe('Express Server API Integration Tests', () => {
       expect(b1.text).not.toBe(a1.text);
     });
 
+    it('regenerates the session when a different battempt shows up on the same client', async () => {
+      const agent = request.agent(app);
+
+      const first = await agent.get('/api').query({ battempt: 'attempt-1' });
+      const sameAttemptAgain = await agent
+        .get('/api')
+        .query({ battempt: 'attempt-1' });
+      const secondAttempt = await agent
+        .get('/api')
+        .query({ battempt: 'attempt-2' });
+
+      expect(first.status).toBe(200);
+      expect(sameAttemptAgain.status).toBe(200);
+      expect(secondAttempt.status).toBe(200);
+
+      // Same battempt on the same client -> same session (this is the
+      // ordinary "resume" path, e.g. a page refresh).
+      expect(sameAttemptAgain.text).toBe(first.text);
+      // A different battempt on the same client (same cookie jar) must get a
+      // brand-new session, not silently inherit the first attempt's.
+      expect(secondAttempt.text).not.toBe(first.text);
+    });
+
+    it('does not regenerate the session for a client with no prior battempt on record', async () => {
+      const agent = request.agent(app);
+
+      const noAttempt = await agent.get('/api');
+      const firstAttemptSeen = await agent
+        .get('/api')
+        .query({ battempt: 'attempt-1' });
+
+      expect(noAttempt.status).toBe(200);
+      expect(firstAttemptSeen.status).toBe(200);
+      // No prior battempt was recorded, so seeing one for the first time
+      // just starts tracking it -- it must not regenerate an ordinary
+      // organic (non-Besample) visitor's session.
+      expect(firstAttemptSeen.text).toBe(noAttempt.text);
+    });
+
     it('should include baseline security headers', async () => {
       const response = await request(app).get('/api');
 

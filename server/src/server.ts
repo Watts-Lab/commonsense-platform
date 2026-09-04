@@ -197,7 +197,38 @@ app.get('/api/images/*imageName', (req, res) => {
 });
 
 app.get('/api', (req, res) => {
+  const attemptId =
+    typeof req.query.battempt === 'string' ? req.query.battempt : undefined;
+
+  // A different Besample attempt id showing up on a browser that already has
+  // a session cookie from a *previous* attempt means this is a distinct
+  // participant reusing the same browser (kiosk/shared device, or someone
+  // replaying the recruitment link) -- regenerate the session so they get a
+  // genuinely new sessionID/cookie, rather than silently inheriting the
+  // previous attempt's session purely because express-session's cookie is
+  // httpOnly and outlives whatever the client clears from localStorage (see
+  // client/src/utils/besampleAttempt.ts for the matching client-side half).
+  if (
+    attemptId &&
+    req.session.besampleAttemptId &&
+    req.session.besampleAttemptId !== attemptId
+  ) {
+    req.session.regenerate((err) => {
+      if (err) {
+        res.status(500).json({ error: 'Failed to start a new session' });
+        return;
+      }
+      req.session.initialized = true;
+      req.session.besampleAttemptId = attemptId;
+      res.send(req.sessionID);
+    });
+    return;
+  }
+
   req.session.initialized = true;
+  if (attemptId) {
+    req.session.besampleAttemptId = attemptId;
+  }
   res.send(req.sessionID);
 });
 

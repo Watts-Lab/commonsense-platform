@@ -183,6 +183,126 @@ also be recruited from, those need updating separately over there.
 
 ---
 
+## 8. Two duplicate-participant edge cases found in early live data
+
+After the initial rollout, real Besample data surfaced two different ways a participant could end
+up with two `experiments` rows sharing one `sessionId` — each with a different root cause and a
+different fix.
+
+### 8a. Same participant revisits after finishing (server-side fix)
+
+A Nigerian participant's `experiments` table showed two rows with **identical** Besample
+identifiers (`assignment_id`/`battempt`, `response_id`/`bnum`, `bpid` all the same), ~1 minute apart:
+they finished the whole flow once, then landed back on the same URL (back button/reload) and
+re-answered the same 15 statements a second time — but without redoing CRT/RME/demographics, since
+those "already completed" flags are separate, standalone localStorage keys that survive the revisit.
+
+Root cause: `besample.experiment.ts`'s `treatmentAssigner` had no "already assigned" guard, unlike
+`daily.experiment.ts`. Step 1 of `returnStatements` only resumes an *unfinished* experiment; once the
+first row is `finished: true`, a revisit falls straight back through to the assigners, which happily
+mint a brand-new besample-sampling row and active set.
+
+**Fix**: `besample.experiment.ts`'s `treatmentAssigner` now checks whether this `sessionId` already
+has *any* `experiments` row with `experimentType: 'besample-sampling'` (regardless of finished
+state — by the time the assigner runs, step 1 has already ruled out an unfinished one) and returns
+`null` if so, falling through to `daily-experiment`/default instead of reassigning. This is a
+once-per-session-ever guard, unlike `daily-experiment`'s once-per-calendar-day one.
+
+New tests: `besample-experiment.test.ts` reproduces the exact reported flow (assign → finish →
+revisit with the same session/`tc`) and asserts only one `besample-sampling` row ever exists for
+that session; `besample.experiment.test.ts` covers the guard at the unit level.
+
+### 8b. Two different Besample assignments, same browser (client + server fix)
+
+An Indian participant's two `experiments` rows told a different story: **completely different**
+Besample identifiers on each row (different `assignment_id`/`battempt`, `response_id`/`bnum`, and
+`bpid`), but the exact same `sessionId`, and the second pass replayed all 15 answers essentially
+identically to the first (and much faster) — consistent with the same browser being used for two
+distinct, separately-payable Besample assignments (whether that's one person deliberately replaying
+the link to double-claim, or two different people sharing a device).
+
+This one turned out to have **three** compounding root causes, only two of which were visible from
+reading the code alone — the third only surfaced once the fix was actually exercised end to end with
+Cypress against a real DB and a real browser (see the testing note at the end of this section for why
+that almost didn't happen). Reviewing this fix from a code diff alone would have missed it.
+
+**Root cause 1 — this app's own "already completed" state.** `sessionId`, `consent`, and the
+`CRT`/`rmeTen`/`demographicsLongInternational` flags Layout.tsx checks all live in `localStorage`
+keyed only by name, with nothing tying them to *which* Besample assignment is active. A second,
+genuinely different assignment opened in the same browser silently inherits the first assignment's
+session, consent, and completed-surveys state.
+
+**Root cause 2 — `@watts-lab/surveys`' own autosave, a *different* set of keys.** Independently of
+the flags above, that library saves `{ currentPageNo, data, timeSpent }` to its own `storageName`
+key on every answer and restores from it on mount (`storageName="crt"`/`"rmeten"`/`"demographics"`,
+per Layout.tsx's `<CRT>`/`<RmeTen>`/`<DemographicsLongInternational>` props) — entirely separate
+from, and unrelated to, the completion flags in root cause 1. Left alone, a second participant's RME
+would resume from wherever the first participant's `currentPageNo` last landed — including jumping
+straight to the final question if the first participant had just finished.
+
+**Root cause 3 — `sessionId` doesn't actually originate on the client at all.** `GET /api`
+(`server.ts`) just returns `req.sessionID`: the `express-session` id, tied to an `httpOnly` cookie
+(`survey-session`, see `config/sessions.config.ts`) that JavaScript can never read or clear. No amount
+of clearing `localStorage.sessionId` changes what the *server* hands back, because the server is
+still looking at the same cookie. This is the one that only showed up once the fix was run against a
+real browser/cookie jar instead of just read.
+
+**Fix, part 1 (client)** — `client/src/utils/besampleAttempt.ts`'s `resetStorageForNewBesampleAttempt`
+compares the URL's Besample attempt id (`battempt`, falling back to `bnum`) against one recorded in
+localStorage from the last visit; if a *different* one was already recorded, it wipes every
+participant-scoped localStorage key — both root-cause-1's (`sessionId`, `consent`, `CRT`, `rmeTen`,
+`demographicsLongInternational`, `statementsData`, `urlParams`) and root-cause-2's (`crt`, `rmeten`,
+`demographics`) — before anything else reads them, and records the new attempt id.
+`SessionContext.tsx`'s `SessionProvider` calls this once, synchronously, before its own `useState`
+initializers read any of those keys.
+
+**Fix, part 2 (server, for root cause 3)** — `SessionContext.tsx`'s session-init request now sends
+the current attempt id as a `battempt` query param to `GET /api`. That handler (`server.ts`) compares
+it against one recorded on `req.session` and, if different, calls `req.session.regenerate()` before
+responding — issuing a genuinely new session id *and* a new `Set-Cookie`, which is the only way to
+actually get a fresh identity out of an `httpOnly`-cookie-backed session. Without this half, the
+client-side reset alone is cosmetic: the server still hands back the old session id regardless.
+
+Together, a same-attempt revisit (§8a's case) leaves everything untouched (attempt id unchanged, no
+regenerate); so does this browser's very first-ever Besample attempt (nothing recorded yet on either
+side) — it just starts tracking from there, without wiping or regenerating anything for an ordinary
+first-time visitor.
+
+This doesn't stop someone from deliberately clearing cookies/localStorage by hand to bypass it —
+that's a fraud-detection problem for Besample's own side, not something fixable at this layer — but
+it does fix the accidental-reuse case (kiosk/shared device, or casually reopening an old tab) and
+raises the cost of a deliberate replay back to redoing the entire flow, including getting a new,
+separately-tracked session.
+
+New tests:
+
+- `client/src/utils/besampleAttempt.test.ts` (Vitest) — no-op on an unchanged attempt id, full wipe
+  (all ten keys, root causes 1 and 2) on a changed one, the `bnum` fallback, and the
+  first-ever-sighting no-op case.
+- `server/src/tests/integration/server.test.ts` — `GET /api` regenerates the session when a
+  different `battempt` shows up on the same client (same cookie jar), does *not* regenerate when the
+  same `battempt` repeats or when none was previously recorded.
+- `client/cypress/e2e/1-functionality/session-integrity.cy.js` gained a second `describe` block
+  simulating the whole incident end to end against a real DB and a real cookie jar: complete a full
+  survey under one Besample attempt, then `cy.visit` the same browser again with a *different*
+  `bpid`/`bnum`/`battempt`, confirming the app redirects back to the consent gate, issues a
+  brand-new `sessionId`, re-shows CRT/RME/demographics, and that both attempts end up as fully
+  self-consistent, non-overlapping rows across `experiments`/`answers`/`individuals` — directly
+  exercising the colleague's stated concern that this change could reintroduce the old cross-table
+  sessionId-drift bug that the Hungarian-matching bootstrap (§5) was built to paper over historically.
+  **This test is what actually caught root causes 2 and 3** — both were invisible from reading the
+  diff and only surfaced by running the full flow against a real browser/DB; treat that as the
+  cautionary tale for reviewing this kind of fix from a diff alone.
+
+**Testing note for whoever runs this locally**: if `npx cypress run`/`open` fails immediately with
+`bad option: --no-sandbox` / `--smoke-test` / `--ping=...` even after a clean reinstall, check for
+`ELECTRON_RUN_AS_NODE=1` in your shell environment and unset it for the Cypress invocation (e.g.
+`env -u ELECTRON_RUN_AS_NODE npx cypress run ...`) — that variable forces Cypress's bundled Electron
+binary into plain-Node mode, where it can't parse its own launch flags. Not specific to this change,
+but it's what blocked verifying it at all until diagnosed.
+
+---
+
 ## Testing
 
 - `npm run build` (tsc) and `npm test` (Jest, 25 suites / 137 tests) both pass clean; `npm run
@@ -202,6 +322,20 @@ also be recruited from, those need updating separately over there.
   `raw: true` under SQLite returns it unparsed, silently breaking self-report country resolution.
   Fixed by reading via model instances + `.get()`, matching the convention already used elsewhere
   in this codebase.
+- §8's fixes add: a new integration case in `besample-experiment.test.ts` and a new unit case in
+  `besample.experiment.test.ts` for the once-per-session guard (§8a); `client/src/utils/
+  besampleAttempt.test.ts` (Vitest) plus two new `server.test.ts` integration cases for the
+  localStorage-reset/session-regeneration logic (§8b). Full server suite after these: **25 suites /
+  141 tests**, all passing; `npx tsc --noEmit` clean on both `server/` and `client/` for every file
+  touched (the client repo has pre-existing, unrelated `tsc`/lint/coverage failures elsewhere that
+  these changes don't add to or fix).
+- §8b was additionally verified with real Cypress runs against the local MariaDB (not just unit
+  tests) — `session-integrity.cy.js`'s new `describe` block and the existing e2e specs
+  (`besample.cy.js`, `formfill.cy.js`, `home.cy.js`, `magic-link-auth.cy.js`, `persistence.cy.js`,
+  `skipEndTests.cy.js`) all pass with §8's changes in place. The pre-existing
+  `session-integrity.cy.js` `ipaddresses`-flush assertion is intermittently flaky on a loaded local
+  machine independent of this change (confirmed by reproducing the same flake against unmodified
+  code via `git stash`) — not something introduced here.
 
 ## Rollout notes for whoever deploys this
 
@@ -210,6 +344,10 @@ also be recruited from, those need updating separately over there.
 2. Run `npm run bootstrap:country-matrix` once, manually, against production data, to seed
    `statementcountryratings` from all pre-existing history before the new experiment starts relying
    on it. It's idempotent, so re-running it later to reconcile is safe.
-3. No client (`client/`) changes were needed — the frontend already forwards all URL params and
-   experiment metadata generically.
+3. §1-7 needed no client (`client/`) changes — the frontend already forwards all URL params and
+   experiment metadata generically. §8b touches both sides — client (`SessionContext.tsx` +
+   `besampleAttempt.ts`) and server (`server.ts`'s `GET /api` handler +
+   `types/express-session.d.ts`) — a normal `npm run build`/deploy of both picks it up, no extra
+   migration or session-store change needed (`req.session.regenerate()` just issues a new row in the
+   existing `express-mysql-session` store; old rows expire normally).
 4. No `commonsense-data` changes are needed — see §6.

@@ -233,6 +233,44 @@ describe('Besample dynamic-frontier country experiment', () => {
     expect(rating?.get('confirmedCount')).toBe(10);
   });
 
+  it('does not re-assign a second besample-sampling experiment once the session already finished one (revisit via the same tc URL)', async () => {
+    const [row] = await seedStatements(1);
+    const statementId = row.get('id') as number;
+    await db.statementcountryratings.create({
+      statementId,
+      countryCode: '818',
+      confirmedCount: 9,
+    });
+
+    const sessionId = 'egypt-revisit';
+
+    // First visit: gets assigned and finishes the survey.
+    const first = await getStatements({ sessionId, tc: '818' });
+    expect(first.body.experimentType).toBe('besample-sampling');
+
+    const experimentRow = await db.experiments.findOne({
+      where: { sessionId },
+    });
+    const done = await request(app)
+      .post('/api/experiments/save')
+      .send({ experimentId: experimentRow?.get('id') });
+    expect(done.status).toBe(200);
+
+    // Revisit with the same URL/session (e.g. back button or reload after
+    // finishing) -- there is no unfinished experiment to resume, so this
+    // reaches the assigner again. It must not mint a second besample-sampling
+    // experiment for a session that already completed one.
+    const second = await getStatements({ sessionId, tc: '818' });
+    expect(second.status).toBe(200);
+    expect(second.body.isResumed).toBeUndefined();
+    expect(second.body.experimentType).not.toBe('besample-sampling');
+
+    const experimentCount = await db.experiments.count({
+      where: { sessionId, experimentType: 'besample-sampling' },
+    });
+    expect(experimentCount).toBe(1);
+  });
+
   it('does not bump assignedCount/reservation twice when resuming an unfinished experiment', async () => {
     const [row] = await seedStatements(1);
     const statementId = row.get('id') as number;

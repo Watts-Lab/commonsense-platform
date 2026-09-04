@@ -1,14 +1,22 @@
 export {};
 
 const computeActiveSetMock = jest.fn();
+const findExperimentMock = jest.fn();
 
 jest.mock('../../../survey/experiments/utils/besample-matrix', () => ({
   computeActiveSet: (...args: unknown[]) => computeActiveSetMock(...args),
 }));
 
+jest.mock('../../../db/models', () => ({
+  experiments: {
+    findOne: (...args: unknown[]) => findExperimentMock(...args),
+  },
+}));
+
 describe('besample experiment', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    findExperimentMock.mockResolvedValue(null);
   });
 
   describe('validity', () => {
@@ -81,12 +89,30 @@ describe('besample experiment', () => {
             function: jest.fn(),
           },
         ],
-        { query: { tc: '76' } }, // Brazil, unpadded
+        { query: { tc: '76', sessionId: 'session-1' } }, // Brazil, unpadded
       )) as any;
 
+      expect(findExperimentMock).toHaveBeenCalledWith({
+        where: { sessionId: 'session-1', experimentType: 'besample-sampling' },
+      });
       expect(computeActiveSetMock).toHaveBeenCalledWith('076', 15);
       expect(result.countryCode).toBe('076');
       expect(result.params).toEqual({ ids: [101, 102, 103] });
+    });
+
+    it('returns null when this session already has a besample-sampling experiment', async () => {
+      findExperimentMock.mockResolvedValueOnce({ id: 1 });
+      const besampleExperiment = (
+        await import('../../../survey/experiments/besample.experiment')
+      ).default;
+
+      const result = await besampleExperiment.treatmentAssigner(
+        [{ params: {}, function: jest.fn() }],
+        { query: { tc: '818', sessionId: 'session-2' } },
+      );
+
+      expect(result).toBeNull();
+      expect(computeActiveSetMock).not.toHaveBeenCalled();
     });
 
     it('declares a priority higher than the default/daily-experiment tier', async () => {

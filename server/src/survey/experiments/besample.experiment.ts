@@ -1,3 +1,4 @@
+import { experiments } from '../../db/models';
 import { GetStatementById } from '../treatments/statement-by-id.treatment';
 import { resolveCountryCodeFromTc } from './utils/besample-countries';
 import { computeActiveSet } from './utils/besample-matrix';
@@ -41,6 +42,23 @@ const experiment = {
   ) => {
     const code = resolveCountryCodeFromTc(req?.query?.tc);
     if (!code) return null;
+
+    // A session gets exactly one besample-sampling assignment, ever. Without
+    // this guard, a participant who finishes and then revisits the same URL
+    // (back button, reload, resent link) would fall past step 1's "resume
+    // unfinished experiment" check in returnStatements (their prior row is
+    // already finished) and land right back here, minting a second
+    // experiments row and re-answering statements that were already counted
+    // in the matrix -- unlike daily-experiment's per-day re-eligibility, this
+    // experiment type has no legitimate reason to ever assign the same
+    // session twice.
+    const sessionId = req?.query?.sessionId as string | undefined;
+    if (sessionId) {
+      const alreadyAssigned = await experiments.findOne({
+        where: { sessionId, experimentType: 'besample-sampling' },
+      });
+      if (alreadyAssigned) return null;
+    }
 
     // Carry the controller-injected metadata (experiment_name/assigner) onto
     // the returned assignment, same pattern as the legacy country experiment.
