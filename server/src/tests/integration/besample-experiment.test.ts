@@ -38,7 +38,6 @@ jest.mock('../../survey/treatments/statement-by-id.treatment', () => ({
 
 import app from '../../server';
 import db from '../../db/models';
-import { _resetGlobalOrderCacheForTests } from '../../survey/experiments/utils/besample-matrix';
 
 const STATEMENT_FIXTURE = {
   statementSource: 'test',
@@ -59,9 +58,6 @@ describe('Besample dynamic-frontier country experiment', () => {
     await db.experiments.destroy({ where: {} });
     await db.statementcountryratings.destroy({ where: {} });
     await db.statements.destroy({ where: {} });
-    // The global row-priority order is cached in-process (see
-    // besample-matrix.ts); force a recompute against each test's own fixtures.
-    _resetGlobalOrderCacheForTests();
   });
 
   const getStatements = (query: Record<string, unknown>) =>
@@ -231,6 +227,51 @@ describe('Besample dynamic-frontier country experiment', () => {
       where: { statementId, countryCode: '818' },
     });
     expect(rating?.get('confirmedCount')).toBe(10);
+  });
+
+  it('does not overshoot past 10 confirmed ratings when a second session is assigned right after the first finishes (no stale caching)', async () => {
+    // Regression test for a real production incident: with the global order
+    // cached for up to an hour, a burst of back-to-back completions within
+    // one cache window were all handed the identical active set, since
+    // nothing about the cache reflected each prior completion's bump --
+    // some statements reached 31-32 confirmed ratings for a single country
+    // this way. getGlobalOrder() must now recompute fresh on every call, so
+    // the second session here sees the first session's completion.
+    const [row] = await seedStatements(1);
+    const statementId = row.get('id') as number;
+    await db.statementcountryratings.create({
+      statementId,
+      countryCode: '818',
+      confirmedCount: 9, // remaining 1 -- exactly one slot left
+    });
+
+    const first = await getStatements({ sessionId: 'egypt-first', tc: '818' });
+    expect(first.body.experimentType).toBe('besample-sampling');
+    expect((await experimentInfoFor('egypt-first'))?.params?.ids).toEqual([
+      statementId,
+    ]);
+
+    const firstExperiment = await db.experiments.findOne({
+      where: { sessionId: 'egypt-first' },
+    });
+    await request(app)
+      .post('/api/experiments/save')
+      .send({ experimentId: firstExperiment?.get('id') });
+
+    const rating = await db.statementcountryratings.findOne({
+      where: { statementId, countryCode: '818' },
+    });
+    expect(rating?.get('confirmedCount')).toBe(10); // now fully filled
+
+    // Immediately (no delay, same process) assign a second, different
+    // session for the same country. With a stale cache this would still see
+    // "remaining 1" and hand out the same, already-filled statement again --
+    // instead it must find nothing left for Egypt and fall through.
+    const second = await getStatements({
+      sessionId: 'egypt-second',
+      tc: '818',
+    });
+    expect(second.body.experimentType).toBe('default');
   });
 
   it('does not re-assign a second besample-sampling experiment once the session already finished one (revisit via the same tc URL)', async () => {

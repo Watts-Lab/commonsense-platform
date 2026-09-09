@@ -16,12 +16,6 @@ const MIN_RATINGS = 10;
 // separate from the legacy country-bundle's 30-minute INFLIGHT_TTL_MS.
 const SESSION_TTL_MS = 45 * 60 * 1000;
 
-// How often the global row-priority order is recomputed -- see strategy.md
-// Step 5 ("recomputed regularly, e.g. every hour"). Recomputation is lazy (on
-// next access past staleness), not a background timer.
-const REFRESH_MS =
-  Number(process.env.BESAMPLE_MATRIX_REFRESH_MS) || 60 * 60 * 1000;
-
 interface GlobalOrder {
   // Published, not-yet-fully-filled (R(i) > 0) statement ids, sorted
   // ascending by R(i) then id -- the single global ranking every country's
@@ -29,12 +23,20 @@ interface GlobalOrder {
   order: number[];
   // Per country code, remaining(i,j) for every published statement id.
   perCountryRemaining: Map<string, Map<number, number>>;
-  computedAt: number;
 }
 
-let cache: GlobalOrder | null = null;
-
-async function computeGlobalOrder(): Promise<GlobalOrder> {
+// Computed fresh on every call -- see strategy.md Step 5. This used to be
+// cached in-process for up to an hour, but that let `remaining(i,j)` go
+// stale against real, confirmed completions between refreshes (only
+// unfinished/in-flight reservations were ever checked live): a burst of
+// sequential completions within one cache window would all be handed the
+// exact same active set, since nothing about the cache changed between their
+// requests, blowing well past the 10-rating cap ("no overshoot" broke down
+// in production -- some statements reached 31-32 confirmed ratings for a
+// single country). The underlying query (published statements + this
+// country's confirmed-ratings rows) is cheap -- a few ms -- so recomputing
+// on every call closes that window entirely rather than just shrinking it.
+export async function getGlobalOrder(): Promise<GlobalOrder> {
   const publishedRows = await statements.findAll({
     where: { published: true },
     attributes: ['id'],
@@ -88,20 +90,7 @@ async function computeGlobalOrder(): Promise<GlobalOrder> {
   return {
     order: ranked.map((entry) => entry.id),
     perCountryRemaining,
-    computedAt: Date.now(),
   };
-}
-
-export async function getGlobalOrder(): Promise<GlobalOrder> {
-  if (!cache || Date.now() - cache.computedAt > REFRESH_MS) {
-    cache = await computeGlobalOrder();
-  }
-  return cache;
-}
-
-// Test-only escape hatch to force the next getGlobalOrder() call to recompute.
-export function _resetGlobalOrderCacheForTests(): void {
-  cache = null;
 }
 
 // Live (unpersisted) pending count per statement for one country: how many

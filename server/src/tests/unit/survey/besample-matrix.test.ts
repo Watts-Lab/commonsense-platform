@@ -24,13 +24,11 @@ import {
   getLivePending,
   computeActiveSet,
   bumpCountryRatings,
-  _resetGlobalOrderCacheForTests,
 } from '../../../survey/experiments/utils/besample-matrix';
 
 describe('besample-matrix', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    _resetGlobalOrderCacheForTests();
     transactionMock.mockImplementation((cb: (t: unknown) => unknown) => cb({}));
     experimentsFindAllMock.mockResolvedValue([]);
   });
@@ -147,15 +145,23 @@ describe('besample-matrix', () => {
     });
   });
 
-  describe('getGlobalOrder caching', () => {
-    it('does not requery within the refresh window', async () => {
+  describe('getGlobalOrder', () => {
+    it('recomputes fresh on every call rather than caching across calls', async () => {
+      // Regression test: this used to be cached for up to an hour, which let
+      // `remaining` go stale against real completions in between (see
+      // besample-matrix.ts's comment on getGlobalOrder) -- a burst of
+      // sequential completions within one cache window would all be handed
+      // the identical active set, overshooting the 10-rating cap well past
+      // what "no overshoot" requires. Confirmed against production data
+      // (some Mexico statements reached 31-32 confirmed ratings this way).
       statementsFindAllMock.mockResolvedValue([{ id: 1 }]);
       ratingsFindAllMock.mockResolvedValue([]);
 
       await getGlobalOrder();
       await getGlobalOrder();
 
-      expect(statementsFindAllMock).toHaveBeenCalledTimes(1);
+      expect(statementsFindAllMock).toHaveBeenCalledTimes(2);
+      expect(ratingsFindAllMock).toHaveBeenCalledTimes(2);
     });
   });
 });
