@@ -55,11 +55,8 @@ decrement-on-timeout handling.
 **New:** `server/src/survey/experiments/utils/besample-matrix.ts`
 
 - `getGlobalOrder()` — computes `R(i) = Σⱼ remaining(i,j)` for every published statement across
-  the 16 countries, drops fully-filled statements, sorts ascending. Cached in-process and
-  lazily recomputed once stale (default 1 hour, `BESAMPLE_MATRIX_REFRESH_MS` env override) —
-  matches the strategy doc's "recomputed regularly, e.g. every hour." Safe as an in-memory cache
-  because the ECS service runs a single task (`desired_count = 1`); would need rethinking if that
-  ever changes.
+  the 16 countries, drops fully-filled statements, sorts ascending. Recomputed fresh on every call
+  (no cache) — see the **2026-09-09 update** below for why.
 - `getLivePending(countryCode)` — live count of statements reserved by unfinished
   `besample-sampling` sessions within the last **45 minutes** (the strategy's session timeout;
   the old country-bundle used 30 minutes — these are intentionally different features now).
@@ -69,6 +66,43 @@ decrement-on-timeout handling.
   across requests/restarts, while still satisfying the strategy's behavioral requirements.
 - `bumpCountryRatings(countryCode, statementIds)` — confirms ratings (transactional
   upsert-and-increment), called from two places (see §4).
+
+**2026-09-09 update: removed `getGlobalOrder()`'s in-process cache.** Live Mexico recruitment data
+showed several statements reaching **31-32** confirmed ratings against the 10-rating cap — "no
+overshoot" broke down in production. Root cause: the cache (originally hourly, matching the
+strategy doc's "recomputed regularly, e.g. every hour") only ever recomputed `remaining(i,j)` on a
+timer; `bumpCountryRatings` wrote the real `confirmedCount` on every completion, but nothing ever
+invalidated the cached `remaining` in response. Only the *live* pending (in-flight, unfinished)
+count was checked fresh per request — once a session finished, it dropped out of "pending," but the
+cache still thought its statement had the same room it did an hour ago. Verified directly: 13
+Mexico completions in one ~2-hour window were all handed the byte-identical 15-statement active set
+(same `experimentInfo.params.ids`), because nothing about the cache had changed between their
+requests — this isn't a rare race, it's guaranteed for any burst of completions within one cache
+window, which is the normal shape of Besample recruitment, not an edge case.
+
+Fix: removed the cache (`REFRESH_MS`/`BESAMPLE_MATRIX_REFRESH_MS`/`_resetGlobalOrderCacheForTests`)
+and made `getGlobalOrder()` always compute fresh. Benchmarked the query this cache existed to
+avoid first: `statements` (published, ~1,227 rows) + `statementcountryratings` filtered to the 16
+tracked countries (~5,400 rows) both return in a few ms — nothing like the ~3.2s full-table scan
+benchmarked for the (unrelated) reporting feature's aggregate over 833K raw `answers` rows with no
+relevant index. Shrinking the interval instead of removing the cache wouldn't have fixed this —
+any fixed window still lets a burst of completions within it all see the same stale `remaining`,
+just a smaller window; removing the cache closes it to zero. This also incidentally fixes a second
+latent gap: re-running `bootstrap-country-matrix.ts` against a live server (the actual production
+path — a one-off ECS task run alongside the running app) previously had no way to invalidate that
+running server's cache, so it would keep serving pre-bootstrap `remaining` for up to an hour.
+
+The already-overshot rows in `statementcountryratings` from before this fix are historical fact,
+not something this code change corrects retroactively — re-running `bootstrap-country-matrix.ts`
+(which recomputes from raw `answers`/`individuals` truth rather than the possibly-drifted
+`statementcountryratings` table) is the way to reconcile them, but that's a separate operational
+decision, not folded into this change.
+
+New regression test: `besample-experiment.test.ts`'s `'does not overshoot past 10 confirmed ratings
+when a second session is assigned right after the first finishes'` — seeds a statement at
+`confirmedCount=9`, finishes one session's assignment (bumping it to 10), then immediately assigns a
+second session for the same country with no delay and asserts nothing is left to offer. Confirmed
+this fails against the pre-fix code (reproduces the exact bug) and passes against the fix.
 
 ## 3. New experiment: replaces `country.experiment.ts`
 
