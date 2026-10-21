@@ -2,7 +2,7 @@ import { useEffect } from "react";
 
 const LlmEvals = () => {
   useEffect(() => {
-    window.location.replace("/llm-evals.html");
+    window.location.replace("/report/llm_evaluations");
   }, []);
 
   return null;
