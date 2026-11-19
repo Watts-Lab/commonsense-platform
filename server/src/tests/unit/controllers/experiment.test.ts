@@ -162,6 +162,42 @@ describe('experiment controller', () => {
     });
   });
 
+  it('returnStatements stores the CloudFront viewer country on any experiment', async () => {
+    const { returnStatements } =
+      await import('../../../controllers/experiment');
+
+    const req: any = {
+      query: { sessionId: 's-geo' },
+      headers: { 'cloudfront-viewer-country': 'de' },
+    };
+    const res: any = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+
+    await returnStatements(req, res);
+
+    const saved = createExperimentMock.mock.calls[0][0];
+    expect(saved.experimentType).toBe('default');
+    expect(saved.experimentInfo.viewerCountry).toBe('DE');
+  });
+
+  it('returnStatements omits viewerCountry when the header is missing or malformed', async () => {
+    const { returnStatements } =
+      await import('../../../controllers/experiment');
+    const res: any = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+
+    await returnStatements({ query: { sessionId: 's-nogeo' } } as any, res);
+    await returnStatements(
+      {
+        query: { sessionId: 's-bad' },
+        headers: { 'cloudfront-viewer-country': '<script>' },
+      } as any,
+      res,
+    );
+
+    for (const [saved] of createExperimentMock.mock.calls) {
+      expect(saved.experimentInfo).not.toHaveProperty('viewerCountry');
+    }
+  });
+
   it('returnStatements returns 500 when createExperiment fails', async () => {
     createExperimentMock.mockRejectedValueOnce(new Error('insert failed'));
     const { returnStatements } =

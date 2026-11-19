@@ -13,6 +13,13 @@ import { stringy } from '../survey/treatments/utils/id-generator';
 import { bumpCountryRatings } from '../survey/experiments/utils/besample-matrix';
 import { sendMetaEvent } from './meta';
 
+// CloudFront's 2-letter viewer country (e.g. "DE"); undefined when the request didn't pass through CloudFront.
+function readViewerCountry(req: Request): string | undefined {
+  const raw = req.headers?.['cloudfront-viewer-country'];
+  const value = (Array.isArray(raw) ? raw[0] : raw)?.trim().toUpperCase();
+  return value && /^[A-Z]{2}$/.test(value) ? value : undefined;
+}
+
 export const returnStatements = async (
   req: Request,
   res: Response,
@@ -165,11 +172,16 @@ export const returnStatements = async (
 
   delete req.query.sessionId;
 
+  const viewerCountry = readViewerCountry(req);
+
   const experimentData = {
     sessionId,
     experimentId: stringy(randomExperiment.assigned_treatment.params),
     experimentType: randomExperiment.assigned_treatment.experiment_name,
-    experimentInfo: randomExperiment.assigned_treatment,
+    experimentInfo: {
+      ...randomExperiment.assigned_treatment,
+      ...(viewerCountry ? { viewerCountry } : {}),
+    },
     statementList: result.answer,
     urlParams: stringy(req.query) ? stringy(req.query) : null,
     finished: false,
