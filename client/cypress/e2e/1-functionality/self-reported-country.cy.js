@@ -119,7 +119,7 @@ describe("Self-reported country ratings", () => {
           statuses.forEach((status) => expect(status).to.equal(200));
         });
 
-        confirmedFor(ICELAND, statementIds).then((afterCounts) => {
+        confirmedFor(ICELAND, statementIds).should((afterCounts) => {
           touched = statementIds.map((statementId) => ({
             statementId,
             credited:
@@ -136,7 +136,7 @@ describe("Self-reported country ratings", () => {
         cy.queryDb(
           "SELECT COUNT(*) AS credited FROM experiments WHERE sessionId LIKE ? AND selfReportCredited = 1",
           [`${RUN}%`],
-        ).then(([{ credited }]) => {
+        ).should(([{ credited }]) => {
           expect(Number(credited)).to.equal(sessions.length);
         });
       });
