@@ -51,21 +51,33 @@ describe("Viewer country and country-targeted sampling", () => {
     });
   });
 
-  it("saves the viewer country on an experiment for an untracked country", () => {
-    const sessionId = `${RUN}-untracked`;
+  it("samples a visitor from any country by their CloudFront country", () => {
+    const sessionId = `${RUN}-any-country`;
     requestStatements(sessionId, { country: "DE" })
-      .its("status")
-      .should("equal", 200);
+      .its("body.experimentType")
+      .should("equal", "besample-sampling");
 
     savedInfo(sessionId).then(({ type, info }) => {
+      expect(type).to.equal("besample-sampling");
+      expect(info.countryCode).to.equal("276");
+      expect(info.countrySource).to.equal("geo");
       expect(info.viewerCountry).to.equal("DE");
-      // No tracked country, so the visitor gets a non-country experiment.
-      expect(type).to.not.equal("besample-sampling");
-      expect(info).to.not.have.property("countryCode");
     });
   });
 
-  it("uses the CloudFront country for a tracked country when tc is absent", () => {
+  it("samples a Besample tc country outside the original 16", () => {
+    const sessionId = `${RUN}-tc-france`;
+    requestStatements(sessionId, { tc: "250" })
+      .its("body.experimentType")
+      .should("equal", "besample-sampling");
+
+    savedInfo(sessionId).then(({ info }) => {
+      expect(info.countryCode).to.equal("250");
+      expect(info.countrySource).to.equal("tc");
+    });
+  });
+
+  it("uses the CloudFront country for a Besample country when tc is absent", () => {
     const sessionId = `${RUN}-geo-only`;
     requestStatements(sessionId, { country: "BR" })
       .its("body.experimentType")
@@ -93,7 +105,7 @@ describe("Viewer country and country-targeted sampling", () => {
     });
   });
 
-  it("omits viewerCountry when the header is missing or malformed", () => {
+  it("omits viewerCountry and skips country sampling when the header is missing or malformed", () => {
     const missing = `${RUN}-no-header`;
     const malformed = `${RUN}-bad-header`;
     requestStatements(missing).its("status").should("equal", 200);
@@ -101,11 +113,13 @@ describe("Viewer country and country-targeted sampling", () => {
       .its("status")
       .should("equal", 200);
 
-    savedInfo(missing).then(({ info }) => {
-      expect(info).to.not.have.property("viewerCountry");
-    });
-    savedInfo(malformed).then(({ info }) => {
-      expect(info).to.not.have.property("viewerCountry");
+    // Country unknown: the visitor gets the same non-country experiment as before.
+    [missing, malformed].forEach((sessionId) => {
+      savedInfo(sessionId).then(({ type, info }) => {
+        expect(info).to.not.have.property("viewerCountry");
+        expect(type).to.not.equal("besample-sampling");
+        expect(info).to.not.have.property("countryCode");
+      });
     });
   });
 
@@ -156,11 +170,14 @@ describe("Viewer country and country-targeted sampling", () => {
           expect(Number(after) - Number(before)).to.equal(assigned);
         });
 
-        // No cell may exceed the confirmed + pending cap.
+        // No cell this burst reserved may exceed the confirmed + pending cap.
+        // (Older cells can sit above it from before reservations were
+        // enforced in the database; the burst never reserves those.)
         cy.queryDb(
-          "SELECT statementId, confirmedCount + pendingCount AS covered FROM statementcountryratings WHERE countryCode = ?",
-          [country],
+          "SELECT statementId, confirmedCount + pendingCount AS covered FROM statementcountryratings WHERE countryCode = ? AND statementId IN (?)",
+          [country, Object.keys(perStatement).map(Number)],
         ).then((cells) => {
+          expect(cells).to.have.length(Object.keys(perStatement).length);
           cells.forEach((cell) => {
             expect(
               Number(cell.covered),

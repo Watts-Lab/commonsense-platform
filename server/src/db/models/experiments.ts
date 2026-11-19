@@ -45,6 +45,13 @@ export default function defineExperiments(
         allowNull: false,
         defaultValue: false,
       },
+      // True once this experiment's answers were counted toward the
+      // participant's self-reported country in statementcountryratings.
+      selfReportCredited: {
+        type: dataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
     },
     {
       indexes: [

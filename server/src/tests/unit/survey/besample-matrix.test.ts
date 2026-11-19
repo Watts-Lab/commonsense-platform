@@ -55,7 +55,7 @@ describe('besample-matrix', () => {
       ]);
       // Egypt confirmed: statement 1 -> 9 (remaining 1), statement 2 -> 10
       // (remaining 0, filled), statement 3 -> 0 (remaining 10). Every other
-      // tracked country has no row (remaining 10 for all three statements).
+      // country has no row (remaining 10 for all three statements).
       ratingsFindAllMock.mockResolvedValueOnce([
         { statementId: 1, countryCode: '818', confirmedCount: 9 },
         { statementId: 2, countryCode: '818', confirmedCount: 10 },
@@ -88,13 +88,41 @@ describe('besample-matrix', () => {
       expect(ids).toEqual([2]);
     });
 
-    it('returns an empty array for an untracked country code', async () => {
-      statementsFindAllMock.mockResolvedValueOnce([{ id: 1 }]);
-      ratingsFindAllMock.mockResolvedValueOnce([]);
+    it('counts ratings from every country toward the global order', async () => {
+      statementsFindAllMock.mockResolvedValueOnce([
+        { id: 1 },
+        { id: 2 },
+        { id: 3 },
+      ]);
+      // Only countries outside the original Besample 16 have ratings.
+      // Statement 3 is over-filled in France (30, counted as 10); statement 2
+      // has 8 in each of France, Germany and the US (24); statement 1 has none.
+      ratingsFindAllMock.mockResolvedValueOnce([
+        { statementId: 3, countryCode: '250', confirmedCount: 30 },
+        { statementId: 2, countryCode: '250', confirmedCount: 8 },
+        { statementId: 2, countryCode: '276', confirmedCount: 8 },
+        { statementId: 2, countryCode: '840', confirmedCount: 8 },
+      ]);
 
-      const ids = await computeActiveSet('250' /* France, untracked */, 15);
+      // Egypt has no ratings, so its local order is the global order, lowest
+      // R(i) first. Without the cap at 10, statement 3 would rank first.
+      expect(await computeActiveSet('818', 15)).toEqual([2, 3, 1]);
+    });
+
+    it('excludes a statement only for the country that filled it', async () => {
+      statementsFindAllMock.mockResolvedValueOnce([{ id: 1 }, { id: 2 }]);
+      ratingsFindAllMock.mockResolvedValueOnce([
+        { statementId: 1, countryCode: '250', confirmedCount: 10 },
+      ]);
+
+      expect(await computeActiveSet('250', 15)).toEqual([2]); // France
+      expect(await computeActiveSet('276', 15)).toEqual([1, 2]); // Germany
+    });
+
+    it('returns an empty array when no country code is given', async () => {
+      const ids = await computeActiveSet('', 15);
       expect(ids).toEqual([]);
-      expect(experimentsFindAllMock).not.toHaveBeenCalled();
+      expect(statementsFindAllMock).not.toHaveBeenCalled();
     });
   });
 

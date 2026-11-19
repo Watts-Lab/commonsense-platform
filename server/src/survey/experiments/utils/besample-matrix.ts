@@ -1,11 +1,11 @@
-import { Op, Sequelize } from 'sequelize';
+import { Op, Sequelize, Transaction } from 'sequelize';
 import {
   db,
   statements,
   statementcountryratings,
   experiments,
 } from '../../../db/models';
-import { BESAMPLE_COUNTRY_CODES } from './besample-countries';
+import { ALL_COUNTRY_CODES } from './country-codes';
 
 // A cell (statement, country) is "filled" once it has this many confirmed
 // ratings -- see strategy.md Step 2.
@@ -26,12 +26,25 @@ interface GlobalOrder {
   // ascending by R(i) then id -- the single global ranking every country's
   // queue draws from.
   order: number[];
-  // Per country code, remaining(i,j) for every published statement id.
-  perCountryRemaining: Map<string, Map<number, number>>;
+  // confirmedCount per country code -> statement id, only for cells that
+  // have at least one confirmed rating. A missing cell means 0 confirmed.
+  // Kept sparse: a dense ~250 countries x every statement map would be large
+  // and almost entirely 0.
+  confirmed: Map<string, Map<number, number>>;
   computedAt: number;
 }
 
 let cache: GlobalOrder | null = null;
+
+function remainingFor(
+  globalOrder: GlobalOrder,
+  countryCode: string,
+  statementId: number,
+): number {
+  const confirmed =
+    globalOrder.confirmed.get(countryCode)?.get(statementId) ?? 0;
+  return Math.max(0, MIN_RATINGS - confirmed);
+}
 
 async function computeGlobalOrder(): Promise<GlobalOrder> {
   const publishedRows = await statements.findAll({
@@ -44,41 +57,46 @@ async function computeGlobalOrder(): Promise<GlobalOrder> {
   );
 
   const ratingRows = await statementcountryratings.findAll({
-    where: { countryCode: BESAMPLE_COUNTRY_CODES as unknown as string[] },
+    where: { confirmedCount: { [Op.gt]: 0 } },
     attributes: ['statementId', 'countryCode', 'confirmedCount'],
     raw: true,
   });
 
-  const confirmedByStatement = new Map<number, Map<string, number>>();
+  const confirmed = new Map<string, Map<number, number>>();
   for (const row of ratingRows as unknown as Array<{
     statementId: number;
     countryCode: string;
     confirmedCount: number;
   }>) {
-    if (!confirmedByStatement.has(row.statementId)) {
-      confirmedByStatement.set(row.statementId, new Map());
+    if (!confirmed.has(row.countryCode)) {
+      confirmed.set(row.countryCode, new Map());
     }
-    confirmedByStatement
-      .get(row.statementId)!
-      .set(row.countryCode, row.confirmedCount);
+    confirmed.get(row.countryCode)!.set(row.statementId, row.confirmedCount);
   }
 
-  const perCountryRemaining = new Map<string, Map<number, number>>();
-  for (const code of BESAMPLE_COUNTRY_CODES) {
-    perCountryRemaining.set(code, new Map());
+  // Every country counts toward R(i): all ISO 3166-1 countries plus any other
+  // code that already has ratings, so the set grows with the data instead of
+  // being a fixed list.
+  const countryCount = new Set([...ALL_COUNTRY_CODES, ...confirmed.keys()])
+    .size;
+
+  // R(i) = sum over countries j of max(0, MIN_RATINGS - n(i,j)). A country
+  // with no ratings for i contributes MIN_RATINGS, so
+  // R(i) = MIN_RATINGS * countryCount - sum over stored cells of min(MIN_RATINGS, n(i,j)).
+  const filledByStatement = new Map<number, number>();
+  for (const cells of confirmed.values()) {
+    for (const [statementId, count] of cells) {
+      filledByStatement.set(
+        statementId,
+        (filledByStatement.get(statementId) ?? 0) +
+          Math.min(MIN_RATINGS, count),
+      );
+    }
   }
 
   const ranked: Array<{ id: number; r: number }> = [];
-
   for (const id of publishedIds) {
-    const confirmedForStatement = confirmedByStatement.get(id);
-    let r = 0;
-    for (const code of BESAMPLE_COUNTRY_CODES) {
-      const confirmed = confirmedForStatement?.get(code) ?? 0;
-      const remaining = Math.max(0, MIN_RATINGS - confirmed);
-      perCountryRemaining.get(code)!.set(id, remaining);
-      r += remaining;
-    }
+    const r = MIN_RATINGS * countryCount - (filledByStatement.get(id) ?? 0);
     if (r > 0) ranked.push({ id, r });
   }
 
@@ -86,7 +104,7 @@ async function computeGlobalOrder(): Promise<GlobalOrder> {
 
   return {
     order: ranked.map((entry) => entry.id),
-    perCountryRemaining,
+    confirmed,
     computedAt: Date.now(),
   };
 }
@@ -183,13 +201,17 @@ export async function computeActiveSet(
   countryCode: string,
   size = 15,
 ): Promise<number[]> {
-  const { order, perCountryRemaining } = await getGlobalOrder();
-  const remainMap = perCountryRemaining.get(countryCode);
-  if (!remainMap) return [];
+  if (!countryCode) return [];
+  const globalOrder = await getGlobalOrder();
 
   await sweepStaleReservations();
 
-  const candidates = order.filter((id) => (remainMap.get(id) ?? 0) > 0);
+  // This country's local order: the global order, minus statements this
+  // country has already filled (as of the cached snapshot -- tryReserve
+  // re-checks against the live row).
+  const candidates = globalOrder.order.filter(
+    (id) => remainingFor(globalOrder, countryCode, id) > 0,
+  );
   const activeSet: number[] = [];
   const chunkSize = size * 3;
 
@@ -211,6 +233,22 @@ export async function computeActiveSet(
   return activeSet;
 }
 
+// +1 confirmedCount per unique statement for this country, inside the caller's transaction.
+export async function incrementConfirmed(
+  countryCode: string,
+  statementIds: number[],
+  transaction: Transaction,
+): Promise<void> {
+  for (const statementId of Array.from(new Set(statementIds))) {
+    const [row] = await statementcountryratings.findOrCreate({
+      where: { statementId, countryCode },
+      defaults: { statementId, countryCode, confirmedCount: 0 },
+      transaction,
+    });
+    await row.increment('confirmedCount', { by: 1, transaction });
+  }
+}
+
 // Confirms ratings (+1 confirmedCount per unique statement); releaseReservation also drops the session's pendingCount.
 export async function bumpCountryRatings(
   countryCode: string,
@@ -221,14 +259,7 @@ export async function bumpCountryRatings(
   if (uniqueIds.length === 0) return;
 
   await db.sequelize.transaction(async (transaction) => {
-    for (const statementId of uniqueIds) {
-      const [row] = await statementcountryratings.findOrCreate({
-        where: { statementId, countryCode },
-        defaults: { statementId, countryCode, confirmedCount: 0 },
-        transaction,
-      });
-      await row.increment('confirmedCount', { by: 1, transaction });
-    }
+    await incrementConfirmed(countryCode, uniqueIds, transaction);
     if (releaseReservation) {
       await statementcountryratings.update(
         {

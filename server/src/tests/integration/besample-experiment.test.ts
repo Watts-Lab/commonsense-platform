@@ -70,7 +70,13 @@ describe('Besample dynamic-frontier country experiment', () => {
   const experimentInfoFor = async (sessionId: string) => {
     const row = await db.experiments.findOne({ where: { sessionId } });
     return row?.get('experimentInfo') as
-      { countryCode?: string; params?: { ids?: number[] } } | undefined;
+      | {
+          countryCode?: string;
+          countrySource?: string;
+          viewerCountry?: string;
+          params?: { ids?: number[] };
+        }
+      | undefined;
   };
 
   const seedStatements = async (n: number) =>
@@ -125,12 +131,41 @@ describe('Besample dynamic-frontier country experiment', () => {
     expect(res.body.experimentType).toBe('default');
   });
 
-  it('falls back to the default experiment for an untracked country code', async () => {
+  it('falls back to the default experiment when tc is not a country and there is no viewer country', async () => {
     await seedStatements(1);
 
-    const res = await getStatements({ sessionId: 'untracked', tc: '250' }); // France
+    const res = await getStatements({ sessionId: 'placeholder', tc: '999' });
     expect(res.status).toBe(200);
     expect(res.body.experimentType).toBe('default');
+  });
+
+  it('assigns a Besample country outside the original 16 from tc', async () => {
+    const created = await seedStatements(2);
+
+    const res = await getStatements({ sessionId: 'france', tc: '250' });
+    expect(res.status).toBe(200);
+    expect(res.body.experimentType).toBe('besample-sampling');
+
+    const info = await experimentInfoFor('france');
+    expect(info?.countryCode).toBe('250');
+    expect(info?.countrySource).toBe('tc');
+    expect(info?.params?.ids).toEqual(created.map((row) => row.get('id')));
+  });
+
+  it('samples an organic participant by their CloudFront viewer country', async () => {
+    await seedStatements(2);
+
+    const res = await request(app)
+      .get('/api/experiments')
+      .set('CloudFront-Viewer-Country', 'DE')
+      .query({ sessionId: 'organic-de' });
+    expect(res.status).toBe(200);
+    expect(res.body.experimentType).toBe('besample-sampling');
+
+    const info = await experimentInfoFor('organic-de');
+    expect(info?.countryCode).toBe('276');
+    expect(info?.countrySource).toBe('geo');
+    expect(info?.viewerCountry).toBe('DE');
   });
 
   it("falls back to the default experiment once a country's queue is fully drained", async () => {

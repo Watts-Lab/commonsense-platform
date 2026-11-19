@@ -10,7 +10,15 @@ import {
 import { saveIndividualDB } from '../survey/experiments/utils/save-individual';
 import { GetStatementsWeighted } from '../survey/treatments/weighted-random.treatment';
 import { stringy } from '../survey/treatments/utils/id-generator';
-import { bumpCountryRatings } from '../survey/experiments/utils/besample-matrix';
+import {
+  bumpCountryRatings,
+  releasePending,
+} from '../survey/experiments/utils/besample-matrix';
+import {
+  creditFinishedExperiment,
+  creditOnDemographics,
+  isDemographicsType,
+} from '../survey/experiments/utils/self-reported-ratings';
 import { sendMetaEvent } from './meta';
 
 // CloudFront's 2-letter viewer country (e.g. "DE"); undefined when the request didn't pass through CloudFront.
@@ -214,7 +222,19 @@ export const saveIndividual = async (
     finished: true,
   };
 
-  saveIndividualDB(individualData).catch(() => {});
+  // Waits for the row (and, for demographics, the country-rating credit)
+  // before responding, so the client's next step -- the Result page, which
+  // finishes the experiment -- never races this credit. Failures are still
+  // swallowed and never block the participant.
+  try {
+    await saveIndividualDB(individualData);
+    if (isDemographicsType(individualData.informationType)) {
+      await creditOnDemographics(
+        individualData.sessionId as string,
+        individualData.experimentInfo,
+      );
+    }
+  } catch {}
 
   res.json({ ok: true });
 };
@@ -254,7 +274,11 @@ export const saveExperiment = async (
         attributes: ['experimentType', 'experimentInfo', 'staleSwept'],
       });
       const experimentInfo = experiment?.get('experimentInfo') as
-        | { countryCode?: string; params?: { ids?: number[] } }
+        | {
+            countryCode?: string;
+            countrySource?: string;
+            params?: { ids?: number[] };
+          }
         | null
         | undefined;
 
@@ -264,13 +288,34 @@ export const saveExperiment = async (
         experimentInfo.params?.ids?.length
       ) {
         // A sweep already released this reservation if the session finished late.
-        await bumpCountryRatings(
-          experimentInfo.countryCode,
-          experimentInfo.params.ids,
-          !experiment.get('staleSwept'),
-        );
+        const holdsReservation = !experiment.get('staleSwept');
+        if (experimentInfo.countrySource === 'geo') {
+          // Organic participants are counted by self-reported country
+          // (below), never by viewerCountry; only free the reservation.
+          if (holdsReservation) {
+            await releasePending(
+              experimentInfo.countryCode,
+              experimentInfo.params.ids,
+            );
+          }
+        } else {
+          // Besample (tc) participants: counted by their tc country, as before.
+          await bumpCountryRatings(
+            experimentInfo.countryCode,
+            experimentInfo.params.ids,
+            holdsReservation,
+          );
+        }
       }
     } catch (_counterError) {}
+
+    try {
+      const finished = await experimentModel.findByPk(experimentId, {
+        attributes: ['sessionId'],
+      });
+      const sessionId = finished?.get('sessionId') as string | undefined;
+      if (sessionId) await creditFinishedExperiment(experimentId, sessionId);
+    } catch {}
 
     try {
       await sendMetaEvent({
