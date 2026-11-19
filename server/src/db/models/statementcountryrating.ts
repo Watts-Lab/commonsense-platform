@@ -27,6 +27,12 @@ export default function defineStatementCountryRating(
         allowNull: false,
         defaultValue: 0,
       },
+      // Sessions currently assigned this cell but not yet finished; claimed atomically at assignment.
+      pendingCount: {
+        type: dataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+      },
     },
     {
       tableName: 'statementcountryratings',

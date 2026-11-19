@@ -1,18 +1,29 @@
 import { experiments } from '../../db/models';
 import { GetStatementById } from '../treatments/statement-by-id.treatment';
-import { resolveCountryCodeFromTc } from './utils/besample-countries';
+import {
+  resolveCountryCodeFromGeoHeader,
+  resolveCountryCodeFromRequest,
+} from './utils/besample-countries';
 import { computeActiveSet } from './utils/besample-matrix';
 
 interface RequestLike {
   query?: Record<string, unknown>;
+  headers?: Record<string, string | string[] | undefined>;
 }
 
-// Besample appends all four of these to every recruitment link; presence of
-// any one of them marks a participant as Besample-recruited (see
-// strategy.md). Country itself is always resolved from `tc` specifically.
-function hasBesampleParams(req: RequestLike): boolean {
+// Besample parameters preserve campaign routing; tc wins over the CloudFront geo header.
+function hasCountryOrBesampleParams(req: RequestLike): boolean {
   const query = req?.query ?? {};
-  return Boolean(query.tc || query.bpid || query.bnum || query.battempt);
+  return Boolean(
+    resolveCountryCodeFromRequest(
+      req?.headers?.['cloudfront-viewer-country'],
+      query.tc,
+    ) ||
+    query.tc ||
+    query.bpid ||
+    query.bnum ||
+    query.battempt,
+  );
 }
 
 const ACTIVE_SET_SIZE = 15;
@@ -32,7 +43,7 @@ const experiment = {
     {
       params: {},
       function: GetStatementById,
-      validity: (req: RequestLike) => hasBesampleParams(req),
+      validity: (req: RequestLike) => hasCountryOrBesampleParams(req),
     },
   ],
 
@@ -40,7 +51,9 @@ const experiment = {
     validTreatments: Array<Record<string, unknown>>,
     req: RequestLike,
   ) => {
-    const code = resolveCountryCodeFromTc(req?.query?.tc);
+    const geoCountry = req?.headers?.['cloudfront-viewer-country'];
+    const tc = req?.query?.tc;
+    const code = resolveCountryCodeFromRequest(geoCountry, tc);
     if (!code) return null;
 
     // A session gets exactly one besample-sampling assignment, ever. Without
@@ -71,6 +84,10 @@ const experiment = {
     return {
       ...gatewayMeta,
       countryCode: code,
+      countrySource:
+        tc !== undefined && tc !== null && String(tc).trim() !== ''
+          ? 'tc'
+          : 'geo',
       params: { ids },
       function: GetStatementById,
     };

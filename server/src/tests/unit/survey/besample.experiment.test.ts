@@ -44,6 +44,19 @@ describe('besample experiment', () => {
         false,
       );
     });
+
+    it('is eligible for a tracked geo-header country without Besample params', async () => {
+      const besampleExperiment = (
+        await import('../../../survey/experiments/besample.experiment')
+      ).default;
+
+      expect(
+        besampleExperiment.treatments[0].validity({
+          query: {},
+          headers: { 'cloudfront-viewer-country': 'BR' },
+        }),
+      ).toBe(true);
+    });
   });
 
   describe('treatmentAssigner', () => {
@@ -97,7 +110,46 @@ describe('besample experiment', () => {
       });
       expect(computeActiveSetMock).toHaveBeenCalledWith('076', 15);
       expect(result.countryCode).toBe('076');
+      expect(result.countrySource).toBe('tc');
       expect(result.params).toEqual({ ids: [101, 102, 103] });
+    });
+
+    it('uses tc instead of a different geo-header country', async () => {
+      computeActiveSetMock.mockResolvedValueOnce([201]);
+      const besampleExperiment = (
+        await import('../../../survey/experiments/besample.experiment')
+      ).default;
+
+      const result = (await besampleExperiment.treatmentAssigner(
+        [{ params: {}, function: jest.fn() }],
+        {
+          query: { tc: '818', sessionId: 'session-tc' },
+          headers: { 'cloudfront-viewer-country': 'BR' },
+        },
+      )) as any;
+
+      expect(computeActiveSetMock).toHaveBeenCalledWith('818', 15);
+      expect(result.countryCode).toBe('818');
+      expect(result.countrySource).toBe('tc');
+    });
+
+    it('uses geo-header country when tc is absent', async () => {
+      computeActiveSetMock.mockResolvedValueOnce([201]);
+      const besampleExperiment = (
+        await import('../../../survey/experiments/besample.experiment')
+      ).default;
+
+      const result = (await besampleExperiment.treatmentAssigner(
+        [{ params: {}, function: jest.fn() }],
+        {
+          query: { sessionId: 'session-geo' },
+          headers: { 'cloudfront-viewer-country': 'BR' },
+        },
+      )) as any;
+
+      expect(computeActiveSetMock).toHaveBeenCalledWith('076', 15);
+      expect(result.countryCode).toBe('076');
+      expect(result.countrySource).toBe('geo');
     });
 
     it('returns null when this session already has a besample-sampling experiment', async () => {

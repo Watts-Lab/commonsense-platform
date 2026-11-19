@@ -1,4 +1,4 @@
-import { Op } from 'sequelize';
+import { Op, Sequelize } from 'sequelize';
 import {
   db,
   statements,
@@ -12,8 +12,7 @@ import { BESAMPLE_COUNTRY_CODES } from './besample-countries';
 const MIN_RATINGS = 10;
 
 // Session timeout for an in-flight (unfinished) besample-sampling assignment
-// before its reservation is released -- see strategy.md Step 7. Deliberately
-// separate from the legacy country-bundle's 30-minute INFLIGHT_TTL_MS.
+// before its reservation is released -- see strategy.md Step 7.
 const SESSION_TTL_MS = 45 * 60 * 1000;
 
 // How often the global row-priority order is recomputed -- see strategy.md
@@ -104,44 +103,82 @@ export function _resetGlobalOrderCacheForTests(): void {
   cache = null;
 }
 
-// Live (unpersisted) pending count per statement for one country: how many
-// currently-unfinished, not-yet-timed-out besample-sampling sessions have
-// this statement in their assigned set. Derived from `experiments` rather
-// than a maintained counter, mirroring how the legacy country-bundle
-// in-flight check already worked.
-export async function getLivePending(
+// Decrements pendingCount for a session's reserved cells, never below zero.
+export async function releasePending(
   countryCode: string,
-): Promise<Map<number, number>> {
-  const cutoff = new Date(Date.now() - SESSION_TTL_MS);
+  statementIds: number[],
+): Promise<void> {
+  if (statementIds.length === 0) return;
+  await statementcountryratings.update(
+    {
+      pendingCount: Sequelize.literal('pendingCount - 1') as unknown as number,
+    },
+    {
+      where: {
+        countryCode,
+        statementId: { [Op.in]: statementIds },
+        pendingCount: { [Op.gt]: 0 },
+      },
+    },
+  );
+}
 
-  const inFlight = await experiments.findAll({
+// Frees reservations of unfinished assignments older than SESSION_TTL_MS, bounded per call.
+export async function sweepStaleReservations(): Promise<void> {
+  const stale = await experiments.findAll({
     where: {
       experimentType: 'besample-sampling',
       finished: false,
-      createdAt: { [Op.gte]: cutoff },
+      staleSwept: false,
+      createdAt: { [Op.lt]: new Date(Date.now() - SESSION_TTL_MS) },
     },
-    attributes: ['experimentInfo'],
+    attributes: ['id', 'experimentInfo'],
+    limit: 200,
   });
 
-  const pending = new Map<number, number>();
-  for (const row of inFlight) {
+  for (const row of stale) {
+    // Only the caller that flips the flag releases, so concurrent sweeps can't double-release.
+    const [claimed] = await experiments.update(
+      { staleSwept: true },
+      { where: { id: row.get('id') as number, staleSwept: false } },
+    );
+    if (!claimed) continue;
+
     const info = row.get('experimentInfo') as
       { countryCode?: string; params?: { ids?: number[] } } | null | undefined;
-    if (!info || info.countryCode !== countryCode) continue;
-    for (const id of info.params?.ids ?? []) {
-      pending.set(id, (pending.get(id) ?? 0) + 1);
+    if (info?.countryCode) {
+      await releasePending(info.countryCode, info.params?.ids ?? []);
     }
   }
-  return pending;
 }
 
-// The next participant's assigned statement set for `countryCode`: the
-// highest-global-priority statements that still have room after accounting
-// for both confirmed ratings and live reservations. Recomputed fresh on every
-// call rather than tracking a persistent per-country pointer/window -- this
-// is stateless across requests and process restarts while still satisfying
-// strategy.md Step 6 (never show an already-filled cell, highest priority
-// first, naturally adapts as the matrix changes).
+// Atomic: only succeeds while confirmed + pending is still under MIN_RATINGS in the DB.
+async function tryReserve(
+  countryCode: string,
+  statementId: number,
+): Promise<boolean> {
+  const [affected] = await statementcountryratings.update(
+    {
+      pendingCount: Sequelize.literal('pendingCount + 1') as unknown as number,
+    },
+    {
+      where: {
+        statementId,
+        countryCode,
+        [Op.and]: [
+          Sequelize.where(
+            Sequelize.literal('confirmedCount + pendingCount'),
+            Op.lt,
+            MIN_RATINGS,
+          ),
+        ],
+      },
+    },
+  );
+  return affected > 0;
+}
+
+// Reserves and returns up to `size` highest-priority statements that still need ratings for `countryCode`.
 export async function computeActiveSet(
   countryCode: string,
   size = 15,
@@ -150,28 +187,35 @@ export async function computeActiveSet(
   const remainMap = perCountryRemaining.get(countryCode);
   if (!remainMap) return [];
 
-  const pendingMap = await getLivePending(countryCode);
+  await sweepStaleReservations();
 
+  const candidates = order.filter((id) => (remainMap.get(id) ?? 0) > 0);
   const activeSet: number[] = [];
-  for (const id of order) {
-    const remaining = remainMap.get(id) ?? 0;
-    if (remaining <= 0) continue;
-    const pending = pendingMap.get(id) ?? 0;
-    if (remaining - pending <= 0) continue;
-    activeSet.push(id);
-    if (activeSet.length === size) break;
+  const chunkSize = size * 3;
+
+  for (let start = 0; start < candidates.length; start += chunkSize) {
+    if (activeSet.length >= size) break;
+    const chunk = candidates.slice(start, start + chunkSize);
+
+    // Cells are created lazily; reservation needs the row to exist.
+    await statementcountryratings.bulkCreate(
+      chunk.map((statementId) => ({ statementId, countryCode })),
+      { ignoreDuplicates: true },
+    );
+
+    for (const id of chunk) {
+      if (activeSet.length >= size) break;
+      if (await tryReserve(countryCode, id)) activeSet.push(id);
+    }
   }
   return activeSet;
 }
 
-// Confirms ratings for a set of statements at a country: bumps
-// `confirmedCount` by 1 for each (deduplicated) statement id. Called once a
-// session's country is known and its ratings are considered final -- either a
-// besample-sampling experiment finishing, or an organic participant
-// self-reporting one of the 16 tracked countries.
+// Confirms ratings (+1 confirmedCount per unique statement); releaseReservation also drops the session's pendingCount.
 export async function bumpCountryRatings(
   countryCode: string,
   statementIds: number[],
+  releaseReservation = false,
 ): Promise<void> {
   const uniqueIds = Array.from(new Set(statementIds));
   if (uniqueIds.length === 0) return;
@@ -184,6 +228,23 @@ export async function bumpCountryRatings(
         transaction,
       });
       await row.increment('confirmedCount', { by: 1, transaction });
+    }
+    if (releaseReservation) {
+      await statementcountryratings.update(
+        {
+          pendingCount: Sequelize.literal(
+            'pendingCount - 1',
+          ) as unknown as number,
+        },
+        {
+          where: {
+            countryCode,
+            statementId: { [Op.in]: uniqueIds },
+            pendingCount: { [Op.gt]: 0 },
+          },
+          transaction,
+        },
+      );
     }
   });
 }

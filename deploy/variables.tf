@@ -46,3 +46,14 @@ variable "bastion_key_name" {
   description = "EC2 key pair name for the bastion."
   type        = string
 }
+
+variable "alert_email" {
+  description = "Email address that receives ECS task failure alerts (SNS subscription)."
+  type        = string
+}
+
+variable "cloudfront_route53_enabled" {
+  description = "Point commonsensicality.org/.com at CloudFront; leave false until the distribution is tested."
+  type        = bool
+  default     = false
+}

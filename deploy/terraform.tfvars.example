@@ -7,3 +7,6 @@ rds_kms_key_id      = "arn:aws:kms:us-east-1:000000000000:key/xxxxxxxx-xxxx-xxxx
 bastion_ami         = "ami-xxxxxxxxxxxxxxxxx"
 bastion_private_ip  = "10.0.0.10"
 bastion_key_name    = "your-ec2-keypair"
+alert_email         = "you@example.com"
+
+cloudfront_route53_enabled = false

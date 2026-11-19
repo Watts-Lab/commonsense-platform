@@ -10,7 +10,7 @@ data "aws_db_subnet_group" "default" {
 resource "aws_db_instance" "main" {
   identifier     = "database-common-sense"
   engine         = "mariadb"
-  engine_version = "10.6.24"
+  engine_version = "10.6.25"
   instance_class = "db.t3.medium"
 
   allocated_storage     = 20
