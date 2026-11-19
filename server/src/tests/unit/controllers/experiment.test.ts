@@ -11,6 +11,9 @@ const getStatementsWeightedMock = jest.fn();
 const stringyMock = jest.fn((v) => JSON.stringify(v));
 const sendMetaEventMock = jest.fn();
 const bumpCountryRatingsMock = jest.fn();
+const releasePendingMock = jest.fn();
+const creditFinishedExperimentMock = jest.fn();
+const creditOnDemographicsMock = jest.fn();
 
 jest.mock('express-validator', () => ({
   validationResult: (...args: unknown[]) => validationResultMock(...args),
@@ -55,6 +58,16 @@ jest.mock('../../../controllers/meta', () => ({
 
 jest.mock('../../../survey/experiments/utils/besample-matrix', () => ({
   bumpCountryRatings: (...args: unknown[]) => bumpCountryRatingsMock(...args),
+  releasePending: (...args: unknown[]) => releasePendingMock(...args),
+}));
+
+jest.mock('../../../survey/experiments/utils/self-reported-ratings', () => ({
+  isDemographicsType: (type: unknown) =>
+    type === 'demographics' || type === 'demographicsLongInternational',
+  creditFinishedExperiment: (...args: unknown[]) =>
+    creditFinishedExperimentMock(...args),
+  creditOnDemographics: (...args: unknown[]) =>
+    creditOnDemographicsMock(...args),
 }));
 
 describe('experiment controller', () => {
@@ -76,6 +89,9 @@ describe('experiment controller', () => {
     sendMetaEventMock.mockResolvedValue({ ok: true });
     saveIndividualDBMock.mockResolvedValue({});
     bumpCountryRatingsMock.mockResolvedValue(undefined);
+    releasePendingMock.mockResolvedValue(undefined);
+    creditFinishedExperimentMock.mockResolvedValue(undefined);
+    creditOnDemographicsMock.mockResolvedValue(undefined);
     answersFindAllMock.mockResolvedValue([]);
   });
 
@@ -239,23 +255,60 @@ describe('experiment controller', () => {
     expect(res.json).toHaveBeenCalledWith({ ok: true });
   });
 
-  it('saveIndividual does not count self-reported demographic countries', async () => {
+  it('saveIndividual credits self-reported country only for demographics', async () => {
     const { saveIndividual } = await import('../../../controllers/experiment');
+    const info = { responses: { country_reside: 'Brazil' } };
 
-    const req: any = {
-      body: {
-        sessionId: 'organic-1',
-        informationType: 'demographics',
-        experimentInfo: { responses: { country_reside: 'Brazil' } },
-      },
-      query: {},
-    };
-    const res: any = { json: jest.fn() };
+    const res = { json: jest.fn() };
+    await saveIndividual(
+      {
+        body: {
+          sessionId: 'organic-1',
+          informationType: 'demographicsLongInternational',
+          experimentInfo: info,
+        },
+        query: {},
+      } as never,
+      res as never,
+    );
+    expect(creditOnDemographicsMock).toHaveBeenCalledWith('organic-1', info);
+    expect(res.json).toHaveBeenCalledWith({ ok: true });
 
-    await saveIndividual(req, res);
-    expect(experimentFindOneMock).not.toHaveBeenCalled();
-    expect(answersFindAllMock).not.toHaveBeenCalled();
-    expect(bumpCountryRatingsMock).not.toHaveBeenCalled();
+    creditOnDemographicsMock.mockClear();
+    await saveIndividual(
+      {
+        body: { sessionId: 'organic-1', informationType: 'CRT' },
+        query: {},
+      } as never,
+      { json: jest.fn() } as never,
+    );
+    expect(creditOnDemographicsMock).not.toHaveBeenCalled();
+  });
+
+  it('saveIndividual still responds ok when saving or crediting fails', async () => {
+    const { saveIndividual } = await import('../../../controllers/experiment');
+    creditOnDemographicsMock.mockRejectedValueOnce(new Error('db down'));
+
+    const res = { json: jest.fn() };
+    await saveIndividual(
+      {
+        body: { sessionId: 's', informationType: 'demographics' },
+        query: {},
+      } as never,
+      res as never,
+    );
+    expect(res.json).toHaveBeenCalledWith({ ok: true });
+
+    saveIndividualDBMock.mockRejectedValueOnce(new Error('insert failed'));
+    const res2 = { json: jest.fn() };
+    await saveIndividual(
+      {
+        body: { sessionId: 's', informationType: 'demographics' },
+        query: {},
+      } as never,
+      res2 as never,
+    );
+    expect(res2.json).toHaveBeenCalledWith({ ok: true });
   });
 
   it('saveExperiment handles validation, success, and failure paths', async () => {
@@ -383,5 +436,49 @@ describe('experiment controller', () => {
     await saveExperiment(req, res);
 
     expect(bumpCountryRatingsMock).toHaveBeenCalledWith('818', [1], false);
+  });
+
+  it('saveExperiment only releases the reservation for a viewer-country assignment and credits self-report', async () => {
+    const { saveExperiment } = await import('../../../controllers/experiment');
+
+    const row = {
+      get: (key: string) => {
+        if (key === 'sessionId') return 'organic-geo';
+        if (key === 'experimentType') return 'besample-sampling';
+        if (key === 'experimentInfo') {
+          return {
+            countryCode: '276',
+            countrySource: 'geo',
+            params: { ids: [1, 2] },
+          };
+        }
+        return undefined;
+      },
+    };
+    experimentFindByPkMock.mockResolvedValue(row);
+    validationResultMock.mockReturnValueOnce({
+      isEmpty: () => true,
+      array: () => [],
+    });
+
+    const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+    await saveExperiment(
+      {
+        body: { experimentId: 789 },
+        cookies: {},
+        headers: {},
+        session: {},
+        socket: {},
+      } as never,
+      res as never,
+    );
+
+    expect(bumpCountryRatingsMock).not.toHaveBeenCalled();
+    expect(releasePendingMock).toHaveBeenCalledWith('276', [1, 2]);
+    expect(creditFinishedExperimentMock).toHaveBeenCalledWith(
+      789,
+      'organic-geo',
+    );
+    expect(res.json).toHaveBeenCalledWith({ ok: true });
   });
 });

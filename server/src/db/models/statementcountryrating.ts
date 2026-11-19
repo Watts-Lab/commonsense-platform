@@ -13,7 +13,7 @@ export default function defineStatementCountryRating(
       },
 
       // ISO 3166-1 numeric country code, zero-padded to 3 digits (e.g. "818").
-      // Only ever populated for the Besample-recruitable country set.
+      // Any country can have rows (see survey/experiments/utils/country-codes.ts).
       countryCode: {
         type: dataTypes.STRING(3),
         allowNull: false,

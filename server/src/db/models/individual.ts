@@ -31,6 +31,7 @@ export default function defineIndividuals(
     },
     {
       tableName: 'individuals',
+      indexes: [{ fields: ['sessionId', 'informationType'] }],
     },
   );
 }

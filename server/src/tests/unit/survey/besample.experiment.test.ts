@@ -20,47 +20,45 @@ describe('besample experiment', () => {
   });
 
   describe('validity', () => {
-    it.each(['tc', 'bpid', 'bnum', 'battempt'])(
-      'is eligible when `%s` is present',
-      async (param) => {
-        const besampleExperiment = (
-          await import('../../../survey/experiments/besample.experiment')
-        ).default;
-
-        expect(
-          besampleExperiment.treatments[0].validity({
-            query: { [param]: 'x' },
-          }),
-        ).toBe(true);
-      },
-    );
-
-    it('is not eligible when none of the Besample params are present', async () => {
-      const besampleExperiment = (
+    const validity = async (req: Record<string, unknown>) =>
+      (
         await import('../../../survey/experiments/besample.experiment')
-      ).default;
+      ).default.treatments[0].validity(req);
 
-      expect(besampleExperiment.treatments[0].validity({ query: {} })).toBe(
-        false,
-      );
+    it('is eligible for any valid tc country, not just past Besample countries', async () => {
+      expect(await validity({ query: { tc: '250' } })).toBe(true); // France
+      expect(await validity({ query: { tc: '76' } })).toBe(true); // Brazil
     });
 
-    it('is eligible for a tracked geo-header country without Besample params', async () => {
-      const besampleExperiment = (
-        await import('../../../survey/experiments/besample.experiment')
-      ).default;
+    it('is eligible for any geo-header country without Besample params', async () => {
+      for (const country of ['BR', 'DE', 'us']) {
+        expect(
+          await validity({
+            query: {},
+            headers: { 'cloudfront-viewer-country': country },
+          }),
+        ).toBe(true);
+      }
+    });
 
+    it('is not eligible when the country cannot be inferred', async () => {
+      expect(await validity({ query: {} })).toBe(false);
+      // Besample params alone don't identify a country.
+      expect(await validity({ query: { bpid: 'x', battempt: 'y' } })).toBe(
+        false,
+      );
+      expect(await validity({ query: { tc: '999' } })).toBe(false);
       expect(
-        besampleExperiment.treatments[0].validity({
+        await validity({
           query: {},
-          headers: { 'cloudfront-viewer-country': 'BR' },
+          headers: { 'cloudfront-viewer-country': 'XX' },
         }),
-      ).toBe(true);
+      ).toBe(false);
     });
   });
 
   describe('treatmentAssigner', () => {
-    it('returns null when tc is missing or unmappable', async () => {
+    it('returns null when the country cannot be inferred', async () => {
       const besampleExperiment = (
         await import('../../../survey/experiments/besample.experiment')
       ).default;
@@ -149,6 +147,41 @@ describe('besample experiment', () => {
 
       expect(computeActiveSetMock).toHaveBeenCalledWith('076', 15);
       expect(result.countryCode).toBe('076');
+      expect(result.countrySource).toBe('geo');
+    });
+
+    it('assigns a country outside the original 16 from tc', async () => {
+      computeActiveSetMock.mockResolvedValueOnce([301]);
+      const besampleExperiment = (
+        await import('../../../survey/experiments/besample.experiment')
+      ).default;
+
+      const result = (await besampleExperiment.treatmentAssigner(
+        [{ params: {}, function: jest.fn() }],
+        { query: { tc: '250', sessionId: 'session-fr' } }, // France
+      )) as any;
+
+      expect(computeActiveSetMock).toHaveBeenCalledWith('250', 15);
+      expect(result.countryCode).toBe('250');
+      expect(result.countrySource).toBe('tc');
+    });
+
+    it('falls back to the geo-header country when tc is not a valid country', async () => {
+      computeActiveSetMock.mockResolvedValueOnce([401]);
+      const besampleExperiment = (
+        await import('../../../survey/experiments/besample.experiment')
+      ).default;
+
+      const result = (await besampleExperiment.treatmentAssigner(
+        [{ params: {}, function: jest.fn() }],
+        {
+          query: { tc: '999', sessionId: 'session-placeholder' },
+          headers: { 'cloudfront-viewer-country': 'DE' },
+        },
+      )) as any;
+
+      expect(computeActiveSetMock).toHaveBeenCalledWith('276', 15);
+      expect(result.countryCode).toBe('276');
       expect(result.countrySource).toBe('geo');
     });
 

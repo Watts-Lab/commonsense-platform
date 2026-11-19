@@ -1,3 +1,4 @@
+import { Op } from 'sequelize';
 import db from '../../db/models';
 import { main } from '../../../scripts/bootstrap-country-matrix';
 
@@ -15,10 +16,11 @@ describe('bootstrap-country-matrix', () => {
     await db.sequelize.close();
   });
 
-  it('resolves self-reported and Besample-overridden countries, skips untracked/unpublished, and is idempotent on re-run', async () => {
+  it('resolves self-reported and Besample-overridden countries for every country, skips unpublished, and is idempotent on re-run', async () => {
     // 5 statements: 1,2,5 published, 5 will be excluded via the published filter
-    // being answered by a tracked-country session; 3 published (Egypt via
-    // override); 4 published but only answered by an untracked-country session.
+    // being answered by a Brazil session; 3 published (Egypt via override);
+    // 4 published and answered by a France session (outside the original
+    // Besample 16, still counted).
     const created = await db.statements.bulkCreate([
       { ...STATEMENT_FIXTURE, statement: 'S1', published: true },
       { ...STATEMENT_FIXTURE, statement: 'S2', published: true },
@@ -55,7 +57,7 @@ describe('bootstrap-country-matrix', () => {
       })),
     );
 
-    // --- Scenario B: self-report France (untracked), but a Besample `tc`
+    // --- Scenario B: self-report France, but a Besample `tc`
     // code resolves to Egypt -> override wins.
     const overrideSession = 'smoke-override-egypt';
     await db.individuals.bulkCreate([
@@ -92,9 +94,9 @@ describe('bootstrap-country-matrix', () => {
       perceived_commonsense: true,
     });
 
-    // --- Scenario C: self-report France (untracked), no Besample code ->
-    // not counted toward any tracked country.
-    const untrackedSession = 'smoke-untracked';
+    // --- Scenario C: self-report France, no Besample code -> counted for
+    // France.
+    const untrackedSession = 'smoke-france';
     await db.individuals.bulkCreate([
       {
         sessionId: untrackedSession,
@@ -146,27 +148,24 @@ describe('bootstrap-country-matrix', () => {
     // Egypt: s3 counted via override, despite self-reporting France.
     expect(byKey.get(`${s3}:818`)).toBe(1);
 
-    // Untracked session's statement never appears under any tracked country.
-    for (const code of [
-      '032',
-      '076',
-      '818',
-      '288',
-      '356',
-      '360',
-      '392',
-      '398',
-      '404',
-      '484',
-      '566',
-      '586',
-      '608',
-      '710',
-      '792',
-      '804',
-    ]) {
-      expect(byKey.has(`${s4}:${code}`)).toBe(false);
-    }
+    // France: s4 counted from self-report, and only there.
+    expect(byKey.get(`${s4}:250`)).toBe(1);
+    expect([...byKey.keys()].filter((key) => key.startsWith(`${s4}:`))).toEqual(
+      [`${s4}:250`],
+    );
+
+    // A live reservation on an existing cell, plus a stale count that history
+    // doesn't support, must survive / be corrected by a re-run.
+    await db.statementcountryratings.update(
+      { pendingCount: 2, confirmedCount: 7 },
+      { where: { statementId: s1, countryCode: '076' } },
+    );
+    await db.statementcountryratings.create({
+      statementId: s2,
+      countryCode: '840',
+      confirmedCount: 5,
+      pendingCount: 1,
+    });
 
     // Re-running is idempotent: same counts, not doubled.
     await main();
@@ -187,6 +186,27 @@ describe('bootstrap-country-matrix', () => {
     );
     expect(rerunByKey.get(`${s1}:076`)).toBe(1);
     expect(rerunByKey.get(`${s3}:818`)).toBe(1);
-    expect(rowsAfterRerun.length).toBe(rows.length);
+    expect(rerunByKey.get(`${s4}:250`)).toBe(1);
+    // The reserved US cell has no history, so it's reset to 0 but kept.
+    expect(rerunByKey.get(`${s2}:840`)).toBe(0);
+    expect(rowsAfterRerun.length).toBe(rows.length + 1);
+
+    const reserved = await db.statementcountryratings.findAll({
+      where: { pendingCount: { [Op.gt]: 0 } },
+      raw: true,
+    });
+    expect(
+      (
+        reserved as unknown as Array<{
+          statementId: number;
+          countryCode: string;
+          pendingCount: number;
+        }>
+      )
+        .map(
+          (row) => `${row.statementId}:${row.countryCode}:${row.pendingCount}`,
+        )
+        .sort(),
+    ).toEqual([`${s1}:076:2`, `${s2}:840:1`].sort());
   });
 });

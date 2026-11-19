@@ -21,14 +21,16 @@
  *      recruitment code (`tc`/`c_code` in `experiments.urlParams`) whenever
  *      that code maps to a recognized country -- even if the two disagree.
  *
- * Only ratings resolving to one of the 16 Besample-recruitable countries
- * (see besample-countries.ts) are written, and only for `published`
- * statements.
+ * Ratings are written for every country that resolves to an ISO 3166-1 code
+ * (see country-codes.ts), and only for `published` statements.
  *
- * This is a full, idempotent recompute (not an incremental append): it always
- * replaces every existing statementcountryratings row for the 16 tracked
- * countries from scratch, so it's safe to re-run if something drifts. It is
- * NOT part of the automatic migrate:deploy path -- run it manually:
+ * This is a full, idempotent recompute (not an incremental append): it resets
+ * every row's confirmedCount and rewrites it from history, so it's safe to
+ * re-run if something drifts. Live reservations (pendingCount) are kept, so
+ * in-flight sessions aren't over-assigned afterwards. A session that finishes
+ * while the script runs can have its bump overwritten -- run it when traffic
+ * is quiet. It is NOT part of the automatic migrate:deploy path -- run it
+ * manually:
  *
  *   npm run bootstrap:country-matrix
  */
@@ -44,13 +46,13 @@ import db, {
   statementcountryratings,
 } from '../src/db/models';
 import {
-  BESAMPLE_COUNTRY_CODES,
   resolveCountryCodeFromName,
-} from '../src/survey/experiments/utils/besample-countries';
-import {
-  extractCountryCodeFromUrlParams,
-  codeToCountryName,
-} from './lib/iso-country-codes';
+  resolveCountryCodeFromTc,
+} from '../src/survey/experiments/utils/country-codes';
+import { extractCountryCodeFromUrlParams } from './lib/iso-country-codes';
+
+// Rows per INSERT, to stay well under MariaDB's max_allowed_packet.
+const INSERT_BATCH_SIZE = 5000;
 
 interface HungarianRow {
   demo: string;
@@ -232,35 +234,33 @@ export async function main(): Promise<void> {
 
   // --- Resolve each matched group's country and tally ratings --------------
   const tally = new Map<string, Map<number, number>>(); // countryCode -> statementId -> count
-  for (const code of BESAMPLE_COUNTRY_CODES) tally.set(code, new Map());
 
-  let trackedGroups = 0;
+  let countedGroups = 0;
   let overriddenGroups = 0;
 
   for (const group of matchedGroups) {
     const besampleRawCode = besampleCodeBySession.get(group.answersId);
-    const besampleCountryName = besampleRawCode
-      ? codeToCountryName(besampleRawCode)
+    const besampleCode = besampleRawCode
+      ? resolveCountryCodeFromTc(besampleRawCode)
       : null;
-    // A valid Besample code always overrides self-report, even if it maps to
-    // a country we don't track; an invalid/unmappable code (or none at all)
-    // falls back to self-report, exactly like update-data.py's override_mask.
-    const finalCountryName =
-      besampleCountryName ??
-      demoRowsByLatest.get(group.demoId)?.countryReside ??
-      null;
+    // A valid Besample code always overrides self-report, even if the two
+    // disagree; an invalid/unmappable code (or none at all) falls back to
+    // self-report, exactly like update-data.py's override_mask.
+    const countryCode =
+      besampleCode ??
+      resolveCountryCodeFromName(
+        demoRowsByLatest.get(group.demoId)?.countryReside,
+      );
 
-    if (besampleCountryName) overriddenGroups += 1;
-    if (!finalCountryName) continue;
-
-    const trackedCode = resolveCountryCodeFromName(finalCountryName);
-    if (!trackedCode) continue;
+    if (besampleCode) overriddenGroups += 1;
+    if (!countryCode) continue;
 
     const statementIds = answersBySession.get(group.answersId);
     if (!statementIds || statementIds.size === 0) continue;
 
-    trackedGroups += 1;
-    const countryTally = tally.get(trackedCode)!;
+    countedGroups += 1;
+    if (!tally.has(countryCode)) tally.set(countryCode, new Map());
+    const countryTally = tally.get(countryCode)!;
     for (const statementId of statementIds) {
       if (!publishedIds.has(statementId)) continue;
       countryTally.set(statementId, (countryTally.get(statementId) ?? 0) + 1);
@@ -268,15 +268,12 @@ export async function main(): Promise<void> {
   }
 
   console.log(
-    `\n${trackedGroups} matched groups resolved to one of the 16 tracked ` +
-      `countries (${overriddenGroups} had a valid Besample recruitment code).`,
+    `\n${countedGroups} matched groups resolved to a country across ` +
+      `${tally.size} countries (${overriddenGroups} had a valid Besample ` +
+      `recruitment code).`,
   );
 
-  // --- Idempotent full recompute: replace all tracked-country rows ---------
-  await statementcountryratings.destroy({
-    where: { countryCode: BESAMPLE_COUNTRY_CODES as unknown as string[] },
-  });
-
+  // --- Idempotent full recompute that keeps live reservations --------------
   const rows: Array<{
     statementId: number;
     countryCode: string;
@@ -290,7 +287,52 @@ export async function main(): Promise<void> {
       `  ${countryCode}: ${statementCounts.size} statement(s) with >=1 rating`,
     );
   }
-  await statementcountryratings.bulkCreate(rows);
+
+  await db.sequelize.transaction(async (transaction) => {
+    // Rows holding a reservation stay (with confirmedCount reset to 0);
+    // every other row is rebuilt from the tally.
+    await statementcountryratings.destroy({
+      where: { pendingCount: 0 },
+      transaction,
+    });
+    await statementcountryratings.update(
+      { confirmedCount: 0 },
+      { where: {}, transaction },
+    );
+
+    const reservedRows = (await statementcountryratings.findAll({
+      attributes: ['statementId', 'countryCode'],
+      raw: true,
+      transaction,
+    })) as unknown as Array<{ statementId: number; countryCode: string }>;
+    const reservedKeys = new Set(
+      reservedRows.map((row) => `${row.statementId}:${row.countryCode}`),
+    );
+
+    const newRows = [];
+    for (const row of rows) {
+      if (reservedKeys.has(`${row.statementId}:${row.countryCode}`)) {
+        await statementcountryratings.update(
+          { confirmedCount: row.confirmedCount },
+          {
+            where: {
+              statementId: row.statementId,
+              countryCode: row.countryCode,
+            },
+            transaction,
+          },
+        );
+      } else {
+        newRows.push(row);
+      }
+    }
+    for (let start = 0; start < newRows.length; start += INSERT_BATCH_SIZE) {
+      await statementcountryratings.bulkCreate(
+        newRows.slice(start, start + INSERT_BATCH_SIZE),
+        { transaction },
+      );
+    }
+  });
 
   console.log(`\nWrote ${rows.length} statementcountryratings rows.`);
   console.log('Done.');
