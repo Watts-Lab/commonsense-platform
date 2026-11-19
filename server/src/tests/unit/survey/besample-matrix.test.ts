@@ -1,7 +1,10 @@
 const statementsFindAllMock = jest.fn();
 const ratingsFindAllMock = jest.fn();
 const ratingsFindOrCreateMock = jest.fn();
+const ratingsUpdateMock = jest.fn();
+const ratingsBulkCreateMock = jest.fn();
 const experimentsFindAllMock = jest.fn();
+const experimentsUpdateMock = jest.fn();
 const transactionMock = jest.fn((cb: (t: unknown) => unknown) => cb({}));
 
 jest.mock('../../../db/models', () => ({
@@ -9,8 +12,13 @@ jest.mock('../../../db/models', () => ({
   statementcountryratings: {
     findAll: (...a: unknown[]) => ratingsFindAllMock(...a),
     findOrCreate: (...a: unknown[]) => ratingsFindOrCreateMock(...a),
+    update: (...a: unknown[]) => ratingsUpdateMock(...a),
+    bulkCreate: (...a: unknown[]) => ratingsBulkCreateMock(...a),
   },
-  experiments: { findAll: (...a: unknown[]) => experimentsFindAllMock(...a) },
+  experiments: {
+    findAll: (...a: unknown[]) => experimentsFindAllMock(...a),
+    update: (...a: unknown[]) => experimentsUpdateMock(...a),
+  },
   db: {
     sequelize: {
       transaction: (...a: unknown[]) =>
@@ -21,7 +29,7 @@ jest.mock('../../../db/models', () => ({
 
 import {
   getGlobalOrder,
-  getLivePending,
+  sweepStaleReservations,
   computeActiveSet,
   bumpCountryRatings,
   _resetGlobalOrderCacheForTests,
@@ -33,6 +41,9 @@ describe('besample-matrix', () => {
     _resetGlobalOrderCacheForTests();
     transactionMock.mockImplementation((cb: (t: unknown) => unknown) => cb({}));
     experimentsFindAllMock.mockResolvedValue([]);
+    ratingsUpdateMock.mockResolvedValue([1]);
+    ratingsBulkCreateMock.mockResolvedValue([]);
+    experimentsUpdateMock.mockResolvedValue([1]);
   });
 
   describe('computeActiveSet', () => {
@@ -67,25 +78,14 @@ describe('besample-matrix', () => {
       expect(ids).toHaveLength(5);
     });
 
-    it('subtracts live pending reservations from remaining need', async () => {
-      statementsFindAllMock.mockResolvedValueOnce([{ id: 1 }]);
-      // Egypt confirmed 9 -> remaining 1 for statement 1.
-      ratingsFindAllMock.mockResolvedValueOnce([
-        { statementId: 1, countryCode: '818', confirmedCount: 9 },
-      ]);
-      // An in-flight besample-sampling session already reserved statement 1
-      // for Egypt -> effective remaining is 1 - 1 = 0.
-      experimentsFindAllMock.mockResolvedValueOnce([
-        {
-          get: (key: string) =>
-            key === 'experimentInfo'
-              ? { countryCode: '818', params: { ids: [1] } }
-              : undefined,
-        },
-      ]);
+    it('skips statements the database refuses to reserve', async () => {
+      statementsFindAllMock.mockResolvedValueOnce([{ id: 1 }, { id: 2 }]);
+      ratingsFindAllMock.mockResolvedValueOnce([]);
+      // Statement 1 was just taken by a concurrent request; statement 2 is free.
+      ratingsUpdateMock.mockResolvedValueOnce([0]).mockResolvedValueOnce([1]);
 
       const ids = await computeActiveSet('818', 15);
-      expect(ids).toEqual([]);
+      expect(ids).toEqual([2]);
     });
 
     it('returns an empty array for an untracked country code', async () => {
@@ -98,27 +98,34 @@ describe('besample-matrix', () => {
     });
   });
 
-  describe('getLivePending', () => {
-    it('only tallies in-flight rows for the requested country', async () => {
+  describe('sweepStaleReservations', () => {
+    const staleRow = (id: number, info: unknown) => ({
+      get: (key: string) => (key === 'id' ? id : info),
+    });
+
+    it('releases each stale assignment once and marks it swept', async () => {
       experimentsFindAllMock.mockResolvedValueOnce([
-        {
-          get: (key: string) =>
-            key === 'experimentInfo'
-              ? { countryCode: '818', params: { ids: [1, 2] } }
-              : undefined,
-        },
-        {
-          get: (key: string) =>
-            key === 'experimentInfo'
-              ? { countryCode: '076', params: { ids: [1] } } // different country
-              : undefined,
-        },
+        staleRow(7, { countryCode: '818', params: { ids: [1, 2] } }),
       ]);
 
-      const pending = await getLivePending('818');
-      expect(pending.get(1)).toBe(1);
-      expect(pending.get(2)).toBe(1);
-      expect(pending.has(3)).toBe(false);
+      await sweepStaleReservations();
+
+      expect(experimentsUpdateMock).toHaveBeenCalledWith(
+        { staleSwept: true },
+        { where: { id: 7, staleSwept: false } },
+      );
+      expect(ratingsUpdateMock).toHaveBeenCalledTimes(1);
+    });
+
+    it('does not release when another sweep already claimed the row', async () => {
+      experimentsFindAllMock.mockResolvedValueOnce([
+        staleRow(7, { countryCode: '818', params: { ids: [1] } }),
+      ]);
+      experimentsUpdateMock.mockResolvedValueOnce([0]);
+
+      await sweepStaleReservations();
+
+      expect(ratingsUpdateMock).not.toHaveBeenCalled();
     });
   });
 

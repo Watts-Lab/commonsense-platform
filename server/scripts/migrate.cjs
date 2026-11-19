@@ -24,6 +24,13 @@ const { execFileSync } = require('child_process');
 const path = require('path');
 const mysql = require('mysql2/promise');
 
+// This script runs standalone (outside the app's normal import chain), so it
+// never picks up the .env file the way `sequelize.config.ts` does via its own
+// `dotenv.config()` call. Load it explicitly here too. Harmless in
+// environments (e.g. containers/CI) where env vars are injected directly and
+// no .env file exists.
+require('dotenv').config();
+
 const BASE_MIGRATION = '20260522163628-create-core-tables.cjs';
 
 // A table that only the legacy sync()-built schema would already have. If this

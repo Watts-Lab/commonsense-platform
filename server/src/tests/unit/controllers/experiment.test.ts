@@ -203,14 +203,8 @@ describe('experiment controller', () => {
     expect(res.json).toHaveBeenCalledWith({ ok: true });
   });
 
-  it('saveIndividual bumps country ratings for an organic participant self-reporting a tracked country', async () => {
+  it('saveIndividual does not count self-reported demographic countries', async () => {
     const { saveIndividual } = await import('../../../controllers/experiment');
-
-    experimentFindOneMock.mockResolvedValueOnce(null); // no besample-sampling row for this session
-    answersFindAllMock.mockResolvedValueOnce([
-      { get: (k: string) => (k === 'statementId' ? 10 : null) },
-      { get: (k: string) => (k === 'statementId' ? 20 : null) },
-    ]);
 
     const req: any = {
       body: {
@@ -223,54 +217,8 @@ describe('experiment controller', () => {
     const res: any = { json: jest.fn() };
 
     await saveIndividual(req, res);
-    // The country-bump logic is fire-and-forget; flush microtasks so it runs.
-    await new Promise((resolve) => setImmediate(resolve));
-
-    expect(experimentFindOneMock).toHaveBeenCalledWith({
-      where: { sessionId: 'organic-1', experimentType: 'besample-sampling' },
-    });
-    expect(bumpCountryRatingsMock).toHaveBeenCalledWith('076', [10, 20]);
-  });
-
-  it('saveIndividual skips the country bump when a besample-sampling row already exists for the session', async () => {
-    const { saveIndividual } = await import('../../../controllers/experiment');
-
-    experimentFindOneMock.mockResolvedValueOnce({ id: 1 });
-
-    const req: any = {
-      body: {
-        sessionId: 'already-besample',
-        informationType: 'demographics',
-        experimentInfo: { responses: { country_reside: 'Brazil' } },
-      },
-      query: {},
-    };
-    const res: any = { json: jest.fn() };
-
-    await saveIndividual(req, res);
-    await new Promise((resolve) => setImmediate(resolve));
-
-    expect(bumpCountryRatingsMock).not.toHaveBeenCalled();
-  });
-
-  it('saveIndividual does not bump ratings when self-reported country is untracked', async () => {
-    const { saveIndividual } = await import('../../../controllers/experiment');
-
-    experimentFindOneMock.mockResolvedValueOnce(null);
-
-    const req: any = {
-      body: {
-        sessionId: 'organic-2',
-        informationType: 'demographics',
-        experimentInfo: { responses: { country_reside: 'France' } },
-      },
-      query: {},
-    };
-    const res: any = { json: jest.fn() };
-
-    await saveIndividual(req, res);
-    await new Promise((resolve) => setImmediate(resolve));
-
+    expect(experimentFindOneMock).not.toHaveBeenCalled();
+    expect(answersFindAllMock).not.toHaveBeenCalled();
     expect(bumpCountryRatingsMock).not.toHaveBeenCalled();
   });
 
@@ -365,7 +313,39 @@ describe('experiment controller', () => {
 
     await saveExperiment(req, res);
 
-    expect(bumpCountryRatingsMock).toHaveBeenCalledWith('818', [1, 2, 3]);
+    expect(bumpCountryRatingsMock).toHaveBeenCalledWith('818', [1, 2, 3], true);
     expect(res.json).toHaveBeenCalledWith({ ok: true });
+  });
+
+  it('saveExperiment keeps the reservation untouched when a sweep already released it', async () => {
+    const { saveExperiment } = await import('../../../controllers/experiment');
+
+    experimentFindByPkMock.mockResolvedValueOnce({
+      get: (key: string) => {
+        if (key === 'experimentType') return 'besample-sampling';
+        if (key === 'staleSwept') return true;
+        if (key === 'experimentInfo') {
+          return { countryCode: '818', params: { ids: [1] } };
+        }
+        return undefined;
+      },
+    });
+    validationResultMock.mockReturnValueOnce({
+      isEmpty: () => true,
+      array: () => [],
+    });
+
+    const req: any = {
+      body: { experimentId: 456 },
+      cookies: {},
+      headers: {},
+      session: {},
+      socket: {},
+    };
+    const res: any = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+
+    await saveExperiment(req, res);
+
+    expect(bumpCountryRatingsMock).toHaveBeenCalledWith('818', [1], false);
   });
 });

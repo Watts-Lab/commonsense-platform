@@ -23,9 +23,9 @@ resource "aws_route53_record" "org_apex" {
   type    = "A"
 
   alias {
-    name                   = "dualstack.${aws_lb.main.dns_name}"
-    zone_id                = aws_lb.main.zone_id
-    evaluate_target_health = true
+    name                   = var.cloudfront_route53_enabled ? aws_cloudfront_distribution.main.domain_name : "dualstack.${aws_lb.main.dns_name}"
+    zone_id                = var.cloudfront_route53_enabled ? aws_cloudfront_distribution.main.hosted_zone_id : aws_lb.main.zone_id
+    evaluate_target_health = !var.cloudfront_route53_enabled
   }
 }
 
@@ -67,9 +67,9 @@ resource "aws_route53_record" "com_apex" {
   type    = "A"
 
   alias {
-    name                   = "dualstack.${aws_lb.main.dns_name}"
-    zone_id                = aws_lb.main.zone_id
-    evaluate_target_health = true
+    name                   = var.cloudfront_route53_enabled ? aws_cloudfront_distribution.main.domain_name : "dualstack.${aws_lb.main.dns_name}"
+    zone_id                = var.cloudfront_route53_enabled ? aws_cloudfront_distribution.main.hosted_zone_id : aws_lb.main.zone_id
+    evaluate_target_health = !var.cloudfront_route53_enabled
   }
 }
 

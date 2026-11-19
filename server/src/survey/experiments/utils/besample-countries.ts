@@ -35,6 +35,25 @@ const NAME_TO_CODE = new Map<string, string>(
   BESAMPLE_COUNTRIES.map(({ code, name }) => [name, code]),
 );
 
+const GEO_ALPHA2_TO_CODE: Record<string, string> = {
+  AR: '032',
+  BR: '076',
+  EG: '818',
+  GH: '288',
+  IN: '356',
+  ID: '360',
+  JP: '392',
+  KZ: '398',
+  KE: '404',
+  MX: '484',
+  NG: '566',
+  PK: '586',
+  PH: '608',
+  ZA: '710',
+  TR: '792',
+  UA: '804',
+};
+
 export const BESAMPLE_COUNTRY_CODES: readonly string[] = BESAMPLE_COUNTRIES.map(
   ({ code }) => code,
 );
@@ -51,6 +70,25 @@ export function resolveCountryCodeFromTc(tc: unknown): string | null {
   if (tc === undefined || tc === null || tc === '') return null;
   const code = String(tc).trim().padStart(3, '0');
   return isTrackedCountryCode(code) ? code : null;
+}
+
+// Resolves the ISO alpha-2 country header that CloudFront adds, for tracked countries.
+export function resolveCountryCodeFromGeoHeader(
+  country: unknown,
+): string | null {
+  if (typeof country !== 'string') return null;
+  return GEO_ALPHA2_TO_CODE[country.trim().toUpperCase()] ?? null;
+}
+
+// Uses tc when present and falls back to geo header when absent.
+export function resolveCountryCodeFromRequest(
+  geoCountry: unknown,
+  tc: unknown,
+): string | null {
+  if (tc !== undefined && tc !== null && String(tc).trim() !== '') {
+    return resolveCountryCodeFromTc(tc);
+  }
+  return resolveCountryCodeFromGeoHeader(geoCountry);
 }
 
 // Resolves a self-reported `country_reside` demographic value to one of the

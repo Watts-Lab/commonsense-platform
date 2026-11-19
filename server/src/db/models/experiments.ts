@@ -39,6 +39,12 @@ export default function defineExperiments(
         allowNull: true,
         defaultValue: false,
       },
+      // True once an abandoned assignment's pendingCount reservation was released.
+      staleSwept: {
+        type: dataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
     },
     {
       indexes: [
@@ -46,6 +52,7 @@ export default function defineExperiments(
         { fields: ['experimentId'] },
         { fields: ['sessionId', 'experimentType'] },
         { fields: ['finished'] },
+        { fields: ['experimentType', 'finished', 'staleSwept', 'createdAt'] },
       ],
     },
   );

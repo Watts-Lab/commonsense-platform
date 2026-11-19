@@ -2,6 +2,8 @@ import {
   BESAMPLE_COUNTRIES,
   BESAMPLE_COUNTRY_CODES,
   isTrackedCountryCode,
+  resolveCountryCodeFromGeoHeader,
+  resolveCountryCodeFromRequest,
   resolveCountryCodeFromTc,
   resolveCountryCodeFromName,
 } from '../../../survey/experiments/utils/besample-countries';
@@ -38,6 +40,30 @@ describe('besample-countries', () => {
     it('returns null for an untracked or unmappable code', () => {
       expect(resolveCountryCodeFromTc('999')).toBeNull(); // Besample placeholder
       expect(resolveCountryCodeFromTc('250')).toBeNull(); // France, untracked
+    });
+  });
+
+  describe('Geo header country resolution', () => {
+    it('maps tracked alpha-2 headers to numeric country codes', () => {
+      expect(resolveCountryCodeFromGeoHeader('br')).toBe('076');
+      expect(resolveCountryCodeFromGeoHeader('EG')).toBe('818');
+    });
+
+    it('ignores unknown and untracked geo-header countries', () => {
+      expect(resolveCountryCodeFromGeoHeader('XX')).toBeNull();
+      expect(resolveCountryCodeFromGeoHeader('FR')).toBeNull();
+      expect(resolveCountryCodeFromGeoHeader(undefined)).toBeNull();
+    });
+
+    it('prefers the Besample tc parameter over geo header', () => {
+      expect(resolveCountryCodeFromRequest('BR', '818')).toBe('818');
+      expect(resolveCountryCodeFromRequest(undefined, '818')).toBe('818');
+    });
+
+    it('uses geo header only when tc is absent', () => {
+      expect(resolveCountryCodeFromRequest('BR', undefined)).toBe('076');
+      expect(resolveCountryCodeFromRequest('BR', '')).toBe('076');
+      expect(resolveCountryCodeFromRequest('BR', '250')).toBeNull();
     });
   });
 
